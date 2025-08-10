@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+#panel {
+  backdrop-filter: blur(8px);
+}
