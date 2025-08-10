@@ -32,7 +32,7 @@ export default function Home() {
       transition={{
         duration: 0.2,
       }}
-      className="flex flex-col  items-start justify-between p-4 gap-2 relative w-full h-full"
+      className="flex flex-col items-start justify-between p-4 gap-2 relative w-full h-full"
     >
       <div
         id="panel"

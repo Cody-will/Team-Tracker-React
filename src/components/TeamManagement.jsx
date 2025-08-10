@@ -8,7 +8,7 @@ import {
   getShift,
   getUnassigned,
 } from "../teamSorting";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { db } from "../firebase";
 import { onValue, ref, set } from "firebase/database";
 import { createCards, createLgCard, createUpper } from "../createCards";
@@ -116,26 +116,50 @@ const Panel = ({
         className=" relative flex flex-col w-full h-11/12 bg-zinc-900/50 rounded-md border border-zinc-700 drop-shadow-xl/50"
       >
         {selectedTab === "Unassigned" ? (
-          <Unassigned
-            upperCards={createLgCard(supervisors)}
-            lowerCards={team
-              .filter(
-                (person) =>
-                  !supervisors.some((sup) => sup.badgeNum === person.badgeNum)
-              )
-              .map((person) => (
+          <>
+            <SupervisorPanel
+              title="Large and in Charge"
+              cards={supervisors.map((sup) => (
                 <PanelCard
-                  key={person.badgeNum}
-                  person={person}
+                  key={sup.badgeNum}
+                  person={sup}
                   selectedPerson={selectedPerson}
                   setSelectedPerson={setSelectedPerson}
                 />
               ))}
-          />
+            />
+            <TeamPanel
+              title="Unassigned"
+              cards={team
+                .filter(
+                  (person) =>
+                    !supervisors.some((sup) => sup.badgeNum === person.badgeNum)
+                )
+                .map((person) => (
+                  <PanelCard
+                    key={person.badgeNum}
+                    person={person}
+                    selectedPerson={selectedPerson}
+                    setSelectedPerson={setSelectedPerson}
+                  />
+                ))}
+            />
+          </>
         ) : (
           <>
-            <SupervisorPanel cards={createLgCard(supervisors)} />
+            <SupervisorPanel
+              title="Supervisors"
+              cards={supervisors.map((sup) => (
+                <PanelCard
+                  key={sup.badgeNum}
+                  person={sup}
+                  selectedPerson={selectedPerson}
+                  setSelectedPerson={setSelectedPerson}
+                />
+              ))}
+            />
             <TeamPanel
+              title="Team"
               cards={team
                 .filter(
                   (person) =>
@@ -158,8 +182,11 @@ const Panel = ({
 };
 
 const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
-  const [isOic, setIsOic] = useState(false);
-  const [isFto, setIsFto] = useState(false);
+  const [isOic, setIsOic] = useState(person.oic);
+  const [isFto, setIsFto] = useState(person.fto);
+  const [photo, setPhoto] = useState(person.photo || null);
+  const [mandate, setMandate] = useState(person.mandate);
+  const [isTrainee, setIsTrainee] = useState(person.trainee);
 
   const fullRanks = {
     maj: "Major",
@@ -170,8 +197,10 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
     train: "Trainee",
   };
 
+  const containerStyle =
+    "relative flex flex-col gap-1 w-1/2 items-start justify-center";
   const formStyle =
-    "text-l w-1/2 border border-zinc-600 rounded-sm px-2 py-2 focus:ring-1 focus:ring-sky-500 focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none";
+    "text-l w-full border border-zinc-600 rounded-sm px-2 py-2 focus:ring-1 focus:ring-sky-500 focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none";
 
   const isSelected = selectedPerson?.badgeNum === person.badgeNum;
 
@@ -186,7 +215,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
       whileHover={
         isSelected ? undefined : { scale: 1.05, transition: { duration: 0.05 } }
       }
-      className={`flex flex-col rounded-md drop-shadow-lg/50 bg-gradient-to-t from-zinc-950 via-zinc-900 to-zinc-800 text-zinc-200 ${
+      className={`flex flex-col rounded-md drop-shadow-lg/50 bg-zinc-900 text-zinc-200 ${
         isSelected
           ? "w-full h-full z-10 p-6 absolute top-0 left-0"
           : "w-full h-full items-center cursor-pointer justify-center p-2 relative"
@@ -214,7 +243,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, duration: 0.2 }}
           exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-gradient-to-t  from-zinc-950 via-zinc-900 to-zinc-800 p-4 rounded-md flex justify-start items-start text-left text-sm"
+          className="absolute inset-0 bg-zinc-900 p-4 rounded-md flex justify-start items-start text-left text-sm"
         >
           <motion.div
             whileHover={{ scale: 1.2 }}
@@ -223,19 +252,24 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
           >
             {<BsXLg size="24" />}
           </motion.div>
-          <div className="flex h-full w-2/10 border border-red-500 flex-col justify-center items-center gap-2">
+          <div className="flex h-full w-2/10 flex-col justify-center items-center gap-2">
             <div className="flex items-center justify-center size-40 aspect-square rounded-full border-4 border-sky-500">
               <div className="flex items-center justify-center w-full h-full">
-                {<BsPersonCircle size="160" />}
+                {photo ? (
+                  <img src={photo} size="160" />
+                ) : (
+                  <BsPersonCircle size="160" />
+                )}
               </div>
             </div>
             <span className="flex items-center font-semibold text-zinc-200 text-lg justify-center">
               {person.firstName} {person.lastName}
             </span>
+            <UploadButton onFile={photo} photo={photo} setPhoto={setPhoto} />
           </div>
 
-          <form className="flex flex-col gap-5 items-center justify-center w-1/2 h-full border border-blue-500">
-            <div className="relative flex flex-col gap-2 w-full items-start justify-center">
+          <form className="flex flex-col flex-wrap gap-2 items-center justify-center w-1/2 h-full">
+            <div className={containerStyle}>
               <label className="text-xl">First Name</label>
               <input
                 name="firstName"
@@ -243,7 +277,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               />
             </div>
-            <div className="relative flex flex-col gap-2 w-full items-start justify-center">
+            <div className={containerStyle}>
               <label className="text-xl">Last Name</label>
               <input
                 name="lastName"
@@ -251,7 +285,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               />
             </div>
-            <div className="relative flex flex-col gap-2 w-full items-start justify-center">
+            <div className={containerStyle}>
               <label className="text-xl">Badge Number</label>
               <input
                 name="badgeNum"
@@ -259,7 +293,15 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               />
             </div>
-            <div className="relative flex flex-col gap-2 w-full items-start justify-center">
+            <div className={containerStyle}>
+              <label className="text-xl">Shift</label>
+              <select
+                name="shift"
+                value={person.shift}
+                className={formStyle}
+              ></select>
+            </div>
+            <div className={containerStyle}>
               <label className="text-xl">Rank</label>
               <select
                 name="rank"
@@ -273,7 +315,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 ))}
               </select>
             </div>
-            <div className="relative flex flex-col gap-2 w-full items-start justify-center">
+            <div className={containerStyle}>
               <label className="text-xl">Email</label>
               <input
                 name="email"
@@ -281,7 +323,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               />
             </div>
-            <div className="relative flex flex-col gap-2 w-full items-start justify-center">
+            <div className={containerStyle}>
               <label className="text-xl">Password</label>
               <input
                 type="password"
@@ -290,7 +332,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               />
             </div>
-            <div className="relatve flex flex-col gap-2 w-full items-start justify-center">
+            <div className={containerStyle}>
               <label className="text-xl">Division</label>
               <select
                 name="division"
@@ -298,23 +340,72 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               ></select>
             </div>
-            <div className="relativ flex gap-2 w-full items-start-justify-center">
-              <label className="text-xl">OIC</label>
-              <ToggleSwitch value="oic" data={isOic} setData={setIsOic} />
+            <div className="relative flex w-1/2 items-center justify-between gap-4">
+              <div className="relative flex flex-col gap-2 items-center justify-center">
+                <label className="text-xl">OIC</label>
+                <ToggleSwitch value="oic" isData={isOic} setIsData={setIsOic} />
+              </div>
+              <div className="relative flex flex-col gap-2 items-center justify-center">
+                <label className="text-xl">FTO</label>
+                <ToggleSwitch value="fto" isData={isFto} setIsData={setIsFto} />
+              </div>
+              <div className="relative flex flex-col gap-2 items-center justify-center">
+                <label className="text-xl">Mandate</label>
+                <ToggleSwitch
+                  value="mandate"
+                  isData={mandate}
+                  setIsData={setMandate}
+                />
+              </div>
+              <div className="relative flex flex-col gap-2 items-center justify-center">
+                <label className="text-xl">Trainee</label>
+                <ToggleSwitch
+                  value="trainee"
+                  isData={isTrainee}
+                  setIsData={setIsTrainee}
+                />
+              </div>
             </div>
+            {isTrainee && (
+              <motion.div
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className={containerStyle}
+              >
+                <label className="text-xl">Trainer</label>
+                <select
+                  name="trainer"
+                  value={person.trainer || "Select Trainer"}
+                  className={formStyle}
+                ></select>
+              </motion.div>
+            )}
+            {isTrainee && (
+              <div className={containerStyle}>
+                <label className="text-xl">Phase</label>
+                <select
+                  name="phase"
+                  value={person.phase || "Select Phase"}
+                  className={formStyle}
+                >
+                  <option value="">Select Phase</option>
+                  <option value="phase1">Phase 1</option>
+                  <option value="phase2">Phase 2</option>
+                </select>
+              </div>
+            )}
           </form>
-          <div className="border border-green-500 w-1/2 h-full"></div>
+          <div className="w-1/2 h-full"></div>
         </motion.div>
       )}
     </motion.div>
   );
 };
 
-const SupervisorPanel = ({ cards }) => {
+const SupervisorPanel = ({ title, cards }) => {
   return (
-    <motion.div className="flex flex-col items-center justify-center mb-2 w-full h-1/4">
+    <motion.div className="flex flex-col items-center justify-center mb-2 w-full h-1/3">
       <div className="flex items-center justify-start h-1/10 w-full text-lg p-4 font-semibold text-zinc-200">
-        Supervisors
+        {title}
       </div>
       <div className="flex items-center p-2 gap-2 justify-evenly w-full h-full">
         {cards}
@@ -323,11 +414,11 @@ const SupervisorPanel = ({ cards }) => {
   );
 };
 
-const TeamPanel = ({ cards }) => {
+const TeamPanel = ({ title, cards }) => {
   return (
-    <motion.div className="flex flex-col w-full h-3/4">
+    <motion.div className="flex flex-col w-full h-2/3">
       <div className="w-full h-1/10 relative p-4 border-t border-zinc-700 flex items-center justify-start text-lg font-semibold text-zinc-200">
-        Team
+        {title}
       </div>
       <div className="flex p-4 gap-4 items-center justify-evenly w-full h-full">
         {cards}
@@ -336,25 +427,104 @@ const TeamPanel = ({ cards }) => {
   );
 };
 
-const Unassigned = ({ upperCards, lowerCards }) => {
+const ToggleSwitch = ({ value, isData, setIsData }) => {
+  const toggleIsData = () => {
+    setIsData(!isData);
+  };
+
   return (
-    <motion.div className="items-center justify-start flex flex-col w-full h-full">
-      <div className="flex items-center p-2 justify-start text-zinc-200 text-lg font-semibold h-1/10 w-full">
-        Large and in Charge
-      </div>
-      <div className="w-full h-full flex gap-4 p-2">{upperCards}</div>
-      <div className="items-center justify-start p-2 text-zinc-200 text-lg font-semibold h-1/10 w-full">
-        Unassigned
-      </div>
-      <div className="flex w-full h-full gap-4 p-2">{lowerCards}</div>
-    </motion.div>
+    <div
+      className={`relative flex items-center border hover:cursor-pointer p-0.5 border-sky-500  ${
+        isData ? "bg-sky-500" : "bg-zinc-300"
+      } h-6 w-12 rounded-xl`}
+    >
+      <motion.div
+        className="size-5 bg-zinc-800 rounded-full"
+        onClick={toggleIsData}
+        animate={{ x: isData ? 22 : 0 }}
+        transition={{ type: "spring", bounce: 0.5, duration: 0.3 }}
+      />
+    </div>
   );
 };
 
-const ToggleSwitch = ({ value, isData, setIsData }) => {
+const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
+  const inputRef = useRef(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  // Create a preview if `photo` is a File; clean up URL object
+  useEffect(() => {
+    if (photo instanceof File) {
+      const url = URL.createObjectURL(photo);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    setPreviewUrl(null);
+  }, [photo]);
+
+  const handleChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // hand the file to parent state and optional callback
+    setPhoto?.(file);
+    onFile?.(file);
+
+    // allow selecting the same file again later
+    e.target.value = "";
+  };
+
+  const getDisplayName = () => {
+    if (!photo) return "";
+    if (photo instanceof File) return photo.name;
+    // assume string/URL
+    try {
+      const path = new URL(photo).pathname;
+      return decodeURIComponent(path.split("/").pop() || "photo");
+    } catch {
+      return String(photo);
+    }
+  };
+
   return (
-    <div className="relative flex bg-zinc-200 rounded-lg">
-      <motion.div className="h-full w-1/4 bg-sky-500 rounded-full" />
+    <div className="flex flex-col items-center gap-3">
+      <motion.button
+        type="button"
+        className="relative flex justify-center items-center bg-sky-500 py-2 px-3 rounded-md text-md text-zinc-900 hover:cursor-pointer"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => inputRef.current?.click()}
+        aria-label="Upload photo"
+      >
+        {label}
+      </motion.button>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        onChange={handleChange}
+      />
+
+      {/* Filename (truncated if long) */}
+      {photo && (
+        <div
+          className="w-full text-sm border border-zinc-600 rounded-md py-2 px-3 text-zinc-600 truncate"
+          title={getDisplayName()}
+        >
+          {getDisplayName()}
+        </div>
+      )}
+
+      {/* Optional tiny preview bubble when a File is selected */}
+      {previewUrl && (
+        <img
+          src={previewUrl}
+          alt="Selected preview"
+          className="h-24 w-24 rounded-full object-cover border-2 border-sky-500"
+        />
+      )}
     </div>
   );
 };
