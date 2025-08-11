@@ -1,5 +1,6 @@
 import { BsPersonCircle, BsXLg } from "react-icons/bs";
 import { motion } from "motion/react";
+import { ProfileBadge } from "./ProfileBadge";
 
 import {
   findSupervisors,
@@ -75,7 +76,7 @@ const Panel = ({
   setSelectedPerson,
 }) => {
   return (
-    <motion.div className="relative flex gap-2 flex-col h-7/8 w-7/8">
+    <motion.div className="relative flex gap-2 flex-col h-full w-full p-4">
       <motion.div
         id="panel"
         className="relative w-full h-1/12 flex bg-zinc-900/50 rounded-md border border-zinc-700 drop-shadow-xl/50"
@@ -204,10 +205,17 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
     train: "Trainee",
   };
 
+  const superRanks = {
+    maj: "Maj",
+    lt: "Lt",
+    sgt: "Sgt",
+    cpl: "Cpl",
+  };
+
   const containerStyle =
-    "relative flex flex-col gap-1 w-1/2 items-start justify-center";
+    "relative flex flex-col shrnk gap-1 items-start justify-center";
   const formStyle =
-    "text-l w-full border border-zinc-600 rounded-sm px-2 py-2 focus:ring-1 focus:ring-sky-500 focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none";
+    "text-l w-full flex shrink border border-zinc-700 rounded-sm px-2 py-2 focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none";
 
   const isSelected = selectedPerson?.badgeNum === person.badgeNum;
 
@@ -228,8 +236,8 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
           : "w-full h-full items-center cursor-pointer justify-center p-2 relative"
       }`}
     >
-      <div className="flex justify-center items-center">
-        <div className="rounded-full border-2 border-sky-500 aspect-square flex justify-center items-center overflow-hidden">
+      <div className="relative flex justify-center items-center">
+        <div className="relative rounded-full border-2 border-sky-500 aspect-square flex justify-center items-center">
           {person.photo ? (
             person.photo
           ) : (
@@ -255,13 +263,14 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
           <motion.div
             whileHover={{ scale: 1.2 }}
             onClick={() => setSelectedPerson(null)}
-            className="absolute h-8 w-8 flex items-center justify-center font-bold top-1 right-1 hover:cursor-pointer"
+            className="absolute h-10 w-10 flex items-center justify-center font-bold top-1 right-1 hover:cursor-pointer"
           >
-            {<BsXLg size="24" />}
+            {<BsXLg size="32" />}
           </motion.div>
-          <div className="flex h-full w-2/10 flex-col justify-center items-center gap-2">
-            <div className="flex items-center justify-center size-40 aspect-square rounded-full border-4 border-sky-500">
-              <div className="flex items-center justify-center w-full h-full">
+          <div className="flex shrink h-full w-2/10 flex-col justify-center items-center gap-2">
+            <div className="h-full w-full flex"></div>
+            <div className="relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4 border-sky-500">
+              <div className="relative flex shrink items-center justify-center w-full h-full">
                 {photo ? (
                   <img src={photo} size="160" />
                 ) : (
@@ -269,13 +278,29 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 )}
               </div>
             </div>
-            <span className="flex items-center font-semibold text-zinc-200 text-lg justify-center">
+            <span className="flex shrink items-center font-semibold text-zinc-200 text-lg justify-center">
               {person.firstName} {person.lastName}
             </span>
             <UploadButton onFile={photo} photo={photo} setPhoto={setPhoto} />
+            <div className="h-full w-full flex items-end gap-4 justify-center">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative px-8 py-2 shadow-lg/40 rounded-md bg-sky-500 text-xl text-zinc-900"
+              >
+                Save
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative px-3 py-2 shadow-lg/40 hover:cursor-pointer rounded-md bg-sky-500 text-xl text-zinc-900"
+              >
+                Deactivate
+              </motion.button>
+            </div>
           </div>
 
-          <form className="flex flex-col flex-wrap gap-2 items-center justify-center w-1/2 h-full">
+          <form className="grid grid-cols-2 gap-4 p-4 auto-rows-min place-content-center items-center justify-center w-1/2 h-full">
             <div className={containerStyle}>
               <label className="text-xl">First Name</label>
               <input
@@ -341,7 +366,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               ></select>
             </div>
-            <div className="relative flex w-1/2 items-center justify-between gap-4">
+            <div className="relative flex items-center justify-between gap-2">
               <div className="relative flex flex-col gap-2 items-center justify-center">
                 <label className="text-xl">OIC</label>
                 <ToggleSwitch value="oic" isData={isOic} setIsData={setIsOic} />
@@ -395,7 +420,11 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
               </div>
             )}
           </form>
-          <div className="w-1/2 h-full"></div>
+          <div className="w-1/2 h-full relative flex flex-col gap-4">
+            <InfoPanel title="Shift Swap / Coverage" />
+            <InfoPanel title="Vacation" />
+            <InfoPanel title="Training" />
+          </div>
         </motion.div>
       )}
     </motion.div>
@@ -404,7 +433,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
 
 const SupervisorPanel = ({ title, cards }) => {
   return (
-    <motion.div className="flex flex-col items-center justify-center mb-2 w-full h-1/3">
+    <motion.div className="flex flex-col items-center justify-center mb-2 w-full h-2/5">
       <div className="flex items-center justify-start h-1/10 w-full text-lg p-4 font-semibold text-zinc-200">
         {title}
       </div>
@@ -417,7 +446,7 @@ const SupervisorPanel = ({ title, cards }) => {
 
 const TeamPanel = ({ title, cards }) => {
   return (
-    <motion.div className="flex flex-col w-full h-2/3">
+    <motion.div className="flex flex-col w-full h-3/5">
       <div className="w-full h-1/10 relative p-4 border-t border-zinc-700 flex items-center justify-start text-lg font-semibold text-zinc-200">
         {title}
       </div>
@@ -434,18 +463,18 @@ const ToggleSwitch = ({ value, isData, setIsData }) => {
   };
 
   return (
-    <div
+    <motion.div
       className={`relative flex items-center border hover:cursor-pointer p-0.5 border-sky-500  ${
         isData ? "bg-sky-500" : "bg-zinc-300"
       } h-6 w-12 rounded-xl`}
+      onClick={toggleIsData}
     >
       <motion.div
         className="size-5 bg-zinc-800 rounded-full"
-        onClick={toggleIsData}
         animate={{ x: isData ? 22 : 0 }}
         transition={{ type: "spring", bounce: 0.5, duration: 0.3 }}
       />
-    </div>
+    </motion.div>
   );
 };
 
@@ -488,7 +517,7 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
     <div className="flex flex-col items-center gap-3">
       <motion.button
         type="button"
-        className="relative flex justify-center items-center bg-sky-500 py-2 px-3 rounded-md text-md text-zinc-900 hover:cursor-pointer"
+        className="relative flex justify-center shadow-lg/50 items-center bg-sky-500 py-2 px-3 rounded-md text-md font-semibold text-zinc-900 hover:cursor-pointer"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => inputRef.current?.click()}
@@ -521,6 +550,14 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
           className="h-24 w-24 rounded-full object-cover border-2 border-sky-500"
         />
       )}
+    </div>
+  );
+};
+
+const InfoPanel = ({ title, props }) => {
+  return (
+    <div className="relative p-2 flex h-full w-15/16 rounded-lg border border-zinc-800 shadow-lg/40">
+      <div className="text-xl">{title}</div>
     </div>
   );
 };

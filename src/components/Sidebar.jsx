@@ -6,6 +6,8 @@ import {
   BsShuffle,
   BsGear,
   BsDoorClosed,
+  BsPersonPlus,
+  BsCalendar2Plus,
 } from "react-icons/bs";
 
 export default function Sidebar({ setPage, pages }) {
@@ -30,7 +32,15 @@ export default function Sidebar({ setPage, pages }) {
           pages={pages}
         />
         <SideBarIcon icon={<BsAirplane size="32" />} text="Vacation" />
-        <SideBarIcon icon={<BsShuffle size="32" />} text="Shift Swap" />
+        <SideBarIcon
+          icon={<BsShuffle size="32" />}
+          text="Shift Swap"
+          location="shiftSwap"
+          setPage={setPage}
+          pages={pages}
+        />
+        <SideBarIcon icon={<BsPersonPlus size="32" />} text="Add User" />
+        <SideBarIcon icon={<BsCalendar2Plus size="32" />} text="Coverage" />
       </div>
       <div className="h-1/4 flex flex-col justify-end mb-4">
         <SideBarIcon icon={<BsGear size="32" />} text="Settings" />
