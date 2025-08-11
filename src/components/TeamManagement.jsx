@@ -4,14 +4,12 @@ import { motion } from "motion/react";
 import {
   findSupervisors,
   findUpperSupervisors,
-  getMandate,
   getShift,
   getUnassigned,
 } from "../teamSorting";
 import { useEffect, useState, useRef } from "react";
 import { db } from "../firebase";
 import { onValue, ref, set } from "firebase/database";
-import { createCards, createLgCard, createUpper } from "../createCards";
 
 export default function TeamManagement() {
   const [data, setData] = useState(null);
@@ -187,6 +185,15 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
   const [photo, setPhoto] = useState(person.photo || null);
   const [mandate, setMandate] = useState(person.mandate);
   const [isTrainee, setIsTrainee] = useState(person.trainee);
+  const shifts = [
+    "Alpha",
+    "Bravo",
+    "Charlie",
+    "Delta",
+    `Split: Alpha, Bravo`,
+    "Split: Charlie Delta",
+    "Unassigned",
+  ];
 
   const fullRanks = {
     maj: "Major",
@@ -295,11 +302,13 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
             </div>
             <div className={containerStyle}>
               <label className="text-xl">Shift</label>
-              <select
-                name="shift"
-                value={person.shift}
-                className={formStyle}
-              ></select>
+              <select name="shift" value={person.shift} className={formStyle}>
+                {shifts.map((shift, index) => (
+                  <option key={index} value={shift}>
+                    {shift}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className={containerStyle}>
               <label className="text-xl">Rank</label>
@@ -323,15 +332,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 className={formStyle}
               />
             </div>
-            <div className={containerStyle}>
-              <label className="text-xl">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={person.password || "lsdnlsndfln"}
-                className={formStyle}
-              />
-            </div>
+
             <div className={containerStyle}>
               <label className="text-xl">Division</label>
               <select
@@ -452,7 +453,6 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
   const inputRef = useRef(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
-  // Create a preview if `photo` is a File; clean up URL object
   useEffect(() => {
     if (photo instanceof File) {
       const url = URL.createObjectURL(photo);
@@ -466,18 +466,16 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // hand the file to parent state and optional callback
     setPhoto?.(file);
     onFile?.(file);
 
-    // allow selecting the same file again later
     e.target.value = "";
   };
 
   const getDisplayName = () => {
     if (!photo) return "";
     if (photo instanceof File) return photo.name;
-    // assume string/URL
+
     try {
       const path = new URL(photo).pathname;
       return decodeURIComponent(path.split("/").pop() || "photo");
@@ -507,7 +505,6 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
         onChange={handleChange}
       />
 
-      {/* Filename (truncated if long) */}
       {photo && (
         <div
           className="w-full text-sm border border-zinc-600 rounded-md py-2 px-3 text-zinc-600 truncate"
@@ -517,7 +514,6 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
         </div>
       )}
 
-      {/* Optional tiny preview bubble when a File is selected */}
       {previewUrl && (
         <img
           src={previewUrl}
