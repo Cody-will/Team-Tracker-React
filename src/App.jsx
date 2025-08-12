@@ -25,7 +25,7 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      setPage(pages.teamManagement);
+      setPage(pages.shiftSwap);
       setPadding(16);
     } else {
       setPage(pages.login);
