@@ -11,9 +11,10 @@ export default function ShiftSwap() {
   const [workDate, setWorkDate] = useState(null);
   const [data, setData] = useState(null);
   const [step, setStep] = useState(1);
-  const initial = { x: 300, opacity: 0 };
-  const animate = { x: 0, opacity: 1 };
-  const exit = { x: -300, opacity: 0 };
+  const [direction, setDirection] = useState(null);
+  const initial = { x: 600, opacity: 0, filter: "blur(15px)" };
+  const animate = { x: 0, opacity: 1, filter: "blur(0px)" };
+  const exit = { x: -600, opacity: 0, filter: "blur(15px)" };
   const transition = { duration: 0.5, ease: "easeInOut" };
 
   useEffect(() => {
@@ -32,17 +33,23 @@ export default function ShiftSwap() {
     return () => unsubscribe();
   }, []);
 
+  const handleClick = () => {};
+
   return (
     <div className="relative h-full w-full justify-center items-center flex">
       <motion.div
-        transition={{ duration: 0.35, ease: "easeInOut" }}
+        layout
+        transition={{
+          default: { ease: "easeIn" },
+          layout: { duration: 0.3, type: "tween" },
+        }}
         id="panel"
-        className=" bg-zinc-900/50 shadow-xl/40 rounded-xl transition-all duration-300 ease-in-out border border-zinc-700 relative flex flex-col"
+        className=" bg-zinc-900/50 overflow-hidden shadow-xl/40 rounded-xl border border-zinc-700 relative flex flex-col"
       >
         <div className="h-1/10 text-2xl font-semibold text-zinc-200 w-full flex items-center justify-start p-2">
           Shift Swap
         </div>
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {step === 1 ? (
             <StepOne
               data={data}
@@ -61,7 +68,13 @@ export default function ShiftSwap() {
               transition={transition}
             />
           ) : (
-            <StepThree />
+            <StepThree
+              setStep={setStep}
+              initial={initial}
+              animate={animate}
+              exit={exit}
+              transition={transition}
+            />
           )}
         </AnimatePresence>
       </motion.div>
@@ -85,7 +98,7 @@ const StepOne = ({
       animate={animate}
       exit={exit}
       transition={transition}
-      className="relative w-full h-full flex flex-col text-zinc-200 gap-4 py-15 px-12 justify-center items-center"
+      className="relative w-full h-full flex flex-col text-zinc-200 gap-4 py-24 px-18 justify-center items-center"
     >
       <div className="relative justify-center items-center flex">
         Select person to swap with:
@@ -147,8 +160,40 @@ const StepTwo = ({ setStep, initial, animate, exit, transition }) => {
   );
 };
 
-const StepThree = ({ initial, animate, exit, key }) => {
-  return <></>;
+const StepThree = ({ setStep, initial, animate, transition, exit }) => {
+  return (
+    <motion.div
+      key={3}
+      initial={initial}
+      animate={animate}
+      exit={exit}
+      transition={transition}
+      className="relative w-full h-full flex flex-col text-zinc-200 p-15 gap-4 justify-center items-center"
+    >
+      <div className="relative justify-center items-center flex">
+        Select dates you need covered:
+      </div>
+      <div className="">{<Calendar />}</div>
+      <div className="relative flex gap-4 justify-center items-center">
+        <motion.button
+          className="text-center text-zinc-900 text-lg font-semibold px-5 py-2 bg-sky-500 rounded-md"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setStep(2)}
+        >
+          Back
+        </motion.button>
+        <motion.button
+          className="text-center text-zinc-900 text-lg font-semibold px-5 py-2 bg-sky-500 rounded-md"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setStep(3)}
+        >
+          Next
+        </motion.button>
+      </div>
+    </motion.div>
+  );
 };
 
 const Calendar = () => {

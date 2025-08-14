@@ -1,5 +1,5 @@
 import { BsPersonCircle, BsXLg } from "react-icons/bs";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { ProfileBadge } from "./ProfileBadge";
 
 import {
@@ -213,7 +213,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
   };
 
   const containerStyle =
-    "relative flex flex-col shrnk gap-1 items-start justify-center";
+    "relative flex flex-col shrink gap-1 items-start justify-center";
   const formStyle =
     "text-l w-full flex shrink border border-zinc-700 rounded-sm px-2 py-2 focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none";
 
@@ -224,210 +224,222 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
   };
 
   return (
-    <motion.div
-      layout
-      onClick={!isSelected ? handleClick : undefined}
-      whileHover={
-        isSelected ? undefined : { scale: 1.05, transition: { duration: 0.05 } }
-      }
-      className={`flex flex-col rounded-md drop-shadow-lg/50 bg-zinc-900 text-zinc-200 ${
-        isSelected
-          ? "w-full h-full z-10 p-6 absolute top-0 left-0"
-          : "w-full h-full items-center cursor-pointer justify-center p-2 relative"
-      }`}
-    >
-      <div className="relative flex justify-center items-center">
-        <div className="relative rounded-full border-2 border-sky-500 aspect-square flex justify-center items-center">
-          {person.photo ? (
-            person.photo
-          ) : (
-            <BsPersonCircle size={isSelected ? "160" : "100"} />
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col items-center justify-center gap-1 mt-2 text-sm font-semibold">
-        <div>{`${person.firstName} ${person.lastName}`}</div>
-        <div className="bg-gradient-to-br from-amber-600 to-amber-500 text-zinc-950 px-1 py-0.5 rounded-xs">
-          {person.badgeNum}
-        </div>
-        <div>{fullRanks[person.title]}</div>
-        <div>{person.number || `000-000-0000`}</div>
-      </div>
-      {isSelected && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, duration: 0.2 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-zinc-900 p-4 rounded-md flex justify-start items-start text-left text-sm"
-        >
-          <motion.div
-            whileHover={{ scale: 1.2 }}
-            onClick={() => setSelectedPerson(null)}
-            className="absolute h-10 w-10 flex items-center justify-center font-bold top-1 right-1 hover:cursor-pointer"
-          >
-            {<BsXLg size="32" />}
-          </motion.div>
-          <div className="flex shrink h-full w-2/10 flex-col justify-center items-center gap-2">
-            <div className="h-full w-full flex"></div>
-            <div className="relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4 border-sky-500">
-              <div className="relative flex shrink items-center justify-center w-full h-full">
-                {photo ? (
-                  <img src={photo} size="160" />
-                ) : (
-                  <BsPersonCircle size="160" />
-                )}
-              </div>
-            </div>
-            <span className="flex shrink items-center font-semibold text-zinc-200 text-lg justify-center">
-              {person.firstName} {person.lastName}
-            </span>
-            <UploadButton onFile={photo} photo={photo} setPhoto={setPhoto} />
-            <div className="h-full w-full flex items-end gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative px-8 py-2 shadow-lg/40 rounded-md bg-sky-500 text-xl text-zinc-900"
-              >
-                Save
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative px-3 py-2 shadow-lg/40 hover:cursor-pointer rounded-md bg-sky-500 text-xl text-zinc-900"
-              >
-                Deactivate
-              </motion.button>
-            </div>
-          </div>
-
-          <form className="grid grid-cols-2 gap-4 p-4 auto-rows-min place-content-center items-center justify-center w-1/2 h-full">
-            <div className={containerStyle}>
-              <label className="text-xl">First Name</label>
-              <input
-                name="firstName"
-                value={person.firstName}
-                className={formStyle}
-              />
-            </div>
-            <div className={containerStyle}>
-              <label className="text-xl">Last Name</label>
-              <input
-                name="lastName"
-                value={person.lastName}
-                className={formStyle}
-              />
-            </div>
-            <div className={containerStyle}>
-              <label className="text-xl">Badge Number</label>
-              <input
-                name="badgeNum"
-                value={person.badgeNum}
-                className={formStyle}
-              />
-            </div>
-            <div className={containerStyle}>
-              <label className="text-xl">Shift</label>
-              <select name="shift" value={person.shift} className={formStyle}>
-                {shifts.map((shift, index) => (
-                  <option key={index} value={shift}>
-                    {shift}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className={containerStyle}>
-              <label className="text-xl">Rank</label>
-              <select
-                name="rank"
-                value={fullRanks[person.rank]}
-                className={formStyle}
-              >
-                {Object.entries(fullRanks).map(([key, value]) => (
-                  <option key={key} value={value}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className={containerStyle}>
-              <label className="text-xl">Email</label>
-              <input
-                name="email"
-                value={`${person.firstName[0]}${person.lastName}@pickensgasheriff.com`}
-                className={formStyle}
-              />
-            </div>
-
-            <div className={containerStyle}>
-              <label className="text-xl">Division</label>
-              <select
-                name="division"
-                value={person.divison || "ADC"}
-                className={formStyle}
-              ></select>
-            </div>
-            <div className="relative flex items-center justify-between gap-2">
-              <div className="relative flex flex-col gap-2 items-center justify-center">
-                <label className="text-xl">OIC</label>
-                <ToggleSwitch value="oic" isData={isOic} setIsData={setIsOic} />
-              </div>
-              <div className="relative flex flex-col gap-2 items-center justify-center">
-                <label className="text-xl">FTO</label>
-                <ToggleSwitch value="fto" isData={isFto} setIsData={setIsFto} />
-              </div>
-              <div className="relative flex flex-col gap-2 items-center justify-center">
-                <label className="text-xl">Mandate</label>
-                <ToggleSwitch
-                  value="mandate"
-                  isData={mandate}
-                  setIsData={setMandate}
-                />
-              </div>
-              <div className="relative flex flex-col gap-2 items-center justify-center">
-                <label className="text-xl">Trainee</label>
-                <ToggleSwitch
-                  value="trainee"
-                  isData={isTrainee}
-                  setIsData={setIsTrainee}
-                />
-              </div>
-            </div>
-            {isTrainee && (
-              <motion.div
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className={containerStyle}
-              >
-                <label className="text-xl">Trainer</label>
-                <select
-                  name="trainer"
-                  value={person.trainer || "Select Trainer"}
-                  className={formStyle}
-                ></select>
-              </motion.div>
+    <AnimatePresence>
+      <motion.div
+        layout
+        onClick={!isSelected ? handleClick : undefined}
+        whileHover={
+          isSelected
+            ? undefined
+            : { scale: 1.05, transition: { duration: 0.05 } }
+        }
+        className={`flex flex-col rounded-xl drop-shadow-lg/50 bg-zinc-900 text-zinc-200 ${
+          isSelected
+            ? "w-full h-full z-10 p-6 absolute top-0 left-0"
+            : "w-full h-full items-center cursor-pointer justify-center p-2 relative"
+        }`}
+      >
+        <div className="relative flex justify-center items-center">
+          <div className="relative rounded-full border-2 border-sky-500 aspect-square flex justify-center items-center">
+            {person.photo ? (
+              person.photo
+            ) : (
+              <BsPersonCircle size={isSelected ? "160" : "100"} />
             )}
-            {isTrainee && (
-              <div className={containerStyle}>
-                <label className="text-xl">Phase</label>
-                <select
-                  name="phase"
-                  value={person.phase || "Select Phase"}
-                  className={formStyle}
+          </div>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-1 mt-2 text-sm font-semibold">
+          <div>{`${person.firstName} ${person.lastName}`}</div>
+          <div className="bg-gradient-to-br from-amber-600 to-amber-500 text-zinc-950 px-1 py-0.5 rounded-xs">
+            {person.badgeNum}
+          </div>
+          <div>{fullRanks[person.title]}</div>
+          <div>{person.number || `000-000-0000`}</div>
+        </div>
+        {isSelected && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, duration: 0.2 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-zinc-900 p-4 rounded-md flex justify-start items-start text-left text-sm"
+          >
+            <motion.button
+              whileHover={{ scale: 1.2 }}
+              onClick={() => setSelectedPerson(null)}
+              className="absolute h-12 w-12 flex items-center justify-center font-bold top-1 right-1 hover:cursor-pointer"
+            >
+              {<BsXLg size="32" />}
+            </motion.button>
+            <div className="flex shrink h-full w-2/10 flex-col justify-center items-center gap-2">
+              <div className="h-full w-full flex"></div>
+              <div className="relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4 border-sky-500">
+                <div className="relative flex shrink items-center justify-center w-full h-full">
+                  {photo ? (
+                    <img src={photo} size="160" />
+                  ) : (
+                    <BsPersonCircle size="160" />
+                  )}
+                </div>
+              </div>
+              <span className="flex shrink items-center font-semibold text-zinc-200 text-lg justify-center">
+                {person.firstName} {person.lastName}
+              </span>
+              <UploadButton onFile={photo} photo={photo} setPhoto={setPhoto} />
+              <div className="h-full w-full flex items-end gap-4 justify-center">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative px-8 py-2 shadow-lg/40 rounded-md bg-sky-500 text-xl text-zinc-900"
                 >
-                  <option value="">Select Phase</option>
-                  <option value="phase1">Phase 1</option>
-                  <option value="phase2">Phase 2</option>
+                  Save
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative px-3 py-2 shadow-lg/40 hover:cursor-pointer rounded-md bg-sky-500 text-xl text-zinc-900"
+                >
+                  Deactivate
+                </motion.button>
+              </div>
+            </div>
+
+            <form className="grid grid-cols-2 gap-4 p-4 auto-rows-min place-content-center items-center justify-center w-1/2 h-full">
+              <div className={containerStyle}>
+                <label className="text-xl">First Name</label>
+                <input
+                  name="firstName"
+                  value={person.firstName}
+                  className={formStyle}
+                />
+              </div>
+              <div className={containerStyle}>
+                <label className="text-xl">Last Name</label>
+                <input
+                  name="lastName"
+                  value={person.lastName}
+                  className={formStyle}
+                />
+              </div>
+              <div className={containerStyle}>
+                <label className="text-xl">Badge Number</label>
+                <input
+                  name="badgeNum"
+                  value={person.badgeNum}
+                  className={formStyle}
+                />
+              </div>
+              <div className={containerStyle}>
+                <label className="text-xl">Shift</label>
+                <select name="shift" value={person.shift} className={formStyle}>
+                  {shifts.map((shift, index) => (
+                    <option key={index} value={shift}>
+                      {shift}
+                    </option>
+                  ))}
                 </select>
               </div>
-            )}
-          </form>
-          <div className="w-1/2 h-full relative flex flex-col gap-4">
-            <InfoPanel title="Shift Swap / Coverage" />
-            <InfoPanel title="Vacation" />
-            <InfoPanel title="Training" />
-          </div>
-        </motion.div>
-      )}
-    </motion.div>
+              <div className={containerStyle}>
+                <label className="text-xl">Rank</label>
+                <select
+                  name="rank"
+                  value={fullRanks[person.rank]}
+                  className={formStyle}
+                >
+                  {Object.entries(fullRanks).map(([key, value]) => (
+                    <option key={key} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={containerStyle}>
+                <label className="text-xl">Email</label>
+                <input
+                  name="email"
+                  value={`${person.firstName[0]}${person.lastName}@pickensgasheriff.com`}
+                  className={formStyle}
+                />
+              </div>
+
+              <div className={containerStyle}>
+                <label className="text-xl">Division</label>
+                <select
+                  name="division"
+                  value={person.divison || "ADC"}
+                  className={formStyle}
+                ></select>
+              </div>
+              <div className="relative flex items-center justify-between gap-2">
+                <div className="relative flex flex-col gap-2 items-center justify-center">
+                  <label className="text-xl">OIC</label>
+                  <ToggleSwitch
+                    value="oic"
+                    isData={isOic}
+                    setIsData={setIsOic}
+                  />
+                </div>
+                <div className="relative flex flex-col gap-2 items-center justify-center">
+                  <label className="text-xl">FTO</label>
+                  <ToggleSwitch
+                    value="fto"
+                    isData={isFto}
+                    setIsData={setIsFto}
+                  />
+                </div>
+                <div className="relative flex flex-col gap-2 items-center justify-center">
+                  <label className="text-xl">Mandate</label>
+                  <ToggleSwitch
+                    value="mandate"
+                    isData={mandate}
+                    setIsData={setMandate}
+                  />
+                </div>
+                <div className="relative flex flex-col gap-2 items-center justify-center">
+                  <label className="text-xl">Trainee</label>
+                  <ToggleSwitch
+                    value="trainee"
+                    isData={isTrainee}
+                    setIsData={setIsTrainee}
+                  />
+                </div>
+              </div>
+              {isTrainee && (
+                <motion.div
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className={containerStyle}
+                >
+                  <label className="text-xl">Trainer</label>
+                  <select
+                    name="trainer"
+                    value={person.trainer || "Select Trainer"}
+                    className={formStyle}
+                  ></select>
+                </motion.div>
+              )}
+              {isTrainee && (
+                <div className={containerStyle}>
+                  <label className="text-xl">Phase</label>
+                  <select
+                    name="phase"
+                    value={person.phase || "Select Phase"}
+                    className={formStyle}
+                  >
+                    <option value="">Select Phase</option>
+                    <option value="phase1">Phase 1</option>
+                    <option value="phase2">Phase 2</option>
+                  </select>
+                </div>
+              )}
+            </form>
+            <div className="w-1/2 h-full relative flex flex-col gap-4">
+              <InfoPanel title="Shift Swap / Coverage" />
+              <InfoPanel title="Vacation" />
+              <InfoPanel title="Training" />
+            </div>
+          </motion.div>
+        )}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
