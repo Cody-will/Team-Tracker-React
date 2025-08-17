@@ -5,6 +5,9 @@ import { AnimatePresence, motion } from "motion/react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { select } from "@material-tailwind/react";
+import { format } from "date-fns";
+import Calendar from "./Calendar";
+import Button from "./Button";
 
 export default function ShiftSwap() {
   const [data, setData] = useState(null);
@@ -12,7 +15,7 @@ export default function ShiftSwap() {
   const [direction, setDirection] = useState(null);
   const [coverRange, setCoverRange] = useState(null);
   const [workRange, setWorkRange] = useState(null);
-  const [selectedPersonId, setSelectedPersonId] = useState("Select Person");
+  const [selectedPersonId, setSelectedPersonId] = useState(undefined);
   const selectedPerson = useMemo(
     () => data?.find((person) => person.badgeNum === selectedPersonId) ?? null,
     [data, selectedPersonId]
@@ -34,10 +37,6 @@ export default function ShiftSwap() {
 
     return () => unsubscribe();
   }, []);
-
-  useEffect(() => {
-    console.log(selectedPerson);
-  }, [selectedPersonId]);
 
   const variants = {
     enter: (dir) => ({
@@ -64,6 +63,10 @@ export default function ShiftSwap() {
     setStep((cur) => cur - 1);
     setDirection(-1);
   };
+
+  useEffect(() => {
+    console.log(selectedPersonId);
+  }, [selectedPersonId]);
 
   return (
     <div className="relative h-full w-full justify-center items-center flex">
@@ -150,10 +153,12 @@ const StepOne = ({
         Select person to swap with:
       </div>
       <select
-        className=" border-2 border-zinc-500 text-lg font-semibold rounded-md px-5 py-3 focus:ring-2 focus:ring-sky-500 focus:border-none focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none"
+        className="border-2 border-zinc-500 text-lg font-semibold rounded-md px-5 py-3 focus:ring-2 focus:ring-sky-500 focus:border-none focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none"
         value={selectedPersonId}
         onChange={(event) => setSelectedPersonId(event.target.value)}
       >
+        {" "}
+        <option value={undefined}>Please select person</option>
         {data &&
           Object.values(data).map((person) => (
             <option
@@ -162,16 +167,7 @@ const StepOne = ({
             >{`${person.lastName}, ${person.firstName[0]} ${person.badgeNum}`}</option>
           ))}
       </select>
-      <motion.button
-        className="text-center text-zinc-900 text-lg font-semibold px-5 py-2 bg-sky-500 rounded-md"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => {
-          handleNext();
-        }}
-      >
-        Next
-      </motion.button>
+      <Button text="Next" action={handleNext} />
     </motion.div>
   );
 };
@@ -199,27 +195,9 @@ const StepTwo = ({
         Select dates you need covered:
       </div>
       <div className="">{<Calendar range={range} setRange={setRange} />}</div>
-      <div className="relative flex gap-4 justify-center items-center">
-        <motion.button
-          className="text-center text-zinc-900 text-lg font-semibold px-5 py-2 bg-sky-500 rounded-md"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            handleBack();
-          }}
-        >
-          Back
-        </motion.button>
-        <motion.button
-          className="text-center text-zinc-900 text-lg font-semibold px-5 py-2 bg-sky-500 rounded-md"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            handleNext();
-          }}
-        >
-          Next
-        </motion.button>
+      <div className="relative w-full flex gap-4 justify-center items-center">
+        <Button text={"Back"} action={handleBack} />
+        <Button text={"Next"} action={handleNext} />
       </div>
     </motion.div>
   );
@@ -248,27 +226,9 @@ const StepThree = ({
         Select dates you need covered:
       </div>
       <div className="">{<Calendar range={range} setRange={setRange} />}</div>
-      <div className="relative flex gap-4 justify-center items-center">
-        <motion.button
-          className="text-center text-zinc-900 text-lg font-semibold px-5 py-2 bg-sky-500 rounded-md"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            handleBack();
-          }}
-        >
-          Back
-        </motion.button>
-        <motion.button
-          className="text-center text-zinc-900 text-lg font-semibold px-5 py-2 bg-sky-500 rounded-md"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => {
-            handleNext();
-          }}
-        >
-          Next
-        </motion.button>
+      <div className="relative w-full flex gap-4 justify-center items-center">
+        <Button text={"Back"} action={handleBack} />
+        <Button text={"Next"} action={handleNext} />
       </div>
     </motion.div>
   );
@@ -276,41 +236,20 @@ const StepThree = ({
 
 const Confirm = ({ selectedPerson, coverRange, workRange }) => {
   return (
-    <>
+    <motion.div className="relative flex flex-col justify-center items-center gap-2 text-zinc-200 text-xl font-semibold p-15">
       <div className="">{`${selectedPerson.lastName} ${selectedPerson.badgeNum}`}</div>
-      <div className="">{format(coverRange, "PP")}</div>
-      <div className="">{format(workRange, "PP")}</div>
-    </>
-  );
-};
-
-const Calendar = ({ range, setRange }) => {
-  return (
-    <DayPicker
-      mode="range"
-      animate
-      selected={range}
-      onSelect={setRange}
-      navLayout="around"
-      showOutsideDays={true}
-      fixedWeeks={6}
-      classNames={{
-        day_button: "h-full w-full flex",
-        today: "text-sky-500 bg-sky-500",
-        range_start: "bg-sky-500 text-zinc-900",
-        range_middle: "bg-sky-500 text-zinc-900",
-        range_end: "bg-sky-500 text-zinc-900",
-        caption_label: "text-2xl",
-        weekdays: "grid text-lg font-semibold grid-cols-7",
-        week: "grid gap-2 grid-cols-7",
-        weeks: "grid gap-2",
-        day: "w-22 min-h-16 font-semibold hover:cursor-pointer hover:scale-110 p-1 rounded-md border-2 border-zinc-200 text-sm text-zinc-200 hover:bg-sky-500 hover:border-sky-500 hover:txt-zinc-900",
-        selected:
-          "bg-sky-500 border border-sky-500 text-zinc-900 hover:bg-sky-700",
-        chevron:
-          "fill-sky-500 hover:scale-150 transition duration-300 ease-in-out",
-        outside: "text-zinc-400 border-zinc-400",
-      }}
-    />
+      <div className="relative flex">
+        {`${format(coverRange.from, "EEE, MMM d, yyyy")} - ${format(
+          coverRange.to,
+          "EEE, MMM d, yyyy"
+        )}`}
+      </div>
+      <div className="relative flex ">
+        {`${format(workRange.from, "EEE, MMM d, yyyy")} - ${format(
+          workRange.to,
+          "EEE, MMM d, yyyy"
+        )}`}
+      </div>
+    </motion.div>
   );
 };

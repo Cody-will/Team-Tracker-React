@@ -1,10 +1,21 @@
-export default function InfoCard({ title = "", props = "" }) {
+import { useState, useEffect } from "react";
+
+export default function InfoCard({ title = "", props = "", column = false }) {
+  const [col, setCol] = useState(false);
+  useEffect(() => {
+    setCol(column);
+  }, []);
+
   return (
     <div className="relative p-1 rounded-md flex flex-col justify-center items-center h-full w-full overflow-hidden bg-gradient-to-b from-zinc-950 to-zinc-800 shadow-lg/30">
       <div className="absolute top-0 left-0 pl-2 pt-2 flex items-center justify-start text-lg font-bold text-zinc-200">
         {title}
       </div>
-      <div className="relative flex gap-4 items-center justify-center">
+      <div
+        className={`relative flex${
+          col ? "-col" : ""
+        } gap-4 items-center justify-center`}
+      >
         {props}
       </div>
     </div>

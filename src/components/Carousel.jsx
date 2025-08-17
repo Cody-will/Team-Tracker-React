@@ -24,7 +24,7 @@ export default function Carousel({ team }) {
     const mandateCards = createCards(mandate);
 
     const all = [
-      { key: "mandate", title: "Mandate", props: mandateCards },
+      { key: "mandate", title: "Mandate", props: mandateCards, column: false },
       { key: "extra-1", title: "Extra 1" },
       { key: "extra-2", title: "Extra 2" },
       { key: "extra-3", title: "Extra 3" },
@@ -81,7 +81,7 @@ export default function Carousel({ team }) {
       </motion.button>
 
       <div className="relative w-full h-full flex justify-center items-center">
-        <AnimatePresence custom={direction} mode="wait">
+        <AnimatePresence custom={direction} mode="wait" initial={false}>
           <motion.div
             key={page}
             custom={direction}
@@ -93,7 +93,12 @@ export default function Carousel({ team }) {
             className="flex gap-2 w-full h-full justify-center items-center"
           >
             {paginatedCards.map((card) => (
-              <InfoCard key={card.key} title={card.title} props={card.props} />
+              <InfoCard
+                key={card.key}
+                title={card.title}
+                props={card.props}
+                column={card.column}
+              />
             ))}
           </motion.div>
         </AnimatePresence>

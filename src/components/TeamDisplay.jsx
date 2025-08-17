@@ -36,10 +36,6 @@ export default function TeamDisplay({ team }) {
 
   return (
     <motion.div className="flex flex-col w-full">
-      <div className="w-full flex justify-center pt-1">
-        <ButtonBar />
-      </div>
-
       <div id="mainContainer" className="w-full p-2">
         <div id="topContainer" className="flex w-full h-28">
           <div
@@ -59,26 +55,3 @@ export default function TeamDisplay({ team }) {
     </motion.div>
   );
 }
-
-// Button group for switching between shifts
-const ButtonBar = () => {
-  return (
-    <div className="flex bg-zinc-900 justify-evenly items-center text-zinc-300 text-center text-md divide-x-1 divide-zinc-300 font-semibold rounded-md shadow-lg/50">
-      <button className="py-1.5 px-2.5 hover:bg-amber-500 hover:rounded-l-md">
-        All
-      </button>
-      <button className="py-1.5 px-2.5 hover:bg-amber-500 hover:text-zinc-950">
-        Alpha
-      </button>
-      <button className="py-1.5 px-2.5 hover:bg-amber-500 hover:text-zinc-950">
-        Bravo
-      </button>
-      <button className="py-1.5 px-2.5 hover:bg-amber-500 hover:text-zinc-950">
-        Charlie
-      </button>
-      <button className="py-1.5 px-2.5 hover:bg-amber-500 hover:rounded-r-md">
-        Delta
-      </button>
-    </div>
-  );
-};

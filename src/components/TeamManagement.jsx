@@ -1,5 +1,5 @@
 import { BsPersonCircle, BsXLg } from "react-icons/bs";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ProfileBadge } from "./ProfileBadge";
 
 import {

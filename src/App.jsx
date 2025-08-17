@@ -11,35 +11,39 @@ import Login from "./components/Login";
 import { motion } from "motion/react";
 import TeamManagement from "./components/TeamManagement";
 import ShiftSwap from "./components/ShiftSwap";
+import Vacation from "./components/Vacation";
+import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 function App() {
-  const pages = {
-    login: <Login />,
-    home: <Home />,
-    teamManagement: <TeamManagement />,
-    shiftSwap: <ShiftSwap />,
-  };
-  const [page, setPage] = useState(null);
-  const [isLoggedIn, setIsLoggedin] = useState(true);
-  const [padding, setPadding] = useState(16);
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setPage(pages.shiftSwap);
-      setPadding(16);
-    } else {
-      setPage(pages.login);
-      setPadding(0);
-    }
-  }, [isLoggedIn]);
+      <Route element={<ProtectedLayout />}>
+        <Route index element={<Navigate to="/shift-swap" replace />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/team-management" element={<TeamManagement />} />
+        <Route path="/vacation" element={<Vacation />} />
+        <Route path="/shift-swap" element={<ShiftSwap />} />
+      </Route>
 
+      <Route path="*" element={<div className="p-6">Not Found</div>} />
+    </Routes>
+  );
+}
+
+const ProtectedLayout = () => {
+  const isLoggedIn = true;
+  if (!isLoggedIn) return <Navigate to="/login" replace />;
   return (
     <motion.div className="h-screen w-screen overflow-hidden relative">
       <div className="bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover fixed inset-0 z-0"></div>
-      {isLoggedIn && <Sidebar setPage={setPage} pages={pages} />}
-      <main className={`w-full h-full relative z-10 pl-16`}>{page}</main>
+      {isLoggedIn && <Sidebar />}
+      <main className={`w-full h-full relative z-10 pl-16`}>
+        <Outlet />
+      </main>
     </motion.div>
   );
-}
+};
 
 export default App;
