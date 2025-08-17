@@ -476,15 +476,16 @@ const ToggleSwitch = ({ value, isData, setIsData }) => {
 
   return (
     <motion.div
+      layout="position"
       className={`relative flex items-center border hover:cursor-pointer p-0.5 border-sky-500  ${
-        isData ? "bg-sky-500" : "bg-zinc-300"
+        isData ? "bg-sky-500 justify-end" : "bg-zinc-300 justify-start"
       } h-6 w-12 rounded-xl`}
       onClick={toggleIsData}
     >
       <motion.div
+        layout
         className="size-5 bg-zinc-800 rounded-full"
-        animate={{ x: isData ? 22 : 0 }}
-        transition={{ type: "spring", bounce: 0.5, duration: 0.3 }}
+        transition={{ layout: { type: "spring", bounce: 0.5, duration: 0.5 } }}
       />
     </motion.div>
   );
