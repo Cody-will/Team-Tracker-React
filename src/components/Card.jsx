@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { primaryAccent, secondaryAccent } from "../colors.js";
 
 export default function Card({
   firstname,
@@ -29,7 +30,9 @@ export default function Card({
         transition={{ duration: 0.3 }}
         className="absolute inset-0 h-24 w-24 flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-md shadow-lg/30"
       >
-        <div className="h-14 w-14 relative border-2 border-sky-400 text-zinc-200 rounded-full flex items-center justify-center text-4xl">
+        <div
+          className={`h-14 w-14 relative border-2 border-${primaryAccent} text-zinc-200 rounded-full flex items-center justify-center text-4xl`}
+        >
           {icon}
           {fto && <Badge label="FTO" position="bottom-right" />}
           {oic && <Badge label="OIC" position="bottom-left" />}
@@ -56,7 +59,9 @@ export default function Card({
       >
         {/* Row 1 */}
         <div className="flex flex-row gap-2 items-center justify-center">
-          <div className="h-14 w-14 relative border-2 border-sky-400 rounded-full flex items-center justify-center text-4xl text-zinc-200">
+          <div
+            className={`h-14 w-14 relative border-2 border-${primaryAccent} rounded-full flex items-center justify-center text-4xl text-zinc-200`}
+          >
             {icon}
             {fto && <Badge label="FTO" position="bottom-right" />}
             {oic && <Badge label="OIC" position="bottom-left" />}
@@ -64,7 +69,9 @@ export default function Card({
           <div className="flex flex-col items-center text-sm font-semibold text-zinc-300 text-center">
             <div>{title}</div>
             <div className="text-xs">{`${lastname}, ${firstname[0]}`}</div>
-            <div className="bg-amber-500 text-zinc-900 text-xs px-1 mt-1 rounded-xs shadow-md">
+            <div
+              className={`bg-${secondaryAccent} text-zinc-900 text-xs px-1 mt-1 rounded-xs shadow-md`}
+            >
               {badge}
             </div>
           </div>
@@ -88,7 +95,7 @@ function Badge({ label, position }) {
   return (
     <div
       className={`${base} ${pos} ${
-        label === "FTO" ? "bg-amber-500" : "bg-sky-500"
+        label === "FTO" ? `bg-${secondaryAccent}` : `bg-${primaryAccent}`
       }`}
     >
       {label}

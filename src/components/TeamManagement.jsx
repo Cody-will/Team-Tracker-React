@@ -11,6 +11,7 @@ import {
 import { useEffect, useState, useRef } from "react";
 import { db } from "../firebase";
 import { onValue, ref, set } from "firebase/database";
+import { primaryAccent, secondaryAccent } from "../colors.js";
 
 export default function TeamManagement() {
   const [data, setData] = useState(null);
@@ -92,7 +93,7 @@ const Panel = ({
                 <motion.div
                   layoutId="underline"
                   transition={{ type: "spring", bounce: 0.25, duration: 0.3 }}
-                  className="absolute top-0 left-0 w-full -z-1 h-full rounded-md bg-sky-500"
+                  className={`absolute top-0 left-0 w-full -z-1 h-full rounded-md bg-${primaryAccent}`}
                 ></motion.div>
               )}
               <motion.span
@@ -214,8 +215,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
 
   const containerStyle =
     "relative flex flex-col shrink gap-1 items-start justify-center";
-  const formStyle =
-    "text-l w-full flex shrink border border-zinc-700 rounded-sm px-2 py-2 focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none";
+  const formStyle = `text-l w-full flex shrink border border-zinc-700 rounded-sm px-2 py-2 focus:ring-2 focus:ring-${primaryAccent} focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none`;
 
   const isSelected = selectedPerson?.badgeNum === person.badgeNum;
 
@@ -240,7 +240,9 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
         }`}
       >
         <div className="relative flex justify-center items-center">
-          <div className="relative rounded-full border-2 border-sky-500 aspect-square flex justify-center items-center">
+          <div
+            className={`relative rounded-full border-2 border-${primaryAccent} aspect-square flex justify-center items-center`}
+          >
             {person.photo ? (
               person.photo
             ) : (
@@ -250,7 +252,9 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
         </div>
         <div className="flex flex-col items-center justify-center gap-1 mt-2 text-sm font-semibold">
           <div>{`${person.firstName} ${person.lastName}`}</div>
-          <div className="bg-gradient-to-br from-amber-600 to-amber-500 text-zinc-950 px-1 py-0.5 rounded-xs">
+          <div
+            className={`bg-${secondaryAccent} text-zinc-950 px-1 py-0.5 rounded-xs`}
+          >
             {person.badgeNum}
           </div>
           <div>{fullRanks[person.title]}</div>
@@ -272,7 +276,9 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
             </motion.button>
             <div className="flex shrink h-full w-2/10 flex-col justify-center items-center gap-2">
               <div className="h-full w-full flex"></div>
-              <div className="relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4 border-sky-500">
+              <div
+                className={`relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4 border-${primaryAccent}`}
+              >
                 <div className="relative flex shrink items-center justify-center w-full h-full">
                   {photo ? (
                     <img src={photo} size="160" />
@@ -289,14 +295,14 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="relative px-8 py-2 shadow-lg/40 rounded-md bg-sky-500 text-xl text-zinc-900"
+                  className={`relative px-8 py-2 shadow-lg/40 rounded-md bg-${primaryAccent} text-xl text-zinc-900`}
                 >
                   Save
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="relative px-3 py-2 shadow-lg/40 hover:cursor-pointer rounded-md bg-sky-500 text-xl text-zinc-900"
+                  className={`relative px-3 py-2 shadow-lg/40 hover:cursor-pointer rounded-md bg-${primaryAccent} text-xl text-zinc-900`}
                 >
                   Deactivate
                 </motion.button>
@@ -477,8 +483,8 @@ const ToggleSwitch = ({ value, isData, setIsData }) => {
   return (
     <motion.div
       layout="position"
-      className={`relative flex items-center border hover:cursor-pointer p-0.5 border-sky-500  ${
-        isData ? "bg-sky-500 justify-end" : "bg-zinc-300 justify-start"
+      className={`relative flex items-center border hover:cursor-pointer p-0.5 border-${primaryAccent}  ${
+        isData ? `${primaryAccent} justify-end` : "bg-zinc-300 justify-start"
       } h-6 w-12 rounded-xl`}
       onClick={toggleIsData}
     >
@@ -530,7 +536,7 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
     <div className="flex flex-col items-center gap-3">
       <motion.button
         type="button"
-        className="relative flex justify-center shadow-lg/50 items-center bg-sky-500 py-2 px-3 rounded-md text-md font-semibold text-zinc-900 hover:cursor-pointer"
+        className={`relative flex justify-center shadow-lg/50 items-center bg-${primaryAccent} py-2 px-3 rounded-md text-md font-semibold text-zinc-900 hover:cursor-pointer`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => inputRef.current?.click()}
@@ -560,7 +566,7 @@ const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
         <img
           src={previewUrl}
           alt="Selected preview"
-          className="h-24 w-24 rounded-full object-cover border-2 border-sky-500"
+          className={`h-24 w-24 rounded-full object-cover border-2 border-${primaryAccent}`}
         />
       )}
     </div>

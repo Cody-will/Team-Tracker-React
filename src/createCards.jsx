@@ -1,7 +1,6 @@
 import Card from "./components/Card";
 import UpperCard from "./components/UpperCard";
 import { BsPersonCircle } from "react-icons/bs";
-import CardSm from "./components/CardSm";
 
 export function createCards(team) {
   const cards = [];

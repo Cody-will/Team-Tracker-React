@@ -13,6 +13,7 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { primaryAccent, secondaryAccent } from "../colors.js";
 
 export default function Sidebar({ setPage, pages }) {
   const links = [
@@ -28,7 +29,7 @@ export default function Sidebar({ setPage, pages }) {
   return (
     <div
       id="panel"
-      className="fixed top-0 left-0 h-screen w-16 z-50 flex gap-4 shadow-inner/90 flex-col bg-zinc-950/50"
+      className="fixed top-0 left-0 h-screen w-16 z-50 flex gap-4 shadow-lg/40 flex-col bg-zinc-950/50"
     >
       <div className="h-3/4 mt-2">
         {links.map(({ to, icon, label }) => (
@@ -59,7 +60,7 @@ function SideBarLink({ to, icon, label }) {
         [
           "relative flex items-center justify-center h-12 w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
           "hover:scale-110 hover:bg-orange-500 hover:text-zinc-950",
-          isActive ? "bg-orange-500 text-zinc-950" : "",
+          isActive ? `bg-${secondaryAccent} text-zinc-950` : "",
         ].join(" ")
       }
     >

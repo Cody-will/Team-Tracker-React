@@ -12,6 +12,7 @@ import { motion } from "motion/react";
 import TeamManagement from "./components/TeamManagement";
 import ShiftSwap from "./components/ShiftSwap";
 import Vacation from "./components/Vacation";
+import Settings from "./components/Settings";
 import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/team-management" element={<TeamManagement />} />
         <Route path="/vacation" element={<Vacation />} />
         <Route path="/shift-swap" element={<ShiftSwap />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
 
       <Route path="*" element={<div className="p-6">Not Found</div>} />

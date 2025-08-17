@@ -8,6 +8,7 @@ import { select } from "@material-tailwind/react";
 import { format } from "date-fns";
 import Calendar from "./Calendar";
 import Button from "./Button";
+import { primaryAccent, secondaryAccent } from "../colors.js";
 
 export default function ShiftSwap() {
   const [data, setData] = useState(null);
@@ -153,7 +154,7 @@ const StepOne = ({
         Select person to swap with:
       </div>
       <select
-        className="border-2 border-zinc-500 text-lg font-semibold rounded-md px-5 py-3 focus:ring-2 focus:ring-sky-500 focus:border-none focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none"
+        className={`border-2 border-zinc-500 text-lg font-semibold rounded-md px-5 py-3 focus:ring-2 focus:ring-${primaryAccent} focus:border-none focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none`}
         value={selectedPersonId}
         onChange={(event) => setSelectedPersonId(event.target.value)}
       >

@@ -1,4 +1,5 @@
 import { DayPicker } from "react-day-picker";
+import { primaryAccent, secondaryAccent } from "../colors.js";
 
 export default function Calendar({ range, setRange }) {
   return (
@@ -20,11 +21,9 @@ export default function Calendar({ range, setRange }) {
         weekdays: "grid text-lg font-semibold grid-cols-7",
         week: "grid gap-2 grid-cols-7",
         weeks: "grid gap-2",
-        day: "w-22 min-h-16 font-semibold hover:cursor-pointer hover:scale-110 p-1 rounded-md border-2 border-zinc-200 text-sm text-zinc-200 hover:bg-sky-500 hover:border-sky-500 hover:txt-zinc-900",
-        selected:
-          "bg-sky-500 border border-sky-500 text-zinc-900 hover:bg-sky-700",
-        chevron:
-          "fill-sky-500 hover:scale-150 transition duration-300 ease-in-out",
+        day: `w-22 min-h-16 font-semibold hover:cursor-pointer hover:scale-110 p-1 rounded-md border-2 border-zinc-200 text-sm text-zinc-200 hover:bg-${primaryAccent} hover:border-${primaryAccent} hover:text-zinc-900`,
+        selected: `bg- border border-${primaryAccent} text-zinc-900 hover:bg-sky-700`,
+        chevron: `fill-${primaryAccent} hover:scale-150 transition duration-300 ease-in-out`,
         outside: "text-zinc-400 border-zinc-400",
       }}
     />
