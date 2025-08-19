@@ -1,43 +1,26 @@
-import { db } from "../firebase";
 import { useLayoutEffect, useState, useMemo, useEffect, useRef } from "react";
-import { ref, onValue } from "firebase/database";
 import { AnimatePresence, motion } from "motion/react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { select } from "@material-tailwind/react";
 import { format } from "date-fns";
-import Calendar from "./Calendar";
-import Button from "./Button";
-import { primaryAccent, secondaryAccent } from "../colors.js";
+import Calendar from "../components/Calendar";
+import Button from "../components/Button";
+import { primaryAccent, secondaryAccent } from "../colors";
+import { useOutletContext } from "react-router-dom";
 
 export default function ShiftSwap() {
-  const [data, setData] = useState(null);
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(null);
   const [coverRange, setCoverRange] = useState(null);
   const [workRange, setWorkRange] = useState(null);
   const [selectedPersonId, setSelectedPersonId] = useState(undefined);
+  const { data, loading } = useOutletContext();
   const selectedPerson = useMemo(
     () => data?.find((person) => person.badgeNum === selectedPersonId) ?? null,
     [data, selectedPersonId]
   );
   getDefaultClassNames();
-
-  useEffect(() => {
-    const teamData = ref(db, "team");
-
-    const unsubscribe = onValue(
-      teamData,
-      (snapshot) => {
-        setData(snapshot.exists() ? Object.values(snapshot.val()) : null);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
 
   const variants = {
     enter: (dir) => ({

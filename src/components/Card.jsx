@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { primaryAccent, secondaryAccent } from "../colors.js";
+import { primaryAccent, secondaryAccent } from "../colors";
 
 export default function Card({
   firstname,

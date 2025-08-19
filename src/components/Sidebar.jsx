@@ -10,10 +10,9 @@ import {
   BsCalendar2Plus,
 } from "react-icons/bs";
 
-import { NavLink, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { primaryAccent, secondaryAccent } from "../colors.js";
+import { NavLink } from "react-router-dom";
+import { motion, LayoutGroup } from "motion/react";
+import { primaryAccentHex } from "../colors";
 
 export default function Sidebar({ setPage, pages }) {
   const links = [
@@ -23,29 +22,21 @@ export default function Sidebar({ setPage, pages }) {
     { to: "/shift-swap", icon: <BsShuffle size={32} />, label: "Shift Swap" },
     { to: "/add-user", icon: <BsPersonPlus size={32} />, label: "Add User" },
     { to: "/coverage", icon: <BsCalendar2Plus size={32} />, label: "Coverage" },
+    { to: "/settings", icon: <BsGear size={32} />, label: "Settings" },
+    { to: "/login", icon: <BsDoorClosed size="32" />, label: "Logout" },
   ];
-  const [selectedTab, setSelectedTab] = useState();
-
   return (
-    <div
-      id="panel"
-      className="fixed top-0 left-0 h-screen w-16 z-50 flex gap-4 shadow-lg/40 flex-col bg-zinc-950/50"
-    >
-      <div className="h-3/4 mt-2">
-        {links.map(({ to, icon, label }) => (
-          <SideBarLink key={to} to={to} icon={icon} label={label} />
-        ))}
-      </div>
-      <SideBarLink
-        to={"/settings"}
-        icon={<BsGear size={32} />}
-        label="Settings"
-      />
-      <SideBarLink
-        to="/login"
-        icon={<BsDoorClosed size={32} />}
-        label="Logout"
-      />
+    <div className="w-20 z-50 flex items-end justify-center h-screen flex-col">
+      <LayoutGroup>
+        <div
+          id="panel"
+          className="w-16 py-4 gap-2 rounded-xl flex flex-col items-center justify-center border border-zinc-700 shadow-xl/40 bg-zinc-950/40"
+        >
+          {links.map(({ to, icon, label }) => (
+            <SideBarLink key={to} to={to} icon={icon} label={label} />
+          ))}
+        </div>
+      </LayoutGroup>
     </div>
   );
 }
@@ -59,15 +50,27 @@ function SideBarLink({ to, icon, label }) {
       className={({ isActive }) =>
         [
           "relative flex items-center justify-center h-12 w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
-          "hover:scale-110 hover:bg-orange-500 hover:text-zinc-950",
-          isActive ? `bg-${secondaryAccent} text-zinc-950` : "",
+          "hover:scale-120",
+          isActive ? "text-zinc-950" : "",
         ].join(" ")
       }
     >
-      {icon}
-      <span className="absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md text-zinc-200 bg-zinc-950 text-xs font-bold transition-all duration-100 scale-0 origin-left group-hover:scale-100">
-        {label}
-      </span>
+      {({ isActive }) => (
+        <>
+          {isActive && (
+            <motion.div
+              layoutId="sidebar-highlight"
+              transition={{ type: "spring", bounce: 0.25, duration: 0.3 }}
+              style={{ backgroundColor: primaryAccentHex }}
+              className="absolute inset-0 rounded-lg -z-10"
+            />
+          )}
+          {icon}
+          <span className="absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md text-zinc-200 bg-zinc-950 text-xs font-bold transition-all duration-100 scale-0 origin-left group-hover:scale-100">
+            {label}
+          </span>
+        </>
+      )}
     </NavLink>
   );
 }

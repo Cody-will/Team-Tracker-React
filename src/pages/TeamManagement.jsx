@@ -1,6 +1,7 @@
 import { BsPersonCircle, BsXLg } from "react-icons/bs";
-import { motion, AnimatePresence } from "framer-motion";
-import { ProfileBadge } from "./ProfileBadge";
+import { motion, AnimatePresence } from "motion/react";
+import { ProfileBadge } from "../components/ProfileBadge";
+import ToggleSwitch from "../components/ToggleSwitch";
 
 import {
   findSupervisors,
@@ -9,34 +10,22 @@ import {
   getUnassigned,
 } from "../teamSorting";
 import { useEffect, useState, useRef } from "react";
-import { db } from "../firebase";
-import { onValue, ref, set } from "firebase/database";
-import { primaryAccent, secondaryAccent } from "../colors.js";
+import {
+  primaryAccent,
+  primaryAccentHex,
+  secondaryAccent,
+  secondaryAccentHex,
+} from "../colors";
+import { useOutletContext } from "react-router-dom";
+import Button from "../components/Button";
 
 export default function TeamManagement() {
-  const [data, setData] = useState(null);
+  const { data, loading } = useOutletContext();
   const [selectedTab, setSelectedTab] = useState("Alpha");
   const tabs = ["Alpha", "Bravo", "Charlie", "Delta", "Unassigned"];
   const [shift, setShift] = useState([]);
   const [shiftSuper, setShiftSuper] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState(null);
-
-  useEffect(() => {
-    const teamData = ref(db, "team");
-
-    const unsubscribe = onValue(
-      teamData,
-      (snapshot) => {
-        setData(snapshot.exists() ? Object.values(snapshot.val()) : null);
-        console.log(snapshot.exists());
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
 
   const sortTeam = useEffect(() => {
     if (!data) return;
@@ -93,7 +82,8 @@ const Panel = ({
                 <motion.div
                   layoutId="underline"
                   transition={{ type: "spring", bounce: 0.25, duration: 0.3 }}
-                  className={`absolute top-0 left-0 w-full -z-1 h-full rounded-md bg-${primaryAccent}`}
+                  style={{ backgroundColor: primaryAccentHex }}
+                  className={`absolute top-0 left-0 w-full -z-1 h-full rounded-md`}
                 ></motion.div>
               )}
               <motion.span
@@ -240,23 +230,25 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
         }`}
       >
         <div className="relative flex justify-center items-center">
-          <div
-            className={`relative rounded-full border-2 border-${primaryAccent} aspect-square flex justify-center items-center`}
+          <motion.div
+            style={{ borderColor: primaryAccentHex }}
+            className={`relative rounded-full border-2 aspect-square flex justify-center items-center`}
           >
             {person.photo ? (
               person.photo
             ) : (
               <BsPersonCircle size={isSelected ? "160" : "100"} />
             )}
-          </div>
+          </motion.div>
         </div>
         <div className="flex flex-col items-center justify-center gap-1 mt-2 text-sm font-semibold">
           <div>{`${person.firstName} ${person.lastName}`}</div>
-          <div
-            className={`bg-${secondaryAccent} text-zinc-950 px-1 py-0.5 rounded-xs`}
+          <motion.div
+            style={{ backgroundColor: secondaryAccentHex }}
+            className={`text-zinc-950 px-1 py-0.5 rounded-xs`}
           >
             {person.badgeNum}
-          </div>
+          </motion.div>
           <div>{fullRanks[person.title]}</div>
           <div>{person.number || `000-000-0000`}</div>
         </div>
@@ -277,7 +269,8 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
             <div className="flex shrink h-full w-2/10 flex-col justify-center items-center gap-2">
               <div className="h-full w-full flex"></div>
               <div
-                className={`relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4 border-${primaryAccent}`}
+                style={{ borderColor: primaryAccentHex }}
+                className={`relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4`}
               >
                 <div className="relative flex shrink items-center justify-center w-full h-full">
                   {photo ? (
@@ -292,24 +285,15 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
               </span>
               <UploadButton onFile={photo} photo={photo} setPhoto={setPhoto} />
               <div className="h-full w-full flex items-end gap-4 justify-center">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`relative px-8 py-2 shadow-lg/40 rounded-md bg-${primaryAccent} text-xl text-zinc-900`}
-                >
-                  Save
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`relative px-3 py-2 shadow-lg/40 hover:cursor-pointer rounded-md bg-${primaryAccent} text-xl text-zinc-900`}
-                >
-                  Deactivate
-                </motion.button>
+                <Button text="Save" action={() => {}} />
+                <Button text="Deactivate" action={() => {}} />
               </div>
             </div>
 
-            <form className="grid grid-cols-2 gap-4 p-4 auto-rows-min place-content-center items-center justify-center w-1/2 h-full">
+            <motion.form
+              layout
+              className="grid grid-cols-2 gap-4 p-4 auto-rows-min place-content-center items-center justify-center w-1/2 h-full"
+            >
               <div className={containerStyle}>
                 <label className="text-xl">First Name</label>
                 <input
@@ -378,39 +362,24 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
               <div className="relative flex items-center justify-between gap-2">
                 <div className="relative flex flex-col gap-2 items-center justify-center">
                   <label className="text-xl">OIC</label>
-                  <ToggleSwitch
-                    value="oic"
-                    isData={isOic}
-                    setIsData={setIsOic}
-                  />
+                  <ToggleSwitch state={isOic} setState={setIsOic} />
                 </div>
                 <div className="relative flex flex-col gap-2 items-center justify-center">
                   <label className="text-xl">FTO</label>
-                  <ToggleSwitch
-                    value="fto"
-                    isData={isFto}
-                    setIsData={setIsFto}
-                  />
+                  <ToggleSwitch state={isFto} setState={setIsFto} />
                 </div>
                 <div className="relative flex flex-col gap-2 items-center justify-center">
                   <label className="text-xl">Mandate</label>
-                  <ToggleSwitch
-                    value="mandate"
-                    isData={mandate}
-                    setIsData={setMandate}
-                  />
+                  <ToggleSwitch state={mandate} setState={setMandate} />
                 </div>
                 <div className="relative flex flex-col gap-2 items-center justify-center">
                   <label className="text-xl">Trainee</label>
-                  <ToggleSwitch
-                    value="trainee"
-                    isData={isTrainee}
-                    setIsData={setIsTrainee}
-                  />
+                  <ToggleSwitch state={isTrainee} setState={setIsTrainee} />
                 </div>
               </div>
               {isTrainee && (
                 <motion.div
+                  layout
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className={containerStyle}
                 >
@@ -423,7 +392,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                 </motion.div>
               )}
               {isTrainee && (
-                <div className={containerStyle}>
+                <motion.div layout className={containerStyle}>
                   <label className="text-xl">Phase</label>
                   <select
                     name="phase"
@@ -434,9 +403,9 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
                     <option value="phase1">Phase 1</option>
                     <option value="phase2">Phase 2</option>
                   </select>
-                </div>
+                </motion.div>
               )}
-            </form>
+            </motion.form>
             <div className="w-1/2 h-full relative flex flex-col gap-4">
               <InfoPanel title="Shift Swap / Coverage" />
               <InfoPanel title="Vacation" />
@@ -471,28 +440,6 @@ const TeamPanel = ({ title, cards }) => {
       <div className="flex p-4 gap-4 items-center justify-evenly w-full h-full">
         {cards}
       </div>
-    </motion.div>
-  );
-};
-
-const ToggleSwitch = ({ value, isData, setIsData }) => {
-  const toggleIsData = () => {
-    setIsData(!isData);
-  };
-
-  return (
-    <motion.div
-      layout="position"
-      className={`relative flex items-center border hover:cursor-pointer p-0.5 border-${primaryAccent}  ${
-        isData ? `${primaryAccent} justify-end` : "bg-zinc-300 justify-start"
-      } h-6 w-12 rounded-xl`}
-      onClick={toggleIsData}
-    >
-      <motion.div
-        layout
-        className="size-5 bg-zinc-800 rounded-full"
-        transition={{ layout: { type: "spring", bounce: 0.5, duration: 0.5 } }}
-      />
     </motion.div>
   );
 };

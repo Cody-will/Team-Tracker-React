@@ -1,4 +1,4 @@
-import { primaryAccent, secondaryAccent } from "../colors.js";
+import { primaryAccent, secondaryAccent } from "../colors";
 
 // The larger card, used for displaying upper rank supervisors that are always on call or on all shifts (Maj, LT, Ect..)
 

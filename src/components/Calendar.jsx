@@ -1,5 +1,5 @@
 import { DayPicker } from "react-day-picker";
-import { primaryAccent, secondaryAccent } from "../colors.js";
+import { primaryAccent, secondaryAccent } from "../colors";
 
 export default function Calendar({ range, setRange }) {
   return (

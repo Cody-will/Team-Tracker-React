@@ -1,18 +1,47 @@
-import { db } from "../firebase.js";
-import { ref, onValue } from "firebase/database";
-import Calendar from "./Calendar";
-import { AnimatePresence, motion } from "framer-motion";
+import Calendar from "../components/Calendar";
+import { AnimatePresence, motion } from "motion/react";
 import { useState, useEffect } from "react";
-import Button from "./Button";
-import { primaryAccent, secondaryAccent } from "../colors.js";
+import Button from "../components/Button";
+import { primaryAccent, secondaryAccent } from "../colors";
+import { useOutletContext } from "react-router-dom";
 
+/**
+ * A minimal Person shape used in this view.
+ * @typedef {Object} Person
+ * @property {string|number} badgeNum
+ * @property {string} firstName
+ * @property {string} lastName
+ */
+
+/**
+ * Direction value for slide animations: +1 next, -1 back.
+ * @typedef {number} Direction
+ */
+
+/**
+ * Variants object for direction-aware slide transitions.
+ * `enter` and `exit` receive the custom `Direction` value.
+ * @typedef {Object} SlideVariants
+ * @property {(dir: Direction) => Object} enter
+ * @property {Object} center
+ * @property {(dir: Direction) => Object} exit
+ */
+
+/**
+ * Vacation request page: select a person, choose a date range, submit.
+ * Holds shared state and renders step content with animations.
+ * @returns {JSX.Element}
+ */
 export default function Vacation() {
   const [range, setRange] = useState(undefined);
   const [selectedPersonId, setSelectedPersonId] = useState(undefined);
   const [direction, setDirection] = useState(null);
-  const [data, setData] = useState([]);
+  const { data, loading } = useOutletContext();
 
+  /** @type {{ duration: number; ease: string }} */
   const transition = { duration: 0.5, ease: "easeInOut" };
+
+  /** @type {SlideVariants} */
   const variants = {
     enter: (dir) => ({
       x: dir > 0 ? 600 : -600,
@@ -27,24 +56,10 @@ export default function Vacation() {
     }),
   };
 
-  useEffect(() => {
-    const teamData = ref(db, "team");
-
-    const unsubscribe = onValue(
-      teamData,
-      (snapshot) => {
-        setData(snapshot.exists() ? Object.values(snapshot.val()) : null);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
-
+  /** @returns {void} */
   const handleNext = () => {};
 
+  /** @returns {void} */
   const handleBack = () => {};
 
   return (
@@ -75,6 +90,11 @@ export default function Vacation() {
   );
 }
 
+/**
+ * Step for choosing a date range.
+ * @param {{ range: import('react-day-picker').DateRange | undefined, setRange: (r: import('react-day-picker').DateRange | undefined) => void }} props
+ * @returns {JSX.Element}
+ */
 const ChooseDates = ({ range, setRange }) => {
   return (
     <motion.div className="relative flex p-10 flex-col gap-4">
@@ -86,6 +106,20 @@ const ChooseDates = ({ range, setRange }) => {
   );
 };
 
+/**
+ * Step for selecting the person who is requesting vacation.
+ * @param {{
+ *   selectedPersonId: string | undefined,
+ *   setSelectedPersonId: (id: string | undefined) => void,
+ *   handleNext: () => void,
+ *   handleBack: () => void,
+ *   data: Person[] | null,
+ *   variants: SlideVariants,
+ *   transition: { duration: number; ease: string },
+ *   custom: Direction | null
+ * }} props
+ * @returns {JSX.Element}
+ */
 const SelectPerson = ({
   selectedPersonId,
   setSelectedPersonId,

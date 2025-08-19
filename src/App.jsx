@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
-import TeamDisplay from "./components/TeamDisplay";
-import InfoCard from "./components/InfoCard";
-import Carousel from "./components/Carousel";
-import Home from "./components/Home";
-import Login from "./components/Login";
+import Home from "./pages/Home";
+import Login from "./pages/Login.jsx";
 import { motion } from "motion/react";
-import TeamManagement from "./components/TeamManagement";
-import ShiftSwap from "./components/ShiftSwap";
-import Vacation from "./components/Vacation";
-import Settings from "./components/Settings";
+import TeamManagement from "./pages/TeamManagement";
+import ShiftSwap from "./pages/ShiftSwap";
+import Vacation from "./pages/Vacation";
+import Settings from "./pages/Settings";
 import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { db } from "./firebase.js";
+import { onValue, ref } from "firebase/database";
 
 function App() {
   return (
@@ -37,12 +34,35 @@ function App() {
 const ProtectedLayout = () => {
   const isLoggedIn = true;
   if (!isLoggedIn) return <Navigate to="/login" replace />;
+
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    const teamData = ref(db, "team");
+
+    const unsubscribe = onValue(
+      teamData,
+      (snapshot) => {
+        setData(snapshot.exists() ? Object.values(snapshot.val()) : null);
+        setLoading(false);
+        console.log(snapshot.exists());
+      },
+      (error) => {
+        console.log(error);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <motion.div className="h-screen w-screen overflow-hidden relative">
+    <motion.div className="h-screen w-screen overflow-hidden  flex relative">
       <div className="bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover fixed inset-0 z-0"></div>
       {isLoggedIn && <Sidebar />}
-      <main className={`w-full h-full relative z-10 pl-16`}>
-        <Outlet />
+      <main className={`w-full h-full relative z-10`}>
+        <Outlet context={{ data, loading }} />
       </main>
     </motion.div>
   );
