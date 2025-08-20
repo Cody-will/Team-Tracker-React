@@ -1,6 +1,9 @@
 import { DayPicker } from "react-day-picker";
 import { primaryAccent, secondaryAccent } from "../colors";
 
+/** @typedef {() => void} typeSetRange */
+/** @param {{range: Object, setRange: typeSetRange}} */
+
 export default function Calendar({ range, setRange }) {
   return (
     <DayPicker

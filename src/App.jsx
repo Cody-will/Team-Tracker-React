@@ -8,6 +8,7 @@ import TeamManagement from "./pages/TeamManagement";
 import ShiftSwap from "./pages/ShiftSwap";
 import Vacation from "./pages/Vacation";
 import Settings from "./pages/Settings";
+import AddUser from "./pages/AddUser";
 import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { db } from "./firebase.js";
 import { onValue, ref } from "firebase/database";
@@ -22,6 +23,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/team-management" element={<TeamManagement />} />
         <Route path="/vacation" element={<Vacation />} />
+        <Route path="/add-user" element={<AddUser />} />
         <Route path="/shift-swap" element={<ShiftSwap />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
