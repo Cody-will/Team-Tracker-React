@@ -45,8 +45,6 @@ function SideBarLink({ to, icon, label }) {
   return (
     <NavLink
       to={to}
-      aria-label={label}
-      title={label}
       className={({ isActive }) =>
         [
           "relative flex items-center justify-center h-12 w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",

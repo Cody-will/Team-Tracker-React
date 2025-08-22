@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { primaryAccent, secondaryAccent } from "../colors";
+import { primaryAccentHex, secondaryAccentHex } from "../colors";
+
+/** @param {firstName: String, lastName: String, title: String, badge: String, oic: Boolean, fto: Boolean, icon: Object} props */
 
 export default function Card({
   firstname,
@@ -31,7 +33,8 @@ export default function Card({
         className="absolute inset-0 h-24 w-24 flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-md shadow-lg/30"
       >
         <div
-          className={`h-14 w-14 relative border-2 border-${primaryAccent} text-zinc-200 rounded-full flex items-center justify-center text-4xl`}
+          style={{ borderColor: primaryAccentHex }}
+          className={`h-14 w-14 relative border-2 text-zinc-200 rounded-full flex items-center justify-center text-4xl`}
         >
           {icon}
           {fto && <Badge label="FTO" position="bottom-right" />}
@@ -60,7 +63,8 @@ export default function Card({
         {/* Row 1 */}
         <div className="flex flex-row gap-2 items-center justify-center">
           <div
-            className={`h-14 w-14 relative border-2 border-${primaryAccent} rounded-full flex items-center justify-center text-4xl text-zinc-200`}
+            style={{ borderColor: primaryAccentHex }}
+            className={`h-14 w-14 relative border-2 rounded-full flex items-center justify-center text-4xl text-zinc-200`}
           >
             {icon}
             {fto && <Badge label="FTO" position="bottom-right" />}
@@ -70,7 +74,8 @@ export default function Card({
             <div>{title}</div>
             <div className="text-xs">{`${lastname}, ${firstname[0]}`}</div>
             <div
-              className={`bg-${secondaryAccent} text-zinc-900 text-xs px-1 mt-1 rounded-xs shadow-md`}
+              style={{ backgroundColor: secondaryAccentHex }}
+              className={`text-zinc-900 text-xs px-1 mt-1 rounded-xs shadow-md`}
             >
               {badge}
             </div>
@@ -94,9 +99,11 @@ function Badge({ label, position }) {
 
   return (
     <div
-      className={`${base} ${pos} ${
-        label === "FTO" ? `bg-${secondaryAccent}` : `bg-${primaryAccent}`
-      }`}
+      style={{
+        backgroundColor:
+          label === "FTO" ? secondaryAccentHex : primaryAccentHex,
+      }}
+      className={`${base} ${pos}`}
     >
       {label}
     </div>

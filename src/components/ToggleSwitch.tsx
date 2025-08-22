@@ -1,23 +1,34 @@
 import { motion, AnimatePresence } from "motion/react";
 import { primaryAccent, primaryAccentHex } from "../colors";
+import * as React from "react";
 
-/** @typedef {'sm'|'md'|'lg'} ToggleSize */
-/**@param {{ state: boolean, setState: import('react').Dispatch<import('react').SetStateAction<boolean>>, size?: ToggleSize }} props*/
+type ToggleSize = "sm" | "md" | "lg";
 
-export default function ToggleSwitch({ state, setState, size = "md" }) {
-  const off = "#71717a";
+interface ToggleSwitchProps {
+  state: Boolean;
+  setState: React.Dispatch<React.SetStateAction<Boolean>>;
+  size?: ToggleSize;
+  off?: string;
+}
+
+export default function ToggleSwitch({
+  state,
+  setState,
+  size = "md",
+  off = "#71717a",
+}: ToggleSwitchProps) {
   const sizes = {
     sm: { container: "h-6 w-12 p-0.5", knob: "size-5" },
     md: { container: "h-8 w-16 p-1", knob: "size-6" },
     lg: { container: "h-10 w-20 p-1", knob: "size-8" },
-  };
-  console.log(sizes[size].height);
+  } as const satisfies Record<ToggleSize, { container: string; knob: string }>;
+
   return (
     <motion.div
       style={{ justifyContent: state ? "flex-end" : "flex-start" }}
       animate={{ backgroundColor: state ? primaryAccentHex : off }}
       transition={{ type: "tween", duration: 0.3 }}
-      className={`h-${sizes[size].container} flex items-center rounded-full`}
+      className={`h-${sizes[size].container} flex items-center overflow-hidden rounded-full`}
       onClick={() => setState(!state)}
     >
       <motion.div
