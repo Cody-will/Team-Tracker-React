@@ -1,11 +1,19 @@
 import { motion } from "motion/react";
 import { primaryAccent, secondaryAccent, primaryAccentHex } from "../colors";
 
-/** @param {{ text: String, action: function, type: button:type, color: String, styles: String }} props */
+/** @param {{ text: String, action: function, type: button:type, disabled: Boolean, color: String, styles: String }} props */
 
-export default function Button({ text, action, type, color, styles }) {
+export default function Button({
+  text,
+  action,
+  type,
+  disabled = false,
+  color,
+  styles,
+}) {
   return (
     <motion.button
+      disabled={disabled}
       type={type || "button"}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}

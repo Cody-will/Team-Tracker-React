@@ -69,7 +69,7 @@ const Panel = ({
     <motion.div className="relative flex gap-2 flex-col h-full w-full p-4">
       <motion.div
         id="panel"
-        className="relative w-full h-1/12 flex bg-zinc-900/50 rounded-md border border-zinc-700 drop-shadow-xl/50"
+        className="relative w-full h-1/12 flex bg-zinc-950/30 rounded-md border border-zinc-800 drop-shadow-xl/50"
       >
         <ul className="relative flex items-center justify-around cursor-pointer overflow-hidden p-1 w-full h-full">
           {tabs.map((tab) => (
@@ -103,7 +103,7 @@ const Panel = ({
 
       <motion.div
         id="panel"
-        className=" relative flex flex-col w-full h-11/12 bg-zinc-900/50 rounded-md border border-zinc-700 drop-shadow-xl/50"
+        className=" relative flex flex-col w-full h-11/12 bg-zinc-950/30 rounded-md border border-zinc-800 drop-shadow-xl/50"
       >
         {selectedTab === "Unassigned" ? (
           <>

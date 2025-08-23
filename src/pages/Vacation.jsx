@@ -66,9 +66,9 @@ export default function Vacation() {
     <motion.div className="h-full w-full text-zinc-200 flex justify-center items-center">
       <motion.div
         id="panel"
-        className="relative flex flex-col gap-4 p-4 bg-zinc-900/50 overflow-hidden shadow-xl/40 rounded-xl border border-zinc-700"
+        className="relative flex flex-col gap-4 p-4 bg-zinc-950/30 overflow-hidden shadow-xl/40 rounded-xl border border-zinc-800"
       >
-        <span className="relative text-2xl font-semibold flex w-full items-start justify-start">
+        <span className="relative text-3xl font-semibold flex w-full items-start justify-start">
           Vacation
         </span>
         <AnimatePresence initial={false} mode="wait" custom={direction}>

@@ -13,6 +13,8 @@ import {
 import { NavLink } from "react-router-dom";
 import { motion, LayoutGroup } from "motion/react";
 import { primaryAccentHex } from "../colors";
+import { auth } from "../firebase.js";
+import { signOut } from "firebase/auth";
 
 export default function Sidebar({ setPage, pages }) {
   const links = [
@@ -23,17 +25,32 @@ export default function Sidebar({ setPage, pages }) {
     { to: "/add-user", icon: <BsPersonPlus size={32} />, label: "Add User" },
     { to: "/coverage", icon: <BsCalendar2Plus size={32} />, label: "Coverage" },
     { to: "/settings", icon: <BsGear size={32} />, label: "Settings" },
-    { to: "/login", icon: <BsDoorClosed size="32" />, label: "Logout" },
+    {
+      to: "/login",
+      action: logOut,
+      icon: <BsDoorClosed size="32" />,
+      label: "Logout",
+    },
   ];
+
+  function logOut() {
+    signOut(auth).then(() => {});
+  }
   return (
     <div className="w-20 z-50 flex items-end justify-center h-screen flex-col">
       <LayoutGroup>
         <div
           id="panel"
-          className="w-16 py-4 gap-2 rounded-xl flex flex-col items-center justify-center border border-zinc-700 shadow-xl/40 bg-zinc-950/40"
+          className="w-16 py-4 gap-2 rounded-xl flex flex-col items-center justify-center border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
         >
-          {links.map(({ to, icon, label }) => (
-            <SideBarLink key={to} to={to} icon={icon} label={label} />
+          {links.map(({ to, action, icon, label }) => (
+            <SideBarLink
+              key={to}
+              to={to}
+              action={action}
+              icon={icon}
+              label={label}
+            />
           ))}
         </div>
       </LayoutGroup>
@@ -41,10 +58,11 @@ export default function Sidebar({ setPage, pages }) {
   );
 }
 
-function SideBarLink({ to, icon, label }) {
+function SideBarLink({ to, action, icon, label }) {
   return (
     <NavLink
       to={to}
+      onClick={action ? () => action() : undefined}
       className={({ isActive }) =>
         [
           "relative flex items-center justify-center h-12 w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",

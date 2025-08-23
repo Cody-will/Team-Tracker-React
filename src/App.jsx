@@ -9,10 +9,13 @@ import ShiftSwap from "./pages/ShiftSwap";
 import Vacation from "./pages/Vacation";
 import Settings from "./pages/Settings";
 import AddUser from "./pages/AddUser";
+import Coverage from "./pages/Coverage";
 import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { db } from "./firebase.js";
 import { onValue, ref } from "firebase/database";
 import { AuthProvider } from "./pages/context/AuthContext.jsx";
+import CometWallpaper from "./pages/CometWallpaper";
+import { useAuth } from "./pages/context/AuthContext.jsx";
 
 function App() {
   return (
@@ -27,6 +30,7 @@ function App() {
           <Route path="/vacation" element={<Vacation />} />
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/shift-swap" element={<ShiftSwap />} />
+          <Route path="/coverage" element={<Coverage />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
 
@@ -37,11 +41,11 @@ function App() {
 }
 
 const ProtectedLayout = () => {
-  const isLoggedIn = true;
-  if (!isLoggedIn) return <Navigate to="/login" replace />;
-
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
+  const [userWallpaper, setUserWallpaper] = useState(true);
+  const { currentUser } = useAuth();
+  if (!currentUser) return <Navigate to="/login" replace />;
 
   useEffect(() => {
     const teamData = ref(db, "team");
@@ -61,11 +65,18 @@ const ProtectedLayout = () => {
 
     return () => unsubscribe();
   }, []);
+  const backgrounddd =
+    "bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover";
 
   return (
-    <motion.div className="h-screen w-screen overflow-hidden  flex relative">
-      <div className="bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover fixed inset-0 z-0"></div>
-      {isLoggedIn && <Sidebar />}
+    <motion.div
+      className={` ${
+        userWallpaper && backgrounddd
+      } h-screen w-screen overflow-hidden  flex relative`}
+    >
+      {!userWallpaper && <CometWallpaper />}
+      <div className=" fixed inset-0 z-0"></div>
+      <Sidebar />
       <main className={`w-full h-full relative z-10`}>
         <Outlet context={{ data, loading }} />
       </main>

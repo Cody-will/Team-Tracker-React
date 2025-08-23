@@ -23,7 +23,7 @@ export default function Settings() {
       <motion.div
         layout
         id="panel"
-        className="bg-zinc-950/50 overflow-hidden flex flex-col gap-4 p-4 justify-center items-center border border-zinc-700 rounded-xl"
+        className="bg-zinc-950/30 overflow-hidden flex flex-col gap-4 p-4 justify-center items-center border border-zinc-800 rounded-xl"
       >
         {isVisible && (
           <ColorPicker

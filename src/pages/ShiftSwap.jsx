@@ -61,7 +61,7 @@ export default function ShiftSwap() {
           layout: { duration: 0.3, type: "tween" },
         }}
         id="panel"
-        className="bg-zinc-900/50 overflow-hidden shadow-xl/40 rounded-xl border border-zinc-700 relative flex flex-col"
+        className="bg-zinc-950/30 overflow-hidden shadow-xl/40 rounded-xl border border-zinc-800 relative flex flex-col"
       >
         <div className="h-1/10 text-3xl font-semibold text-zinc-200 w-full flex items-center justify-start p-2">
           Shift Swap
