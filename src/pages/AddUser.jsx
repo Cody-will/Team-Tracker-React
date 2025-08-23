@@ -56,7 +56,7 @@ export default function AddUser() {
         <motion.div
           layout
           id="panel"
-          className="flex p-6 gap-4 flex-col items-center justify-center bg-zinc-950/40 border border-zinc-700 rounded-xl text-zinc-200 font-semibold"
+          className="flex p-10 gap-4 flex-col items-center justify-center bg-zinc-950/40 border border-zinc-700 rounded-xl text-zinc-200 font-semibold"
         >
           <div className="w-full flex justify-start items-center text-2xl">
             Create User

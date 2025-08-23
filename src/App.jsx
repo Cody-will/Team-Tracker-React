@@ -12,24 +12,27 @@ import AddUser from "./pages/AddUser";
 import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { db } from "./firebase.js";
 import { onValue, ref } from "firebase/database";
+import { AuthProvider } from "./pages/context/AuthContext.jsx";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<Login />} />
 
-      <Route element={<ProtectedLayout />}>
-        <Route index element={<Navigate to="/shift-swap" replace />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/team-management" element={<TeamManagement />} />
-        <Route path="/vacation" element={<Vacation />} />
-        <Route path="/add-user" element={<AddUser />} />
-        <Route path="/shift-swap" element={<ShiftSwap />} />
-        <Route path="/settings" element={<Settings />} />
-      </Route>
+        <Route element={<ProtectedLayout />}>
+          <Route index element={<Navigate to="/shift-swap" replace />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/team-management" element={<TeamManagement />} />
+          <Route path="/vacation" element={<Vacation />} />
+          <Route path="/add-user" element={<AddUser />} />
+          <Route path="/shift-swap" element={<ShiftSwap />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
 
-      <Route path="*" element={<div className="p-6">Not Found</div>} />
-    </Routes>
+        <Route path="*" element={<div className="p-6">Not Found</div>} />
+      </Routes>
+    </AuthProvider>
   );
 }
 

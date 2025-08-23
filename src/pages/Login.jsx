@@ -1,22 +1,33 @@
 import { BsPersonFill, BsLockFill } from "react-icons/bs";
+import { useForm } from "react-hook-form";
+import { auth } from "../firebase.js";
+import { useAuth } from "./context/AuthContext";
 
+import Button from "../components/Button";
 export default function Login() {
+  const { register, handleSubmit } = useForm();
+  const { signIn } = useAuth();
+  const handleLogin = (data) => {
+    console.log(signIn(data.email, data.password));
+  };
+
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover justify-center h-screen">
       <div
         id="panel"
-        className="w-full max-w-md bg-zinc-900/30 drop-shadow-xl drop-shadow-zinc-950/30 p-8 rounded-lg shadow-lg border border-zinc-700"
+        className="w-full max-w-md bg-zinc-900/30 font-semibold drop-shadow-xl drop-shadow-zinc-950/30 p-10 rounded-xl shadow-lg/40 border border-zinc-700"
       >
-        <h2 className="text-2xl font-bold text-white mb-6 text-center">
+        <h2 className="text-2xl font-bold text-zinc-200 mb-6 text-center">
           Welcome Back
         </h2>
 
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-1">
+            <label className="block text-lg font-senibold text-zinc-300 mb-1">
               Email
             </label>
             <input
+              {...register("email", { required: "Email required" })}
               type="email"
               className="w-full px-4 py-2 rounded-md bg-zinc-800 text-white border border-zinc-600 focus:outline-none focus:drop-shadow-lg focus:drop-shadow-sky-500/50 focus:ring-2 focus:ring-sky-500"
               placeholder="you@example.com"
@@ -24,28 +35,24 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-1">
+            <label className="block text-lg font-semibold text-zinc-200 mb-1">
               Password
             </label>
             <input
+              {...register("password", { required: "Password required" })}
               type="password"
               className="w-full px-4 py-2 rounded-md bg-zinc-800 text-white border border-zinc-600 focus:outline-none focus:ring-2 focus:ring-sky-500"
               placeholder="••••••••"
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 rounded-md transition-colors"
-          >
-            Log In
-          </button>
+          <Button text="Log in" action={() => {}} type="submit" />
         </form>
 
         <div className="mt-4 text-center text-sm text-zinc-400">
-          Don’t have an account?{" "}
+          Problem logging in?{" "}
           <a href="#" className="text-sky-500 hover:underline">
-            Sign up
+            Reset password
           </a>
         </div>
       </div>
