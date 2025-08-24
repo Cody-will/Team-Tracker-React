@@ -8,6 +8,7 @@ import {
   BsDoorClosed,
   BsPersonPlus,
   BsCalendar2Plus,
+  BsSliders,
 } from "react-icons/bs";
 
 import { NavLink } from "react-router-dom";
@@ -24,7 +25,8 @@ export default function Sidebar({ setPage, pages }) {
     { to: "/shift-swap", icon: <BsShuffle size={32} />, label: "Shift Swap" },
     { to: "/add-user", icon: <BsPersonPlus size={32} />, label: "Add User" },
     { to: "/coverage", icon: <BsCalendar2Plus size={32} />, label: "Coverage" },
-    { to: "/settings", icon: <BsGear size={32} />, label: "Settings" },
+    { to: "/settings", icon: <BsSliders size={32} />, label: "Settings" },
+    { to: "/configure", icon: <BsGear size={32} />, label: "Configure" },
     {
       to: "/login",
       action: logOut,

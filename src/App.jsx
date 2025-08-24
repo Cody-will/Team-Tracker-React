@@ -10,6 +10,7 @@ import Vacation from "./pages/Vacation";
 import Settings from "./pages/Settings";
 import AddUser from "./pages/AddUser";
 import Coverage from "./pages/Coverage";
+import Configure from "./pages/Configure";
 import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { db } from "./firebase.js";
 import { onValue, ref } from "firebase/database";
@@ -31,6 +32,7 @@ function App() {
           <Route path="/add-user" element={<AddUser />} />
           <Route path="/shift-swap" element={<ShiftSwap />} />
           <Route path="/coverage" element={<Coverage />} />
+          <Route path="/configure" element={<Configure />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
 

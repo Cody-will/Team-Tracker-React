@@ -19,7 +19,7 @@ export default function Button({
       whileTap={{ scale: 0.98 }}
       style={{ backgroundColor: color ? color : primaryAccentHex }}
       transition={{ type: "tween", duration: 0.2 }}
-      className={`relative w-full flex items-center justify-center text-center text-zinc-900 text-lg font-semibold rounded-lg shadow-lg/40 px-5 py-3 ${styles}`}
+      className={`relative w-full flex items-center justify-center text-center text-zinc-900 text-lg font-semibold rounded-lg shadow-lg/40 px-3 py-2 ${styles}`}
       onClick={action ? () => action() : () => {}}
     >
       {text}
