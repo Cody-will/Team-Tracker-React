@@ -2,6 +2,7 @@ import { BsPersonCircle, BsXLg } from "react-icons/bs";
 import { motion, AnimatePresence } from "motion/react";
 import { ProfileBadge } from "../components/ProfileBadge";
 import ToggleSwitch from "../components/ToggleSwitch";
+import EditCard from "../components/EditCard";
 
 import {
   findSupervisors,
@@ -177,15 +178,6 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
   const [photo, setPhoto] = useState(person.photo || null);
   const [mandate, setMandate] = useState(person.mandate);
   const [isTrainee, setIsTrainee] = useState(person.trainee);
-  const shifts = [
-    "Alpha",
-    "Bravo",
-    "Charlie",
-    "Delta",
-    `Split: Alpha, Bravo`,
-    "Split: Charlie Delta",
-    "Unassigned",
-  ];
 
   const fullRanks = {
     maj: "Major",
@@ -196,17 +188,6 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
     train: "Trainee",
   };
 
-  const superRanks = {
-    maj: "Maj",
-    lt: "Lt",
-    sgt: "Sgt",
-    cpl: "Cpl",
-  };
-
-  const containerStyle =
-    "relative flex flex-col shrink gap-1 items-start justify-center";
-  const formStyle = `text-l w-full flex shrink border border-zinc-700 rounded-sm px-2 py-2 focus:ring-2 focus:ring-${primaryAccent} focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none`;
-
   const isSelected = selectedPerson?.badgeNum === person.badgeNum;
 
   const handleClick = () => {
@@ -214,20 +195,19 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
   };
 
   return (
-    <AnimatePresence>
+    <div className="w-full h-full">
       <motion.div
-        layout
+        layoutId={!isSelected ? `person-${person.badgeNum}` : undefined}
         onClick={!isSelected ? handleClick : undefined}
         whileHover={
           isSelected
             ? undefined
             : { scale: 1.05, transition: { duration: 0.05 } }
         }
-        className={`flex flex-col rounded-xl drop-shadow-lg/50 bg-zinc-900 text-zinc-200 ${
-          isSelected
-            ? "w-full h-full z-10 p-6 absolute top-0 left-0"
-            : "w-full h-full items-center cursor-pointer justify-center p-2 relative"
-        }`}
+        className={`flex flex-col rounded-xl drop-shadow-lg/50 bg-zinc-900 text-zinc-200
+          w-full h-full items-center justify-center p-2 relative ${
+            isSelected ? "invisible" : "cursor-pointer"
+          }`}
       >
         <div className="relative flex justify-center items-center">
           <motion.div
@@ -252,169 +232,39 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
           <div>{fullRanks[person.title]}</div>
           <div>{person.number || `000-000-0000`}</div>
         </div>
+      </motion.div>
+
+      {/* Overlay absolutely positioned; the overlay holds the layoutId while selected */}
+      <AnimatePresence>
         {isSelected && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, duration: 0.2 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-zinc-900 p-4 rounded-md flex justify-start items-start text-left text-sm"
+            key="overlay"
+            layoutId={`person-${person.badgeNum}`}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ type: "tween", duration: 0.2 }}
+            className="absolute inset-0 z-50"
           >
-            <motion.button
-              whileHover={{ scale: 1.2 }}
-              onClick={() => setSelectedPerson(null)}
-              className="absolute h-12 w-12 flex items-center justify-center font-bold top-1 right-1 hover:cursor-pointer"
-            >
-              {<BsXLg size="32" />}
-            </motion.button>
-            <div className="flex shrink h-full w-2/10 flex-col justify-center items-center gap-2">
-              <div className="h-full w-full flex"></div>
-              <div
-                style={{ borderColor: primaryAccentHex }}
-                className={`relative flex shrink items-center justify-center size-40 aspect-square rounded-full border-4`}
-              >
-                <div className="relative flex shrink items-center justify-center w-full h-full">
-                  {photo ? (
-                    <img src={photo} size="160" />
-                  ) : (
-                    <BsPersonCircle size="160" />
-                  )}
-                </div>
-              </div>
-              <span className="flex shrink items-center font-semibold text-zinc-200 text-lg justify-center">
-                {person.firstName} {person.lastName}
-              </span>
-              <UploadButton onFile={photo} photo={photo} setPhoto={setPhoto} />
-              <div className="h-full w-full flex items-end gap-4 justify-center">
-                <Button text="Save" action={() => {}} />
-                <Button text="Deactivate" action={() => {}} />
-              </div>
-            </div>
-
-            <motion.form
-              layout
-              className="grid grid-cols-2 gap-4 p-4 auto-rows-min place-content-center items-center justify-center w-1/2 h-full"
-            >
-              <div className={containerStyle}>
-                <label className="text-xl">First Name</label>
-                <input
-                  name="firstName"
-                  value={person.firstName}
-                  className={formStyle}
-                />
-              </div>
-              <div className={containerStyle}>
-                <label className="text-xl">Last Name</label>
-                <input
-                  name="lastName"
-                  value={person.lastName}
-                  className={formStyle}
-                />
-              </div>
-              <div className={containerStyle}>
-                <label className="text-xl">Badge Number</label>
-                <input
-                  name="badgeNum"
-                  value={person.badgeNum}
-                  className={formStyle}
-                />
-              </div>
-              <div className={containerStyle}>
-                <label className="text-xl">Shift</label>
-                <select name="shift" value={person.shift} className={formStyle}>
-                  {shifts.map((shift, index) => (
-                    <option key={index} value={shift}>
-                      {shift}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className={containerStyle}>
-                <label className="text-xl">Rank</label>
-                <select
-                  name="rank"
-                  value={fullRanks[person.rank]}
-                  className={formStyle}
-                >
-                  {Object.entries(fullRanks).map(([key, value]) => (
-                    <option key={key} value={value}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className={containerStyle}>
-                <label className="text-xl">Email</label>
-                <input
-                  name="email"
-                  value={`${person.firstName[0]}${person.lastName}@pickensgasheriff.com`}
-                  className={formStyle}
-                />
-              </div>
-
-              <div className={containerStyle}>
-                <label className="text-xl">Division</label>
-                <select
-                  name="division"
-                  value={person.divison || "ADC"}
-                  className={formStyle}
-                ></select>
-              </div>
-              <div className="relative flex items-center justify-between gap-2">
-                <div className="relative flex flex-col gap-2 items-center justify-center">
-                  <label className="text-xl">OIC</label>
-                  <ToggleSwitch state={isOic} setState={setIsOic} />
-                </div>
-                <div className="relative flex flex-col gap-2 items-center justify-center">
-                  <label className="text-xl">FTO</label>
-                  <ToggleSwitch state={isFto} setState={setIsFto} />
-                </div>
-                <div className="relative flex flex-col gap-2 items-center justify-center">
-                  <label className="text-xl">Mandate</label>
-                  <ToggleSwitch state={mandate} setState={setMandate} />
-                </div>
-                <div className="relative flex flex-col gap-2 items-center justify-center">
-                  <label className="text-xl">Trainee</label>
-                  <ToggleSwitch state={isTrainee} setState={setIsTrainee} />
-                </div>
-              </div>
-              {isTrainee && (
-                <motion.div
-                  layout
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className={containerStyle}
-                >
-                  <label className="text-xl">Trainer</label>
-                  <select
-                    name="trainer"
-                    value={person.trainer || "Select Trainer"}
-                    className={formStyle}
-                  ></select>
-                </motion.div>
-              )}
-              {isTrainee && (
-                <motion.div layout className={containerStyle}>
-                  <label className="text-xl">Phase</label>
-                  <select
-                    name="phase"
-                    value={person.phase || "Select Phase"}
-                    className={formStyle}
-                  >
-                    <option value="">Select Phase</option>
-                    <option value="phase1">Phase 1</option>
-                    <option value="phase2">Phase 2</option>
-                  </select>
-                </motion.div>
-              )}
-            </motion.form>
-            <div className="w-1/2 h-full relative flex flex-col gap-4">
-              <InfoPanel title="Shift Swap / Coverage" />
-              <InfoPanel title="Vacation" />
-              <InfoPanel title="Training" />
-            </div>
+            <EditCard
+              person={person}
+              selectedPerson={selectedPerson}
+              setSelectedPerson={setSelectedPerson}
+              photo={photo}
+              setPhoto={setPhoto}
+              isOic={isOic}
+              setIsOic={setIsOic}
+              isFto={isFto}
+              setIsFto={setIsFto}
+              isTrainee={isTrainee}
+              setIsTrainee={setIsTrainee}
+              mandate={mandate}
+              setMandate={setMandate}
+            />
           </motion.div>
         )}
-      </motion.div>
-    </AnimatePresence>
+      </AnimatePresence>
+    </div>
   );
 };
 
@@ -433,7 +283,7 @@ const SupervisorPanel = ({ title, cards }) => {
 
 const TeamPanel = ({ title, cards }) => {
   return (
-    <motion.div className="flex flex-col w-full h-3/5">
+    <motion.div className=" flex flex-col w-full h-3/5">
       <div className="w-full h-1/10 relative p-4 border-t border-zinc-700 flex items-center justify-start text-lg font-semibold text-zinc-200">
         {title}
       </div>
@@ -441,89 +291,5 @@ const TeamPanel = ({ title, cards }) => {
         {cards}
       </div>
     </motion.div>
-  );
-};
-
-const UploadButton = ({ onFile, photo, setPhoto, label = "Upload" }) => {
-  const inputRef = useRef(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  useEffect(() => {
-    if (photo instanceof File) {
-      const url = URL.createObjectURL(photo);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
-    }
-    setPreviewUrl(null);
-  }, [photo]);
-
-  const handleChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setPhoto?.(file);
-    onFile?.(file);
-
-    e.target.value = "";
-  };
-
-  const getDisplayName = () => {
-    if (!photo) return "";
-    if (photo instanceof File) return photo.name;
-
-    try {
-      const path = new URL(photo).pathname;
-      return decodeURIComponent(path.split("/").pop() || "photo");
-    } catch {
-      return String(photo);
-    }
-  };
-
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <motion.button
-        type="button"
-        className={`relative flex justify-center shadow-lg/50 items-center bg-${primaryAccent} py-2 px-3 rounded-md text-md font-semibold text-zinc-900 hover:cursor-pointer`}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => inputRef.current?.click()}
-        aria-label="Upload photo"
-      >
-        {label}
-      </motion.button>
-
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        onChange={handleChange}
-      />
-
-      {photo && (
-        <div
-          className="w-full text-sm border border-zinc-600 rounded-md py-2 px-3 text-zinc-600 truncate"
-          title={getDisplayName()}
-        >
-          {getDisplayName()}
-        </div>
-      )}
-
-      {previewUrl && (
-        <img
-          src={previewUrl}
-          alt="Selected preview"
-          className={`h-24 w-24 rounded-full object-cover border-2 border-${primaryAccent}`}
-        />
-      )}
-    </div>
-  );
-};
-
-const InfoPanel = ({ title, props }) => {
-  return (
-    <div className="relative p-2 flex h-full w-15/16 rounded-lg border border-zinc-800 shadow-lg/40">
-      <div className="text-xl">{title}</div>
-    </div>
   );
 };

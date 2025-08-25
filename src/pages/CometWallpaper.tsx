@@ -1,5 +1,6 @@
 // CometWallpaper.tsx (JSX or TSX works as-is)
 import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function CometWallpaper({
   starCount = 500,
@@ -177,7 +178,10 @@ export default function CometWallpaper({
   }, [bg, starColor, cometHead, cometTail, starCount, tailLength, ease]);
 
   return (
-    <canvas
+    <motion.canvas
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0 }}
       ref={canvasRef}
       className="fixed inset-0 w-screen h-screen -z-10 pointer-events-none select-none"
       aria-hidden="true"

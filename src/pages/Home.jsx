@@ -11,13 +11,13 @@ export default function Home() {
     <motion.div className="flex flex-col items-start justify-between p-4 gap-2 relative w-full h-full">
       <div
         id="panel"
-        className="flex items-start justify-center w-full relative h-3/4 border overflow-hidden border-zinc-800 rounded-md backdrop-blur-sm bg-zinc-950/10"
+        className="flex items-start justify-center w-full relative h-full border overflow-hidden border-zinc-800 rounded-md backdrop-blur-sm bg-zinc-950/10"
       >
         {data && <TeamDisplay team={data} />}
       </div>
       <div
         id="panel"
-        className="relative w-full flex items-start justify-center h-1/4 
+        className="relative w-full flex items-start justify-center h-4/10
         border border-zinc-800 p-2 rounded-md backdrop-blur-sm bg-zinc-950/10"
       >
         {data && <Carousel team={data} />}

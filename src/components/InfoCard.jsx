@@ -7,14 +7,14 @@ export default function InfoCard({ title = "", props = "", column = false }) {
   }, []);
 
   return (
-    <div className="relative p-1 rounded-md flex flex-col justify-center items-center h-full w-full overflow-hidden bg-gradient-to-b from-zinc-950 to-zinc-800 shadow-lg/30">
-      <div className="absolute top-0 left-0 pl-2 pt-2 flex items-center justify-start text-lg font-bold text-zinc-200">
+    <div className="relative p-2 rounded-md flex flex-col justify-center items-center h-full w-full overflow-hidden bg-gradient-to-b from-zinc-950 to-zinc-800 shadow-lg/30">
+      <div className="flex w-full flex items-center justify-start text-lg font-bold text-zinc-200">
         {title}
       </div>
       <div
         className={`relative flex${
           col ? "-col" : ""
-        } gap-4 items-center justify-center`}
+        } gap-2 items-center justify-center p-2 w-full h-full`}
       >
         {props}
       </div>

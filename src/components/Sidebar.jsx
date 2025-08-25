@@ -16,8 +16,9 @@ import { motion, LayoutGroup } from "motion/react";
 import { primaryAccentHex } from "../colors";
 import { auth } from "../firebase.js";
 import { signOut } from "firebase/auth";
+import ToggleSwitch from "./ToggleSwitch";
 
-export default function Sidebar({ setPage, pages }) {
+export default function Sidebar({ toggleState, setToggleState }) {
   const links = [
     { to: "/home", icon: <BsHouse size={32} />, label: "Home" },
     { to: "/team-management", icon: <BsPeople size={32} />, label: "Team" },
@@ -54,6 +55,11 @@ export default function Sidebar({ setPage, pages }) {
               label={label}
             />
           ))}
+          <ToggleSwitch
+            state={toggleState}
+            setState={setToggleState}
+            size="sm"
+          />
         </div>
       </LayoutGroup>
     </div>

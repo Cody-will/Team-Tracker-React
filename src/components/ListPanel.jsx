@@ -55,7 +55,7 @@ export default function ListPanel({
         layout
         className="w-full flex flex-col gap-1 items-center justify-center mt-2 pt-2"
       >
-        <AnimatePresence mode="sync" initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
           {data.map((itemData, index) => (
             <ListItem key={index} data={itemData} action={onRemove} />
           ))}

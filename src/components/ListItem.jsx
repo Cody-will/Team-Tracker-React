@@ -12,7 +12,6 @@ export default function ListItem({ data, action }) {
 
   return (
     <motion.li
-      exit={{ width: 0, height: 0, opacity: 0 }}
       layout
       whileHover={{ scale: 1.1 }}
       className="w-full flex items-center overflow-hidden bg-zinc-900/70 rounded-lg border border-zinc-700 px-2 py-2 justify-center gap-2"

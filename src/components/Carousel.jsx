@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createCards } from "../createCards";
 import { getMandate } from "../teamSorting";
 import { AnimatePresence, motion, wrap } from "motion/react";
+import { NewCard } from "./Card";
 
 export default function Carousel({ team }) {
   const [data, setData] = useState([]);
@@ -21,7 +22,7 @@ export default function Carousel({ team }) {
     if (!data.length) return;
 
     const mandate = getMandate(data);
-    const mandateCards = createCards(mandate);
+    const mandateCards = mandate.map((person) => <NewCard person={person} />);
 
     const all = [
       { key: "mandate", title: "Mandate", props: mandateCards, column: false },

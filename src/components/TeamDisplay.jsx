@@ -36,8 +36,8 @@ export default function TeamDisplay({ team }) {
 
   return (
     <motion.div className="flex flex-col w-full">
-      <div id="mainContainer" className="w-full p-2">
-        <div id="topContainer" className="flex w-full h-28">
+      <div id="mainContainer" className="w-full h-full p-2">
+        <div id="topContainer" className="flex  w-full h-full">
           <div
             id="majContainer"
             className="flex pb-2 w-full justify-stretch gap-2 items-center"
@@ -45,12 +45,13 @@ export default function TeamDisplay({ team }) {
             {upper}
           </div>
         </div>
-        <div
+        <motion.div
           id="middleContainer"
+          layout
           className="relative flex gap-2 rounded-md w-full h-full"
         >
           {allShifts}
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );

@@ -3,7 +3,7 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
 import Login from "./pages/Login.jsx";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import TeamManagement from "./pages/TeamManagement";
 import ShiftSwap from "./pages/ShiftSwap";
 import Vacation from "./pages/Vacation";
@@ -45,9 +45,8 @@ function App() {
 const ProtectedLayout = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
-  const [userWallpaper, setUserWallpaper] = useState(true);
+  const [nightMode, setNightMode] = useState(false);
   const { currentUser } = useAuth();
-  if (!currentUser) return <Navigate to="/login" replace />;
 
   useEffect(() => {
     const teamData = ref(db, "team");
@@ -67,18 +66,19 @@ const ProtectedLayout = () => {
 
     return () => unsubscribe();
   }, []);
+  if (!currentUser) return <Navigate to="/login" replace />;
   const backgrounddd =
     "bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover";
 
   return (
     <motion.div
       className={` ${
-        userWallpaper && backgrounddd
+        !nightMode && backgrounddd
       } h-screen w-screen overflow-hidden  flex relative`}
     >
-      {!userWallpaper && <CometWallpaper />}
+      <AnimatePresence>{nightMode && <CometWallpaper />}</AnimatePresence>
       <div className=" fixed inset-0 z-0"></div>
-      <Sidebar />
+      <Sidebar toggleState={nightMode} setToggleState={setNightMode} />
       <main className={`w-full h-full relative z-10`}>
         <Outlet context={{ data, loading }} />
       </main>
