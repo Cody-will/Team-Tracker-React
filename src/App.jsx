@@ -11,33 +11,37 @@ import Settings from "./pages/Settings";
 import AddUser from "./pages/AddUser";
 import Coverage from "./pages/Coverage";
 import Configure from "./pages/Configure";
+import PoliceRadarWallpaper from "./pages/PoliceRadarWallpaper";
 import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { db } from "./firebase.js";
 import { onValue, ref } from "firebase/database";
 import { AuthProvider } from "./pages/context/AuthContext.jsx";
+import { ConfigureProvider } from "./pages/context/configureContext.jsx";
 import CometWallpaper from "./pages/CometWallpaper";
 import { useAuth } from "./pages/context/AuthContext.jsx";
 
 function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<Login />} />
+      <ConfigureProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
 
-        <Route element={<ProtectedLayout />}>
-          <Route index element={<Navigate to="/shift-swap" replace />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/team-management" element={<TeamManagement />} />
-          <Route path="/vacation" element={<Vacation />} />
-          <Route path="/add-user" element={<AddUser />} />
-          <Route path="/shift-swap" element={<ShiftSwap />} />
-          <Route path="/coverage" element={<Coverage />} />
-          <Route path="/configure" element={<Configure />} />
-          <Route path="/settings" element={<Settings />} />
-        </Route>
+          <Route element={<ProtectedLayout />}>
+            <Route index element={<Navigate to="/shift-swap" replace />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/team-management" element={<TeamManagement />} />
+            <Route path="/vacation" element={<Vacation />} />
+            <Route path="/add-user" element={<AddUser />} />
+            <Route path="/shift-swap" element={<ShiftSwap />} />
+            <Route path="/coverage" element={<Coverage />} />
+            <Route path="/configure" element={<Configure />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
 
-        <Route path="*" element={<div className="p-6">Not Found</div>} />
-      </Routes>
+          <Route path="*" element={<div className="p-6">Not Found</div>} />
+        </Routes>
+      </ConfigureProvider>
     </AuthProvider>
   );
 }

@@ -8,7 +8,7 @@ export default function InfoCard({ title = "", props = "", column = false }) {
 
   return (
     <div className="relative p-2 rounded-md flex flex-col justify-center items-center h-full w-full overflow-hidden bg-gradient-to-b from-zinc-950 to-zinc-800 shadow-lg/30">
-      <div className="flex w-full flex items-center justify-start text-lg font-bold text-zinc-200">
+      <div className="flex w-full items-center justify-start text-lg font-bold text-zinc-200">
         {title}
       </div>
       <div

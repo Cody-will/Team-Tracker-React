@@ -1,5 +1,5 @@
 import Button from "./Button";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, Reorder } from "motion/react";
 import ListItem from "./ListItem";
 
 export default function ListPanel({
@@ -18,16 +18,18 @@ export default function ListPanel({
   }
 
   function onCreate(event, itemToAdd) {
+    console.log(event.key);
     if (event) {
-      if (event.key !== "Enter") {
-        return;
-      } else {
+      if (event.key === "Enter") {
         setData((prev) => [...prev, itemToAdd]);
         setInputState("");
+      } else if (event.type === "click") {
+        setData((prev) => [...prev, itemToAdd]);
+        setInputState("");
+      } else {
+        return;
       }
     }
-    setData((prev) => [...prev, itemToAdd]);
-    setInputState("");
   }
 
   function handleChange(event, setState) {
@@ -35,7 +37,10 @@ export default function ListPanel({
   }
 
   return (
-    <div className="flex flex-col border border-zinc-700 rounded-lg gap-2 justify-center items-center p-4">
+    <motion.div
+      layout
+      className="flex flex-col border border-zinc-700 rounded-lg gap-2 justify-start items-center p-4"
+    >
       <div className="text-xl">{title}</div>
       <input
         className={inputStyle}
@@ -51,16 +56,18 @@ export default function ListPanel({
         action={(event) => onCreate(event, inputState)}
         type="button"
       />
-      <motion.ul
-        layout
+      <Reorder.Group
+        as="ul"
         className="w-full flex flex-col gap-1 items-center justify-center mt-2 pt-2"
+        values={data}
+        onReorder={setData}
       >
-        <AnimatePresence mode="wait" initial={false}>
-          {data.map((itemData, index) => (
-            <ListItem key={index} data={itemData} action={onRemove} />
+        <AnimatePresence>
+          {data.map((itemData) => (
+            <ListItem key={itemData} data={itemData} action={onRemove} />
           ))}
         </AnimatePresence>
-      </motion.ul>
-    </div>
+      </Reorder.Group>
+    </motion.div>
   );
 }

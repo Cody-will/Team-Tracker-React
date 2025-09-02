@@ -19,6 +19,14 @@ const firebaseConfig = {
   measurementId: "G-GPPMNXZEV7",
 };
 
+export const updateConfigure = (location, data) => {
+  set(ref(db, "configure/" + location), {
+    location: data,
+  })
+    .then(() => console.log("Succesful"))
+    .catch((error) => console.error(error));
+};
+
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
