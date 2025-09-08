@@ -3,7 +3,7 @@ import { BsChevronUp, BsChevronDown, BsTrash, BsList } from "react-icons/bs";
 import { SlControlStart } from "react-icons/sl";
 import { useState } from "react";
 
-/** @param {data: String, action: Function} */
+/** @param {data: Object, action: Function} */
 
 export default function ListItem({ data, action }) {
   const controls = useDragControls();
@@ -17,7 +17,7 @@ export default function ListItem({ data, action }) {
   return (
     <Reorder.Item
       as="li"
-      value={data}
+      value={data.title}
       dragListeners={false}
       useDragControls={controls}
       initial={{ opacity: 0, height: 0, width: 0 }}
@@ -37,7 +37,7 @@ export default function ListItem({ data, action }) {
         </motion.div>
       </div>
       <div className="w-full flex items-center text-lg justify-center ">
-        {data}
+        {data.title}
       </div>
       <motion.div
         onClick={() => action(data)}

@@ -1,25 +1,51 @@
 import { useState, useEffect, useRef, useReducer } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { input } from "@material-tailwind/react";
 import Button from "../components/Button";
 import ListPanel from "../components/ListPanel";
 import { useConfigure } from "./context/configureContext.jsx";
 import { BsPlusLg } from "react-icons/bs";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-
-function reducer(state, action) {}
 
 export default function Configure() {
-  const { data } = useConfigure();
-  const { updateConfig } = useConfigure();
-  const args = Object.values(data);
+  const [loading, setLoading] = useState(true);
+  const { data, addPanel } = useConfigure();
+  const [isPressed, setIsPressed] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [panelData, setPanelData] = useState(null);
 
-  const update = useEffect(() => {
-    data && console.log(data);
+  // Handles changing the input for the create new panel input
+  const handleChange = (event, setState) => {
+    setState(event.target.value);
+  };
+
+  // Initializes the state in the reducer function with data from the configure section of the database.
+  useEffect(() => {
+    data && setLoading(false);
+    data && setPanelData(data);
   }, [data]);
 
+  // Styling for all inputs to keep consistent styling
   const inputStyle =
     "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
+
+  // Handles creating the new list panel by adding a new child under the configure section of the database
+  const handleAddNew = async () => {
+    if (!isPressed) return setIsPressed(true);
+    const name = newTitle.trim();
+    if (!name) return setIsPressed(false);
+    try {
+      setSaving(true);
+      await addPanel(newTitle);
+      setNewTitle("");
+      setIsPressed(false);
+    } catch (error) {
+      setError(error.message || "Failed to Add");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="h-full w-full flex justify-center items-center">
@@ -32,16 +58,41 @@ export default function Configure() {
           <div className="flex w-full justify-start items-center text-3xl">
             Configure
           </div>
-          <div className="w-full"></div>
+          <div className="w-full flex justify-center items-center">
+            <AnimatePresence>
+              {isPressed && (
+                <motion.input
+                  layout
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%", opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ type: "tween" }}
+                  className={inputStyle}
+                  placeholder="Enter Title"
+                  value={newTitle}
+                  onChange={(event) => handleChange(event, setNewTitle)}
+                />
+              )}
+            </AnimatePresence>
+          </div>
           <div className="w-full">
-            <Button text={<BsPlusLg size={24} />} />
+            <Button
+              text={isPressed ? "Save Panel" : "Add New Panel"}
+              action={handleAddNew}
+              disabled={saving}
+            />
           </div>
         </div>
-        <div className="flex gap-4">
-          {data &&
-            Object.values(args).forEach((item) =>
-              Object.values(item).map((i) => <ListPanel title={i} />)
-            )}
+        <div className="flex justify-center items-center gap-4">
+          {panelData &&
+            Object.entries(panelData).map(([panelKey, panel]) => (
+              <ListPanel
+                key={panelKey}
+                name={panel?.title ?? panelKey}
+                listData={panel}
+                inputStyle={inputStyle}
+              />
+            ))}
         </div>
       </motion.div>
     </div>
