@@ -28,7 +28,7 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           <Route element={<ProtectedLayout />}>
-            <Route index element={<Navigate to="/shift-swap" replace />} />
+            <Route index element={<Navigate to="/home" replace />} />
             <Route path="/home" element={<Home />} />
             <Route path="/team-management" element={<TeamManagement />} />
             <Route path="/vacation" element={<Vacation />} />

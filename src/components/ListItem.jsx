@@ -1,25 +1,22 @@
 import { motion, Reorder, useDragControls } from "motion/react";
-import { BsChevronUp, BsChevronDown, BsTrash, BsList } from "react-icons/bs";
-import { SlControlStart } from "react-icons/sl";
+import { BsTrash, BsList } from "react-icons/bs";
 import { useState } from "react";
+import { useConfigure } from "../pages/context/configureContext";
 
-/** @param {data: Object, action: Function} */
+/** @param {data: Object, action: Function, onDragend: Function} */
 
-export default function ListItem({ data, action }) {
+export default function ListItem({ data, onRemove, onDragEnd }) {
   const controls = useDragControls();
   const [grabbed, setGrabbed] = useState(false);
-  const variants = {
-    enter: { width: 0, opacity: 0 },
-    center: { width: "100%", opacity: 1 },
-    exit: { width: 0, opacity: 0 },
-  };
+  const [id, title, order] = data;
 
   return (
     <Reorder.Item
       as="li"
-      value={data.title}
+      value={data}
       dragListeners={false}
       useDragControls={controls}
+      onDragEnd={() => onDragEnd()}
       initial={{ opacity: 0, height: 0, width: 0 }}
       animate={{ opacity: 1, height: "100%", width: "100%" }}
       exit={{ opacity: 0, x: 50 }}
@@ -37,10 +34,10 @@ export default function ListItem({ data, action }) {
         </motion.div>
       </div>
       <div className="w-full flex items-center text-lg justify-center ">
-        {data.title}
+        {title}
       </div>
       <motion.div
-        onClick={() => action(data)}
+        onClick={() => onRemove(id)}
         className="flex items-center-justify-center text-2xl text-red-500 hover:cursor-pointer"
       >
         <BsTrash />

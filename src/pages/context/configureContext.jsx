@@ -20,10 +20,11 @@ export function ConfigureProvider({ children }) {
   const [data, setData] = useState();
   const value = {
     data,
-    updatePanel,
+    updateList,
     addPanel,
-    deletePanel,
+    removePanel,
     addItem,
+    removeItem,
   };
 
   useEffect(() => {
@@ -52,9 +53,13 @@ export function ConfigureProvider({ children }) {
       .replace(/\s+/g, "-");
   }
 
-  function updatePanel(panel, data) {
-    const configRef = ref(db, "configure/" + panel);
-    set(configRef, data);
+  async function updateList(panel, data) {
+    const updates = {};
+    for (const [id, title, order] of data) {
+      updates[`configure/${panel}/items/${id}/title`] = title;
+      updates[`configure/${panel}/items/${id}/order`] = order;
+    }
+    await update(ref(db), updates);
   }
 
   /**
@@ -82,10 +87,14 @@ export function ConfigureProvider({ children }) {
    *
    * @param {String} panelName
    */
-  function deletePanel(panelName) {
-    const configRef = ref(db, "configure/" + panelName);
-    remove(configRef);
+  async function removePanel(panelName) {
+    await remove(ref(db, `configure/${panelName}`));
   }
+
+  async function removeItem(panel, itemID) {
+    await remove(ref(db, `configure/${panel}/items/${itemID}`));
+  }
+
   return (
     <ConfigureContext.Provider value={value}>
       {children}

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useReducer } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { input } from "@material-tailwind/react";
 import Button from "../components/Button";
-import ListPanel from "../components/ListPanel";
+import ListPanel from "../components/ListPanel.tsx";
 import { useConfigure } from "./context/configureContext.jsx";
 import { BsPlusLg } from "react-icons/bs";
 
@@ -26,6 +26,10 @@ export default function Configure() {
     data && setPanelData(data);
   }, [data]);
 
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   // Styling for all inputs to keep consistent styling
   const inputStyle =
     "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
@@ -45,6 +49,10 @@ export default function Configure() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleEnter = (event) => {
+    event.key === "Enter" && handleAddNew();
   };
 
   return (
@@ -70,6 +78,7 @@ export default function Configure() {
                   className={inputStyle}
                   placeholder="Enter Title"
                   value={newTitle}
+                  onKeyDown={(event) => handleEnter(event)}
                   onChange={(event) => handleChange(event, setNewTitle)}
                 />
               )}
