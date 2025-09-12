@@ -27,7 +27,7 @@ export default function Configure() {
   }, [data]);
 
   useEffect(() => {
-    console.error(error);
+    error != "" && console.error(error);
   }, [error]);
 
   // Styling for all inputs to keep consistent styling

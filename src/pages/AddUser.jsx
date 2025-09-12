@@ -4,9 +4,19 @@ import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import Button from "../components/Button";
 import ToggleSwitch from "../components/ToggleSwitch";
+import { useConfigure } from "./context/configureContext";
+
+// TODO:
+// Create function to sort data from configure to display in drop downs
+// Create function to create an account for the new user and link them to a user section in the database with their uid
+// Create optional fields dependent on whether the user is in the ADC or UPD (mandate, madated, pit, speed, rifle, car number, title)
+// Create the short abreviations for the different ranks
+// Create a function to add the abbreviation to the rank for the select supervisor drop down
 
 export default function AddUser() {
   const { data, loading } = useOutletContext();
+  const { data: configData } = useConfigure();
+  const [dropDownData, setDropDownData] = useState([]);
   const {
     register,
     handleSubmit,
@@ -25,23 +35,6 @@ export default function AddUser() {
     },
   });
   const trainee = watch("trainee");
-  const shifts = [
-    "Alpha",
-    "Bravo",
-    "Charlie",
-    "Delta",
-    "Split: Alpha & Bravo",
-    "Split: Charlie & Delta",
-  ];
-  const ranks = [
-    "Major",
-    "Lieutenant",
-    "Sergeant",
-    "Deputy (Level 2)",
-    "Deputy (Level 1)",
-    "Trainee",
-  ];
-  const divisions = ["adc", "upd"];
   const toggleStyle = "flex flex-col justify-center items-center gap-2";
   const inputStyle =
     "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
@@ -49,6 +42,23 @@ export default function AddUser() {
   const onSubmit = (data) => {
     console.log(data);
   };
+
+  useEffect(() => {
+    console.log(sortConfigure(configData));
+    setDropDownData(sortItems(sortConfigure(configData)));
+  }, [configData]);
+
+  function sortConfigure() {
+    return Object.entries(configData).map(([key, value]) => [
+      key,
+      value.title,
+      value.items,
+    ]);
+  }
+
+  function sortItems(items) {
+    return items.sort((a, b) => a[2] - b[2]);
+  }
 
   return (
     <motion.div className="h-full w-full relative flex items-center justify-center">
@@ -116,42 +126,21 @@ export default function AddUser() {
               type="text"
               placeholder="Car Number"
             />
-            <motion.select
-              layout
-              {...register("shift", { required: true })}
-              className={inputStyle}
-            >
-              <option value={""}>Select a Shift</option>
-              {shifts.map((shift) => (
-                <option key={shift} value={shift}>
-                  {shift}
-                </option>
-              ))}
-            </motion.select>
-            <motion.select
-              layout
-              {...register("division", { required: true })}
-              className={inputStyle}
-            >
-              <option value={""}>Select a Division</option>
-              {divisions.map((division) => (
-                <option key={division} value={division}>
-                  {division.toUpperCase()}
-                </option>
-              ))}
-            </motion.select>
-            <motion.select
-              layout
-              {...register("rank", { required: true })}
-              className={inputStyle}
-            >
-              <option value={""}>Select Rank</option>
-              {ranks.map((rank) => (
-                <option key={rank} value={rank.toLowerCase()}>
-                  {rank}
-                </option>
-              ))}
-            </motion.select>
+            {false && (
+              <motion.select
+                layout
+                {...register("shift", { required: true })}
+                className={inputStyle}
+              >
+                <option value={""}>Select a Shift</option>
+                {shifts.map((shift) => (
+                  <option key={shift} value={shift}>
+                    {shift}
+                  </option>
+                ))}
+              </motion.select>
+            )}
+
             <motion.select layout {...register("title")} className={inputStyle}>
               <option value={""}>Select Title</option>
             </motion.select>
