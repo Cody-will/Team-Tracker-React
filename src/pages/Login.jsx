@@ -19,7 +19,7 @@ export default function Login() {
   };
 
   if (currentUser) {
-    navigate("/configure");
+    navigate("/add-user");
   }
 
   async function handleLogin(user) {

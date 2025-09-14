@@ -7,7 +7,6 @@ import ToggleSwitch from "../components/ToggleSwitch";
 import { useConfigure } from "./context/configureContext";
 
 // TODO:
-// Create function to sort data from configure to display in drop downs
 // Create function to create an account for the new user and link them to a user section in the database with their uid
 // Create optional fields dependent on whether the user is in the ADC or UPD (mandate, madated, pit, speed, rifle, car number, title)
 // Create the short abreviations for the different ranks
@@ -44,19 +43,22 @@ export default function AddUser() {
   };
 
   useEffect(() => {
-    console.log(sortConfigure(configData));
-    setDropDownData(sortItems(sortConfigure(configData)));
+    configData && setDropDownData(prepareConfig(configData));
+    configData && sortConfig(prepareConfig(configData));
   }, [configData]);
 
-  function sortConfigure() {
-    return Object.entries(configData).map(([key, value]) => [
-      key,
-      value.title,
-      value.items,
+  function prepareConfig(data) {
+    return Object.values(data).map((item) => [
+      item.title,
+      Object.entries(item?.items).map(([key, value]) => [
+        key,
+        value.title,
+        value.order,
+      ]),
     ]);
   }
 
-  function sortItems(items) {
+  function sortConfig(items) {
     return items.sort((a, b) => a[2] - b[2]);
   }
 
@@ -126,31 +128,25 @@ export default function AddUser() {
               type="text"
               placeholder="Car Number"
             />
-            {false && (
-              <motion.select
-                layout
-                {...register("shift", { required: true })}
-                className={inputStyle}
-              >
-                <option value={""}>Select a Shift</option>
-                {shifts.map((shift) => (
-                  <option key={shift} value={shift}>
-                    {shift}
-                  </option>
-                ))}
-              </motion.select>
-            )}
 
-            <motion.select layout {...register("title")} className={inputStyle}>
-              <option value={""}>Select Title</option>
-            </motion.select>
-            <motion.select
-              {...register("supervisor")}
-              layout
-              className={inputStyle}
-            >
-              <option value={""}>Select Supervisor</option>
-            </motion.select>
+            {dropDownData &&
+              dropDownData.map((item) => (
+                <motion.select
+                  layout
+                  key={item.title}
+                  {...register(item[0])}
+                  className={inputStyle}
+                >
+                  <option value={""}>select {item[0]}</option>
+                  {item[1] &&
+                    sortConfig(item[1]).map((items) => (
+                      <option key={items[0]} value={items[1]}>
+                        {items[1]}
+                      </option>
+                    ))}
+                </motion.select>
+              ))}
+
             <AnimatePresence>
               {trainee && (
                 <div
