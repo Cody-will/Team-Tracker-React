@@ -16,24 +16,40 @@ export default function AddUser() {
   const { data, loading } = useOutletContext();
   const { data: configData } = useConfigure();
   const [dropDownData, setDropDownData] = useState([]);
+  const baseDefaults = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phone: "",
+    badge: "",
+    car: "",
+    role: "",
+    oic: false,
+    fto: false,
+    mandate: false,
+    trainee: false,
+    trainer: "",
+    phase: "",
+    pit: false,
+    speed: false,
+    rifle: false,
+  };
+
+  const dynamicDefaults = Object.fromEntries(
+    (dropDownData ?? []).map(([key]) => [key, ""])
+  );
+
+  const defaultValues = { ...baseDefaults, ...dynamicDefaults };
   const {
     register,
     handleSubmit,
     control,
     watch,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      oic: false,
-      fto: false,
-      mandate: false,
-      trainee: false,
-      pit: false,
-      speed: false,
-      rifle: false,
-    },
-  });
+  } = useForm({ defaultValues: { defaultValues } });
   const trainee = watch("trainee");
+  const upd = watch("Division");
   const toggleStyle = "flex flex-col justify-center items-center gap-2";
   const inputStyle =
     "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
@@ -47,6 +63,7 @@ export default function AddUser() {
     configData && sortConfig(prepareConfig(configData));
   }, [configData]);
 
+  // This function unpacks / prepares the data by putting it an an array for easier sorting
   function prepareConfig(data) {
     return Object.values(data).map((item) => [
       item.title,
@@ -58,6 +75,7 @@ export default function AddUser() {
     ]);
   }
 
+  // This functions sorts the prepared data by order item.order
   function sortConfig(items) {
     return items.sort((a, b) => a[2] - b[2]);
   }
@@ -133,7 +151,7 @@ export default function AddUser() {
               dropDownData.map((item) => (
                 <motion.select
                   layout
-                  key={item.title}
+                  key={item[1]}
                   {...register(item[0])}
                   className={inputStyle}
                 >

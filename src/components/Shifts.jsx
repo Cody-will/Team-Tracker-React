@@ -17,7 +17,6 @@ export default function Shifts({ shift, team }) {
   );
   const teamCards = teamOnly.map((person) => <NewCard person={person} />);
   const capShift = shift.charAt(0).toUpperCase() + shift.slice(1);
-  supervisors.forEach((person) => console.log(person.title));
 
   return (
     <motion.div

@@ -19,7 +19,7 @@ import { AuthProvider } from "./pages/context/AuthContext.jsx";
 import { ConfigureProvider } from "./pages/context/configureContext.jsx";
 import CometWallpaper from "./pages/CometWallpaper";
 import { useAuth } from "./pages/context/AuthContext.jsx";
-import { UserProvider } from "./pages/context/UserContext.jsx";
+import { UserProvider } from "./pages/context/UserContext.tsx";
 
 function App() {
   return (

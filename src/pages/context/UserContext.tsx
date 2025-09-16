@@ -1,15 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-
 import { db } from "../../firebase.js";
-import {
-  set,
-  ref,
-  get,
-  push,
-  update,
-  remove,
-  onValue,
-} from "firebase/database";
+import { set, ref, push, update, remove, onValue } from "firebase/database";
 
 // TODO:
 // Complete the typing and verify the functions for deleteUser, updateUser, and deactivateUser work correctly
@@ -17,6 +8,7 @@ import {
 // Complete error handling
 // Double check types and account for dynamically created types that could come from the config page
 // Make sure that all static paramiters are valid and all dynamic types are placed into an object
+// Figure out whether to store the uid as its own attribute or get it directly from the key.
 
 type CustomValue = string | number | boolean | null;
 
@@ -59,6 +51,7 @@ export interface Value {
   deactivateUser: (uid: string) => Promise<void>;
   updateUser: (user: User) => Promise<void>;
 }
+
 export function UserProvider({ children }) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -90,7 +83,7 @@ export function UserProvider({ children }) {
 
   async function addUser(userData: User) {
     const userRef = ref(db, "users");
-    await push(userRef, userData);
+    await set(userRef, userData);
   }
 
   async function deleteUser(uid: string) {
