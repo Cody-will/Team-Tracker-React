@@ -292,7 +292,11 @@ export default function AddUser() {
               </div>
             </div>
             <div className="flex col-span-2">
-              <Button text="Add User" action={() => {}} type="submit" />
+              <Button
+                text="Add User"
+                action={() => handleSubmit(onSubmit)}
+                type="submit"
+              />
             </div>
           </motion.form>
         </motion.div>

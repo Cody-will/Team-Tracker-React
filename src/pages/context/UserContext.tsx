@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { db } from "../../firebase.js";
 import { set, ref, push, update, remove, onValue } from "firebase/database";
+import { useAuth } from "./AuthContext.jsx";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 // TODO:
 // Complete the typing and verify the functions for deleteUser, updateUser, and deactivateUser work correctly
@@ -17,6 +19,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   phone: string;
   badge: string;
   carNumber: string;
@@ -52,7 +55,7 @@ export interface Value {
   updateUser: (user: User) => Promise<void>;
 }
 
-export function UserProvider({ children }) {
+export function UserProvider({ children }: any) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -81,9 +84,36 @@ export function UserProvider({ children }) {
     return unsubscribe;
   }, []);
 
+  function getEmailAndPassword(user: User) {
+    return { email: user.email, password: user.password };
+  }
+
+  async function createUserAccount(
+    email: string,
+    password: string
+  ): Promise<string> {
+    const createAuthUser = httpsCallable(getFunctions(), "createAuthUser");
+    const response = await createAuthUser({ email, password });
+    return (response.data as { uid: string; created: boolean }).uid;
+  }
+
   async function addUser(userData: User) {
-    const userRef = ref(db, "users");
-    await set(userRef, userData);
+    try {
+      const { email, password } = getEmailAndPassword(userData);
+      const uid = await createUserAccount(email, password);
+      const { password: _omit, ...cleanData } = userData;
+      const userRef = ref(db, `users/${uid}`);
+      await set(userRef, {
+        ...cleanData,
+        uid,
+        email,
+        active: cleanData.active ?? true,
+        createdAt: Date.now(),
+      });
+    } catch (e) {
+      console.error("addUser failed:", e);
+      throw e;
+    }
   }
 
   async function deleteUser(uid: string) {
