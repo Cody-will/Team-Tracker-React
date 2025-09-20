@@ -74,7 +74,7 @@ export function UserProvider({ children }: any) {
     const unsubscribe = onValue(
       confRef,
       (snapshot) => {
-        setData(snapshot.exists() ? snapshot.val() : null);
+        setData(snapshot.exists() ? snapshot.val() : {});
         setLoading(false);
       },
       (error) => {
@@ -84,10 +84,14 @@ export function UserProvider({ children }: any) {
     return unsubscribe;
   }, []);
 
+  // Returns users email and password to be ised when creating the auth account
   function getEmailAndPassword(user: User) {
-    return { email: user.email, password: user.password };
+    return { email: user.email.trim(), password: user.password.trim() };
   }
 
+  // This functions calls the service worker on the server to create the users account
+  // using the Admin SDK, so the admin can create the user without being logged
+  // in as the new user afterwards
   async function createUserAccount(
     email: string,
     password: string
@@ -97,10 +101,40 @@ export function UserProvider({ children }: any) {
     return (response.data as { uid: string; created: boolean }).uid;
   }
 
+  // This function calls the service worker on the server to delete the users auth account
+  // using the Admin SDK
+  async function deleteUserAccount(uid: string): Promise<boolean> {
+    const deleteAuthUser = httpsCallable(getFunctions(), "deleteAuthUser");
+    const response = await deleteAuthUser({ uid });
+    return (response.data as { ok: boolean }).ok;
+  }
+
+  // This function calls the service worker on the server to set the users role
+  async function setUserRole(uid: string, role: string): Promise<boolean> {
+    const setRole = httpsCallable(getFunctions(), "setUserRole");
+    const response = await setRole({ uid, role });
+    return (response.data as { complete: boolean }).complete;
+  }
+
+  // This function disables the users auth account by calling the service worker
+  // that is using the Admin SDK, the service worker takes a disabled argument
+  // but the function calling this function has an active argument, so when
+  // calling this function active === false, but disabled === true, so this function
+  // will send !active / !disabled to the database
+  async function disableUser(uid: string, disabled: boolean) {
+    const setDisabled = httpsCallable(getFunctions(), "setDisabled");
+    const response = await setDisabled({ uid, disabled });
+    return (response.data as { uid: string; disabled: boolean }).disabled;
+  }
+
+  // This function calls the function to create the users auth account, then
+  // adds the users properties to the user section of the database under the returned
+  // UID the user gets when their auth account gets created
   async function addUser(userData: User) {
     try {
       const { email, password } = getEmailAndPassword(userData);
       const uid = await createUserAccount(email, password);
+      await setUserRole(uid, userData.role);
       const { password: _omit, ...cleanData } = userData;
       const userRef = ref(db, `users/${uid}`);
       await set(userRef, {
@@ -117,11 +151,24 @@ export function UserProvider({ children }: any) {
   }
 
   async function deleteUser(uid: string) {
-    await remove(ref(db, `users/${uid}`));
+    try {
+      await deleteUserAccount(uid);
+      await remove(ref(db, `users/${uid}`));
+    } catch (e) {
+      console.error("deleteUser failed: ", e);
+      throw e;
+    }
   }
 
   async function deactivateUser(uid: string) {
-    await update(ref(db, `users/${uid}`), { active: false });
+    try {
+      const disabled = true;
+      await disableUser(uid, disabled);
+      await update(ref(db, `users/${uid}`), { active: false });
+    } catch (e) {
+      console.error("deactivateUser failed: ", e);
+      throw e;
+    }
   }
 
   async function updateUser(user: User) {
