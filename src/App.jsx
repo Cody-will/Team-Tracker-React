@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import TeamManagement from "./pages/TeamManagement";
 import ShiftSwap from "./pages/ShiftSwap";
 import Vacation from "./pages/Vacation";
-import Settings from "./pages/Settings";
+import Settings from "./pages/Settings.tsx";
 import AddUser from "./pages/AddUser";
 import Coverage from "./pages/Coverage";
 import Configure from "./pages/Configure";

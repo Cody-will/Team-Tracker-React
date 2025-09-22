@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { primaryAccent, secondaryAccent, primaryAccentHex } from "../colors";
 
-/** @param {{ text: String, action: function, type: button:type, disabled: Boolean, color: String, styles: String }} props */
+/** @param {{ text: String, action: function, type?: button, disabled?: Boolean, color?: String, styles?: String }} props */
 
 export default function Button({
   text,

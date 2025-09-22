@@ -22,8 +22,8 @@ export function AuthProvider({ children }) {
   const refreshClaims = useCallback(async () => {
     const u = auth.currentUser;
     if (!u) return null;
-    await u.getIdToken(true); // <-- force refresh token
-    const res = await u.getIdTokenResult(); // <-- new claims included
+    await u.getIdToken(true);
+    const res = await u.getIdTokenResult();
     setClaims(res.claims);
     return res.claims;
   }, []);

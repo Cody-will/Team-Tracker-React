@@ -38,8 +38,12 @@ type UserRecord = Record<string, User>;
 
 const userContext = React.createContext<Value | undefined>(undefined);
 
-export function useUser() {
-  return useContext(userContext);
+export function useUser(): Value {
+  const context = useContext(userContext);
+  if (!context) {
+    throw new Error("useUser must be inside <UserProvider>");
+  }
+  return context;
 }
 
 export interface Value {
@@ -50,6 +54,16 @@ export interface Value {
   deleteUser: (uid: string) => Promise<void>;
   deactivateUser: (uid: string) => Promise<void>;
   updateUser: (user: User) => Promise<void>;
+  updateUserSettings: (
+    uid: string,
+    settings: Partial<UserSettings>
+  ) => Promise<void>;
+}
+
+export interface UserSettings {
+  primaryAccent: string;
+  secondaryAccent: string;
+  bgImage: string;
 }
 
 export function UserProvider({ children }: any) {
@@ -64,6 +78,7 @@ export function UserProvider({ children }: any) {
     deleteUser,
     deactivateUser,
     updateUser,
+    updateUserSettings,
   };
 
   // Use effect to get the user data from the users section of the database
@@ -177,6 +192,19 @@ export function UserProvider({ children }: any) {
   // when re-coding the update user information on the team-management page
   async function updateUser(user: User) {
     await update(ref(db, `users/${user.uid}`), user);
+  }
+
+  // This function will update the users settings in the database
+  async function updateUserSettings(
+    uid: string,
+    settings: Partial<UserSettings>
+  ) {
+    try {
+      await update(ref(db, `users/${uid}/settings`), settings);
+    } catch (e) {
+      console.error("updateUserSettings failed: ", e);
+      throw e;
+    }
   }
 
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
