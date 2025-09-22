@@ -22,7 +22,7 @@ export default function Settings() {
   const { currentUser } = useAuth();
   const { updateUserSettings } = useUser();
   const inputStyle =
-    "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
+    "border-2 border-zinc-900 w-full  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
 
   type UserSettings = {
     primaryAccent: string;
@@ -53,10 +53,13 @@ export default function Settings() {
       <motion.div
         layout
         id="panel"
-        className="bg-zinc-950/30 overflow-hidden flex flex-col gap-4 p-4 justify-center items-center border border-zinc-800 rounded-xl"
+        className="bg-zinc-950/30 overflow-hidden flex flex-col gap-4 p-8 justify-center items-center border border-zinc-800 rounded-xl"
       >
+        <div className="font-semibold text-zinc-200 text-3xl flex items-start justify-start w-full">
+          Settings/Customization
+        </div>
         <div className="flex gap-8 items-start justify-center">
-          <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
             <div className="font-semibold text-2xl text-zinc-200">
               Primary Accent
             </div>
@@ -73,7 +76,7 @@ export default function Settings() {
               }}
             />
           </div>
-          <div className="flex flex-col items-center justify-center gap-4">
+          <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
             <div className="font-semibold text-2xl text-zinc-200">
               Secondary Accent
             </div>
@@ -90,7 +93,7 @@ export default function Settings() {
               }}
             />
           </div>
-          <div className="flex flex-col gap-4 justify-center items-center">
+          <div className="flex flex-col gap-4 justify-center items-center border-2 border-zinc-900 rounded-xl p-4">
             <div className="font-semibold text-2xl text-zinc-200">
               Background Image
             </div>
@@ -101,6 +104,7 @@ export default function Settings() {
             <Button text="Upload" type="button" action={() => {}} />
           </div>
         </div>
+        <Button text="Save Settings" type="button" action={() => {}} />
       </motion.div>
     </motion.div>
   );
