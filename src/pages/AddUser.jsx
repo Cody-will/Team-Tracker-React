@@ -7,6 +7,11 @@ import ToggleSwitch from "../components/ToggleSwitch";
 import { useConfigure } from "./context/configureContext";
 import { useUser } from "./context/UserContext";
 
+//TODO:
+// Create pop ups for error handling
+// Define which fields are required
+// Create listeners to see which division is selected
+
 export default function AddUser() {
   const { data, loading } = useOutletContext();
   const { data: configData } = useConfigure();
@@ -20,7 +25,6 @@ export default function AddUser() {
     phone: "",
     badge: "",
     car: "",
-    role: "",
     oic: false,
     fto: false,
     mandate: false,
@@ -42,16 +46,18 @@ export default function AddUser() {
     handleSubmit,
     control,
     watch,
+    reset,
     formState: { errors },
   } = useForm({ defaultValues });
   const trainee = watch("trainee");
-  const upd = watch("Division");
+  const upd = watch("Divisions");
   const toggleStyle = "flex flex-col justify-center items-center gap-2";
   const inputStyle =
     "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
 
   const onSubmit = (data) => {
     addUser(data);
+    reset(defaultValues);
   };
 
   useEffect(() => {
@@ -249,48 +255,52 @@ export default function AddUser() {
                   )}
                 />
               </div>
-              <div className={toggleStyle}>
-                <span className="">PIT</span>
-                <Controller
-                  name="pit"
-                  control={control}
-                  defaultValue={false}
-                  render={({ field }) => (
-                    <ToggleSwitch
-                      state={!!field.value}
-                      setState={field.onChange}
+              {upd === "UPD" && (
+                <>
+                  <div className={toggleStyle}>
+                    <span className="">PIT</span>
+                    <Controller
+                      name="pit"
+                      control={control}
+                      defaultValue={false}
+                      render={({ field }) => (
+                        <ToggleSwitch
+                          state={!!field.value}
+                          setState={field.onChange}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-              <div className={toggleStyle}>
-                <span className="">Speed</span>
-                <Controller
-                  name="speed"
-                  control={control}
-                  defaultValue={false}
-                  render={({ field }) => (
-                    <ToggleSwitch
-                      state={!!field.value}
-                      setState={field.onChange}
+                  </div>
+                  <div className={toggleStyle}>
+                    <span className="">Speed</span>
+                    <Controller
+                      name="speed"
+                      control={control}
+                      defaultValue={false}
+                      render={({ field }) => (
+                        <ToggleSwitch
+                          state={!!field.value}
+                          setState={field.onChange}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
-              <div className={toggleStyle}>
-                <span className="">Rifle</span>
-                <Controller
-                  name="rifle"
-                  control={control}
-                  defaultValue={false}
-                  render={({ field }) => (
-                    <ToggleSwitch
-                      state={!!field.value}
-                      setState={field.onChange}
+                  </div>
+                  <div className={toggleStyle}>
+                    <span className="">Rifle</span>
+                    <Controller
+                      name="rifle"
+                      control={control}
+                      defaultValue={false}
+                      render={({ field }) => (
+                        <ToggleSwitch
+                          state={!!field.value}
+                          setState={field.onChange}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </div>
+                  </div>{" "}
+                </>
+              )}
             </div>
             <div className="flex col-span-2">
               <Button
