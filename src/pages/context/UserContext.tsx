@@ -1,16 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { db } from "../../firebase.js";
 import { set, ref, push, update, remove, onValue } from "firebase/database";
-import { useAuth } from "./AuthContext.jsx";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
 // TODO:
 // Complete the typing and verify the functions for deleteUser, updateUser, and deactivateUser work correctly
-// Complete a function to create the user an account, then use the uid created to map them to the user section with the rest of their info.
 // Complete error handling
 // Double check types and account for dynamically created types that could come from the config page
 // Make sure that all static paramiters are valid and all dynamic types are placed into an object
-// Figure out whether to store the uid as its own attribute or get it directly from the key.
 
 type CustomValue = string | number | boolean | null;
 
@@ -23,7 +20,7 @@ export interface User {
   phone: string;
   badge: string;
   carNumber: string;
-  role: string;
+  Role: string;
   oic: boolean;
   fto: boolean;
   mandate: boolean;
@@ -69,6 +66,7 @@ export function UserProvider({ children }: any) {
     updateUser,
   };
 
+  // Use effect to get the user data from the users section of the database
   useEffect(() => {
     const confRef = ref(db, "users");
     const unsubscribe = onValue(
@@ -131,10 +129,12 @@ export function UserProvider({ children }: any) {
   // adds the users properties to the user section of the database under the returned
   // UID the user gets when their auth account gets created
   async function addUser(userData: User) {
+    console.log(userData);
+    console.log("Role: ", userData.Role);
     try {
       const { email, password } = getEmailAndPassword(userData);
       const uid = await createUserAccount(email, password);
-      await setUserRole(uid, userData.role);
+      await setUserRole(uid, userData.Role.toLowerCase());
       const { password: _omit, ...cleanData } = userData;
       const userRef = ref(db, `users/${uid}`);
       await set(userRef, {
@@ -150,6 +150,7 @@ export function UserProvider({ children }: any) {
     }
   }
 
+  // This function completely deletes the users auth account and user info
   async function deleteUser(uid: string) {
     try {
       await deleteUserAccount(uid);
@@ -160,6 +161,7 @@ export function UserProvider({ children }: any) {
     }
   }
 
+  // This function deactivated the user, but keeps their auth account and user info
   async function deactivateUser(uid: string) {
     try {
       const disabled = true;
@@ -171,6 +173,8 @@ export function UserProvider({ children }: any) {
     }
   }
 
+  // THIS FUNCTION still needs to be completed, will complete this function
+  // when re-coding the update user information on the team-management page
   async function updateUser(user: User) {
     await update(ref(db, `users/${user.uid}`), user);
   }

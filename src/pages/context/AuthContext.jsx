@@ -1,9 +1,9 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { auth } from "../../firebase.js";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  createUserWithEmailAndPassword,
+  onIdTokenChanged,
 } from "firebase/auth";
 
 const AuthContext = React.createContext();
@@ -17,8 +17,30 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     signIn,
-    createUser,
   };
+
+  const refreshClaims = useCallback(async () => {
+    const u = auth.currentUser;
+    if (!u) return null;
+    await u.getIdToken(true); // <-- force refresh token
+    const res = await u.getIdTokenResult(); // <-- new claims included
+    setClaims(res.claims);
+    return res.claims;
+  }, []);
+
+  // Keep user & claims updated automatically
+  useEffect(() => {
+    const unsub = onIdTokenChanged(auth, async (u) => {
+      setUser(u);
+      if (u) {
+        const res = await u.getIdTokenResult();
+        setClaims(res.claims);
+      } else {
+        setClaims(null);
+      }
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

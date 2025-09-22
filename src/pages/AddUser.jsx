@@ -5,17 +5,13 @@ import { useForm, Controller } from "react-hook-form";
 import Button from "../components/Button";
 import ToggleSwitch from "../components/ToggleSwitch";
 import { useConfigure } from "./context/configureContext";
-
-// TODO:
-// Create function to create an account for the new user and link them to a user section in the database with their uid
-// Create optional fields dependent on whether the user is in the ADC or UPD (mandate, madated, pit, speed, rifle, car number, title)
-// Create the short abreviations for the different ranks
-// Create a function to add the abbreviation to the rank for the select supervisor drop down
+import { useUser } from "./context/UserContext";
 
 export default function AddUser() {
   const { data, loading } = useOutletContext();
   const { data: configData } = useConfigure();
   const [dropDownData, setDropDownData] = useState([]);
+  const { addUser } = useUser();
   const baseDefaults = {
     firstName: "",
     lastName: "",
@@ -47,7 +43,7 @@ export default function AddUser() {
     control,
     watch,
     formState: { errors },
-  } = useForm({ defaultValues: { defaultValues } });
+  } = useForm({ defaultValues });
   const trainee = watch("trainee");
   const upd = watch("Division");
   const toggleStyle = "flex flex-col justify-center items-center gap-2";
@@ -55,7 +51,7 @@ export default function AddUser() {
     "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
 
   const onSubmit = (data) => {
-    console.log(data);
+    addUser(data);
   };
 
   useEffect(() => {
@@ -63,7 +59,6 @@ export default function AddUser() {
     configData && sortConfig(prepareConfig(configData));
   }, [configData]);
 
-  // This function unpacks / prepares the data by putting it an an array for easier sorting
   function prepareConfig(data) {
     return Object.values(data).map((item) => [
       item.title,
@@ -75,7 +70,6 @@ export default function AddUser() {
     ]);
   }
 
-  // This functions sorts the prepared data by order item.order
   function sortConfig(items) {
     return items.sort((a, b) => a[2] - b[2]);
   }
@@ -204,6 +198,7 @@ export default function AddUser() {
                 <Controller
                   name="oic"
                   control={control}
+                  defaultValue={false}
                   render={({ field }) => (
                     <ToggleSwitch
                       state={!!field.value}
@@ -217,6 +212,7 @@ export default function AddUser() {
                 <Controller
                   name="fto"
                   control={control}
+                  defaultValue={false}
                   render={({ field }) => (
                     <ToggleSwitch
                       state={!!field.value}
@@ -230,6 +226,7 @@ export default function AddUser() {
                 <Controller
                   name="mandate"
                   control={control}
+                  defaultValue={false}
                   render={({ field }) => (
                     <ToggleSwitch
                       state={!!field.value}
@@ -243,6 +240,7 @@ export default function AddUser() {
                 <Controller
                   name="trainee"
                   control={control}
+                  defaultValue={false}
                   render={({ field }) => (
                     <ToggleSwitch
                       state={!!field.value}
@@ -256,6 +254,7 @@ export default function AddUser() {
                 <Controller
                   name="pit"
                   control={control}
+                  defaultValue={false}
                   render={({ field }) => (
                     <ToggleSwitch
                       state={!!field.value}
@@ -269,6 +268,7 @@ export default function AddUser() {
                 <Controller
                   name="speed"
                   control={control}
+                  defaultValue={false}
                   render={({ field }) => (
                     <ToggleSwitch
                       state={!!field.value}
@@ -282,6 +282,7 @@ export default function AddUser() {
                 <Controller
                   name="rifle"
                   control={control}
+                  defaultValue={false}
                   render={({ field }) => (
                     <ToggleSwitch
                       state={!!field.value}

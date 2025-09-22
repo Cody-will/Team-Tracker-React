@@ -1,8 +1,14 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, onValue } from "firebase/database";
-import { getAuth } from "firebase/auth";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  connectDatabaseEmulator,
+} from "firebase/database";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,16 +25,9 @@ const firebaseConfig = {
   measurementId: "G-GPPMNXZEV7",
 };
 
-export const updateConfigure = (location, data) => {
-  set(ref(db, "configure/" + location), {
-    location: data,
-  })
-    .then(() => console.log("Succesful"))
-    .catch((error) => console.error(error));
-};
-
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
+export const functions = getFunctions(app);
