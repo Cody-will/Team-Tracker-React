@@ -2,6 +2,12 @@ import React, { useContext, useState, useEffect } from "react";
 import { db } from "../../firebase.js";
 import { set, ref, push, update, remove, onValue } from "firebase/database";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { useAuth } from "./AuthContext.jsx";
+import {
+  primaryAccentHex,
+  secondaryAccentHex,
+  backgroundImage,
+} from "../../colors.jsx";
 
 // TODO:
 // Complete the typing and verify the functions for deleteUser, updateUser, and deactivateUser work correctly
@@ -31,6 +37,7 @@ export interface User {
   speed: boolean;
   rifle: boolean;
   active: boolean;
+  settings?: UserSettings;
   custom?: Record<string, CustomValue>;
 }
 
@@ -50,6 +57,8 @@ export interface Value {
   data: UserRecord;
   loading: boolean;
   error?: string;
+  user?: User;
+  userSettings: UserSettings;
   addUser: (userData: User) => Promise<void>;
   deleteUser: (uid: string) => Promise<void>;
   deactivateUser: (uid: string) => Promise<void>;
@@ -60,20 +69,43 @@ export interface Value {
   ) => Promise<void>;
 }
 
+type UserBackground = {
+  name: string;
+  src: string;
+};
 export interface UserSettings {
+  primaryAccent: string;
+  secondaryAccent: string;
+  bgImage: string;
+  userBackground?: UserBackground | Record<string, UserBackground>;
+}
+
+export interface DefaultSettings {
   primaryAccent: string;
   secondaryAccent: string;
   bgImage: string;
 }
 
 export function UserProvider({ children }: any) {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<UserRecord>({});
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | undefined>();
+  const defaultSettings: DefaultSettings = {
+    primaryAccent: primaryAccentHex,
+    secondaryAccent: secondaryAccentHex,
+    bgImage: backgroundImage,
+  };
+  const [userSettings, setUserSettings] = useState<
+    UserSettings | DefaultSettings
+  >(defaultSettings);
+  const { currentUser } = useAuth();
   const [error, setError] = useState<string | undefined>(undefined);
   const value: Value = {
     data,
     loading,
     error,
+    user,
+    userSettings,
     addUser,
     deleteUser,
     deactivateUser,
@@ -87,7 +119,7 @@ export function UserProvider({ children }: any) {
     const unsubscribe = onValue(
       confRef,
       (snapshot) => {
-        setData(snapshot.exists() ? snapshot.val() : {});
+        setData(snapshot.exists() ? (snapshot.val() as UserRecord) : {});
         setLoading(false);
       },
       (error) => {
@@ -96,6 +128,19 @@ export function UserProvider({ children }: any) {
     );
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    const uid: string = currentUser.uid;
+    const cUser = data[uid];
+    setUser(cUser ?? null);
+  }, [data, currentUser]);
+
+  useEffect(() => {
+    if (!user) return;
+    const settings = user.settings ? user.settings : defaultSettings;
+    setUserSettings(settings);
+  }, [user]);
 
   // Returns users email and password to be ised when creating the auth account
   function getEmailAndPassword(user: User) {

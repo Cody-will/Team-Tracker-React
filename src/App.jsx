@@ -20,6 +20,7 @@ import { ConfigureProvider } from "./pages/context/configureContext.jsx";
 import CometWallpaper from "./pages/CometWallpaper";
 import { useAuth } from "./pages/context/AuthContext.jsx";
 import { UserProvider } from "./pages/context/UserContext.tsx";
+import { useUser } from "./pages/context/UserContext.tsx";
 
 function App() {
   return (
@@ -54,6 +55,8 @@ const ProtectedLayout = () => {
   const [data, setData] = useState();
   const [nightMode, setNightMode] = useState(false);
   const { currentUser } = useAuth();
+  const { userSettings } = useUser();
+  console.log(userSettings);
 
   useEffect(() => {
     const teamData = ref(db, "team");
@@ -74,14 +77,16 @@ const ProtectedLayout = () => {
     return () => unsubscribe();
   }, []);
   if (!currentUser) return <Navigate to="/login" replace />;
-  const backgrounddd =
-    "bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover";
 
   return (
     <motion.div
-      className={` ${
-        !nightMode && backgrounddd
-      } h-screen w-screen overflow-hidden  flex relative`}
+      style={{
+        backgroundImage: !nightMode && `url(${userSettings.bgImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+      }}
+      className={`h-screen w-screen overflow-hidden  flex relative`}
     >
       <AnimatePresence>{nightMode && <CometWallpaper />}</AnimatePresence>
       <div className=" fixed inset-0 z-0"></div>

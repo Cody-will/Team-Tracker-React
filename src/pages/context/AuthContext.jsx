@@ -14,10 +14,17 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
+  const [claims, setClaims] = useState(null);
   const value = {
     currentUser,
+    isAdmin,
     signIn,
   };
+
+  // This function can be used to dynamically display parts of the UI based on role
+  function isAdmin() {
+    return claims.role === "admin";
+  }
 
   const refreshClaims = useCallback(async () => {
     const u = auth.currentUser;
@@ -31,10 +38,11 @@ export function AuthProvider({ children }) {
   // Keep user & claims updated automatically
   useEffect(() => {
     const unsub = onIdTokenChanged(auth, async (u) => {
-      setUser(u);
+      setCurrentUser(u);
       if (u) {
         const res = await u.getIdTokenResult();
         setClaims(res.claims);
+        console.log(res.claims);
       } else {
         setClaims(null);
       }

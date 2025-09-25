@@ -5,8 +5,7 @@ import ColorPicker from "../components/ColorPicker.jsx";
 import Button from "../components/Button.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useUser } from "./context/UserContext.tsx";
-import { primaryAccentHex, secondaryAccentHex } from "../colors.jsx";
-
+import { backgroundOptions } from "../colors.jsx";
 // TODO:
 // Finish completing the UI for uploading and changing the users wallpaper
 // Note: the user uploading a wallpaper should add it to a list of wallpapers for them, not replace existing
@@ -14,20 +13,31 @@ import { primaryAccentHex, secondaryAccentHex } from "../colors.jsx";
 // Complete the function calling updateUserSettings
 
 export default function Settings() {
-  const [primaryColor, setPrimaryColor] = useState(primaryAccentHex);
-  const [secondaryColor, setSecondaryColor] = useState(secondaryAccentHex);
-  const [bgImage, setBgImage] = useState("");
+  const [isClicked, setIsClicked] = useState(false);
   const [selectedPrimary, setSelectedPrimary] = useState("");
   const [selectedSecondary, setSelectedSecondary] = useState("");
   const { currentUser } = useAuth();
-  const { updateUserSettings } = useUser();
+  const { updateUserSettings, user, userSettings } = useUser();
+  const [userBackgrounds, setUserBackgrounds] = useState();
+  const [primaryColor, setPrimaryColor] = useState(userSettings.primaryAccent);
+  const [secondaryColor, setSecondaryColor] = useState(
+    userSettings.secondaryAccent
+  );
+  const [bgImage, setBgImage] = useState(userSettings.bgImage);
+
   const inputStyle =
     "border-2 border-zinc-900 w-full  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
+
+  type UserBackground = {
+    name: string;
+    src: string;
+  };
 
   type UserSettings = {
     primaryAccent: string;
     secondaryAccent: string;
     bgImage: string;
+    userBackground?: Record<string, UserBackground> | UserBackground;
   };
 
   function onColorChange(accent: "primary" | "secondary") {
@@ -43,9 +53,18 @@ export default function Settings() {
     const settings: UserSettings = {
       primaryAccent: primaryColor,
       secondaryAccent: secondaryColor,
-      bgImage,
+      bgImage: bgImage,
+      userBackground: userBackgrounds && userBackgrounds,
     };
     updateUserSettings(uid, settings);
+  }
+
+  function handleClick() {
+    if (!isClicked) {
+      setIsClicked(true);
+    } else {
+      setIsClicked(false);
+    }
   }
 
   return (
@@ -97,11 +116,31 @@ export default function Settings() {
             <div className="font-semibold text-2xl text-zinc-200">
               Background Image
             </div>
-            <img src={"../assets/background.svg"} className="" />
-            <select className={inputStyle}>
-              <option value="">Select Image</option>
-            </select>
-            <Button text="Upload" type="button" action={() => {}} />
+            {!isClicked && (
+              <>
+                <img src={"../assets/background.svg"} className="" />
+                <select className={inputStyle}>
+                  <option value="">Select Image</option>
+                </select>{" "}
+              </>
+            )}
+            {isClicked && (
+              <>
+                <div className="">
+                  <img src="" />
+                </div>
+                <input type="file" accept="image/*" className={inputStyle} />
+                <input
+                  placeholder="Enter a nickname for the photo"
+                  className={inputStyle}
+                />
+              </>
+            )}
+            <Button
+              text={isClicked ? "Upload" : "Add Image"}
+              type="button"
+              action={handleClick}
+            />
           </div>
         </div>
         <Button text="Save Settings" type="button" action={() => {}} />
