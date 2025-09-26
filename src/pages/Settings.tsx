@@ -11,6 +11,7 @@ import { backgroundOptions } from "../colors.jsx";
 // Note: the user uploading a wallpaper should add it to a list of wallpapers for them, not replace existing
 // Complete functions for uploading and changing the users wallpaper in the database under user settings
 // Complete the function calling updateUserSettings
+// Section around line 150 needs to have the userSettings.primaryAccent section set up for the file input file:bg-color
 
 export default function Settings() {
   const [isClicked, setIsClicked] = useState(false);
@@ -67,6 +68,13 @@ export default function Settings() {
     }
   }
 
+  type DropDownEvent = React.ChangeEvent<HTMLSelectElement>;
+  function handleDropDown(event: DropDownEvent) {
+    const value = event.target.value;
+    if (value === "Select Image") return;
+    setBgImage(value);
+  }
+
   return (
     <motion.div className="h-full w-full flex items-center justify-center">
       <motion.div
@@ -112,16 +120,29 @@ export default function Settings() {
               }}
             />
           </div>
-          <div className="flex flex-col gap-4 justify-center items-center border-2 border-zinc-900 rounded-xl p-4">
+          <motion.div
+            layout
+            className="flex flex-col gap-4 justify-center items-center border-2 border-zinc-900 rounded-xl p-4"
+          >
             <div className="font-semibold text-2xl text-zinc-200">
               Background Image
             </div>
             {!isClicked && (
               <>
-                <img src={"../assets/background.svg"} className="" />
-                <select className={inputStyle}>
-                  <option value="">Select Image</option>
-                </select>{" "}
+                <img src={bgImage} className="max-w-68 bg-white rounded-md" />
+                <select
+                  className={inputStyle}
+                  onChange={(event) => handleDropDown(event)}
+                >
+                  <option value={bgImage}>Select Image</option>
+                  {Object.entries(backgroundOptions).map(
+                    ([index, background]) => (
+                      <option key={index} value={background.src}>
+                        {background.name}
+                      </option>
+                    )
+                  )}
+                </select>
               </>
             )}
             {isClicked && (
@@ -129,7 +150,11 @@ export default function Settings() {
                 <div className="">
                   <img src="" />
                 </div>
-                <input type="file" accept="image/*" className={inputStyle} />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className={`w-full rounded-lg text-zinc-200 border border-zinc-900 file:py-2 file:px-3 file:text-zinc-950 file:font-semibold `}
+                />
                 <input
                   placeholder="Enter a nickname for the photo"
                   className={inputStyle}
@@ -141,7 +166,7 @@ export default function Settings() {
               type="button"
               action={handleClick}
             />
-          </div>
+          </motion.div>
         </div>
         <Button text="Save Settings" type="button" action={() => {}} />
       </motion.div>
