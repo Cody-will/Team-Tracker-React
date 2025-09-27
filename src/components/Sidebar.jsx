@@ -11,9 +11,9 @@ import {
   BsSliders,
 } from "react-icons/bs";
 
+import { useUser } from "../pages/context/UserContext.js";
 import { NavLink } from "react-router-dom";
 import { motion, LayoutGroup } from "motion/react";
-import { primaryAccentHex } from "../colors";
 import { auth } from "../firebase.js";
 import { signOut } from "firebase/auth";
 import ToggleSwitch from "./ToggleSwitch";
@@ -67,6 +67,8 @@ export default function Sidebar({ toggleState, setToggleState }) {
 }
 
 function SideBarLink({ to, action, icon, label }) {
+  const { userSettings } = useUser();
+  const { primaryAccent } = userSettings;
   return (
     <NavLink
       to={to}
@@ -85,7 +87,7 @@ function SideBarLink({ to, action, icon, label }) {
             <motion.div
               layoutId="sidebar-highlight"
               transition={{ type: "spring", bounce: 0.25, duration: 0.3 }}
-              style={{ backgroundColor: primaryAccentHex }}
+              style={{ backgroundColor: primaryAccent }}
               className="absolute inset-0 rounded-lg -z-10"
             />
           )}

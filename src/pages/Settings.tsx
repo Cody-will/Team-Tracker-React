@@ -1,11 +1,15 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ToggleSwitch from "../components/ToggleSwitch.js";
 import ColorPicker from "../components/ColorPicker.jsx";
 import Button from "../components/Button.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import { useUser } from "./context/UserContext.tsx";
 import { backgroundOptions } from "../colors.jsx";
+import type { UploadTaskSnapshot } from "firebase/storage";
+import FileInput from "../components/FileInput.tsx";
+import ProgressBar from "../components/ProgressBar.tsx";
+import { DataSnapshot } from "firebase/database";
 // TODO:
 // Finish completing the UI for uploading and changing the users wallpaper
 // Note: the user uploading a wallpaper should add it to a list of wallpapers for them, not replace existing
@@ -13,58 +17,109 @@ import { backgroundOptions } from "../colors.jsx";
 // Complete the function calling updateUserSettings
 // Section around line 150 needs to have the userSettings.primaryAccent section set up for the file input file:bg-color
 
-export default function Settings() {
-  const [isClicked, setIsClicked] = useState(false);
-  const [selectedPrimary, setSelectedPrimary] = useState("");
-  const [selectedSecondary, setSelectedSecondary] = useState("");
-  const { currentUser } = useAuth();
-  const { updateUserSettings, user, userSettings } = useUser();
-  const [userBackgrounds, setUserBackgrounds] = useState();
-  const [primaryColor, setPrimaryColor] = useState(userSettings.primaryAccent);
-  const [secondaryColor, setSecondaryColor] = useState(
-    userSettings.secondaryAccent
-  );
-  const [bgImage, setBgImage] = useState(userSettings.bgImage);
+type UserBackground = {
+  name: string;
+  src: string;
+  path: string;
+  uploadedAt: number;
+};
 
+type UserSettings = {
+  primaryAccent: string;
+  secondaryAccent: string;
+  bgImage: string;
+  backgrounds?: Record<string, UserBackground> | UserBackground;
+};
+
+export default function Settings() {
+  const {
+    updateUserSettings,
+    user,
+    userSettings,
+    uploadPhoto,
+    updateUserBackground,
+  } = useUser();
+  const { currentUser } = useAuth();
+  const {
+    primaryAccent,
+    secondaryAccent,
+    bgImage: backgroundImage,
+  } = userSettings;
+  const [isClicked, setIsClicked] = useState(false); // <- Used for switching to upload view on wallpaper options
+  const [selectedPrimary, setSelectedPrimary] = useState(""); // <- Used for storing the new primary color
+  const [selectedSecondary, setSelectedSecondary] = useState(""); // <- Used for storing the new secondary color
+  const [userBackgrounds, setUserBackgrounds] = useState(); // <- Used for storing the users uploaded backgrounds
+  const [primaryColor, setPrimaryColor] = useState(primaryAccent);
+  const [secondaryColor, setSecondaryColor] = useState(secondaryAccent);
+  const [bgImage, setBgImage] = useState(backgroundImage); // <- Used to display the users current background and store new chosen one
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // <- Used to store the photo being uploaded
+  const [uploadPreview, setUploadPreview] = useState<string>(); // <- Used for storing the preview of the uploading image
+  const [progress, setProgress] = useState(0);
+  const nicknameRef = useRef<HTMLInputElement | null>(null);
   const inputStyle =
     "border-2 border-zinc-900 w-full  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
-
-  type UserBackground = {
-    name: string;
-    src: string;
-  };
-
-  type UserSettings = {
-    primaryAccent: string;
-    secondaryAccent: string;
-    bgImage: string;
-    userBackground?: Record<string, UserBackground> | UserBackground;
-  };
 
   function onColorChange(accent: "primary" | "secondary") {
     accent === "primary"
       ? setPrimaryColor(selectedPrimary)
       : setSecondaryColor(selectedSecondary);
-
-    // This function will also need a database call to update the users color preference in users/uid/settings
   }
 
+  // This function will update the users settings in the database under users/uid/settings
   async function updateSettings() {
     const uid = currentUser.uid;
     const settings: UserSettings = {
       primaryAccent: primaryColor,
       secondaryAccent: secondaryColor,
       bgImage: bgImage,
-      userBackground: userBackgrounds && userBackgrounds,
     };
     updateUserSettings(uid, settings);
   }
 
-  function handleClick() {
+  console.log(userSettings.backgrounds);
+
+  // This function creates the preview for the uploading image
+  function createPreview(file: File): void {
+    if (!selectedFile) return;
+    const objectUrl = URL.createObjectURL(file);
+    setUploadPreview(objectUrl);
+  }
+
+  function updateProgress(snapshot: UploadTaskSnapshot): void {
+    setProgress(
+      Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+    );
+  }
+
+  async function handleUpload() {
     if (!isClicked) {
       setIsClicked(true);
     } else {
-      setIsClicked(false);
+      const name = nicknameRef.current?.value
+        ? nicknameRef.current.value
+        : currentUser.uid;
+      const uid = currentUser.uid;
+      if (!selectedFile) return;
+      const { src, path } = await uploadPhoto({
+        uid,
+        file: selectedFile,
+        name,
+        type: "backgrounds",
+        handleProgress: updateProgress,
+      });
+      const complete = await updateUserBackground({
+        uid,
+        type: "backgrounds",
+        name,
+        src,
+        path,
+      });
+      if (complete) {
+        setIsClicked(false);
+        setProgress(0);
+        setSelectedFile(null);
+        setUploadPreview("");
+      }
     }
   }
 
@@ -142,33 +197,45 @@ export default function Settings() {
                       </option>
                     )
                   )}
+                  {userSettings.backgrounds &&
+                    Object.entries(userSettings.backgrounds).map(
+                      ([index, bg]) => (
+                        <option key={index} value={bg.src}>
+                          {bg.name}
+                        </option>
+                      )
+                    )}
                 </select>
               </>
             )}
             {isClicked && (
               <>
-                <div className="">
-                  <img src="" />
+                <div className="max-w-64">
+                  {uploadPreview && <img src={uploadPreview} />}
                 </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className={`w-full rounded-lg text-zinc-200 border border-zinc-900 file:py-2 file:px-3 file:text-zinc-950 file:font-semibold `}
+                <FileInput
+                  selectedFile={selectedFile}
+                  setSelectedFile={setSelectedFile}
+                  handlePreview={createPreview}
                 />
                 <input
                   placeholder="Enter a nickname for the photo"
+                  ref={nicknameRef}
                   className={inputStyle}
                 />
               </>
             )}
+            {progress > 0 && (
+              <ProgressBar progress={progress} accent={primaryAccent} />
+            )}
             <Button
               text={isClicked ? "Upload" : "Add Image"}
               type="button"
-              action={handleClick}
+              action={handleUpload}
             />
           </motion.div>
         </div>
-        <Button text="Save Settings" type="button" action={() => {}} />
+        <Button text="Save Settings" type="button" action={updateSettings} />
       </motion.div>
     </motion.div>
   );

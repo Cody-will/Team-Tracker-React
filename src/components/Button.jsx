@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { primaryAccent, secondaryAccent, primaryAccentHex } from "../colors";
+import { useUser } from "../pages/context/UserContext";
 
 /** @param {{ text: String, action: function, type?: button, disabled?: Boolean, color?: String, styles?: String }} props */
 
@@ -11,13 +11,15 @@ export default function Button({
   color,
   styles,
 }) {
+  const { userSettings } = useUser();
+  const { primaryAccent, secondaryAccent } = userSettings;
   return (
     <motion.button
       disabled={disabled}
       type={type || "button"}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      style={{ backgroundColor: color ? color : primaryAccentHex }}
+      style={{ backgroundColor: color ? color : primaryAccent }}
       transition={{ type: "tween", duration: 0.2 }}
       className={`relative w-full flex items-center justify-center text-center hover:cursor-pointer text-zinc-900 text-lg font-semibold rounded-lg shadow-lg/40 px-3 py-2 ${styles}`}
       onClick={action ? (event) => action(event) : () => {}}

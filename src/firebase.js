@@ -1,14 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  connectDatabaseEmulator,
-} from "firebase/database";
-import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
+import { getFunctions } from "firebase/functions";
+import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,3 +27,4 @@ export const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getDatabase(app);
 export const functions = getFunctions(app);
+export const storage = getStorage(app);

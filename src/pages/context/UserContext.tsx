@@ -1,6 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
-import { db } from "../../firebase.js";
+import React, { useContext, useState, useEffect, SetStateAction } from "react";
+import { db, storage } from "../../firebase.js";
 import { set, ref, push, update, remove, onValue } from "firebase/database";
+import {
+  ref as storageRef,
+  uploadBytesResumable,
+  getDownloadURL,
+  getMetadata,
+} from "firebase/storage";
+import type { FullMetadata, UploadTaskSnapshot } from "firebase/storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useAuth } from "./AuthContext.jsx";
 import {
@@ -43,16 +50,6 @@ export interface User {
 
 type UserRecord = Record<string, User>;
 
-const userContext = React.createContext<Value | undefined>(undefined);
-
-export function useUser(): Value {
-  const context = useContext(userContext);
-  if (!context) {
-    throw new Error("useUser must be inside <UserProvider>");
-  }
-  return context;
-}
-
 export interface Value {
   data: UserRecord;
   loading: boolean;
@@ -67,23 +64,70 @@ export interface Value {
     uid: string,
     settings: Partial<UserSettings>
   ) => Promise<void>;
+  uploadPhoto: ({
+    uid,
+    file,
+    name,
+    type,
+    handleProgress,
+  }: UploadArguments) => Promise<UploadResult>;
+  updateUserBackground: ({
+    uid,
+    type,
+    name,
+    src,
+    path,
+  }: UpdateBackground) => Promise<boolean>;
 }
 
 type UserBackground = {
   name: string;
   src: string;
+  path: string;
+  uploadedAt: number;
 };
 export interface UserSettings {
   primaryAccent: string;
   secondaryAccent: string;
   bgImage: string;
-  userBackground?: UserBackground | Record<string, UserBackground>;
+  backgrounds?: UserBackground | Record<string, UserBackground>;
 }
 
 export interface DefaultSettings {
   primaryAccent: string;
   secondaryAccent: string;
   bgImage: string;
+}
+
+export type UploadArguments = {
+  uid: string;
+  file: File;
+  name: string;
+  type: "backgrounds" | "avatars";
+  handleProgress: (snapshot: UploadTaskSnapshot) => void;
+};
+
+export type UploadResult = {
+  src: string;
+  path: string;
+};
+
+export type UpdateBackground = {
+  uid: string;
+  type: "backgrounds" | "avatars";
+  name: string;
+  src: string;
+  path: string;
+};
+
+const userContext = React.createContext<Value | undefined>(undefined);
+
+export function useUser(): Value {
+  const context = useContext(userContext);
+  if (!context) {
+    throw new Error("useUser must be inside <UserProvider>");
+  }
+  return context;
 }
 
 export function UserProvider({ children }: any) {
@@ -111,6 +155,8 @@ export function UserProvider({ children }: any) {
     deactivateUser,
     updateUser,
     updateUserSettings,
+    uploadPhoto,
+    updateUserBackground,
   };
 
   // Use effect to get the user data from the users section of the database
@@ -129,6 +175,7 @@ export function UserProvider({ children }: any) {
     return unsubscribe;
   }, []);
 
+  // This useEffect sets the user: Database to the currentUser: Auth by using the auth UID and linking it to users uid
   useEffect(() => {
     if (!currentUser) return;
     const uid: string = currentUser.uid;
@@ -136,15 +183,68 @@ export function UserProvider({ children }: any) {
     setUser(cUser ?? null);
   }, [data, currentUser]);
 
+  // This useEffect sets the userSettings to either default or the users settings if the user has changed their settings
   useEffect(() => {
     if (!user) return;
-    const settings = user.settings ? user.settings : defaultSettings;
+    const { primaryAccent, secondaryAccent, bgImage } = defaultSettings;
+    const settings = {
+      primaryAccent: user.settings?.primaryAccent ?? primaryAccent,
+      secondaryAccent: user.settings?.secondaryAccent ?? secondaryAccent,
+      bgImage: user.settings?.bgImage ?? bgImage,
+      backgrounds: user.settings?.backgrounds ?? undefined,
+    };
     setUserSettings(settings);
   }, [user]);
 
   // Returns users email and password to be ised when creating the auth account
   function getEmailAndPassword(user: User) {
     return { email: user.email.trim(), password: user.password.trim() };
+  }
+
+  // This function will handle uploading the users background image, may also make it to handle
+  // uploading the users profile photo also.
+  async function uploadPhoto({
+    uid,
+    file,
+    name,
+    type,
+    handleProgress,
+  }: UploadArguments): Promise<UploadResult> {
+    const storagePath = `users/${uid}/${type}/${Date.now()}_${file.name}`;
+    const objectRef = storageRef(storage, storagePath);
+    const upload = uploadBytesResumable(objectRef, file, {
+      contentType: file.type,
+      customMetadata: { displayName: name },
+    });
+    await new Promise<void>((resolve, reject) => {
+      const unsubscribe = upload.on(
+        "state_changed",
+        (snapshot: UploadTaskSnapshot) => handleProgress(snapshot),
+        (error) => {
+          unsubscribe();
+          reject(error);
+        },
+        () => {
+          unsubscribe();
+          resolve();
+        }
+      );
+    });
+    const src = await getDownloadURL(objectRef);
+
+    return { src, path: storagePath };
+  }
+
+  async function updateUserBackground({
+    uid,
+    type,
+    name,
+    src,
+    path,
+  }: UpdateBackground): Promise<boolean> {
+    const dbRef = `users/${uid}/settings/${type}`;
+    await push(ref(db, dbRef), { name, src, path, uploadedAt: Date.now() });
+    return true;
   }
 
   // This functions calls the service worker on the server to create the users account

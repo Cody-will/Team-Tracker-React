@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { ProfileBadge } from "../components/ProfileBadge";
 import ToggleSwitch from "../components/ToggleSwitch";
 import EditCard from "../components/EditCard";
+import { useUser } from "./context/UserContext";
 
 import {
   findSupervisors,
@@ -11,12 +12,7 @@ import {
   getUnassigned,
 } from "../teamSorting";
 import { useEffect, useState, useRef } from "react";
-import {
-  primaryAccent,
-  primaryAccentHex,
-  secondaryAccent,
-  secondaryAccentHex,
-} from "../colors";
+
 import { useOutletContext } from "react-router-dom";
 import Button from "../components/Button";
 
@@ -66,6 +62,8 @@ const Panel = ({
   selectedPerson,
   setSelectedPerson,
 }) => {
+  const { userSettings } = useUser();
+  const { primaryAccent, secondaryAccent } = userSettings;
   return (
     <motion.div className="relative flex gap-2 flex-col h-full w-full p-4">
       <motion.div
@@ -83,7 +81,7 @@ const Panel = ({
                 <motion.div
                   layoutId="underline"
                   transition={{ type: "spring", bounce: 0.25, duration: 0.3 }}
-                  style={{ backgroundColor: primaryAccentHex }}
+                  style={{ backgroundColor: primaryAccent }}
                   className={`absolute top-0 left-0 w-full -z-1 h-full rounded-md`}
                 ></motion.div>
               )}
@@ -193,6 +191,8 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
   const handleClick = () => {
     setSelectedPerson(!selectedPerson && person);
   };
+  const { userSettings } = useUser();
+  const { primaryAccent, secondaryAccent } = userSettings;
 
   return (
     <div className="w-full h-full">
@@ -211,7 +211,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
       >
         <div className="relative flex justify-center items-center">
           <motion.div
-            style={{ borderColor: primaryAccentHex }}
+            style={{ borderColor: primaryAccent }}
             className={`relative rounded-full border-2 aspect-square flex justify-center items-center`}
           >
             {person.photo ? (
@@ -224,7 +224,7 @@ const PanelCard = ({ person, selectedPerson, setSelectedPerson }) => {
         <div className="flex flex-col items-center justify-center gap-1 mt-2 text-sm font-semibold">
           <div>{`${person.firstName} ${person.lastName}`}</div>
           <motion.div
-            style={{ backgroundColor: secondaryAccentHex }}
+            style={{ backgroundColor: secondaryAccent }}
             className={`text-zinc-950 px-1 py-0.5 rounded-xs`}
           >
             {person.badgeNum}
