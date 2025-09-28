@@ -1,7 +1,9 @@
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import { useUser } from "../pages/context/UserContext";
 import Holidays from "date-holidays";
+import { useSchedule } from "../pages/context/ScheduleContext";
 
 export interface CalendarEvent {
   id: string;
@@ -19,7 +21,15 @@ export interface CalendarEvent {
 
 export type AllEvents = CalendarEvent[];
 
-export default function ScheduleCalendar() {
+interface CalendarProps {
+  height?: string;
+  interactive?: boolean;
+}
+
+export default function ScheduleCalendar({
+  height = "100%",
+  interactive = false,
+}: CalendarProps) {
   const { userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
   const currentDate = new Date();
@@ -83,10 +93,11 @@ export default function ScheduleCalendar() {
   `}</style>
 
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        height="100%"
+        height={height}
         events={allHolidays}
+        selectable={interactive}
       />
     </div>
   );

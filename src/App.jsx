@@ -6,7 +6,7 @@ import Login from "./pages/Login.jsx";
 import { motion, AnimatePresence } from "motion/react";
 import TeamManagement from "./pages/TeamManagement";
 import ShiftSwap from "./pages/ShiftSwap";
-import Vacation from "./pages/Vacation";
+import Vacation from "./pages/Vacation.tsx";
 import Settings from "./pages/Settings.tsx";
 import AddUser from "./pages/AddUser";
 import Coverage from "./pages/Coverage";
@@ -22,30 +22,36 @@ import { useAuth } from "./pages/context/AuthContext.jsx";
 import { UserProvider } from "./pages/context/UserContext.tsx";
 import { useUser } from "./pages/context/UserContext.tsx";
 import Schedule from "./pages/Schedule.tsx";
+import {
+  ScheduleProvider,
+  useSchedule,
+} from "./pages/context/ScheduleContext.tsx";
 
 function App() {
   return (
     <AuthProvider>
       <ConfigureProvider>
         <UserProvider>
-          <Routes>
-            <Route path="/login" element={<Login />} />
+          <ScheduleProvider>
+            <Routes>
+              <Route path="/login" element={<Login />} />
 
-            <Route element={<ProtectedLayout />}>
-              <Route index element={<Navigate to="/home" replace />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/team-management" element={<TeamManagement />} />
-              <Route path="/schedule" element={<Schedule />} />
-              <Route path="/vacation" element={<Vacation />} />
-              <Route path="/add-user" element={<AddUser />} />
-              <Route path="/shift-swap" element={<ShiftSwap />} />
-              <Route path="/coverage" element={<Coverage />} />
-              <Route path="/configure" element={<Configure />} />
-              <Route path="/settings" element={<Settings />} />
-            </Route>
+              <Route element={<ProtectedLayout />}>
+                <Route index element={<Navigate to="/home" replace />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/team-management" element={<TeamManagement />} />
+                <Route path="/schedule" element={<Schedule />} />
+                <Route path="/vacation" element={<Vacation />} />
+                <Route path="/add-user" element={<AddUser />} />
+                <Route path="/shift-swap" element={<ShiftSwap />} />
+                <Route path="/coverage" element={<Coverage />} />
+                <Route path="/configure" element={<Configure />} />
+                <Route path="/settings" element={<Settings />} />
+              </Route>
 
-            <Route path="*" element={<div className="p-6">Not Found</div>} />
-          </Routes>
+              <Route path="*" element={<div className="p-6">Not Found</div>} />
+            </Routes>
+          </ScheduleProvider>
         </UserProvider>
       </ConfigureProvider>
     </AuthProvider>

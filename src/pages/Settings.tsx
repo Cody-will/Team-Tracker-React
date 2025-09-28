@@ -177,7 +177,11 @@ export default function Settings() {
             </div>
             {!isClicked && (
               <>
-                <img src={bgImage} className="max-w-68 bg-white rounded-md" />
+                <img
+                  src={bgImage}
+                  style={{ borderWidth: "4px", borderColor: secondaryAccent }}
+                  className="max-w-68 bg-white rounded-md"
+                />
                 <select
                   className={inputStyle}
                   onChange={(event) => handleDropDown(event)}
