@@ -10,26 +10,13 @@ import type { UploadTaskSnapshot } from "firebase/storage";
 import FileInput from "../components/FileInput.tsx";
 import ProgressBar from "../components/ProgressBar.tsx";
 import { DataSnapshot } from "firebase/database";
+import type { UserSettings } from "./context/UserContext.tsx";
 // TODO:
 // Finish completing the UI for uploading and changing the users wallpaper
 // Note: the user uploading a wallpaper should add it to a list of wallpapers for them, not replace existing
 // Complete functions for uploading and changing the users wallpaper in the database under user settings
 // Complete the function calling updateUserSettings
 // Section around line 150 needs to have the userSettings.primaryAccent section set up for the file input file:bg-color
-
-type UserBackground = {
-  name: string;
-  src: string;
-  path: string;
-  uploadedAt: number;
-};
-
-type UserSettings = {
-  primaryAccent: string;
-  secondaryAccent: string;
-  bgImage: string;
-  backgrounds?: Record<string, UserBackground> | UserBackground;
-};
 
 export default function Settings() {
   const {
@@ -48,12 +35,11 @@ export default function Settings() {
   const [isClicked, setIsClicked] = useState(false); // <- Used for switching to upload view on wallpaper options
   const [selectedPrimary, setSelectedPrimary] = useState(""); // <- Used for storing the new primary color
   const [selectedSecondary, setSelectedSecondary] = useState(""); // <- Used for storing the new secondary color
-  const [userBackgrounds, setUserBackgrounds] = useState(); // <- Used for storing the users uploaded backgrounds
   const [primaryColor, setPrimaryColor] = useState(primaryAccent);
   const [secondaryColor, setSecondaryColor] = useState(secondaryAccent);
   const [bgImage, setBgImage] = useState(backgroundImage); // <- Used to display the users current background and store new chosen one
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // <- Used to store the photo being uploaded
-  const [uploadPreview, setUploadPreview] = useState<string>(); // <- Used for storing the preview of the uploading image
+  const [uploadPreview, setUploadPreview] = useState<string | null>(null); // <- Used for storing the preview of the uploading image
   const [progress, setProgress] = useState(0);
   const nicknameRef = useRef<HTMLInputElement | null>(null);
   const inputStyle =
@@ -76,11 +62,9 @@ export default function Settings() {
     updateUserSettings(uid, settings);
   }
 
-  console.log(userSettings.backgrounds);
-
   // This function creates the preview for the uploading image
   function createPreview(file: File): void {
-    if (!selectedFile) return;
+    if (uploadPreview) URL.revokeObjectURL(uploadPreview);
     const objectUrl = URL.createObjectURL(file);
     setUploadPreview(objectUrl);
   }
@@ -118,9 +102,18 @@ export default function Settings() {
         setIsClicked(false);
         setProgress(0);
         setSelectedFile(null);
-        setUploadPreview("");
+        if (uploadPreview) URL.revokeObjectURL(uploadPreview);
+        setUploadPreview(null);
       }
     }
+  }
+
+  // This function handles the back button if the user decides not to upload an image
+  function handleBack(): void {
+    setIsClicked(false);
+    setSelectedFile(null);
+    if (uploadPreview) URL.revokeObjectURL(uploadPreview);
+    setUploadPreview(null);
   }
 
   type DropDownEvent = React.ChangeEvent<HTMLSelectElement>;
@@ -210,8 +203,14 @@ export default function Settings() {
             )}
             {isClicked && (
               <>
-                <div className="max-w-64">
-                  {uploadPreview && <img src={uploadPreview} />}
+                <div className="w-64">
+                  {uploadPreview ? (
+                    <img src={uploadPreview} />
+                  ) : (
+                    <div className="w-full border border-zinc-950 text-zinc-200 text-center h-32 flex items-center justify-center rounded-lg">
+                      No image selected
+                    </div>
+                  )}
                 </div>
                 <FileInput
                   selectedFile={selectedFile}
@@ -233,6 +232,9 @@ export default function Settings() {
               type="button"
               action={handleUpload}
             />
+            {isClicked && (
+              <Button text="Back" type="button" action={handleBack} />
+            )}
           </motion.div>
         </div>
         <Button text="Save Settings" type="button" action={updateSettings} />

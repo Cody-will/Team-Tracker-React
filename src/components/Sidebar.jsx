@@ -9,6 +9,7 @@ import {
   BsPersonPlus,
   BsCalendar2Plus,
   BsSliders,
+  BsCalendarWeek,
 } from "react-icons/bs";
 
 import { useUser } from "../pages/context/UserContext.js";
@@ -22,6 +23,7 @@ export default function Sidebar({ toggleState, setToggleState }) {
   const links = [
     { to: "/home", icon: <BsHouse size={32} />, label: "Home" },
     { to: "/team-management", icon: <BsPeople size={32} />, label: "Team" },
+    { to: "/schedule", icon: <BsCalendarWeek size={32} />, label: "Schedule" },
     { to: "/vacation", icon: <BsAirplane size={32} />, label: "Vacation" },
     { to: "/shift-swap", icon: <BsShuffle size={32} />, label: "Shift Swap" },
     { to: "/add-user", icon: <BsPersonPlus size={32} />, label: "Add User" },

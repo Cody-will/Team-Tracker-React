@@ -1,6 +1,6 @@
 import { useUser } from "../pages/context/UserContext";
 import { motion } from "motion/react";
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 
 export interface FileInputProps {
   selectedFile: File | null;
@@ -22,6 +22,7 @@ export default function FileInput({
     fileRef.current?.click();
   }
 
+  // This function handles when a background image is selcted from the file input
   type FileChange = React.ChangeEvent<HTMLInputElement>;
   function handleOnChange(event: FileChange) {
     const fileList = event.target.files?.[0];

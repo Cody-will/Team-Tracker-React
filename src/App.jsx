@@ -21,6 +21,7 @@ import CometWallpaper from "./pages/CometWallpaper";
 import { useAuth } from "./pages/context/AuthContext.jsx";
 import { UserProvider } from "./pages/context/UserContext.tsx";
 import { useUser } from "./pages/context/UserContext.tsx";
+import Schedule from "./pages/Schedule.tsx";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
               <Route index element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<Home />} />
               <Route path="/team-management" element={<TeamManagement />} />
+              <Route path="/schedule" element={<Schedule />} />
               <Route path="/vacation" element={<Vacation />} />
               <Route path="/add-user" element={<AddUser />} />
               <Route path="/shift-swap" element={<ShiftSwap />} />
