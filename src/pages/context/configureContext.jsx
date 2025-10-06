@@ -68,7 +68,8 @@ export function ConfigureProvider({ children }) {
    * @param {Number} order
    */
   async function addItem(panel, title, order) {
-    const configRef = ref(db, `configure/${panel}/items`);
+    const noSpaces = panel.replace(" ", "-");
+    const configRef = ref(db, `configure/${noSpaces}/items`);
     await push(configRef, { title, order });
   }
 

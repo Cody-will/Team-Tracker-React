@@ -78,6 +78,8 @@ export interface Value {
     src,
     path,
   }: UpdateBackground) => Promise<boolean>;
+
+  usersWithoutShift: (shift: string) => UserWithShift[] | void;
 }
 
 type UserBackground = {
@@ -120,6 +122,8 @@ export type UpdateBackground = {
   path: string;
 };
 
+type UserWithShift = User & { shift: string };
+
 const userContext = React.createContext<Value | undefined>(undefined);
 
 export function useUser(): Value {
@@ -157,6 +161,7 @@ export function UserProvider({ children }: any) {
     updateUserSettings,
     uploadPhoto,
     updateUserBackground,
+    usersWithoutShift,
   };
 
   // Use effect to get the user data from the users section of the database
@@ -233,6 +238,12 @@ export function UserProvider({ children }: any) {
     const src = await getDownloadURL(objectRef);
 
     return { src, path: storagePath };
+  }
+
+  function usersWithoutShift(shift: string): UserWithShift[] | void {
+    if (!data) return;
+    const users = Object.values(data) as UserWithShift[];
+    return users.filter((user) => user?.shift != shift);
   }
 
   async function updateUserBackground({

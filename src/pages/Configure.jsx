@@ -92,7 +92,7 @@ export default function Configure() {
             />
           </div>
         </div>
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex justify-center items-start gap-4">
           {panelData &&
             Object.entries(panelData).map(([panelKey, panel]) => (
               <ListPanel
