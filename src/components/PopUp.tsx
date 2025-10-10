@@ -3,10 +3,12 @@ import { motion } from "motion/react";
 import Button from "./Button";
 import { useUser } from "../pages/context/UserContext";
 
+export type Location = "top-center" | "bottom-right" | "bottom-left";
+
 export interface PopUpProps {
-  open: boolean;
-  onClose?: (result: boolean) => void;
-  location: "top-center" | "bottom-right" | "bottom-left";
+  open?: boolean;
+  onClose: (result: boolean) => void;
+  location: Location;
   title: string;
   message: string;
   isConfirm?: boolean;
@@ -36,12 +38,17 @@ export default function PopUp(props: PopUpProps) {
     let interval: ReturnType<typeof setInterval>;
     if (!isConfirm && time > 0) {
       interval = setInterval(() => {
-        setTime((prev) => prev - 1);
+        setTime((prev) => (prev <= -1 ? timer : prev - 1));
       }, 1000);
-    } else if (time === 0) {
     }
     return () => clearInterval(interval);
-  }, []);
+  }, [isConfirm, onClose]);
+
+  useEffect(() => {
+    if (!isConfirm && time === -1) {
+      onClose(false);
+    }
+  }, [time]);
 
   function getLocation(location: string) {
     switch (location) {
@@ -59,12 +66,20 @@ export default function PopUp(props: PopUpProps) {
   return (
     <motion.div
       id="panel"
+      initial={{ y: location === "top-center" ? -200 : 200 }}
+      animate={{ y: 0 }}
+      exit={{ y: location === "top-center" ? -200 : 200 }}
       className={`absolute ${position} transform -translate-x-2/3 bg-zinc-900/90 rounded-lg text-zinc-200 border-zinc-700 flex flex-col items-center justify-center gap-4 z-50 px-8 py-4`}
     >
       <div className="text-3xl font-semibold">{title}</div>
-      <div className="text-xl">{time}</div>
+      <div
+        className="text-xl"
+        style={{ paddingBottom: !isConfirm ? "4px" : "0px" }}
+      >
+        {message}
+      </div>
       {isConfirm && (
-        <div className="flex gap-4">
+        <div className="flex w-full gap-4">
           <Button
             text={trueText ?? "Confirm"}
             action={onClose ? () => onClose(true) : () => {}}
@@ -86,8 +101,11 @@ export default function PopUp(props: PopUpProps) {
           aia-valuenow={time}
         >
           <motion.div
-            className=" rounded-sm h-full bg-sky-500"
-            style={{ width: `${time / timer}%` }}
+            className=" rounded-sm h-full"
+            style={{ backgroundColor: secondaryAccent }}
+            initial={{ width: `100%` }}
+            animate={{ width: `${(time / timer) * 100}%` }}
+            transition={{ duration: 0.95, ease: "linear" }}
           ></motion.div>
         </div>
       )}

@@ -3,15 +3,15 @@ import { DateSelectArg } from "@fullcalendar/core/index.js";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useUser } from "../pages/context/UserContext";
-import Holidays from "date-holidays";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import rrulePlugin from "@fullcalendar/rrule";
+import { useState, useEffect, useRef } from "react";
 
 export interface CalendarEvent {
   id: string;
   title: string;
   start: string;
-  end?: string;
+  end: string;
   display?:
     | "auto"
     | "block"
@@ -35,8 +35,22 @@ export default function ScheduleCalendar({
   handleSelect,
 }: CalendarProps) {
   const { userSettings } = useUser();
-  const { allEvents } = useSchedule();
+  const { allEvents, buildShiftEvents } = useSchedule();
   const { primaryAccent, secondaryAccent } = userSettings;
+  const [shiftsOn, setShiftsOn] = useState(false);
+  const calRef = useRef<FullCalendar>(null);
+
+  useEffect(() => {
+    const api = calRef.current?.getApi();
+    const source = { id: "shifts", events: buildShiftEvents() };
+    if (!api) return;
+    const existing = api.getEventSourceById("shifts");
+    if (shiftsOn) {
+      if (!existing) api.addEventSource(source);
+    } else {
+      existing?.remove();
+    }
+  }, [shiftsOn]);
 
   return (
     <div
@@ -52,7 +66,7 @@ export default function ScheduleCalendar({
         ["--fc-button-active-bg-color" as any]: primaryAccent,
         ["--fc-button-active-border-color" as any]: "transparent",
         ["--fc-bg-event-opacity" as any]: "0.8",
-        ["--fc-event-text-color" as any]: "#fafafa",
+        ["--fc-event-text-color" as any]: "#0a0a0a",
       }}
     >
       <style>{`
@@ -72,46 +86,56 @@ export default function ScheduleCalendar({
     }
 
     .fc .fc-day-other .fc-daygrid-day-number { 
-    color: rgba(148, 163, 184, 0.99); /* zinc-400 @ 45% */
+    color: rgba(148, 163, 184, 0.99); 
     }
     .fc .fc-day-other .fc-daygrid-day-frame {
-      opacity: 1; /* optional: fade the whole cell slightly */
+      opacity: 1; 
     }
 
     #calWrap .fc .fc-daygrid-day.fc-day-other .fc-daygrid-day-number {
-      color: #a1a1aa; /* tailwind zinc-400 */
+      color: #a1a1aa; 
     }
 
-    /* Optional: also dim event text/pills in other-month cells */
     #calWrap .fc .fc-daygrid-day.fc-day-other .fc-daygrid-day-top,
     #calWrap .fc .fc-daygrid-day.fc-day-other .fc-event {
       opacity: 1;
     }
 
     #calWrap .fc {
-      --fc-highlight-color: ${primaryAccent}98; /* sky-400 @ 25% */
+      --fc-highlight-color: ${primaryAccent}98; 
     }
       
 
-    /* Today: keep the normal background but add an accent outline */
     #calWrap .fc .fc-daygrid-day.fc-day-today {
-      outline: none;               /* remove default outline if any */
+      outline: none;             
       box-shadow: inset 0 0 0 3px ${primaryAccent};
     }
 
-    /* If FullCalendar's "today" background is too strong, you can lighten it: */
     #calWrap .fc {
-      --fc-today-bg-color: ${primaryAccent}30; /* subtle sky-400 tint; tweak as you like */
+      --fc-today-bg-color: ${primaryAccent}30; 
     }
   `}</style>
 
       <FullCalendar
+        ref={calRef}
         plugins={[dayGridPlugin, interactionPlugin, rrulePlugin]}
         initialView="dayGridMonth"
         height={height}
-        events={allEvents}
+        unselectAuto={false}
+        eventSources={allEvents}
         selectable={interactive}
         select={handleSelect ? handleSelect : () => {}}
+        headerToolbar={{
+          right: "prev,next today",
+          center: "title",
+          left: "dayGridMonth,toggleShifts",
+        }}
+        customButtons={{
+          toggleShifts: {
+            text: shiftsOn ? "Hide Shifts" : "Show Shifts",
+            click: () => setShiftsOn((prev) => !prev),
+          },
+        }}
       />
     </div>
   );

@@ -12,8 +12,10 @@ import Holidays from "date-holidays";
 // Create a function that filters out past events
 
 export interface Value {
-  events: ScheduleEvent | Record<string, ScheduleEvent>;
+  events: ScheduleEvent[];
   allEvents: any[] | undefined;
+  scheduleEvent: (event: ScheduleEvent) => Promise<boolean>;
+  buildShiftEvents: () => any[];
 }
 
 export type Display =
@@ -25,16 +27,19 @@ export type Display =
 export type EventType = "Vacation" | "Training" | "Shift-Swap";
 
 export interface ScheduleEvent {
-  id: string;
+  id?: string;
   originUID: string;
   targetUID?: string;
   title: string;
-  start: string;
-  end?: string;
+  start: number | string;
+  end: number | string;
+  allDay?: boolean;
   display?: Display;
   eventType: EventType;
+  coverage?: boolean;
+  color?: string;
 }
-export type AllEvents = Record<string, ScheduleEvent>;
+export type AllEvents = ScheduleEvent[];
 
 const ScheduleContext = React.createContext<Value | undefined>(undefined);
 
@@ -47,16 +52,16 @@ export function useSchedule(): Value {
 }
 
 export function ScheduleProvider({ children }: any) {
-  const [events, setEvents] = useState<AllEvents | {}>({});
+  const [events, setEvents] = useState<AllEvents | []>([]);
   const { user, userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
   const [allEvents, setAllEvents] = useState<any[] | undefined>();
 
-  const value = { events, allEvents };
+  const value = { events, allEvents, scheduleEvent, buildShiftEvents };
 
   useEffect(() => {
     createEvents();
-  }, [userSettings]);
+  }, [userSettings, events, primaryAccent]);
 
   // This useEffect is used to pull all the events from the database and store them in events useState
   useEffect(() => {
@@ -64,7 +69,12 @@ export function ScheduleProvider({ children }: any) {
     const unsubscribe = onValue(
       confRef,
       (snapshot) => {
-        setEvents(snapshot.exists() ? (snapshot.val() as AllEvents) : {});
+        const typedData = snapshot.val() as Record<string, ScheduleEvent>;
+        setEvents(
+          snapshot.exists()
+            ? (Object.values(typedData).map(normalize) as ScheduleEvent[])
+            : []
+        );
       },
       (error) => {
         console.log(error);
@@ -72,6 +82,32 @@ export function ScheduleProvider({ children }: any) {
     );
     return unsubscribe;
   }, []);
+
+  // This function converts the start and end dates for all the database events so the calendar reads them correctly
+  function normalize(empEvents: ScheduleEvent) {
+    const newStart = new Date(empEvents.start);
+    const newEnd = new Date(empEvents.end);
+    return {
+      ...empEvents,
+      start: toDayOnly(newStart),
+      end: toDayOnly(newEnd),
+    };
+  }
+
+  // This function schedules a new event
+  async function scheduleEvent(event: ScheduleEvent): Promise<boolean> {
+    const eRef = ref(db, "events");
+    try {
+      const eventRef = push(eRef);
+      const key = eventRef.key!;
+      const newEvent: ScheduleEvent = { id: key, ...event };
+      await set(eventRef, newEvent);
+
+      return true;
+    } catch (error) {
+      throw new Error(`${error}`);
+    }
+  }
 
   // This function adds padding to the date if its only a single digit day or month it adds a 0 before it
   function addPadding(number: number): string {
@@ -117,7 +153,6 @@ export function ScheduleProvider({ children }: any) {
       dtstart: "2025-09-29",
     },
   };
-
   const payDay = {
     id: "pay-day",
     title: "Pay Day",
@@ -130,7 +165,6 @@ export function ScheduleProvider({ children }: any) {
       dtstart: "2025-09-19",
     },
   };
-
   const BASE = new Date(2025, 8, 29);
   const addDays = (d: Date, n: number) => {
     const x = new Date(d);
@@ -139,20 +173,20 @@ export function ScheduleProvider({ children }: any) {
   };
 
   const cycle: Array<"AB" | "CD" | "-"> = [
-    "AB", // Day 0:  2025-09-29  Alpha/Bravo
-    "AB", // Day 1:  2025-09-30  Alpha/Bravo
-    "CD", // Day 2:  2025-10-01  Charlie/Delta
-    "CD", // Day 3:  2025-10-02  Charlie/Delta
-    "AB", // Day 4:  2025-10-03 Alpha/Bravo
-    "AB", // Day 5:  2025-10-04 Alpha/Bravo
-    "AB", // Day 6:  2025-10-05  Alpha/Bravo
-    "CD", // Day 7:  2025-10-06  Charlie/Delta
-    "CD", // Day 8:  2025-10-07  Charlie/Delta
-    "AB", // Day 9:  2025-10-08 Alpha/Bravo
-    "AB", // Day 10: 2025-10-09  Alpha/Bravo
-    "CD", // Day 11: 2025-10-10 Charlie/Delta
-    "CD", // Day 12: 2025-10-11 Charlie/Delta
-    "CD", // Day 13: 2025-10-12  Charlie/Delta
+    "AB", // Day 0:   Alpha/Bravo
+    "AB", // Day 1:   Alpha/Bravo
+    "CD", // Day 2:   Charlie/Delta
+    "CD", // Day 3:   Charlie/Delta
+    "AB", // Day 4:   Alpha/Bravo
+    "AB", // Day 5:   Alpha/Bravo
+    "AB", // Day 6:   Alpha/Bravo
+    "CD", // Day 7:   Charlie/Delta
+    "CD", // Day 8:   Charlie/Delta
+    "AB", // Day 9:   Alpha/Bravo
+    "AB", // Day 10:  Alpha/Bravo
+    "CD", // Day 11:  Charlie/Delta
+    "CD", // Day 12:  Charlie/Delta
+    "CD", // Day 13:  Charlie/Delta
   ];
 
   const teamStart = {
@@ -234,22 +268,13 @@ export function ScheduleProvider({ children }: any) {
     return events;
   }
 
-  const anotherEvent = {
-    id: "anotherevent",
-    title: "Vacation Willard, C",
-    start: "2025-10-2",
-    end: "2025-10-13",
-    display: "block",
-  };
-
   function createEvents() {
     setAllEvents([
-      ...currentHolidays,
-      ...nextHolidays,
-      ...buildShiftEvents(),
-      payDay,
-      payPeriod,
-      anotherEvent,
+      { id: "currentHolidays", events: currentHolidays },
+      { id: "nextHolidays", events: nextHolidays },
+      { id: "payday", events: [payDay] },
+      { id: "payPeriod", events: [payPeriod] },
+      { id: "employeeEvents", events: events, color: primaryAccent },
     ]);
   }
 
