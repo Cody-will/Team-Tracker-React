@@ -34,6 +34,8 @@ export default function PopUp(props: PopUpProps) {
   const position = getLocation(location);
   const [time, setTime] = useState<number>(timer);
 
+  console.log(timer);
+
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
     if (!isConfirm && time > 0) {
@@ -69,7 +71,8 @@ export default function PopUp(props: PopUpProps) {
       initial={{ y: location === "top-center" ? -200 : 200 }}
       animate={{ y: 0 }}
       exit={{ y: location === "top-center" ? -200 : 200 }}
-      className={`absolute ${position} transform -translate-x-2/3 bg-zinc-900/90 rounded-lg text-zinc-200 border-zinc-700 flex flex-col items-center justify-center gap-4 z-50 px-8 py-4`}
+      transition={{ duration: 0.2 }}
+      className={`fixed ${position} transform -translate-x-1/2 bg-zinc-900/90 rounded-lg text-zinc-200 border-zinc-700 flex flex-col items-center justify-center gap-4 z-50 px-8 py-4`}
     >
       <div className="text-3xl font-semibold">{title}</div>
       <div
@@ -103,8 +106,8 @@ export default function PopUp(props: PopUpProps) {
           <motion.div
             className=" rounded-sm h-full"
             style={{ backgroundColor: secondaryAccent }}
-            initial={{ width: `100%` }}
-            animate={{ width: `${(time / timer) * 100}%` }}
+            initial={{ scaleX: 1 }}
+            animate={{ scaleX: Math.max(0, time / timer) }}
             transition={{ duration: 0.95, ease: "linear" }}
           ></motion.div>
         </div>

@@ -11,6 +11,7 @@ import type { Location } from "../components/PopUp";
 
 type DateData = { start: Date | string; end: Date | string; allDay?: boolean };
 type ErrorNotify = {
+  key: string;
   title: string;
   message: string;
   location: Location;
@@ -23,10 +24,11 @@ export default function Vacation() {
   const { scheduleEvent } = useSchedule();
   const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
   const [showCoverage, setShowCoverage] = useState<boolean>(false);
-  const [coverage, setCoverage] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState("");
   const [error, setError] = useState<ErrorNotify | null>(null);
+  const [isSelected, setSelected] = useState<boolean>(true);
+  const [interactive, setinteractive] = useState<boolean>(true);
 
   const inputStyle =
     "border-2 border-zinc-900 w-full  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
@@ -36,11 +38,11 @@ export default function Vacation() {
     setSelectedDate({ start, end, allDay });
   }
 
-  async function handleSchedule() {
+  async function handleSchedule(coverage: boolean) {
     if (!selectedDate) return;
     const { start, end, allDay } = selectedDate;
-    const newStart = new Date(start).getTime();
-    const newEnd = new Date(end).getTime();
+    const newStart: number = new Date(start).getTime();
+    const newEnd: number = new Date(end).getTime();
     const firstName = data[selectedUser].firstName;
     const lastName = data[selectedUser].lastName;
     const event: ScheduleEvent = {
@@ -54,22 +56,28 @@ export default function Vacation() {
       coverage,
     };
     const isScheduled = await scheduleEvent(event);
-    if (isScheduled) setShowSuccess(true);
+    if (isScheduled) {
+      setShowSuccess(true);
+      setSelected(false);
+      setSelectedDate(null);
+    }
   }
 
   function onCloseCoverage(result: boolean) {
-    setCoverage(result);
     setShowCoverage(false);
-    handleSchedule();
+    handleSchedule(result);
   }
 
   function onCloseSuccess() {
     setShowSuccess(false);
+    setSelected(true);
+    setinteractive(true);
   }
 
   function handleSubmit() {
     if (selectedUser === "" || selectedUser === "Select Employee") {
       const notify: ErrorNotify = {
+        key: "no_employee",
         title: "Oops",
         message: "No employee selected",
         location: "top-center",
@@ -80,6 +88,7 @@ export default function Vacation() {
       return;
     } else if (!selectedDate) {
       const notify: ErrorNotify = {
+        key: "no_date",
         title: "Oops",
         message: "No dates selected",
         location: "top-center",
@@ -90,6 +99,7 @@ export default function Vacation() {
       return;
     }
     setShowCoverage(true);
+    setinteractive(false);
   }
 
   function handleErrorPopUp() {
@@ -101,6 +111,7 @@ export default function Vacation() {
       <AnimatePresence>
         {showCoverage && (
           <PopUp
+            key="coverage"
             isConfirm
             open={showCoverage}
             onClose={onCloseCoverage}
@@ -113,6 +124,7 @@ export default function Vacation() {
         )}
         {showSuccess && (
           <PopUp
+            key="success"
             open={showSuccess}
             onClose={onCloseSuccess}
             title="Success"
@@ -123,6 +135,7 @@ export default function Vacation() {
         )}
         {error && (
           <PopUp
+            key={error?.key}
             onClose={error?.onClose}
             title={error?.title}
             message={error?.message}
@@ -167,7 +180,11 @@ export default function Vacation() {
         </div>
         <div id="thisOne" className="w-full h-full">
           <div className="border border-zinc-950 h-full w-full p-4 rounded-xl">
-            <ScheduleCalendar interactive={true} handleSelect={handleSelect} />
+            <ScheduleCalendar
+              interactive={interactive}
+              selected={isSelected}
+              handleSelect={handleSelect}
+            />
           </div>
         </div>
       </div>

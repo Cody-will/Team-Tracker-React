@@ -16,6 +16,7 @@ export interface Value {
   allEvents: any[] | undefined;
   scheduleEvent: (event: ScheduleEvent) => Promise<boolean>;
   buildShiftEvents: () => any[];
+  coverage: Coverage | [];
 }
 
 export type Display =
@@ -39,7 +40,19 @@ export interface ScheduleEvent {
   coverage?: boolean;
   color?: string;
 }
+
+export type ScheduleEventMilli = Omit<ScheduleEvent, "start" | "end"> & {
+  start: number;
+  end: number;
+};
+
+export type DayEvent = Omit<ScheduleEventMilli, "start" | "end"> & {
+  day: string;
+};
+
 export type AllEvents = ScheduleEvent[];
+
+export type Coverage = DayEvent[];
 
 const ScheduleContext = React.createContext<Value | undefined>(undefined);
 
@@ -52,12 +65,24 @@ export function useSchedule(): Value {
 }
 
 export function ScheduleProvider({ children }: any) {
-  const [events, setEvents] = useState<AllEvents | []>([]);
+  const [events, setEvents] = useState<AllEvents>([]);
+  const [eventsMilli, setEventsMilli] = useState<ScheduleEventMilli[]>([]);
   const { user, userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
   const [allEvents, setAllEvents] = useState<any[] | undefined>();
+  const [coverage, setCoverage] = useState<Coverage>([]);
 
-  const value = { events, allEvents, scheduleEvent, buildShiftEvents };
+  const value = {
+    events,
+    allEvents,
+    scheduleEvent,
+    buildShiftEvents,
+    coverage,
+  };
+
+  useEffect(() => {
+    setCoverage(eventsMilli.filter((e) => e.coverage).flatMap(expandRange));
+  }, [eventsMilli]);
 
   useEffect(() => {
     createEvents();
@@ -70,6 +95,11 @@ export function ScheduleProvider({ children }: any) {
       confRef,
       (snapshot) => {
         const typedData = snapshot.val() as Record<string, ScheduleEvent>;
+        setEventsMilli(
+          snapshot.exists()
+            ? ([...Object.values(typedData)] as ScheduleEventMilli[])
+            : []
+        );
         setEvents(
           snapshot.exists()
             ? (Object.values(typedData).map(normalize) as ScheduleEvent[])
@@ -120,6 +150,41 @@ export function ScheduleProvider({ children }: any) {
     return `${date.getFullYear()}-${addPadding(
       date.getMonth() + 1
     )}-${addPadding(date.getDate())}`;
+  }
+
+  // This function returns the filtered version of events if covereage is == true;
+  function getCoverage() {
+    return eventsMilli.filter((event) => event.coverage);
+  }
+
+  function toLocalMidnight(millis: number) {
+    const date = new Date(millis);
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }
+
+  function expandRange(e: ScheduleEventMilli): DayEvent[] {
+    const start = toLocalMidnight(e.start);
+    let end = toLocalMidnight(e.end);
+    end = addDays(end, -1);
+    const last = end < start ? start : end;
+
+    const out: DayEvent[] = [];
+    for (let d = start; d <= last; d = addDays(d, 1)) {
+      out.push({
+        id: `${e.id}-${toDayOnly(d)}`,
+        originUID: e.originUID,
+        targetUID: e.targetUID,
+        title: e.title,
+        display: e.display,
+        eventType: e.eventType,
+        coverage: e.coverage,
+        color: e.color,
+        day: toDayOnly(d),
+        allDay: e.allDay,
+      });
+    }
+    return out;
   }
 
   const currentDate = new Date();

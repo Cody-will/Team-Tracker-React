@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useUser } from "../pages/context/UserContext";
 
-/** @param {{ text: String, action: function, type?: button, disabled?: Boolean, color?: String, styles?: String }} props */
+/** @param {{ text: String, action: function, type?: button, disabled?: Boolean, color?: String, styles?: String, fontSize?: String }} props */
 
 export default function Button({
   text,
@@ -10,6 +10,7 @@ export default function Button({
   disabled = false,
   color,
   styles,
+  fontSize,
 }) {
   const { userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
@@ -21,7 +22,9 @@ export default function Button({
       whileTap={{ scale: 0.98 }}
       style={{ backgroundColor: color ? color : primaryAccent }}
       transition={{ type: "tween", duration: 0.2 }}
-      className={`relative w-full flex items-center justify-center text-center hover:cursor-pointer text-zinc-900 text-lg font-semibold rounded-lg shadow-lg/40 px-3 py-2 ${styles}`}
+      className={`relative w-full whitespace-nowrap flex items-center justify-center text-center hover:cursor-pointer text-zinc-900 ${
+        fontSize ? fontSize : "text-lg"
+      } font-semibold rounded-lg shadow-lg/40 px-3 py-2 ${styles}`}
       onClick={action ? (event) => action(event) : () => {}}
     >
       {text}

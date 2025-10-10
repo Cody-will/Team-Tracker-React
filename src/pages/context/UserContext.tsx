@@ -32,6 +32,7 @@ export interface User {
   password: string;
   phone: string;
   badge: string;
+  Shifts: string;
   carNumber: string;
   Role: string;
   oic: boolean;
@@ -48,7 +49,7 @@ export interface User {
   custom?: Record<string, CustomValue>;
 }
 
-type UserRecord = Record<string, User>;
+export type UserRecord = Record<string, User>;
 
 export interface Value {
   data: UserRecord;

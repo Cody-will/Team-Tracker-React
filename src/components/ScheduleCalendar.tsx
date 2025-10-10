@@ -27,18 +27,26 @@ interface CalendarProps {
   height?: string;
   interactive?: boolean;
   handleSelect?: (dateData: DateSelectArg) => void;
+  selected?: boolean;
 }
 
 export default function ScheduleCalendar({
   height = "100%",
   interactive = false,
   handleSelect,
+  selected,
 }: CalendarProps) {
   const { userSettings } = useUser();
   const { allEvents, buildShiftEvents } = useSchedule();
   const { primaryAccent, secondaryAccent } = userSettings;
   const [shiftsOn, setShiftsOn] = useState(false);
   const calRef = useRef<FullCalendar>(null);
+
+  useEffect(() => {
+    if (!selected && interactive) {
+      calRef.current?.getApi().unselect();
+    }
+  }, [selected]);
 
   useEffect(() => {
     const api = calRef.current?.getApi();
