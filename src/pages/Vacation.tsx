@@ -55,6 +55,7 @@ export default function Vacation() {
       display: "block",
       coverage,
     };
+
     const isScheduled = await scheduleEvent(event);
     if (isScheduled) {
       setShowSuccess(true);
@@ -178,7 +179,7 @@ export default function Vacation() {
             />
           </div>
         </div>
-        <div id="thisOne" className="w-full h-full">
+        <div className="w-full h-full">
           <div className="border border-zinc-950 h-full w-full p-4 rounded-xl">
             <ScheduleCalendar
               interactive={interactive}

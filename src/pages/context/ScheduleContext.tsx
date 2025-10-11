@@ -4,19 +4,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { useUser } from "./UserContext";
 import Holidays from "date-holidays";
 
-// TODO:
-// Create a function to sort / query database and return events based on UID | targetUID
-// Create a function to sort / query database and return events based on eventType
-// Create a function to write new events to the database
-// Create a function that converts the start and end to one day string "2025-09-28"
-// Create a function that filters out past events
-
 export interface Value {
   events: ScheduleEvent[];
   allEvents: any[] | undefined;
   scheduleEvent: (event: ScheduleEvent) => Promise<boolean>;
   buildShiftEvents: () => any[];
   coverage: Coverage | [];
+  addClaimedCoverage: (event: DayEvent) => Promise<boolean>;
 }
 
 export type Display =
@@ -48,6 +42,8 @@ export type ScheduleEventMilli = Omit<ScheduleEvent, "start" | "end"> & {
 
 export type DayEvent = Omit<ScheduleEventMilli, "start" | "end"> & {
   day: string;
+  claimed: boolean;
+  start?: number | string;
 };
 
 export type AllEvents = ScheduleEvent[];
@@ -71,6 +67,7 @@ export function ScheduleProvider({ children }: any) {
   const { primaryAccent, secondaryAccent } = userSettings;
   const [allEvents, setAllEvents] = useState<any[] | undefined>();
   const [coverage, setCoverage] = useState<Coverage>([]);
+  const [claimedCoverage, setClaimedCoverage] = useState<Coverage>([]);
 
   const value = {
     events,
@@ -78,12 +75,36 @@ export function ScheduleProvider({ children }: any) {
     scheduleEvent,
     buildShiftEvents,
     coverage,
+    addClaimedCoverage,
   };
 
+  // This use effect gets all of the coverage events from the database
   useEffect(() => {
-    setCoverage(eventsMilli.filter((e) => e.coverage).flatMap(expandRange));
-  }, [eventsMilli]);
+    const cRef = ref(db, "coverage");
+    const unsubscribe = onValue(
+      cRef,
+      (snapshot) => {
+        setCoverage(
+          snapshot.exists()
+            ? ([...Object.values(snapshot.val())] as DayEvent[])
+            : []
+        );
+        setClaimedCoverage(
+          snapshot.exists()
+            ? ([...Object.values(snapshot.val())] as DayEvent[]).filter(
+                (e) => e.coverage
+              )
+            : []
+        );
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    return unsubscribe;
+  }, []);
 
+  // This useEffect creates all of the events and updates them based on if colors, events and userSettings
   useEffect(() => {
     createEvents();
   }, [userSettings, events, primaryAccent]);
@@ -113,6 +134,17 @@ export function ScheduleProvider({ children }: any) {
     return unsubscribe;
   }, []);
 
+  async function addClaimedCoverage(event: DayEvent) {
+    const claimed = true;
+    const cRef = ref(db, `coverage/${event.id}`);
+    try {
+      await update(cRef, { ...event, claimed });
+      return true;
+    } catch (e) {
+      throw new Error(`${e}`);
+    }
+  }
+
   // This function converts the start and end dates for all the database events so the calendar reads them correctly
   function normalize(empEvents: ScheduleEvent) {
     const newStart = new Date(empEvents.start);
@@ -132,6 +164,7 @@ export function ScheduleProvider({ children }: any) {
       const key = eventRef.key!;
       const newEvent: ScheduleEvent = { id: key, ...event };
       await set(eventRef, newEvent);
+      if (event.coverage) expandRange(newEvent as ScheduleEventMilli);
 
       return true;
     } catch (error) {
@@ -152,9 +185,13 @@ export function ScheduleProvider({ children }: any) {
     )}-${addPadding(date.getDate())}`;
   }
 
-  // This function returns the filtered version of events if covereage is == true;
-  function getCoverage() {
-    return eventsMilli.filter((event) => event.coverage);
+  async function addUnclaimedCoverage(event: DayEvent) {
+    const cRef = ref(db, `coverage/${event.id}`);
+    try {
+      await set(cRef, { ...event, targetUID: null, color: null });
+    } catch (e) {
+      throw new Error(`${e}`);
+    }
   }
 
   function toLocalMidnight(millis: number) {
@@ -163,15 +200,14 @@ export function ScheduleProvider({ children }: any) {
     return date;
   }
 
-  function expandRange(e: ScheduleEventMilli): DayEvent[] {
+  function expandRange(e: ScheduleEventMilli) {
     const start = toLocalMidnight(e.start);
     let end = toLocalMidnight(e.end);
     end = addDays(end, -1);
     const last = end < start ? start : end;
 
-    const out: DayEvent[] = [];
     for (let d = start; d <= last; d = addDays(d, 1)) {
-      out.push({
+      const entry = {
         id: `${e.id}-${toDayOnly(d)}`,
         originUID: e.originUID,
         targetUID: e.targetUID,
@@ -182,11 +218,14 @@ export function ScheduleProvider({ children }: any) {
         color: e.color,
         day: toDayOnly(d),
         allDay: e.allDay,
-      });
+        claimed: false,
+      };
+      addUnclaimedCoverage(entry);
     }
-    return out;
   }
 
+  // This block creates all of the holidays for the current year and next year, as well as
+  // creates all of the pay day and pay period schedules for the calendar
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
   const nextYear = currentYear + 1;
@@ -254,6 +293,7 @@ export function ScheduleProvider({ children }: any) {
     "CD", // Day 13:  Charlie/Delta
   ];
 
+  // This block creates the shifts to add to the calendar
   const teamStart = {
     Alpha: "06:00:00",
     Bravo: "18:00:00",
@@ -333,6 +373,7 @@ export function ScheduleProvider({ children }: any) {
     return events;
   }
 
+  // This function adds all of the events together into one bundle
   function createEvents() {
     setAllEvents([
       { id: "currentHolidays", events: currentHolidays },
@@ -340,6 +381,11 @@ export function ScheduleProvider({ children }: any) {
       { id: "payday", events: [payDay] },
       { id: "payPeriod", events: [payPeriod] },
       { id: "employeeEvents", events: events, color: primaryAccent },
+      {
+        id: "coverage",
+        events: claimedCoverage,
+        color: secondaryAccent,
+      },
     ]);
   }
 

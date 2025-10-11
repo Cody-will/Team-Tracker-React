@@ -5,6 +5,8 @@ import Button from "../components/Button";
 import { useUser } from "./context/UserContext";
 import { useSchedule } from "./context/ScheduleContext";
 import type { ScheduleEvent, DayEvent } from "./context/ScheduleContext";
+import PopUp from "../components/PopUp";
+import type { PopUpProps } from "../components/PopUp";
 
 //TODO:
 // Set up functionality for when the user picks up the shift
@@ -15,7 +17,9 @@ export default function Coverage() {
   const { primaryAccent, secondaryAccent } = userSettings;
   const { coverage } = useSchedule();
   const [filteredEvents, setFilteredEvents] = useState<DayEvent[] | []>([]);
+  const [notify, setNotify] = useState<PopUpProps | null>(null);
 
+  // This useEffect filters all of the coverage dates so the user doesn't see the ones from their shift
   useEffect(() => {
     if (!user || !coverage) return;
     setFilteredEvents(
@@ -25,16 +29,43 @@ export default function Coverage() {
     );
   }, [coverage, user]);
 
+  // This function returns the filtered events to the useEffect
   function filterEvents(event: DayEvent[]): DayEvent[] {
-    return event.filter((e) => user?.Shifts != users[e.originUID].Shifts);
+    return event.filter(
+      (e) => user?.Shifts != users[e.originUID].Shifts && !e.claimed
+    );
   }
 
+  // This function handles switching the view from list view to the upcoming calendar view
   function handleViewChange() {
     setView((prev) => !prev);
   }
 
+  function createNotify() {
+    setNotify({
+      title: "Success",
+      message: "Day successfully added to schedule",
+      onClose: notifyComplete,
+      location: "top-center",
+      timer: 3,
+    });
+  }
+
+  function notifyComplete() {
+    setNotify(null);
+  }
+
   return (
     <div className="w-full h-full flex items-center justify-center p-4">
+      {notify && (
+        <PopUp
+          title={notify?.title}
+          onClose={notify?.onClose}
+          location={notify?.location}
+          message={notify?.message}
+          timer={notify?.timer}
+        />
+      )}
       <motion.div
         id="panel"
         layout
@@ -51,7 +82,7 @@ export default function Coverage() {
             color={view ? primaryAccent : secondaryAccent}
           />
         </div>
-        {view && <ListView events={filteredEvents} />}
+        {view && <ListView events={filteredEvents} onComplete={createNotify} />}
       </motion.div>
     </div>
   );
