@@ -19,7 +19,7 @@ export type Display =
   | "list-item"
   | "block"
   | "inverse-background";
-export type EventType = "Vacation" | "Training" | "Shift-Swap" | "coverage";
+export type EventType = "Vacation" | "Training" | "Shift-Swap" | "Coverage";
 
 export interface ScheduleEvent {
   id?: string;
@@ -177,9 +177,10 @@ export function ScheduleProvider({ children }: any) {
 
   async function addClaimedCoverage(event: DayEvent) {
     const claimed = true;
+    const eventType = "Coverage";
     const cRef = ref(db, `coverage/${event.id}`);
     try {
-      await update(cRef, { ...event, claimed });
+      await update(cRef, { ...event, claimed, eventType });
       return true;
     } catch (e) {
       throw new Error(`${e}`);

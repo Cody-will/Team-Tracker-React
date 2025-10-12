@@ -6,6 +6,7 @@ import { useUser } from "../pages/context/UserContext";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import rrulePlugin from "@fullcalendar/rrule";
 import { useState, useEffect, useRef } from "react";
+import type { EventType } from "../pages/context/ScheduleContext";
 
 export interface CalendarEvent {
   id: string;
@@ -41,6 +42,29 @@ export default function ScheduleCalendar({
   const { primaryAccent, secondaryAccent } = userSettings;
   const [shiftsOn, setShiftsOn] = useState(false);
   const calRef = useRef<FullCalendar>(null);
+  const [filters, setFilters] = useState<Record<EventType, boolean>>({
+    Vacation: true,
+    Training: true,
+    Coverage: true,
+    "Shift-Swap": true,
+  });
+
+  useEffect(() => {
+    const api = calRef.current?.getApi();
+    if (!api) return;
+
+    api.getEvents().forEach((ev) => {
+      const kind: EventType =
+        (ev.extendedProps.eventType as EventType) ??
+        (ev.extendedProps.type as EventType);
+
+      const show = filters[kind] ?? true;
+      ev.setProp("display", show ? ev.display : "none");
+    });
+  }, [filters, allEvents]);
+
+  const toggleKind = (k: EventType) =>
+    setFilters((f) => ({ ...f, [k]: !f[k] }));
 
   useEffect(() => {
     if (!selected && interactive) {
@@ -133,16 +157,32 @@ export default function ScheduleCalendar({
         eventSources={allEvents}
         selectable={interactive}
         select={handleSelect ? handleSelect : () => {}}
-        headerToolbar={{
-          right: "prev,next today",
-          center: "title",
-          left: "dayGridMonth,toggleShifts",
-        }}
         customButtons={{
           toggleShifts: {
-            text: shiftsOn ? "Hide Shifts" : "Show Shifts",
+            text: shiftsOn ? "Shifts ✓" : "Shifts ✗",
             click: () => setShiftsOn((prev) => !prev),
           },
+          toggleVac: {
+            text: filters.Vacation ? "Vacation ✓" : "Vacation ✗",
+            click: () => toggleKind("Vacation"),
+          },
+          toggleTrain: {
+            text: filters.Training ? "Training ✓" : "Training ✗",
+            click: () => toggleKind("Training"),
+          },
+          toggleCov: {
+            text: filters.Coverage ? "Coverage ✓" : "Coverage ✗",
+            click: () => toggleKind("Coverage"),
+          },
+          toggleSwap: {
+            text: filters["Shift-Swap"] ? "Swap ✓" : "Swap ✗",
+            click: () => toggleKind("Shift-Swap"),
+          },
+        }}
+        headerToolbar={{
+          left: "dayGridMonth,toggleShifts,toggleVac,toggleTrain,toggleCov,toggleSwap",
+          center: "title",
+          right: "prev,next,today",
         }}
       />
     </div>
