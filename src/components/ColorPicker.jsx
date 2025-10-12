@@ -32,7 +32,6 @@ export default function ColorPicker({ selectedColor, setSelectedColor }) {
       <AnimatePresence>
         {colors.map((color) => (
           <motion.div
-            layout
             style={{
               backgroundColor: color,
               borderColor: color === selectedColor ? "white" : "black",
@@ -43,7 +42,7 @@ export default function ColorPicker({ selectedColor, setSelectedColor }) {
             whileHover={{ scale: 1.2 }}
             onClick={() => setSelectedColor(color)}
             key={color}
-            className={`size-12 border rounded-lg`}
+            className={`size-10 border rounded-lg hover:cursor-pointer`}
           />
         ))}
       </AnimatePresence>

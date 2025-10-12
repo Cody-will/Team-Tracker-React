@@ -11,12 +11,21 @@ import FileInput from "../components/FileInput.tsx";
 import ProgressBar from "../components/ProgressBar.tsx";
 import { DataSnapshot } from "firebase/database";
 import type { UserSettings } from "./context/UserContext.tsx";
-// TODO:
-// Finish completing the UI for uploading and changing the users wallpaper
-// Note: the user uploading a wallpaper should add it to a list of wallpapers for them, not replace existing
-// Complete functions for uploading and changing the users wallpaper in the database under user settings
-// Complete the function calling updateUserSettings
-// Section around line 150 needs to have the userSettings.primaryAccent section set up for the file input file:bg-color
+import {
+  BsChevronLeft,
+  BsChevronRight,
+  BsArrowRight,
+  BsArrowLeft,
+} from "react-icons/bs";
+
+export type Location =
+  | "primaryAccent"
+  | "secondaryAccent"
+  | "bgImage"
+  | "vacationAccent"
+  | "swapAccent"
+  | "coverageAccent"
+  | "trainingAccent";
 
 export default function Settings() {
   const {
@@ -31,6 +40,10 @@ export default function Settings() {
     primaryAccent,
     secondaryAccent,
     bgImage: backgroundImage,
+    vacationAccent,
+    swapAccent,
+    trainingAccent,
+    coverageAccent,
   } = userSettings;
   const [isClicked, setIsClicked] = useState(false); // <- Used for switching to upload view on wallpaper options
   const [selectedPrimary, setSelectedPrimary] = useState(""); // <- Used for storing the new primary color
@@ -41,25 +54,25 @@ export default function Settings() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // <- Used to store the photo being uploaded
   const [uploadPreview, setUploadPreview] = useState<string | null>(null); // <- Used for storing the preview of the uploading image
   const [progress, setProgress] = useState(0);
+  const [selectedVacation, setSelectedVacation] = useState(vacationAccent);
+  const [vacation, setVacation] = useState("");
+  const [selectedSwap, setSelectedSwap] = useState(swapAccent);
+  const [swap, setSwap] = useState("");
+  const [selectedTraining, setSelectedTraining] = useState(trainingAccent);
+  const [training, setTraining] = useState("");
+  const [selectedCoverage, setSelectedCoverage] = useState(coverageAccent);
+  const [coverage, setCoverage] = useState("");
+  const [next, setnext] = useState(false);
   const nicknameRef = useRef<HTMLInputElement | null>(null);
   const inputStyle =
-    "border-2 border-zinc-900 w-full  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
+    "border-2 border-zinc-900 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
 
-  function onColorChange(accent: "primary" | "secondary") {
-    accent === "primary"
-      ? setPrimaryColor(selectedPrimary)
-      : setSecondaryColor(selectedSecondary);
-  }
+  function onColorChange() {}
 
   // This function will update the users settings in the database under users/uid/settings
-  async function updateSettings() {
+  async function updateSettings(location: Location, value: string) {
     const uid = currentUser.uid;
-    const settings: UserSettings = {
-      primaryAccent: primaryColor,
-      secondaryAccent: secondaryColor,
-      bgImage: bgImage,
-    };
-    updateUserSettings(uid, settings);
+    updateUserSettings(uid, location, value);
   }
 
   // This function creates the preview for the uploading image
@@ -104,6 +117,8 @@ export default function Settings() {
         setSelectedFile(null);
         if (uploadPreview) URL.revokeObjectURL(uploadPreview);
         setUploadPreview(null);
+        setBgImage(src);
+        updateSettings("bgImage", src);
       }
     }
   }
@@ -121,6 +136,7 @@ export default function Settings() {
     const value = event.target.value;
     if (value === "Select Image") return;
     setBgImage(value);
+    updateSettings("bgImage", value);
   }
 
   return (
@@ -130,118 +146,233 @@ export default function Settings() {
         id="panel"
         className="bg-zinc-950/30 overflow-hidden flex flex-col gap-4 p-8 justify-center items-center border border-zinc-800 rounded-xl"
       >
-        <div className="font-semibold text-zinc-200 text-3xl flex items-start justify-start w-full">
-          Settings/Customization
+        <div className="flex w-full">
+          <div className="font-semibold text-zinc-200 text-3xl flex items-start justify-start w-full">
+            Settings/Customization
+          </div>
+          <div className="flex justify-between items-between text-zinc-200 font-semibold">
+            <motion.div
+              animate={{ rotate: next ? -180 : 0 }}
+              transition={{ duration: 0.3, type: "tween" }}
+              whileHover={{ scale: 1.2 }}
+              onClick={() => setnext((prev) => !prev)}
+              className="hover:cursor-pointer"
+            >
+              <BsArrowRight size={40} />
+            </motion.div>
+          </div>
         </div>
         <div className="flex gap-8 items-start justify-center">
-          <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-            <div className="font-semibold text-2xl text-zinc-200">
-              Primary Accent
-            </div>
-            <ColorPicker
-              selectedColor={selectedPrimary}
-              setSelectedColor={setSelectedPrimary}
-            />
-            <Button
-              text="Choose Primary"
-              type="button"
-              color={primaryColor}
-              action={() => {
-                onColorChange("primary");
-              }}
-            />
-          </div>
-          <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-            <div className="font-semibold text-2xl text-zinc-200">
-              Secondary Accent
-            </div>
-            <ColorPicker
-              selectedColor={selectedSecondary}
-              setSelectedColor={setSelectedSecondary}
-            />
-            <Button
-              text="Choose Secondary"
-              type="button"
-              color={secondaryColor}
-              action={() => {
-                onColorChange("secondary");
-              }}
-            />
-          </div>
-          <motion.div
-            layout
-            className="flex flex-col gap-4 justify-center items-center border-2 border-zinc-900 rounded-xl p-4"
-          >
-            <div className="font-semibold text-2xl text-zinc-200">
-              Background Image
-            </div>
-            {!isClicked && (
-              <>
-                <img
-                  src={bgImage}
-                  style={{ borderWidth: "4px", borderColor: secondaryAccent }}
-                  className="max-w-68 bg-white rounded-md"
-                />
-                <select
-                  className={inputStyle}
-                  onChange={(event) => handleDropDown(event)}
-                >
-                  <option value={bgImage}>Select Image</option>
-                  {Object.entries(backgroundOptions).map(
-                    ([index, background]) => (
-                      <option key={index} value={background.src}>
-                        {background.name}
-                      </option>
-                    )
-                  )}
-                  {userSettings.backgrounds &&
-                    Object.entries(userSettings.backgrounds).map(
-                      ([index, bg]) => (
-                        <option key={index} value={bg.src}>
-                          {bg.name}
-                        </option>
-                      )
-                    )}
-                </select>
-              </>
-            )}
-            {isClicked && (
-              <>
-                <div className="w-64">
-                  {uploadPreview ? (
-                    <img src={uploadPreview} />
-                  ) : (
-                    <div className="w-full border border-zinc-950 text-zinc-200 text-center h-32 flex items-center justify-center rounded-lg">
-                      No image selected
-                    </div>
-                  )}
+          <AnimatePresence initial={false} mode="wait">
+            {!next && (
+              <motion.div
+                key="first"
+                initial={{ x: next ? 1200 : -1200, filter: "blur(15px)" }}
+                animate={{ x: 0, filter: "none" }}
+                exit={{ x: next ? 1200 : -1200, filter: "blur(15px)" }}
+                transition={{ duration: 0.3, type: "tween" }}
+                className="flex gap-4"
+              >
+                <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="font-semibold text-2xl text-zinc-200">
+                    Primary Accent
+                  </div>
+                  <ColorPicker
+                    selectedColor={selectedPrimary}
+                    setSelectedColor={setSelectedPrimary}
+                  />
+                  <Button
+                    text="Choose Primary"
+                    type="button"
+                    color={primaryColor}
+                    action={() => {
+                      setPrimaryColor(selectedPrimary);
+                      updateSettings("primaryAccent", selectedPrimary);
+                    }}
+                  />
                 </div>
-                <FileInput
-                  selectedFile={selectedFile}
-                  setSelectedFile={setSelectedFile}
-                  handlePreview={createPreview}
-                />
-                <input
-                  placeholder="Enter a nickname for the photo"
-                  ref={nicknameRef}
-                  className={inputStyle}
-                />
-              </>
+                <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="font-semibold text-2xl text-zinc-200">
+                    Secondary Accent
+                  </div>
+                  <ColorPicker
+                    selectedColor={selectedSecondary}
+                    setSelectedColor={setSelectedSecondary}
+                  />
+                  <Button
+                    text="Choose Secondary"
+                    type="button"
+                    color={secondaryColor}
+                    action={() => {
+                      setSecondaryColor(selectedSecondary);
+                      updateSettings("secondaryAccent", selectedSecondary);
+                    }}
+                  />
+                </div>
+
+                <motion.div
+                  layout
+                  className="flex flex-col gap-4 justify-center items-center border-2 border-zinc-900 rounded-xl p-4"
+                >
+                  <div className="font-semibold text-2xl text-zinc-200">
+                    Background Image
+                  </div>
+                  {!isClicked && (
+                    <>
+                      <img
+                        src={bgImage}
+                        style={{
+                          borderWidth: "4px",
+                          borderColor: secondaryAccent,
+                        }}
+                        className="max-w-68 bg-white rounded-md"
+                      />
+                      <select
+                        className={inputStyle}
+                        onChange={(event) => handleDropDown(event)}
+                      >
+                        <option value={bgImage}>Select Image</option>
+                        {Object.entries(backgroundOptions).map(
+                          ([index, background]) => (
+                            <option key={index} value={background.src}>
+                              {background.name}
+                            </option>
+                          )
+                        )}
+                        {userSettings.backgrounds &&
+                          Object.entries(userSettings.backgrounds).map(
+                            ([index, bg]) => (
+                              <option key={index} value={bg.src}>
+                                {bg.name}
+                              </option>
+                            )
+                          )}
+                      </select>
+                    </>
+                  )}
+                  {isClicked && (
+                    <>
+                      <div className="w-64">
+                        {uploadPreview ? (
+                          <img src={uploadPreview} />
+                        ) : (
+                          <div className="w-full border border-zinc-950 text-zinc-200 text-center h-32 flex items-center justify-center rounded-lg">
+                            No image selected
+                          </div>
+                        )}
+                      </div>
+                      <FileInput
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
+                        handlePreview={createPreview}
+                      />
+                      <input
+                        placeholder="Enter a nickname for the photo"
+                        ref={nicknameRef}
+                        style={{}}
+                        className={inputStyle}
+                      />
+                    </>
+                  )}
+                  {progress > 0 && (
+                    <ProgressBar progress={progress} accent={secondaryAccent} />
+                  )}
+                  <Button
+                    text={isClicked ? "Upload" : "Add Image"}
+                    type="button"
+                    action={handleUpload}
+                  />
+                  {isClicked && (
+                    <Button text="Back" type="button" action={handleBack} />
+                  )}
+                </motion.div>
+              </motion.div>
             )}
-            {progress > 0 && (
-              <ProgressBar progress={progress} accent={primaryAccent} />
+            {next && (
+              <motion.div
+                key="second"
+                initial={{ x: next ? 1200 : -1200, filter: "blur(15px)" }}
+                animate={{ x: 0, filter: "none" }}
+                exit={{ x: next ? 1200 : -1200, filter: "blur(15px)" }}
+                transition={{ duration: 0.3, type: "tween" }}
+                className="flex gap-4"
+              >
+                <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="font-semibold text-2xl text-zinc-200">
+                    Vacation Color
+                  </div>
+                  <ColorPicker
+                    selectedColor={selectedVacation}
+                    setSelectedColor={setSelectedVacation}
+                  />
+                  <Button
+                    text="Choose Vacation"
+                    type="button"
+                    color={vacationAccent}
+                    action={() => {
+                      setVacation(selectedVacation);
+                      updateSettings("vacationAccent", selectedVacation);
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="font-semibold text-2xl text-zinc-200">
+                    Training Accent
+                  </div>
+                  <ColorPicker
+                    selectedColor={selectedTraining}
+                    setSelectedColor={setSelectedTraining}
+                  />
+                  <Button
+                    text="Choose Training"
+                    type="button"
+                    color={trainingAccent}
+                    action={() => {
+                      setTraining(selectedTraining);
+                      updateSettings("trainingAccent", selectedTraining);
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="font-semibold text-2xl text-zinc-200">
+                    Swap Color
+                  </div>
+                  <ColorPicker
+                    selectedColor={selectedSwap}
+                    setSelectedColor={setSelectedSwap}
+                  />
+                  <Button
+                    text="Choose Swap"
+                    type="button"
+                    color={swapAccent}
+                    action={() => {
+                      setSwap(selectedSwap);
+                      updateSettings("swapAccent", selectedSwap);
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="font-semibold text-2xl text-zinc-200">
+                    Coverage Color
+                  </div>
+                  <ColorPicker
+                    selectedColor={selectedCoverage}
+                    setSelectedColor={setSelectedCoverage}
+                  />
+                  <Button
+                    text="Choose Coverage"
+                    type="button"
+                    color={coverageAccent}
+                    action={() => {
+                      setCoverage(selectedCoverage);
+                      updateSettings("coverageAccent", selectedCoverage);
+                    }}
+                  />
+                </div>
+              </motion.div>
             )}
-            <Button
-              text={isClicked ? "Upload" : "Add Image"}
-              type="button"
-              action={handleUpload}
-            />
-            {isClicked && (
-              <Button text="Back" type="button" action={handleBack} />
-            )}
-          </motion.div>
+          </AnimatePresence>
         </div>
-        <Button text="Save Settings" type="button" action={updateSettings} />
       </motion.div>
     </motion.div>
   );

@@ -19,7 +19,7 @@ export type Display =
   | "list-item"
   | "block"
   | "inverse-background";
-export type EventType = "Vacation" | "Training" | "Shift-Swap";
+export type EventType = "Vacation" | "Training" | "Shift-Swap" | "coverage";
 
 export interface ScheduleEvent {
   id?: string;
@@ -64,10 +64,20 @@ export function ScheduleProvider({ children }: any) {
   const [events, setEvents] = useState<AllEvents>([]);
   const [eventsMilli, setEventsMilli] = useState<ScheduleEventMilli[]>([]);
   const { user, userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const {
+    primaryAccent,
+    secondaryAccent,
+    vacationAccent,
+    swapAccent,
+    coverageAccent,
+    trainingAccent,
+  } = userSettings;
   const [allEvents, setAllEvents] = useState<any[] | undefined>();
   const [coverage, setCoverage] = useState<Coverage>([]);
   const [claimedCoverage, setClaimedCoverage] = useState<Coverage>([]);
+  const [training, setTraining] = useState<ScheduleEvent[]>([]);
+  const [vacation, setVacation] = useState<ScheduleEvent[]>([]);
+  const [swap, setSwap] = useState<ScheduleEvent[]>([]);
 
   const value = {
     events,
@@ -107,7 +117,17 @@ export function ScheduleProvider({ children }: any) {
   // This useEffect creates all of the events and updates them based on if colors, events and userSettings
   useEffect(() => {
     createEvents();
-  }, [userSettings, events, primaryAccent]);
+  }, [
+    userSettings,
+    events,
+    primaryAccent,
+    secondaryAccent,
+    vacationAccent,
+    trainingAccent,
+    swapAccent,
+    coverageAccent,
+    claimedCoverage,
+  ]);
 
   // This useEffect is used to pull all the events from the database and store them in events useState
   useEffect(() => {
@@ -124,6 +144,27 @@ export function ScheduleProvider({ children }: any) {
         setEvents(
           snapshot.exists()
             ? (Object.values(typedData).map(normalize) as ScheduleEvent[])
+            : []
+        );
+        setVacation(
+          snapshot.exists()
+            ? ([...Object.values(typedData)].filter(
+                (e) => e.eventType === "Vacation"
+              ) as ScheduleEvent[])
+            : []
+        );
+        setTraining(
+          snapshot.exists()
+            ? ([...Object.values(typedData)].filter(
+                (e) => e.eventType === "Training"
+              ) as ScheduleEvent[])
+            : []
+        );
+        setSwap(
+          snapshot.exists()
+            ? ([...Object.values(typedData)].filter(
+                (e) => e.eventType === "Shift-Swap"
+              ) as ScheduleEvent[])
             : []
         );
       },
@@ -380,11 +421,13 @@ export function ScheduleProvider({ children }: any) {
       { id: "nextHolidays", events: nextHolidays },
       { id: "payday", events: [payDay] },
       { id: "payPeriod", events: [payPeriod] },
-      { id: "employeeEvents", events: events, color: primaryAccent },
+      { id: "vacation", events: vacation, color: vacationAccent },
+      { id: "shift-swap", events: swap, color: swapAccent },
+      { id: "training", events: training, color: trainingAccent },
       {
         id: "coverage",
         events: claimedCoverage,
-        color: secondaryAccent,
+        color: coverageAccent,
       },
     ]);
   }

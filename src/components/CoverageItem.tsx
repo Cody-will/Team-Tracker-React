@@ -15,7 +15,12 @@ export default function CoverageItem(props: CoverageItemProps) {
   const { data: users, userSettings, user } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
   const { firstName, lastName, Shifts } = users[originUID];
-  const date = new Date(day).toDateString();
+  const date = toLocalDateFromISODateOnly(day).toDateString();
+
+  function toLocalDateFromISODateOnly(isoDate: string) {
+    const [y, m, d] = isoDate.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
 
   return (
     <motion.div

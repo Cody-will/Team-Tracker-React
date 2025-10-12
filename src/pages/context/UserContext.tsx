@@ -10,17 +10,12 @@ import {
 import type { FullMetadata, UploadTaskSnapshot } from "firebase/storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useAuth } from "./AuthContext.jsx";
+import type { Location } from "../Settings.js";
 import {
   primaryAccentHex,
   secondaryAccentHex,
   backgroundImage,
 } from "../../colors.jsx";
-
-// TODO:
-// Complete the typing and verify the functions for deleteUser, updateUser, and deactivateUser work correctly
-// Complete error handling
-// Double check types and account for dynamically created types that could come from the config page
-// Make sure that all static paramiters are valid and all dynamic types are placed into an object
 
 type CustomValue = string | number | boolean | null;
 
@@ -63,7 +58,8 @@ export interface Value {
   updateUser: (user: User) => Promise<void>;
   updateUserSettings: (
     uid: string,
-    settings: Partial<UserSettings>
+    location: Location,
+    value: string
   ) => Promise<void>;
   uploadPhoto: ({
     uid,
@@ -78,7 +74,7 @@ export interface Value {
     name,
     src,
     path,
-  }: UpdateBackground) => Promise<boolean>;
+  }: UpdateBackground) => Promise<string>;
 
   usersWithoutShift: (shift: string) => UserWithShift[] | void;
 }
@@ -92,6 +88,10 @@ type UserBackground = {
 export interface UserSettings {
   primaryAccent: string;
   secondaryAccent: string;
+  trainingAccent: string;
+  swapAccent: string;
+  coverageAccent: string;
+  vacationAccent: string;
   bgImage: string;
   backgrounds?: UserBackground | Record<string, UserBackground>;
 }
@@ -99,6 +99,10 @@ export interface UserSettings {
 export interface DefaultSettings {
   primaryAccent: string;
   secondaryAccent: string;
+  vacationAccent: string;
+  swapAccent: string;
+  coverageAccent: string;
+  trainingAccent: string;
   bgImage: string;
 }
 
@@ -142,6 +146,10 @@ export function UserProvider({ children }: any) {
   const defaultSettings: DefaultSettings = {
     primaryAccent: primaryAccentHex,
     secondaryAccent: secondaryAccentHex,
+    vacationAccent: primaryAccentHex,
+    swapAccent: primaryAccentHex,
+    trainingAccent: primaryAccentHex,
+    coverageAccent: primaryAccentHex,
     bgImage: backgroundImage,
   };
   const [userSettings, setUserSettings] = useState<
@@ -164,6 +172,11 @@ export function UserProvider({ children }: any) {
     updateUserBackground,
     usersWithoutShift,
   };
+
+  useEffect(() => {
+    const color = userSettings?.primaryAccent || "#0ea5e9";
+    document.documentElement.style.setProperty("--accent", color);
+  }, [userSettings?.primaryAccent]);
 
   // Use effect to get the user data from the users section of the database
   useEffect(() => {
@@ -196,6 +209,10 @@ export function UserProvider({ children }: any) {
     const settings = {
       primaryAccent: user.settings?.primaryAccent ?? primaryAccent,
       secondaryAccent: user.settings?.secondaryAccent ?? secondaryAccent,
+      trainingAccent: user.settings?.trainingAccent ?? primaryAccent,
+      coverageAccent: user.settings?.coverageAccent ?? primaryAccent,
+      swapAccent: user.settings?.swapAccent ?? primaryAccent,
+      vacationAccent: user.settings?.vacationAccent ?? primaryAccent,
       bgImage: user.settings?.bgImage ?? bgImage,
       backgrounds: user.settings?.backgrounds ?? undefined,
     };
@@ -253,10 +270,10 @@ export function UserProvider({ children }: any) {
     name,
     src,
     path,
-  }: UpdateBackground): Promise<boolean> {
+  }: UpdateBackground): Promise<string> {
     const dbRef = `users/${uid}/settings/${type}`;
     await push(ref(db, dbRef), { name, src, path, uploadedAt: Date.now() });
-    return true;
+    return src;
   }
 
   // This functions calls the service worker on the server to create the users account
@@ -354,10 +371,12 @@ export function UserProvider({ children }: any) {
   // This function will update the users settings in the database
   async function updateUserSettings(
     uid: string,
-    settings: Partial<UserSettings>
+    location: Location,
+    value: string
   ) {
+    const updates = { [`users/${uid}/settings/${location}`]: value };
     try {
-      await update(ref(db, `users/${uid}/settings`), settings);
+      await update(ref(db), updates);
     } catch (e) {
       console.error("updateUserSettings failed: ", e);
       throw e;

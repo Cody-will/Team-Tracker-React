@@ -1,9 +1,6 @@
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import CoverageItem from "./CoverageItem";
 import type { DayEvent, ScheduleEvent } from "../pages/context/ScheduleContext";
-import type { PopUpProps } from "./PopUp";
-import PopUp from "./PopUp";
 import { useUser } from "../pages/context/UserContext";
 import { useSchedule } from "../pages/context/ScheduleContext";
 
