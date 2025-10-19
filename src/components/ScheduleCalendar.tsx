@@ -8,18 +8,21 @@ import rrulePlugin from "@fullcalendar/rrule";
 import { useState, useEffect, useRef } from "react";
 import type { EventType } from "../pages/context/ScheduleContext";
 
+export type Display =
+  | "auto"
+  | "block"
+  | "list-item"
+  | "background"
+  | "inverse-background";
+
 export interface CalendarEvent {
   id: string;
   title: string;
   start: string;
   end: string;
-  display?:
-    | "auto"
-    | "block"
-    | "list-item"
-    | "background"
-    | "inverse-background";
-  type: "Vacation" | "Training" | "Shift-Swap";
+  originDisplay?: Display;
+  display?: Display;
+  type: "Vacation" | "Training" | "Shift-Swap" | "Coverage";
 }
 
 export type AllEvents = CalendarEvent[];
@@ -59,7 +62,7 @@ export default function ScheduleCalendar({
         (ev.extendedProps.type as EventType);
 
       const show = filters[kind] ?? true;
-      ev.setProp("display", show ? ev.display : "none");
+      ev.setProp("display", show ? ev.extendedProps.originDisplay : "none");
     });
   }, [filters, allEvents]);
 
@@ -67,7 +70,7 @@ export default function ScheduleCalendar({
     setFilters((f) => ({ ...f, [k]: !f[k] }));
 
   useEffect(() => {
-    if (!selected && interactive) {
+    if (!selected) {
       calRef.current?.getApi().unselect();
     }
   }, [selected]);
@@ -89,6 +92,7 @@ export default function ScheduleCalendar({
       id="calWrap"
       className="w-full h-full rounded-xl text-zinc-200 "
       style={{
+        ["--fc-page-bg-color" as any]: "#09090b",
         ["--fc-today-bg-color" as any]: primaryAccent,
         ["--fc-button-text-color" as any]: "#0a0a0a",
         ["--fc-button-bg-color" as any]: primaryAccent,
@@ -102,6 +106,23 @@ export default function ScheduleCalendar({
       }}
     >
       <style>{`
+
+        /* Put this in your component’s <style> or a CSS file */
+      #calWrap .fc .fc-toolbar.fc-header-toolbar {
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr; /* left | center | right */
+        align-items: center;
+      }
+
+      #calWrap .fc .fc-toolbar-chunk:nth-child(1) { justify-self: start; }
+      #calWrap .fc .fc-toolbar-chunk:nth-child(2) { justify-self: center; } /* title */
+      #calWrap .fc .fc-toolbar-chunk:nth-child(3) { justify-self: end; }
+
+
+    #calWrap .fc {
+      --fc-page-bg-color: #09090b1;
+    }
+
     .fc .fc-button {
       transition: transform .15s ease-out;
       transform-origin: center;
@@ -180,7 +201,7 @@ export default function ScheduleCalendar({
           },
         }}
         headerToolbar={{
-          left: "dayGridMonth,toggleShifts,toggleVac,toggleTrain,toggleCov,toggleSwap",
+          left: "toggleShifts,toggleVac,toggleTrain,toggleCov,toggleSwap",
           center: "title",
           right: "prev,next,today",
         }}

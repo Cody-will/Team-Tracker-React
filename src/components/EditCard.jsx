@@ -41,8 +41,8 @@ export default function EditCard({
 
   const containerStyle =
     "relative flex flex-col shrink gap-1 items-start justify-center";
-  const formStyle = `text-l w-full flex shrink border border-zinc-700 rounded-sm px-2 py-2 focus:ring-2 focus:ring-${primaryAccent} focus:shadow-[0_0_10px_2px_rgba(3,105,161,0.7)] focus:outline-none`;
-
+  const formStyle =
+    "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
   // ✅ stable layoutId string
   const layoutKey = `person-${person.badgeNum}`;
 

@@ -30,6 +30,7 @@ export interface ScheduleEvent {
   end: number | string;
   allDay?: boolean;
   display?: Display;
+  originDisplay?: Display;
   eventType: EventType;
   coverage?: boolean;
   color?: string;
@@ -204,7 +205,11 @@ export function ScheduleProvider({ children }: any) {
     try {
       const eventRef = push(eRef);
       const key = eventRef.key!;
-      const newEvent: ScheduleEvent = { id: key, ...event };
+      const newEvent: ScheduleEvent = {
+        id: key,
+        ...event,
+        originDisplay: event.display,
+      };
       await set(eventRef, newEvent);
       if (event.coverage) expandRange(newEvent as ScheduleEventMilli);
 
@@ -255,6 +260,7 @@ export function ScheduleProvider({ children }: any) {
         targetUID: e.targetUID,
         title: e.title,
         display: e.display,
+        originDisplay: e.display,
         eventType: e.eventType,
         coverage: e.coverage,
         color: e.color,
@@ -277,6 +283,7 @@ export function ScheduleProvider({ children }: any) {
     title: h.name,
     start: h.date,
     allDay: true,
+    originDisplay: "background",
     display: "background",
     color: secondaryAccent,
   }));
@@ -285,6 +292,7 @@ export function ScheduleProvider({ children }: any) {
     title: h.name,
     start: h.date,
     allDay: true,
+    originDislay: "background",
     display: "background",
     color: secondaryAccent,
   }));
@@ -292,6 +300,7 @@ export function ScheduleProvider({ children }: any) {
     id: "pay-period",
     title: "Pay period begins",
     allDay: true,
+    originDisplay: "list-item",
     display: "list-item",
     rrule: {
       freq: "weekly",
@@ -303,6 +312,7 @@ export function ScheduleProvider({ children }: any) {
     id: "pay-day",
     title: "Pay Day",
     allDay: true,
+    originDisplay: "list-item",
     display: "list-item",
     color: secondaryAccent,
     rrule: {
@@ -415,19 +425,45 @@ export function ScheduleProvider({ children }: any) {
     return events;
   }
 
+  function addExtended(event: ScheduleEvent | DayEvent | any) {
+    const extendedProps = {
+      originDisplay: event.display,
+      eventType: event.eventType ? event.eventType : null,
+    };
+    return { ...event, extendedProps };
+  }
+
   // This function adds all of the events together into one bundle
   function createEvents() {
     setAllEvents([
-      { id: "currentHolidays", events: currentHolidays },
-      { id: "nextHolidays", events: nextHolidays },
+      {
+        id: "currentHolidays",
+        events: currentHolidays.map((event) => addExtended(event)),
+      },
+      {
+        id: "nextHolidays",
+        events: nextHolidays.map((event) => addExtended(event)),
+      },
       { id: "payday", events: [payDay] },
       { id: "payPeriod", events: [payPeriod] },
-      { id: "vacation", events: vacation, color: vacationAccent },
-      { id: "shift-swap", events: swap, color: swapAccent },
-      { id: "training", events: training, color: trainingAccent },
+      {
+        id: "vacation",
+        events: vacation.map((event) => addExtended(event)),
+        color: vacationAccent,
+      },
+      {
+        id: "shift-swap",
+        events: swap.map((event) => addExtended(event)),
+        color: swapAccent,
+      },
+      {
+        id: "training",
+        events: training.map((event) => addExtended(event)),
+        color: trainingAccent,
+      },
       {
         id: "coverage",
-        events: claimedCoverage,
+        events: claimedCoverage.map((event) => addExtended(event)),
         color: coverageAccent,
       },
     ]);

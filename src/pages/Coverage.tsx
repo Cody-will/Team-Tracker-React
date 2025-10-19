@@ -8,9 +8,6 @@ import type { ScheduleEvent, DayEvent } from "./context/ScheduleContext";
 import PopUp from "../components/PopUp";
 import type { PopUpProps } from "../components/PopUp";
 
-//TODO:
-// Set up functionality for when the user picks up the shift
-
 export default function Coverage() {
   const [view, setView] = useState(true);
   const { userSettings, user, data: users } = useUser();
@@ -76,11 +73,13 @@ export default function Coverage() {
             Coverage
           </div>
           <div className="w-full"></div>
-          <Button
-            text="Change View"
-            action={handleViewChange}
-            color={view ? primaryAccent : secondaryAccent}
-          />
+          {false && (
+            <Button
+              text="Change View"
+              action={handleViewChange}
+              color={view ? primaryAccent : secondaryAccent}
+            />
+          )}
         </div>
         {view && <ListView events={filteredEvents} onComplete={createNotify} />}
       </motion.div>

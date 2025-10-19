@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import ScheduleCalendar from "../components/ScheduleCalendar";
 import { useUser } from "../pages/context/UserContext";
@@ -6,7 +6,7 @@ import Button from "../components/Button";
 import { useSchedule } from "./context/ScheduleContext";
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import PopUp from "../components/PopUp";
-import type { ScheduleEvent } from "./context/ScheduleContext";
+import type { ScheduleEvent, EventType } from "./context/ScheduleContext";
 import type { Location } from "../components/PopUp";
 
 type DateData = { start: Date | string; end: Date | string; allDay?: boolean };
@@ -29,9 +29,11 @@ export default function Vacation() {
   const [error, setError] = useState<ErrorNotify | null>(null);
   const [isSelected, setSelected] = useState<boolean>(true);
   const [interactive, setinteractive] = useState<boolean>(true);
+  const [selectedType, setSelectedType] = useState<EventType | "">("");
+  const [trainingInput, setTrainingInput] = useState("");
 
   const inputStyle =
-    "border-2 border-zinc-900 w-full  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
+    "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:border-[var(--accent)] focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
 
   function handleSelect(dateData: DateSelectArg) {
     const { start, end, allDay } = dateData;
@@ -43,15 +45,22 @@ export default function Vacation() {
     const { start, end, allDay } = selectedDate;
     const newStart: number = new Date(start).getTime();
     const newEnd: number = new Date(end).getTime();
-    const firstName = data[selectedUser].firstName;
-    const lastName = data[selectedUser].lastName;
+    if (!selectedType)
+      return setError({
+        key: "no-type",
+        title: "Oops",
+        message: "Type of event must be selected",
+        location: "top-center",
+        onClose: handleErrorPopUp,
+        timer: 3,
+      });
     const event: ScheduleEvent = {
       originUID: selectedUser,
-      title: `Vacation ${lastName}, ${firstName}`,
+      title: getTitle(selectedType),
       start: newStart,
       end: newEnd,
       allDay: allDay,
-      eventType: "Vacation",
+      eventType: selectedType,
       display: "block",
       coverage,
     };
@@ -61,20 +70,43 @@ export default function Vacation() {
       setShowSuccess(true);
       setSelected(false);
       setSelectedDate(null);
+      setSelectedType("");
+      setSelectedUser("");
     }
   }
 
+  function getTitle(eventType: EventType) {
+    const firstName = data[selectedUser].firstName;
+    const lastName = data[selectedUser].lastName;
+    const badge = data[selectedUser].badge;
+    switch (eventType) {
+      case "Vacation":
+        return `Vacation ${lastName}, ${firstName} #${badge}`;
+      case "Training":
+        return `Training( ${lastName}, ${
+          firstName[0]
+        } #${badge} ) ${trainingInput.trim()}`;
+      case "Shift-Swap":
+        return "";
+      default:
+        return "";
+    }
+  }
+
+  // This function handles passing out the value from the pop up asking if coverage is needed
   function onCloseCoverage(result: boolean) {
     setShowCoverage(false);
     handleSchedule(result);
   }
 
+  // This function handles the pop up after the event has been scheduled
   function onCloseSuccess() {
     setShowSuccess(false);
     setSelected(true);
     setinteractive(true);
   }
 
+  // This function handles submit when the event is scheduled
   function handleSubmit() {
     if (selectedUser === "" || selectedUser === "Select Employee") {
       const notify: ErrorNotify = {
@@ -108,7 +140,10 @@ export default function Vacation() {
   }
 
   return (
-    <div className="flex items-center justify-center h-full w-full p-4">
+    <motion.div
+      layout
+      className="flex items-center justify-center h-full w-full p-4"
+    >
       <AnimatePresence>
         {showCoverage && (
           <PopUp
@@ -147,28 +182,62 @@ export default function Vacation() {
       </AnimatePresence>
       <div
         id="panel"
-        className="p-4 bg-zinc-950/30 border border-zinc-800 text-zinc-200 flex flex-col gap-4 items-center justify-center h-full w-full rounded-xl"
+        className="p-4 bg-zinc-950/70 border border-zinc-800 text-zinc-200 flex flex-col gap-4 items-center justify-center h-full w-full rounded-xl"
       >
-        <div className="w-full flex gap-4">
-          <div className="w-full flex items-center justify-start">
+        <motion.div layout className="w-full flex gap-4">
+          <div className="w-full gap-2 flex items-center justify-start">
             <div className="text-zinc-200 flex justify-start items-center text-3xl py-2">
-              Vacation
+              Scheduling
             </div>
           </div>
-          <div className="w-full flex items-center justify-center">
-            <select
-              onChange={(e) => setSelectedUser(e.target.value)}
-              className={inputStyle}
-            >
-              <option value="">Select employee</option>
-              {data &&
-                Object.entries(data).map(([id, user]) => (
-                  <option
-                    key={id}
-                    value={user.uid}
-                  >{`${user.lastName}, ${user.firstName} - ${user.badge}`}</option>
-                ))}
-            </select>
+          <div className="w-full flex flex-col gap-2 items-center justify-center">
+            <div className="w-full flex gap-2">
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value as EventType)}
+                className={inputStyle}
+              >
+                <option value="">Select Type</option>
+                <option value="Vacation">Vacation</option>
+                <option value="Training">Training</option>
+                <option value="Shift-Swap">Shift Swap</option>
+              </select>
+              <select
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+                className={inputStyle}
+              >
+                <option value="">Select employee</option>
+                {data &&
+                  Object.entries(data).map(([id, user]) => (
+                    <option
+                      key={id}
+                      value={user.uid}
+                    >{`${user.lastName}, ${user.firstName} - ${user.badge}`}</option>
+                  ))}
+              </select>
+            </div>
+
+            <AnimatePresence initial={false}>
+              {selectedType === "Training" && (
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  exit={{ width: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    type: "tween",
+                  }}
+                  className="w-full"
+                >
+                  <input
+                    onChange={(e) => setTrainingInput(e.target.value)}
+                    placeholder="Enter training class name"
+                    className={inputStyle}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           <div className="w-full flex items-center justify-center">
             <Button
@@ -178,17 +247,20 @@ export default function Vacation() {
               type="button"
             />
           </div>
-        </div>
-        <div className="w-full h-full">
-          <div className="border border-zinc-950 h-full w-full p-4 rounded-xl">
+        </motion.div>
+        <motion.div layout className="w-full h-full">
+          <motion.div
+            layout
+            className="border border-zinc-950 h-full w-full p-4 rounded-xl"
+          >
             <ScheduleCalendar
               interactive={interactive}
               selected={isSelected}
               handleSelect={handleSelect}
             />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

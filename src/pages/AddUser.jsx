@@ -53,7 +53,7 @@ export default function AddUser() {
   const upd = watch("Divisions");
   const toggleStyle = "flex flex-col justify-center items-center gap-2";
   const inputStyle =
-    "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
+    "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
 
   const onSubmit = (data) => {
     addUser(data);

@@ -31,25 +31,27 @@ export default function CoverageItem(props: CoverageItemProps) {
       transition={{ duration: 0.3, type: "tween" }}
       layout
       style={{ borderColor: `${secondaryAccent}` }}
-      className="flex items-center border bg-zinc-950/20 justify-center gap-4 w-full text-lg font-semibold text-zinc-300 p-2 rounded-lg"
+      className="flex items-center border bg-zinc-950/50 justify-center gap-4 w-full text-lg font-semibold text-zinc-300 p-2 rounded-lg"
     >
-      <div className="w-full text-xl font-semibold whitespace-nowrap flex items-center justify-start">{`${lastName}, ${firstName}`}</div>
+      <div className=" text-xl font-semibold whitespace-nowrap flex items-center justify-start">{`${lastName}, ${firstName}`}</div>
       <div className="whitespace-nowrap flex items-start justify-center">
         {Shifts}
       </div>
-      <div className="w-full whitespace-nowrap flex items-center justify-start">
+      <div className=" whitespace-nowrap flex items-center justify-start">
         {event.eventType}
       </div>
-      <div className="w-full whitespace-nowrap flex flex-col justify-start">
-        <div className="w-full flex items-center justify-start whitespace-nowrap">
+      <div className="w-full whitespace-nowrap flex justify-center items-center">
+        <div className="w-full flex items-center justify-center whitespace-nowrap">
           {date}
         </div>
       </div>
-      <Button
-        text="Work Day"
-        action={() => onClick(event)}
-        fontSize="text-sm"
-      />
+      <div className="flex justify-center items-center">
+        <Button
+          text="Work Day"
+          action={() => onClick(event)}
+          fontSize="text-sm"
+        />
+      </div>
     </motion.div>
   );
 }

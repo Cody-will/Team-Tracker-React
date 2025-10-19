@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
@@ -26,6 +26,60 @@ import {
   ScheduleProvider,
   useSchedule,
 } from "./pages/context/ScheduleContext.tsx";
+
+function useSeamlessWallpaper(initial, fadeMs = 300) {
+  const [current, setCurrent] = useState(initial ?? null);
+  const [next, setNext] = useState(null);
+  const [showNext, setShowNext] = useState(false);
+  const timerRef = useRef(null);
+  const imgRef = useRef(null);
+
+  const startSwap = (url) => {
+    if (!url || url === current) return;
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (imgRef.current) {
+      imgRef.current.onload = null;
+      imgRef.current.onerror = null;
+    }
+    const img = new Image();
+    imgRef.current = img;
+    img.decoding = "async";
+    img.loading = "eager";
+    img.src = url;
+
+    const promote = () => {
+      setNext(url);
+      setShowNext(true);
+      timerRef.current = window.setTimeout(() => {
+        setCurrent(url);
+        setShowNext(false);
+        setNext(null);
+      }, fadeMs);
+    };
+
+    if (typeof img.decode === "function") {
+      img.decode().then(promote).catch(promote);
+    } else {
+      img.onload = promote;
+      img.onerror = promote;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+      if (imgRef.current) {
+        imgRef.current.onload = null;
+        imgRef.current.onerror = null;
+      }
+    };
+  }, []);
+
+  return { current, next, showNext, startSwap, fadeMs };
+}
 
 function App() {
   return (
@@ -64,7 +118,11 @@ const ProtectedLayout = () => {
   const [nightMode, setNightMode] = useState(false);
   const { currentUser } = useAuth();
   const { userSettings } = useUser();
-  console.log(userSettings);
+
+  const { current, next, showNext, startSwap, fadeMs } = useSeamlessWallpaper(
+    userSettings?.bgImage ?? null,
+    300
+  );
 
   useEffect(() => {
     const teamData = ref(db, "team");
@@ -74,7 +132,6 @@ const ProtectedLayout = () => {
       (snapshot) => {
         setData(snapshot.exists() ? Object.values(snapshot.val()) : null);
         setLoading(false);
-        console.log(snapshot.exists());
       },
       (error) => {
         console.log(error);
@@ -84,20 +141,45 @@ const ProtectedLayout = () => {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    startSwap(userSettings?.bgImage ?? null);
+  }, [userSettings?.bgImage]);
+
   if (!currentUser) return <Navigate to="/login" replace />;
 
   return (
     <motion.div
       style={{
-        backgroundImage: !nightMode && `url(${userSettings.bgImage})`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
+        backgroundColor: "#09090b",
       }}
-      className={`h-screen w-screen overflow-hidden  flex relative`}
+      className={`h-screen w-screen overflow-hidden flex relative`}
     >
+      {!nightMode && current && (
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url(${current})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        />
+      )}
+      {!nightMode && next && (
+        <div
+          className="absolute inset-0 z-0 transition-opacity"
+          style={{
+            opacity: showNext ? 1 : 0,
+            transitionDuration: `${fadeMs}ms`,
+            backgroundImage: `url(${next})`,
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        />
+      )}
       <AnimatePresence>{nightMode && <CometWallpaper />}</AnimatePresence>
-      <div className=" fixed inset-0 z-0"></div>
       <Sidebar toggleState={nightMode} setToggleState={setNightMode} />
       <main className={`w-full h-full relative z-10`}>
         <Outlet context={{ data, loading }} />

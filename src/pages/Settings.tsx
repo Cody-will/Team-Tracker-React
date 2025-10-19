@@ -46,28 +46,20 @@ export default function Settings() {
     coverageAccent,
   } = userSettings;
   const [isClicked, setIsClicked] = useState(false); // <- Used for switching to upload view on wallpaper options
-  const [selectedPrimary, setSelectedPrimary] = useState(""); // <- Used for storing the new primary color
-  const [selectedSecondary, setSelectedSecondary] = useState(""); // <- Used for storing the new secondary color
-  const [primaryColor, setPrimaryColor] = useState(primaryAccent);
-  const [secondaryColor, setSecondaryColor] = useState(secondaryAccent);
+  const [selectedPrimary, setSelectedPrimary] = useState(primaryAccent); // <- Used for storing the new primary color
+  const [selectedSecondary, setSelectedSecondary] = useState(secondaryAccent); // <- Used for storing the new secondary color
   const [bgImage, setBgImage] = useState(backgroundImage); // <- Used to display the users current background and store new chosen one
   const [selectedFile, setSelectedFile] = useState<File | null>(null); // <- Used to store the photo being uploaded
   const [uploadPreview, setUploadPreview] = useState<string | null>(null); // <- Used for storing the preview of the uploading image
   const [progress, setProgress] = useState(0);
   const [selectedVacation, setSelectedVacation] = useState(vacationAccent);
-  const [vacation, setVacation] = useState("");
   const [selectedSwap, setSelectedSwap] = useState(swapAccent);
-  const [swap, setSwap] = useState("");
   const [selectedTraining, setSelectedTraining] = useState(trainingAccent);
-  const [training, setTraining] = useState("");
   const [selectedCoverage, setSelectedCoverage] = useState(coverageAccent);
-  const [coverage, setCoverage] = useState("");
   const [next, setnext] = useState(false);
   const nicknameRef = useRef<HTMLInputElement | null>(null);
   const inputStyle =
     "border-2 border-zinc-900 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
-
-  function onColorChange() {}
 
   // This function will update the users settings in the database under users/uid/settings
   async function updateSettings(location: Location, value: string) {
@@ -184,9 +176,8 @@ export default function Settings() {
                   <Button
                     text="Choose Primary"
                     type="button"
-                    color={primaryColor}
+                    color={primaryAccent}
                     action={() => {
-                      setPrimaryColor(selectedPrimary);
                       updateSettings("primaryAccent", selectedPrimary);
                     }}
                   />
@@ -202,9 +193,8 @@ export default function Settings() {
                   <Button
                     text="Choose Secondary"
                     type="button"
-                    color={secondaryColor}
+                    color={secondaryAccent}
                     action={() => {
-                      setSecondaryColor(selectedSecondary);
                       updateSettings("secondaryAccent", selectedSecondary);
                     }}
                   />
@@ -217,63 +207,70 @@ export default function Settings() {
                   <div className="font-semibold text-2xl text-zinc-200">
                     Background Image
                   </div>
-                  {!isClicked && (
-                    <>
-                      <img
-                        src={bgImage}
-                        style={{
-                          borderWidth: "4px",
-                          borderColor: secondaryAccent,
-                        }}
-                        className="max-w-68 bg-white rounded-md"
-                      />
-                      <select
-                        className={inputStyle}
-                        onChange={(event) => handleDropDown(event)}
-                      >
-                        <option value={bgImage}>Select Image</option>
-                        {Object.entries(backgroundOptions).map(
-                          ([index, background]) => (
-                            <option key={index} value={background.src}>
-                              {background.name}
-                            </option>
-                          )
-                        )}
-                        {userSettings.backgrounds &&
-                          Object.entries(userSettings.backgrounds).map(
-                            ([index, bg]) => (
-                              <option key={index} value={bg.src}>
-                                {bg.name}
+                  <AnimatePresence>
+                    {!isClicked && (
+                      <motion.div className="flex flex-col justify-center items-center gap-4">
+                        <img
+                          src={bgImage}
+                          style={{
+                            borderWidth: "4px",
+                            borderColor: secondaryAccent,
+                          }}
+                          className="max-w-68 bg-white rounded-md"
+                        />
+                        <select
+                          className={inputStyle}
+                          onChange={(event) => handleDropDown(event)}
+                        >
+                          <option value={bgImage}>Select Image</option>
+                          {Object.entries(backgroundOptions).map(
+                            ([index, background]) => (
+                              <option key={index} value={background.src}>
+                                {background.name}
                               </option>
                             )
                           )}
-                      </select>
-                    </>
-                  )}
-                  {isClicked && (
-                    <>
-                      <div className="w-64">
-                        {uploadPreview ? (
-                          <img src={uploadPreview} />
-                        ) : (
-                          <div className="w-full border border-zinc-950 text-zinc-200 text-center h-32 flex items-center justify-center rounded-lg">
-                            No image selected
-                          </div>
-                        )}
-                      </div>
-                      <FileInput
-                        selectedFile={selectedFile}
-                        setSelectedFile={setSelectedFile}
-                        handlePreview={createPreview}
-                      />
-                      <input
-                        placeholder="Enter a nickname for the photo"
-                        ref={nicknameRef}
-                        style={{}}
-                        className={inputStyle}
-                      />
-                    </>
-                  )}
+                          {userSettings.backgrounds &&
+                            Object.entries(userSettings.backgrounds).map(
+                              ([index, bg]) => (
+                                <option key={index} value={bg.src}>
+                                  {bg.name}
+                                </option>
+                              )
+                            )}
+                        </select>
+                      </motion.div>
+                    )}
+                    {isClicked && (
+                      <motion.div
+                        initial={{ x: 100 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: -100 }}
+                        className="flex flex-col items-center justify-center gap-4"
+                      >
+                        <div className="w-64">
+                          {uploadPreview ? (
+                            <img src={uploadPreview} />
+                          ) : (
+                            <div className="w-full border border-zinc-950 text-zinc-200 text-center h-32 flex items-center justify-center rounded-lg">
+                              No image selected
+                            </div>
+                          )}
+                        </div>
+                        <FileInput
+                          selectedFile={selectedFile}
+                          setSelectedFile={setSelectedFile}
+                          handlePreview={createPreview}
+                        />
+                        <input
+                          placeholder="Enter a nickname for the photo"
+                          ref={nicknameRef}
+                          style={{}}
+                          className={inputStyle}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   {progress > 0 && (
                     <ProgressBar progress={progress} accent={secondaryAccent} />
                   )}
@@ -310,7 +307,6 @@ export default function Settings() {
                     type="button"
                     color={vacationAccent}
                     action={() => {
-                      setVacation(selectedVacation);
                       updateSettings("vacationAccent", selectedVacation);
                     }}
                   />
@@ -328,7 +324,6 @@ export default function Settings() {
                     type="button"
                     color={trainingAccent}
                     action={() => {
-                      setTraining(selectedTraining);
                       updateSettings("trainingAccent", selectedTraining);
                     }}
                   />
@@ -346,7 +341,6 @@ export default function Settings() {
                     type="button"
                     color={swapAccent}
                     action={() => {
-                      setSwap(selectedSwap);
                       updateSettings("swapAccent", selectedSwap);
                     }}
                   />
@@ -364,7 +358,6 @@ export default function Settings() {
                     type="button"
                     color={coverageAccent}
                     action={() => {
-                      setCoverage(selectedCoverage);
                       updateSettings("coverageAccent", selectedCoverage);
                     }}
                   />
