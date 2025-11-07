@@ -1,6 +1,13 @@
 import { db } from "../../firebase";
 import { ref, push, set, update, onValue } from "firebase/database";
-import React, { useState, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useCallback,
+  startTransition,
+} from "react";
 import { useUser } from "./UserContext";
 import Holidays from "date-holidays";
 
@@ -19,7 +26,13 @@ export type Display =
   | "list-item"
   | "block"
   | "inverse-background";
-export type EventType = "Vacation" | "Training" | "Shift-Swap" | "Coverage";
+
+export type EventType =
+  | "Vacation"
+  | "Training"
+  | "Shift-Swap"
+  | "Coverage"
+  | "Range";
 
 export interface ScheduleEvent {
   id?: string;
@@ -61,10 +74,58 @@ export function useSchedule(): Value {
   return context;
 }
 
+const BASE = new Date(2025, 8, 29);
+const DURATION = { hours: 4 } as const;
+
+const teamStart = {
+  Alpha: "06:00:00",
+  Bravo: "18:00:00",
+  Charlie: "06:00:00",
+  Delta: "18:00:00",
+} as const;
+
+const cycle: Array<"AB" | "CD" | "-"> = [
+  "AB", // 0
+  "AB", // 1
+  "CD", // 2
+  "CD", // 3
+  "AB", // 4
+  "AB", // 5
+  "AB", // 6
+  "CD", // 7
+  "CD", // 8
+  "AB", // 9
+  "AB", // 10
+  "CD", // 11
+  "CD", // 12
+  "CD", // 13
+];
+
+const addDays = (d: Date, n: number) => {
+  const x = new Date(d);
+  x.setDate(x.getDate() + n);
+  return x;
+};
+
+const addPadding = (n: number) => String(n).padStart(2, "0");
+
+const toDayOnly = (d: Date) =>
+  `${d.getFullYear()}-${addPadding(d.getMonth() + 1)}-${addPadding(
+    d.getDate()
+  )}`;
+
+function toLocalMidnight(millis: number | string) {
+  const t =
+    typeof millis === "number" ? millis : new Date(millis).getTime() || 0;
+  const date = new Date(t);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
 export function ScheduleProvider({ children }: any) {
   const [events, setEvents] = useState<AllEvents>([]);
-  const [eventsMilli, setEventsMilli] = useState<ScheduleEventMilli[]>([]);
-  const { user, userSettings } = useUser();
+  const { userSettings } = useUser();
+
   const {
     primaryAccent,
     secondaryAccent,
@@ -73,136 +134,210 @@ export function ScheduleProvider({ children }: any) {
     coverageAccent,
     trainingAccent,
   } = userSettings;
-  const [allEvents, setAllEvents] = useState<any[] | undefined>();
+
   const [coverage, setCoverage] = useState<Coverage>([]);
-  const [claimedCoverage, setClaimedCoverage] = useState<Coverage>([]);
   const [training, setTraining] = useState<ScheduleEvent[]>([]);
   const [vacation, setVacation] = useState<ScheduleEvent[]>([]);
+  const [range, setRange] = useState<ScheduleEvent[]>([]);
   const [swap, setSwap] = useState<ScheduleEvent[]>([]);
 
-  const value = {
-    events,
-    allEvents,
-    scheduleEvent,
-    buildShiftEvents,
-    coverage,
-    addClaimedCoverage,
-  };
-
-  // This use effect gets all of the coverage events from the database
   useEffect(() => {
     const cRef = ref(db, "coverage");
     const unsubscribe = onValue(
       cRef,
       (snapshot) => {
-        setCoverage(
-          snapshot.exists()
-            ? ([...Object.values(snapshot.val())] as DayEvent[])
-            : []
-        );
-        setClaimedCoverage(
-          snapshot.exists()
-            ? ([...Object.values(snapshot.val())] as DayEvent[]).filter(
-                (e) => e.coverage
-              )
-            : []
-        );
+        startTransition(() => {
+          setCoverage(
+            snapshot.exists()
+              ? (Object.values(snapshot.val()) as DayEvent[])
+              : []
+          );
+        });
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => console.log(error)
     );
     return unsubscribe;
   }, []);
 
-  // This useEffect creates all of the events and updates them based on if colors, events and userSettings
-  useEffect(() => {
-    createEvents();
-  }, [
-    userSettings,
-    events,
-    primaryAccent,
-    secondaryAccent,
-    vacationAccent,
-    trainingAccent,
-    swapAccent,
-    coverageAccent,
-    claimedCoverage,
-  ]);
+  const claimedCoverage = useMemo(
+    () => coverage.filter((e) => e.coverage),
+    [coverage]
+  );
 
-  // This useEffect is used to pull all the events from the database and store them in events useState
   useEffect(() => {
     const confRef = ref(db, "events");
     const unsubscribe = onValue(
       confRef,
       (snapshot) => {
+        if (!snapshot.exists()) {
+          startTransition(() => {
+            setEvents([]);
+            setVacation([]);
+            setTraining([]);
+            setRange([]);
+            setSwap([]);
+          });
+          return;
+        }
+
         const typedData = snapshot.val() as Record<string, ScheduleEvent>;
-        setEventsMilli(
-          snapshot.exists()
-            ? ([...Object.values(typedData)] as ScheduleEventMilli[])
-            : []
-        );
-        setEvents(
-          snapshot.exists()
-            ? (Object.values(typedData).map(normalize) as ScheduleEvent[])
-            : []
-        );
-        setVacation(
-          snapshot.exists()
-            ? ([...Object.values(typedData)].filter(
-                (e) => e.eventType === "Vacation"
-              ) as ScheduleEvent[])
-            : []
-        );
-        setTraining(
-          snapshot.exists()
-            ? ([...Object.values(typedData)].filter(
-                (e) => e.eventType === "Training"
-              ) as ScheduleEvent[])
-            : []
-        );
-        setSwap(
-          snapshot.exists()
-            ? ([...Object.values(typedData)].filter(
-                (e) => e.eventType === "Shift-Swap"
-              ) as ScheduleEvent[])
-            : []
-        );
+        const values = Object.values(typedData);
+
+        const nextEvents: ScheduleEvent[] = [];
+        const nextVacation: ScheduleEvent[] = [];
+        const nextTraining: ScheduleEvent[] = [];
+        const nextRange: ScheduleEvent[] = [];
+        const nextSwap: ScheduleEvent[] = [];
+
+        for (const e of values) {
+          // Normalize once
+          const normalized: ScheduleEvent = {
+            ...e,
+            start: toDayOnly(toLocalMidnight(e.start)),
+            end: toDayOnly(toLocalMidnight(e.end)),
+          };
+          nextEvents.push(normalized);
+
+          switch (e.eventType) {
+            case "Vacation":
+              nextVacation.push(normalized);
+              break;
+            case "Training":
+              nextTraining.push(normalized);
+              break;
+            case "Range":
+              nextRange.push(normalized);
+              break;
+            case "Shift-Swap":
+              nextSwap.push(normalized);
+              break;
+          }
+        }
+
+        startTransition(() => {
+          setEvents(nextEvents);
+          setVacation(nextVacation);
+          setTraining(nextTraining);
+          setRange(nextRange);
+          setSwap(nextSwap);
+        });
       },
-      (error) => {
-        console.log(error);
-      }
+      (error) => console.log(error)
     );
     return unsubscribe;
   }, []);
 
-  async function addClaimedCoverage(event: DayEvent) {
-    const claimed = true;
-    const eventType = "Coverage";
-    const cRef = ref(db, `coverage/${event.id}`);
-    try {
-      await update(cRef, { ...event, claimed, eventType });
-      return true;
-    } catch (e) {
-      throw new Error(`${e}`);
-    }
-  }
+  const currentYear = new Date().getFullYear();
+  const nextYear = currentYear + 1;
 
-  // This function converts the start and end dates for all the database events so the calendar reads them correctly
-  function normalize(empEvents: ScheduleEvent) {
-    const newStart = new Date(empEvents.start);
-    const newEnd = new Date(empEvents.end);
-    return {
-      ...empEvents,
-      start: toDayOnly(newStart),
-      end: toDayOnly(newEnd),
+  const hd = useMemo(() => new Holidays("US"), []);
+
+  const currentHolidays = useMemo(
+    () =>
+      hd.getHolidays(currentYear).map((h) => ({
+        id: `holiday-${h.date}`,
+        title: h.name,
+        start: h.date,
+        allDay: true,
+        originDisplay: "background" as const,
+        display: "background" as const,
+        color: secondaryAccent,
+      })),
+    [hd, currentYear, secondaryAccent]
+  );
+
+  const nextHolidays = useMemo(
+    () =>
+      hd.getHolidays(nextYear).map((h) => ({
+        id: `holiday-${h.date}`,
+        title: h.name,
+        start: h.date,
+        allDay: true,
+        originDislay: "background" as const,
+        display: "background" as const,
+        color: secondaryAccent,
+      })),
+    [hd, nextYear, secondaryAccent]
+  );
+
+  const payPeriod = useMemo(
+    () => ({
+      id: "pay-period",
+      title: "Pay period begins",
+      allDay: true,
+      originDisplay: "list-item" as const,
+      display: "list-item" as const,
+      rrule: {
+        freq: "weekly",
+        interval: 2,
+        dtstart: "2025-09-29",
+      },
+    }),
+    []
+  );
+
+  const payDay = useMemo(
+    () => ({
+      id: "pay-day",
+      title: "Pay Day",
+      allDay: true,
+      originDisplay: "list-item" as const,
+      display: "list-item" as const,
+      color: secondaryAccent,
+      rrule: {
+        freq: "weekly",
+        interval: 2,
+        dtstart: "2025-09-19",
+      },
+    }),
+    [secondaryAccent]
+  );
+
+  function addExtended(event: ScheduleEvent | DayEvent | any) {
+    const extendedProps = {
+      originDisplay: event.display,
+      eventType: event.eventType ? event.eventType : null,
     };
+    return { ...event, extendedProps };
   }
 
-  // This function schedules a new event
-  async function scheduleEvent(event: ScheduleEvent): Promise<boolean> {
-    const eRef = ref(db, "events");
-    try {
+  const addUnclaimedCoverage = useCallback(async (event: DayEvent) => {
+    const cRef = ref(db, `coverage/${event.id}`);
+    await set(cRef, { ...event, targetUID: null, color: null });
+  }, []);
+
+  const expandRange = useCallback(
+    (e: ScheduleEvent) => {
+      // robustly handle number|string
+      const start = toLocalMidnight(e.start);
+      let end = toLocalMidnight(e.end);
+      end = addDays(end, -1);
+      const last = end < start ? start : end;
+
+      for (let d = start; d <= last; d = addDays(d, 1)) {
+        const entry: DayEvent = {
+          id: `${e.id}-${toDayOnly(d)}`,
+          originUID: e.originUID,
+          targetUID: e.targetUID,
+          title: e.title,
+          display: e.display,
+          originDisplay: e.display,
+          eventType: e.eventType,
+          coverage: e.coverage,
+          color: e.color,
+          day: toDayOnly(d),
+          allDay: e.allDay,
+          claimed: false,
+        };
+        void addUnclaimedCoverage(entry);
+      }
+    },
+    [addUnclaimedCoverage]
+  );
+
+  const scheduleEvent = useCallback(
+    async (event: ScheduleEvent): Promise<boolean> => {
+      const eRef = ref(db, "events");
       const eventRef = push(eRef);
       const key = eventRef.key!;
       const newEvent: ScheduleEvent = {
@@ -211,152 +346,20 @@ export function ScheduleProvider({ children }: any) {
         originDisplay: event.display,
       };
       await set(eventRef, newEvent);
-      if (event.coverage) expandRange(newEvent as ScheduleEventMilli);
-
+      if (event.coverage) expandRange(newEvent);
       return true;
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
-  }
+    },
+    [expandRange]
+  );
 
-  // This function adds padding to the date if its only a single digit day or month it adds a 0 before it
-  function addPadding(number: number): string {
-    return String(number).padStart(2, "0");
-  }
-
-  // This function converts the millisecond dates to a day only date with no time
-  function toDayOnly(msDate: Date): string {
-    const date = new Date(msDate);
-    return `${date.getFullYear()}-${addPadding(
-      date.getMonth() + 1
-    )}-${addPadding(date.getDate())}`;
-  }
-
-  async function addUnclaimedCoverage(event: DayEvent) {
+  const addClaimedCoverage = useCallback(async (event: DayEvent) => {
     const cRef = ref(db, `coverage/${event.id}`);
-    try {
-      await set(cRef, { ...event, targetUID: null, color: null });
-    } catch (e) {
-      throw new Error(`${e}`);
-    }
-  }
+    await update(cRef, { ...event, claimed: true, eventType: "Coverage" });
+    return true;
+  }, []);
 
-  function toLocalMidnight(millis: number) {
-    const date = new Date(millis);
-    date.setHours(0, 0, 0, 0);
-    return date;
-  }
-
-  function expandRange(e: ScheduleEventMilli) {
-    const start = toLocalMidnight(e.start);
-    let end = toLocalMidnight(e.end);
-    end = addDays(end, -1);
-    const last = end < start ? start : end;
-
-    for (let d = start; d <= last; d = addDays(d, 1)) {
-      const entry = {
-        id: `${e.id}-${toDayOnly(d)}`,
-        originUID: e.originUID,
-        targetUID: e.targetUID,
-        title: e.title,
-        display: e.display,
-        originDisplay: e.display,
-        eventType: e.eventType,
-        coverage: e.coverage,
-        color: e.color,
-        day: toDayOnly(d),
-        allDay: e.allDay,
-        claimed: false,
-      };
-      addUnclaimedCoverage(entry);
-    }
-  }
-
-  // This block creates all of the holidays for the current year and next year, as well as
-  // creates all of the pay day and pay period schedules for the calendar
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const nextYear = currentYear + 1;
-  const holidays = new Holidays("US");
-  const currentHolidays = holidays.getHolidays(currentYear).map((h) => ({
-    id: `holiday-${h.date}`,
-    title: h.name,
-    start: h.date,
-    allDay: true,
-    originDisplay: "background",
-    display: "background",
-    color: secondaryAccent,
-  }));
-  const nextHolidays = holidays.getHolidays(nextYear).map((h) => ({
-    id: `holiday-${h.date}`,
-    title: h.name,
-    start: h.date,
-    allDay: true,
-    originDislay: "background",
-    display: "background",
-    color: secondaryAccent,
-  }));
-  const payPeriod = {
-    id: "pay-period",
-    title: "Pay period begins",
-    allDay: true,
-    originDisplay: "list-item",
-    display: "list-item",
-    rrule: {
-      freq: "weekly",
-      interval: 2,
-      dtstart: "2025-09-29",
-    },
-  };
-  const payDay = {
-    id: "pay-day",
-    title: "Pay Day",
-    allDay: true,
-    originDisplay: "list-item",
-    display: "list-item",
-    color: secondaryAccent,
-    rrule: {
-      freq: "weekly",
-      interval: 2,
-      dtstart: "2025-09-19",
-    },
-  };
-  const BASE = new Date(2025, 8, 29);
-  const addDays = (d: Date, n: number) => {
-    const x = new Date(d);
-    x.setDate(x.getDate() + n);
-    return x;
-  };
-
-  const cycle: Array<"AB" | "CD" | "-"> = [
-    "AB", // Day 0:   Alpha/Bravo
-    "AB", // Day 1:   Alpha/Bravo
-    "CD", // Day 2:   Charlie/Delta
-    "CD", // Day 3:   Charlie/Delta
-    "AB", // Day 4:   Alpha/Bravo
-    "AB", // Day 5:   Alpha/Bravo
-    "AB", // Day 6:   Alpha/Bravo
-    "CD", // Day 7:   Charlie/Delta
-    "CD", // Day 8:   Charlie/Delta
-    "AB", // Day 9:   Alpha/Bravo
-    "AB", // Day 10:  Alpha/Bravo
-    "CD", // Day 11:  Charlie/Delta
-    "CD", // Day 12:  Charlie/Delta
-    "CD", // Day 13:  Charlie/Delta
-  ];
-
-  // This block creates the shifts to add to the calendar
-  const teamStart = {
-    Alpha: "06:00:00",
-    Bravo: "18:00:00",
-    Charlie: "06:00:00",
-    Delta: "18:00:00",
-  } as const;
-
-  const DURATION = { hours: 4 } as const;
-
-  function buildShiftEvents() {
-    const events: any[] = [];
+  const buildShiftEvents = useCallback(() => {
+    const evts: any[] = [];
 
     cycle.forEach((token, dayIndex) => {
       if (token === "-") return;
@@ -364,7 +367,7 @@ export function ScheduleProvider({ children }: any) {
       const dateStr = toDayOnly(addDays(BASE, dayIndex));
 
       if (token === "AB") {
-        events.push(
+        evts.push(
           {
             id: `alpha-d${dayIndex}`,
             title: "Alpha",
@@ -393,7 +396,7 @@ export function ScheduleProvider({ children }: any) {
       }
 
       if (token === "CD") {
-        events.push(
+        evts.push(
           {
             id: `charlie-d${dayIndex}`,
             title: "Charlie",
@@ -422,52 +425,78 @@ export function ScheduleProvider({ children }: any) {
       }
     });
 
-    return events;
-  }
+    return evts;
+  }, []);
 
-  function addExtended(event: ScheduleEvent | DayEvent | any) {
-    const extendedProps = {
-      originDisplay: event.display,
-      eventType: event.eventType ? event.eventType : null,
-    };
-    return { ...event, extendedProps };
-  }
-
-  // This function adds all of the events together into one bundle
-  function createEvents() {
-    setAllEvents([
-      {
-        id: "currentHolidays",
-        events: currentHolidays.map((event) => addExtended(event)),
-      },
-      {
-        id: "nextHolidays",
-        events: nextHolidays.map((event) => addExtended(event)),
-      },
+  const allEvents = useMemo(
+    () => [
+      { id: "currentHolidays", events: currentHolidays.map(addExtended) },
+      { id: "nextHolidays", events: nextHolidays.map(addExtended) },
       { id: "payday", events: [payDay] },
       { id: "payPeriod", events: [payPeriod] },
       {
         id: "vacation",
-        events: vacation.map((event) => addExtended(event)),
+        events: vacation.map(addExtended),
         color: vacationAccent,
       },
       {
         id: "shift-swap",
-        events: swap.map((event) => addExtended(event)),
+        events: swap.map(addExtended),
         color: swapAccent,
       },
       {
         id: "training",
-        events: training.map((event) => addExtended(event)),
+        events: training.map(addExtended),
         color: trainingAccent,
       },
       {
         id: "coverage",
-        events: claimedCoverage.map((event) => addExtended(event)),
+        events: claimedCoverage.map(addExtended),
         color: coverageAccent,
       },
-    ]);
-  }
+      {
+        id: "Range",
+        events: range.map(addExtended),
+        color: "#ef4444",
+      },
+    ],
+    [
+      currentHolidays,
+      nextHolidays,
+      payDay,
+      payPeriod,
+      vacation,
+      swap,
+      training,
+      claimedCoverage,
+      range,
+      vacationAccent,
+      swapAccent,
+      trainingAccent,
+      coverageAccent,
+      primaryAccent,
+      secondaryAccent,
+    ]
+  );
+
+  const value = useMemo(
+    () => ({
+      events,
+      allEvents,
+      scheduleEvent,
+      buildShiftEvents,
+      coverage,
+      addClaimedCoverage,
+    }),
+    [
+      events,
+      allEvents,
+      scheduleEvent,
+      buildShiftEvents,
+      coverage,
+      addClaimedCoverage,
+    ]
+  );
 
   return (
     <ScheduleContext.Provider value={value}>

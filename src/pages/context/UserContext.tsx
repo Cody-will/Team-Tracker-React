@@ -34,6 +34,7 @@ export interface User {
   fto: boolean;
   mandate: boolean;
   trainee: boolean;
+  firearms?: boolean;
   trainer?: string;
   phase?: string;
   pit: boolean;

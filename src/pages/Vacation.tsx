@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import ScheduleCalendar from "../components/ScheduleCalendar";
+import ScheduleCalendarLazy from "../components/ScheduleCalendarLazy";
 import { useUser } from "../pages/context/UserContext";
 import Button from "../components/Button";
 import { useSchedule } from "./context/ScheduleContext";
@@ -9,8 +9,12 @@ import PopUp from "../components/PopUp";
 import type { ScheduleEvent, EventType } from "./context/ScheduleContext";
 import type { Location } from "../components/PopUp";
 
-type DateData = { start: Date | string; end: Date | string; allDay?: boolean };
-type ErrorNotify = {
+export type DateData = {
+  start: Date | string;
+  end: Date | string;
+  allDay?: boolean;
+};
+export type ErrorNotify = {
   key: string;
   title: string;
   message: string;
@@ -20,8 +24,9 @@ type ErrorNotify = {
 };
 
 export default function Vacation() {
-  const { data } = useUser();
+  const { data, user } = useUser();
   const { scheduleEvent } = useSchedule();
+
   const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
   const [showCoverage, setShowCoverage] = useState<boolean>(false);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
@@ -31,6 +36,12 @@ export default function Vacation() {
   const [interactive, setinteractive] = useState<boolean>(true);
   const [selectedType, setSelectedType] = useState<EventType | "">("");
   const [trainingInput, setTrainingInput] = useState("");
+
+  const [mountCalendar, setMountCalendar] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMountCalendar(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const inputStyle =
     "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:border-[var(--accent)] focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
@@ -45,6 +56,7 @@ export default function Vacation() {
     const { start, end, allDay } = selectedDate;
     const newStart: number = new Date(start).getTime();
     const newEnd: number = new Date(end).getTime();
+
     if (!selectedType)
       return setError({
         key: "no-type",
@@ -54,12 +66,13 @@ export default function Vacation() {
         onClose: handleErrorPopUp,
         timer: 3,
       });
+
     const event: ScheduleEvent = {
       originUID: selectedUser,
       title: getTitle(selectedType),
       start: newStart,
       end: newEnd,
-      allDay: allDay,
+      allDay,
       eventType: selectedType,
       display: "block",
       coverage,
@@ -76,39 +89,36 @@ export default function Vacation() {
   }
 
   function getTitle(eventType: EventType) {
-    const firstName = data[selectedUser].firstName;
-    const lastName = data[selectedUser].lastName;
-    const badge = data[selectedUser].badge;
-    switch (eventType) {
-      case "Vacation":
-        return `Vacation ${lastName}, ${firstName} #${badge}`;
-      case "Training":
-        return `Training( ${lastName}, ${
-          firstName[0]
-        } #${badge} ) ${trainingInput.trim()}`;
-      case "Shift-Swap":
-        return "";
-      default:
-        return "";
-    }
+    if (eventType === "Range") return "Range Day";
+    const u = data[selectedUser];
+    const firstName = u?.firstName ?? "";
+    const lastName = u?.lastName ?? "";
+    const badge = u?.badge ?? "";
+    if (eventType === "Vacation")
+      return `Vacation ${lastName}, ${firstName} #${badge}`;
+    if (eventType === "Training")
+      return `Training( ${lastName}, ${
+        firstName[0] ?? ""
+      } #${badge} ) ${trainingInput.trim()}`;
+    return "";
   }
 
-  // This function handles passing out the value from the pop up asking if coverage is needed
   function onCloseCoverage(result: boolean) {
     setShowCoverage(false);
     handleSchedule(result);
   }
 
-  // This function handles the pop up after the event has been scheduled
   function onCloseSuccess() {
     setShowSuccess(false);
     setSelected(true);
     setinteractive(true);
   }
 
-  // This function handles submit when the event is scheduled
   function handleSubmit() {
-    if (selectedUser === "" || selectedUser === "Select Employee") {
+    if (
+      (selectedType !== "Range" && selectedUser === "") ||
+      selectedUser === "Select Employee"
+    ) {
       const notify: ErrorNotify = {
         key: "no_employee",
         title: "Oops",
@@ -131,8 +141,9 @@ export default function Vacation() {
       setError(notify);
       return;
     }
-    setShowCoverage(true);
+    if (selectedType !== "Range") setShowCoverage(true);
     setinteractive(false);
+    if (selectedType === "Range") handleSchedule(false);
   }
 
   function handleErrorPopUp() {
@@ -180,6 +191,7 @@ export default function Vacation() {
           />
         )}
       </AnimatePresence>
+
       <div
         id="panel"
         className="p-4 bg-zinc-950/70 border border-zinc-800 text-zinc-200 flex flex-col gap-4 items-center justify-center h-full w-full rounded-xl"
@@ -190,9 +202,11 @@ export default function Vacation() {
               Scheduling
             </div>
           </div>
+
           <div className="w-full flex flex-col gap-2 items-center justify-center">
             <div className="w-full flex gap-2">
-              <select
+              <motion.select
+                layout
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value as EventType)}
                 className={inputStyle}
@@ -200,22 +214,31 @@ export default function Vacation() {
                 <option value="">Select Type</option>
                 <option value="Vacation">Vacation</option>
                 <option value="Training">Training</option>
-                <option value="Shift-Swap">Shift Swap</option>
-              </select>
-              <select
-                value={selectedUser}
-                onChange={(e) => setSelectedUser(e.target.value)}
-                className={inputStyle}
-              >
-                <option value="">Select employee</option>
-                {data &&
-                  Object.entries(data).map(([id, user]) => (
-                    <option
-                      key={id}
-                      value={user.uid}
-                    >{`${user.lastName}, ${user.firstName} - ${user.badge}`}</option>
-                  ))}
-              </select>
+                {user?.firearms && <option value="Range">Range Day</option>}
+              </motion.select>
+
+              <AnimatePresence>
+                {selectedType !== "" && selectedType !== "Range" && (
+                  <motion.select
+                    layout
+                    initial={{ width: 0 }}
+                    animate={{ width: "100%" }}
+                    exit={{ width: 0 }}
+                    value={selectedUser}
+                    onChange={(e) => setSelectedUser(e.target.value)}
+                    className={inputStyle}
+                  >
+                    <option value="">Select employee</option>
+                    {data &&
+                      Object.entries(data).map(([id, user]) => (
+                        <option
+                          key={id}
+                          value={user.uid}
+                        >{`${user.lastName}, ${user.firstName} - ${user.badge}`}</option>
+                      ))}
+                  </motion.select>
+                )}
+              </AnimatePresence>
             </div>
 
             <AnimatePresence initial={false}>
@@ -224,10 +247,7 @@ export default function Vacation() {
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
                   exit={{ width: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    type: "tween",
-                  }}
+                  transition={{ duration: 0.3, type: "tween" }}
                   className="w-full"
                 >
                   <input
@@ -239,6 +259,7 @@ export default function Vacation() {
               )}
             </AnimatePresence>
           </div>
+
           <div className="w-full flex items-center justify-center">
             <Button
               disabled={showCoverage}
@@ -248,16 +269,23 @@ export default function Vacation() {
             />
           </div>
         </motion.div>
+
         <motion.div layout className="w-full h-full">
           <motion.div
             layout
             className="border border-zinc-950 h-full w-full p-4 rounded-xl"
           >
-            <ScheduleCalendar
-              interactive={interactive}
-              selected={isSelected}
-              handleSelect={handleSelect}
-            />
+            {mountCalendar ? (
+              <ScheduleCalendarLazy
+                interactive={interactive}
+                selected={isSelected}
+                handleSelect={handleSelect}
+                height="100%"
+              />
+            ) : (
+              // lightweight placeholder for one frame
+              <div className="w-full h-full rounded-xl bg-zinc-950/60 border border-zinc-800" />
+            )}
           </motion.div>
         </motion.div>
       </div>
