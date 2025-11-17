@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { useUser } from "../pages/context/UserContext";
 
-/** @param {{ text: String, action: function, type?: button, disabled?: Boolean, color?: String, styles?: String, fontSize?: String }} props */
+/** @param {{ text: String, action: function, type?: button, disabled?: Boolean, color?: String, styles?: String, fontSize?: String, reference?: any }} props */
 
 export default function Button({
   text,
@@ -11,6 +11,7 @@ export default function Button({
   color,
   styles,
   fontSize,
+  reference,
 }) {
   const { userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;

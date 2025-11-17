@@ -97,9 +97,9 @@ export default function Vacation() {
     if (eventType === "Vacation")
       return `Vacation ${lastName}, ${firstName} #${badge}`;
     if (eventType === "Training")
-      return `Training( ${lastName}, ${
+      return `Training (${lastName}, ${
         firstName[0] ?? ""
-      } #${badge} ) ${trainingInput.trim()}`;
+      } #${badge}) ${trainingInput.trim()}`;
     return "";
   }
 

@@ -6,12 +6,14 @@ export interface FileInputProps {
   selectedFile: File | null;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>;
   handlePreview: (file: File) => void;
+  color?: string;
 }
 
 export default function FileInput({
   selectedFile,
   setSelectedFile,
   handlePreview,
+  color,
 }: FileInputProps) {
   const { userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
@@ -33,7 +35,7 @@ export default function FileInput({
   }
 
   return (
-    <div className="rounded-lg">
+    <div className="rounded-lg flex">
       <input
         ref={fileRef}
         type="file"
@@ -50,7 +52,8 @@ export default function FileInput({
         Browse...
       </motion.button>
       <input
-        className="px-3 py-2 border-2 border-zinc-950 rounded-r-lg bg-zinc-900 text-zinc-200"
+        style={{ borderColor: color ? color : "#09090b" }}
+        className="px-3 py-2 border-2 rounded-r-lg bg-zinc-900 text-zinc-200"
         value={selectedFile ? selectedFile.name : "No file selected"}
         placeholder={selectedFile ? selectedFile.name : "No file selected"}
         disabled

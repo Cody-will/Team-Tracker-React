@@ -12,14 +12,18 @@ import {
   BsCalendarWeek,
 } from "react-icons/bs";
 
-import { useUser } from "../pages/context/UserContext.js";
+import ProfilePhoto from "./ProfilePhoto.tsx";
+import { useUser } from "../pages/context/UserContext.tsx";
 import { NavLink } from "react-router-dom";
-import { motion, LayoutGroup } from "motion/react";
+import { motion, LayoutGroup, AnimatePresence } from "motion/react";
 import { auth } from "../firebase.js";
 import { signOut } from "firebase/auth";
 import ToggleSwitch from "./ToggleSwitch";
+import { primaryAccent } from "../colors.jsx";
 
 export default function Sidebar({ toggleState, setToggleState }) {
+  const { user, userSettings } = useUser();
+  const { primaryAccent, secondaryAccent } = userSettings;
   const links = [
     { to: "/home", icon: <BsHouse size={32} />, label: "Home" },
     { to: "/team-management", icon: <BsPeople size={32} />, label: "Team" },
@@ -42,7 +46,24 @@ export default function Sidebar({ toggleState, setToggleState }) {
     signOut(auth).then(() => {});
   }
   return (
-    <div className="w-20 z-50 flex items-end justify-center h-screen flex-col">
+    <div className="relative w-20 z-50 flex items-end justify-center h-screen flex-col">
+      <AnimatePresence>
+        {user && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: "tween", duration: 0.5 }}
+            className="absolute top-4 left-1.5 w-20 flex flex-col items-center justify-center"
+          >
+            <div className="flex flex-col items-center justify-center">
+              <ProfilePhoto user={user} size={16} borderColor={primaryAccent} />
+              <div className="text-zinc-200 font-medium">{user.Ranks}</div>
+              <div className="text-zinc-200 font-medium">{user.lastName}</div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <LayoutGroup>
         <div
           id="panel"

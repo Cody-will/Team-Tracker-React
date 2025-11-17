@@ -22,10 +22,17 @@ export default function Carousel({ team }) {
     if (!data.length) return;
 
     const mandate = getMandate(data);
-    const mandateCards = mandate.map((person) => <NewCard person={person} />);
+    const mandateCards = mandate.map((person) => (
+      <NewCard key={person.badgeNum} person={person} />
+    ));
 
     const all = [
-      { key: "mandate", title: "Mandate", props: mandateCards, column: false },
+      {
+        key: "mandate-cards",
+        title: "Mandate",
+        props: mandateCards,
+        column: false,
+      },
       { key: "extra-1", title: "Extra 1" },
       { key: "extra-2", title: "Extra 2" },
       { key: "extra-3", title: "Extra 3" },

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { primaryAccentHex, secondaryAccentHex } from "../colors";
 import { BsPersonCircle } from "react-icons/bs";
 import { useState } from "react";
+import { useUser } from "../pages/context/UserContext";
 
 /** @param {firstName: String, lastName: String, title: String, badge: String, oic: Boolean, fto: Boolean, icon: Object} props */
 
@@ -114,22 +115,25 @@ function Badge({ label, position }) {
 
 export function NewCard({ person }) {
   const [hovered, setHovered] = useState(false);
+  const { userSettings } = useUser();
+  const { secondaryAccent } = userSettings;
 
   const fullRanks = {
     maj: "Major",
     lt: "Lieutenant",
     sgt: "Sergeant",
     cpl: "Corporal",
-    dep: "Deputy",
+    dep: "Deputy Sheriff 1",
     trainee: "Trainee",
   };
   return (
     <motion.div
-      whileHover={{ scale: 1.1, zIndex: 60 }}
+      whileHover={{ scale: 1.05, zIndex: 60 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       transition={{ layout: { type: "tween", duration: 0.3 } }}
-      className="w-full h-full p-2 gap-1 flex items-center rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
+      style={{ borderColor: secondaryAccent }}
+      className="w-full h-full p-2 gap-1 flex items-center rounded-lg border justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
     >
       <motion.div
         layout
@@ -138,7 +142,7 @@ export function NewCard({ person }) {
       >
         {<BsPersonCircle size={96} />}
       </motion.div>
-      <div className="flex flex-col gap-1 justify-center items-center">
+      <div className="flex flex-col gap-1 font-mediums justify-center items-center">
         <div className="">{`${person.lastName}, ${person.firstName[0]}`}</div>
 
         <div className="flex items-center justify-center px-1.5 py-0.2 text-sm rounded-xs bg-orange-500 text-zinc-950">

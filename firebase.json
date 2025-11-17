@@ -1,7 +1,6 @@
 {
   "functions": [
     {
-      "source": "functions",
       "codebase": "default",
       "ignore": [
         "node_modules",
@@ -10,14 +9,30 @@
         "firebase-debug.*.log",
         "*.local"
       ],
-      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ],
+      "source": "functions"
     }
   ],
   "emulators": {
-    "auth": { "host": "127.0.0.1", "port": 9099 },
-    "database": { "host": "127.0.0.1", "port": 9000 },
-    "functions": { "host": "127.0.0.1", "port": 5001 },
-    "ui": { "enabled": true, "host": "127.0.0.1", "port": 4000 }
+    "auth": {
+      "host": "127.0.0.1",
+      "port": 9099
+    },
+    "database": {
+      "host": "127.0.0.1",
+      "port": 9000
+    },
+    "functions": {
+      "host": "127.0.0.1",
+      "port": 5001
+    },
+    "ui": {
+      "enabled": true,
+      "host": "127.0.0.1",
+      "port": 4000
+    }
   },
   "database": {
     "rules": "database.rules.json"

@@ -14,6 +14,7 @@ import React, {
 import { useUser } from "../pages/context/UserContext";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import type { EventType } from "../pages/context/ScheduleContext";
+import { motion } from "motion/react";
 
 export type Display =
   | "auto"
@@ -200,10 +201,12 @@ function ScheduleCalendar({
   );
 
   return (
-    <div
+    <motion.div
       id="calWrap"
       className="w-full h-full rounded-xl text-zinc-200"
       style={styleVars}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
     >
       <style>{styleText}</style>
 
@@ -220,7 +223,7 @@ function ScheduleCalendar({
         customButtons={customButtons}
         headerToolbar={headerToolbar}
       />
-    </div>
+    </motion.div>
   );
 }
 

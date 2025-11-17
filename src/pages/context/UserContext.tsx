@@ -1,11 +1,20 @@
 import React, { useContext, useState, useEffect, SetStateAction } from "react";
 import { db, storage } from "../../firebase.js";
-import { set, ref, push, update, remove, onValue } from "firebase/database";
+import {
+  set,
+  ref,
+  get,
+  push,
+  update,
+  remove,
+  onValue,
+} from "firebase/database";
 import {
   ref as storageRef,
   uploadBytesResumable,
   getDownloadURL,
   getMetadata,
+  deleteObject,
 } from "firebase/storage";
 import type { FullMetadata, UploadTaskSnapshot } from "firebase/storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
@@ -16,11 +25,14 @@ import {
   secondaryAccentHex,
   backgroundImage,
 } from "../../colors.jsx";
+import type { FormValues } from "../../components/EditForm.tsx";
 
 type CustomValue = string | number | boolean | null;
 
+type Photo = { src: string; path: string };
+
 export interface User {
-  uid?: string;
+  uid: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -28,11 +40,13 @@ export interface User {
   phone: string;
   badge: string;
   Shifts: string;
-  carNumber: string;
+  car: string;
   Role: string;
   oic: boolean;
   fto: boolean;
   mandate: boolean;
+  Ranks: string;
+  photo?: Photo;
   trainee: boolean;
   firearms?: boolean;
   trainer?: string;
@@ -56,7 +70,7 @@ export interface Value {
   addUser: (userData: User) => Promise<void>;
   deleteUser: (uid: string) => Promise<void>;
   deactivateUser: (uid: string) => Promise<void>;
-  updateUser: (user: User) => Promise<void>;
+  updateUser: (uid: string, formData: FormValues) => Promise<UpdateUserResult>;
   updateUserSettings: (
     uid: string,
     location: Location,
@@ -78,6 +92,13 @@ export interface Value {
   }: UpdateBackground) => Promise<string>;
 
   usersWithoutShift: (shift: string) => UserWithShift[] | void;
+  setProfilePhoto: (args: {
+    uid: string;
+    file: File;
+    onProgress?: (snapshot: UploadTaskSnapshot) => void;
+  }) => Promise<{ src: string; path: string }>;
+
+  removeProfilePhoto: (uid: string) => Promise<void>;
 }
 
 type UserBackground = {
@@ -106,6 +127,15 @@ export interface DefaultSettings {
   trainingAccent: string;
   bgImage: string;
 }
+
+export type UpdateUserResult =
+  | { success: true }
+  | {
+      success: false;
+      source: "role" | "profile";
+      code?: string;
+      message: string;
+    };
 
 export type UploadArguments = {
   uid: string;
@@ -172,6 +202,8 @@ export function UserProvider({ children }: any) {
     uploadPhoto,
     updateUserBackground,
     usersWithoutShift,
+    setProfilePhoto,
+    removeProfilePhoto,
   };
 
   useEffect(() => {
@@ -220,7 +252,7 @@ export function UserProvider({ children }: any) {
     setUserSettings(settings);
   }, [user]);
 
-  // Returns users email and password to be ised when creating the auth account
+  // Returns users email and password to be used when creating the auth account
   function getEmailAndPassword(user: User) {
     return { email: user.email.trim(), password: user.password.trim() };
   }
@@ -363,10 +395,55 @@ export function UserProvider({ children }: any) {
     }
   }
 
-  // THIS FUNCTION still needs to be completed, will complete this function
-  // when re-coding the update user information on the team-management page
-  async function updateUser(user: User) {
-    await update(ref(db, `users/${user.uid}`), user);
+  async function updateUser(
+    uid: string,
+    formData: FormValues
+  ): Promise<UpdateUserResult> {
+    const setRole = httpsCallable(getFunctions(), "setUserRole");
+
+    try {
+      // 1) Update role if it changed
+      if (data[uid].Role !== formData.Role) {
+        // NOTE: callable takes an object, not (uid, role)
+        await setRole({ uid, role: formData.Role });
+      }
+
+      // 2) Update user record in Realtime DB
+      await update(ref(db, `users/${uid}`), formData);
+
+      return { success: true };
+    } catch (err: any) {
+      console.error("updateUser failed:", err);
+
+      // Default values
+      let source: "role" | "profile" = "profile";
+      let code: string | undefined = err?.code;
+      let message = "Failed to update user.";
+
+      // Detect if this came from the callable (functions/...)
+      if (typeof err?.code === "string" && err.code.startsWith("functions/")) {
+        source = "role";
+
+        // Prefer the original message if you passed it via details
+        if (err.details?.originalMessage) {
+          message = err.details.originalMessage;
+        } else if (err.message) {
+          message = err.message;
+        }
+      } else {
+        // Probably a DB error or something else on the client
+        if (err?.message) {
+          message = err.message;
+        }
+      }
+
+      return {
+        success: false,
+        source,
+        code,
+        message,
+      };
+    }
   }
 
   // This function will update the users settings in the database
@@ -381,6 +458,97 @@ export function UserProvider({ children }: any) {
     } catch (e) {
       console.error("updateUserSettings failed: ", e);
       throw e;
+    }
+  }
+
+  /**
+   * Uploads a new profile photo, then deletes the old one (if any),
+   * and stores { src, path } at users/{uid}/photo.
+   * Old photo stays in place until the new one is uploaded + saved.
+   */
+  async function setProfilePhoto({
+    uid,
+    file,
+    onProgress,
+  }: {
+    uid: string;
+    file: File;
+    onProgress?: (snapshot: UploadTaskSnapshot) => void;
+  }): Promise<{ src: string; path: string }> {
+    if (!uid) throw new Error("setProfilePhoto: uid is required");
+    if (!file) throw new Error("setProfilePhoto: file is required");
+
+    // 1) Read the previous photo path (but don't delete yet)
+    let oldPath: string | undefined;
+    try {
+      const pathSnap = await get(ref(db, `users/${uid}/photo/path`));
+      oldPath = pathSnap.exists() ? (pathSnap.val() as string) : undefined;
+    } catch (e) {
+      console.warn("Could not read old photo path:", e);
+    }
+
+    // 2) Upload the new file
+    const storagePath = `users/${uid}/avatars/${Date.now()}_${file.name}`;
+    const objectRef = storageRef(storage, storagePath);
+    const upload = uploadBytesResumable(objectRef, file, {
+      contentType: file.type,
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      const unsub = upload.on(
+        "state_changed",
+        (snap) => onProgress?.(snap),
+        (err) => {
+          unsub();
+          reject(err);
+        },
+        () => {
+          unsub();
+          resolve();
+        }
+      );
+    });
+
+    // 3) Get URL and persist { src, path } on the user
+    const src = await getDownloadURL(objectRef);
+    await update(ref(db, `users/${uid}/photo`), { src, path: storagePath });
+
+    // 4) Now that the new one is live, delete the old one (if any)
+    if (oldPath) {
+      try {
+        await deleteObject(storageRef(storage, oldPath));
+      } catch (e) {
+        console.warn("Delete old profile photo skipped:", e);
+      }
+    }
+
+    return { src, path: storagePath };
+  }
+
+  /**
+   * Removes the user's current profile photo:
+   * - deletes the Storage object using saved path (if found)
+   * - clears `users/{uid}/photo`
+   */
+  async function removeProfilePhoto(uid: string): Promise<void> {
+    if (!uid) throw new Error("removeProfilePhoto: uid is required");
+
+    try {
+      const pathSnap = await get(ref(db, `users/${uid}/photo/path`));
+      const oldPath = pathSnap.exists()
+        ? (pathSnap.val() as string)
+        : undefined;
+
+      if (oldPath) {
+        try {
+          await deleteObject(storageRef(storage, oldPath));
+        } catch (e) {
+          console.warn("Delete profile photo skipped:", e);
+        }
+      }
+    } finally {
+      // Clear DB entry regardless of delete outcome
+      await update(ref(db), { [`users/${uid}/photo`]: null });
     }
   }
 

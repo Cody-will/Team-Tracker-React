@@ -1,3 +1,4 @@
+import { AnimatePresence } from "motion/react";
 import React, { lazy, Suspense, useEffect, useState } from "react";
 
 const ScheduleCalendarHeavy = lazy(() => import("./ScheduleCalendar"));
@@ -25,7 +26,7 @@ function CalendarSkeleton({ height = "100%" }: { height?: string }) {
 }
 
 export default function ScheduleCalendarLazy({
-  delayMs = 16,
+  delayMs = 300,
   suppressSkeleton = false,
   ...props
 }: Props) {
@@ -47,7 +48,9 @@ export default function ScheduleCalendarLazy({
 
   return (
     <Suspense fallback={fallback}>
-      <ScheduleCalendarHeavy {...props} />
+      <AnimatePresence>
+        <ScheduleCalendarHeavy {...props} />
+      </AnimatePresence>
     </Suspense>
   );
 }

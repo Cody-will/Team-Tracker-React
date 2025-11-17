@@ -1,22 +1,24 @@
-import { BsPersonCircle } from "react-icons/bs";
 import { motion, AnimatePresence } from "motion/react";
-import EditCard from "../components/EditCard";
+import EditCard from "../components/EditCard.tsx";
 import { useUser } from "./context/UserContext";
 import { useConfigure } from "./context/configureContext";
 import type { Item } from "../components/ListPanel";
 import { useEffect, useMemo, useState } from "react";
+import type { User } from "./context/UserContext";
+import ProfilePhoto from "../components/ProfilePhoto.tsx";
+import PopUp from "../components/PopUp.tsx";
+import type { ErrorNotify } from "./Vacation.tsx";
 
-type TabDef = { id: string; title: string };
+type TabDef = { id: string; title: string; order?: number };
 
 export default function TeamManagement() {
   const [selectedTab, setSelectedTab] = useState<string>("");
   const [tabs, setTabs] = useState<TabDef[]>([]);
   const [team, setTeam] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [notify, setNotify] = useState<ErrorNotify | null>(null);
 
-  // config = data returned by ConfigureProvider (where Shifts/Ranks live)
   const { data: config } = useConfigure() as { data: any };
-  // users = Record<uid, User> from your UserProvider
   const { data: users, userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
 
@@ -36,26 +38,23 @@ export default function TeamManagement() {
         order: it?.order ?? 0,
       }))
       .filter((t) => t.title.length > 0)
-      .sort((a, b) => a.order - b.order)
-      .map(({ id, title }) => ({ id, title }));
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map(({ id, title, order }) => ({ id, title, order }));
 
     setTabs(orderedTabs);
-    if (orderedTabs.length === 0) {
-      setSelectedTab("");
-    } else {
-      setSelectedTab((curr) =>
-        curr && orderedTabs.some((t) => t.id === curr)
-          ? curr
-          : orderedTabs[0].id
-      );
+
+    // Only change selectedTab if current is invalid
+    if (!orderedTabs.some((t) => t.id === selectedTab)) {
+      setSelectedTab(orderedTabs[0]?.id ?? "");
     }
-  }, [config]);
+  }, [config, selectedTab]);
 
   // Rank order from configure.Ranks.items, used to sort users within a tab
   const rankOrder = useMemo(() => {
     const record: Record<string, Item> | undefined = config?.Ranks?.items;
     const map = new Map<string, number>();
     if (!record) return map;
+
     const ordered = Object.entries(record)
       .map(([id, it]) => ({
         id,
@@ -65,7 +64,6 @@ export default function TeamManagement() {
       .filter((r) => r.title.length > 0)
       .sort((a, b) => a.order - b.order);
 
-    // allow matching by key (id) and by title string
     ordered.forEach((r, idx) => {
       map.set(r.id.toLowerCase(), idx);
       map.set(r.title.toLowerCase(), idx);
@@ -78,10 +76,8 @@ export default function TeamManagement() {
     return rankOrder.has(role)
       ? rankOrder.get(role)!
       : Number.POSITIVE_INFINITY;
-    // If you want to also match alternate spellings, extend here.
   };
 
-  // Whether a user belongs to a given tab, based on user's `Shifts` field
   const belongsToTab = (u: User, tab: TabDef | undefined) => {
     if (!tab) return false;
     const shift = String(u?.Shifts ?? "")
@@ -96,12 +92,12 @@ export default function TeamManagement() {
     const tab = tabs.find((t) => t.id === selectedTab);
     if (!tab || !users) {
       setTeam([]);
-      setSelectedUser(null);
+      // Do not force-clear selection here; just leave it as-is.
       return;
     }
 
     const list = Object.values(users)
-      .filter((u) => u?.active !== false) // keep inactive users out
+      .filter((u) => u?.active !== false)
       .filter((u) => belongsToTab(u, tab))
       .sort((a, b) => {
         const ra = getRankIndex(a);
@@ -113,11 +109,26 @@ export default function TeamManagement() {
       });
 
     setTeam(list);
-    setSelectedUser(null);
+
+    // Preserve selection if the selected UID is still in the list.
+    setSelectedUser((prev) => {
+      if (!prev) return prev;
+      return list.some((u) => u.uid === prev) ? prev : null;
+    });
   }, [tabs, selectedTab, users, rankOrder]);
 
   return (
     <div className="relative flex flex-col flex-shrink flex-grow gap-2 items-center p-4 justify-center w-full h-full">
+      {notify && (
+        <PopUp
+          key={notify.key}
+          onClose={notify.onClose}
+          title={notify.title}
+          location={notify.location}
+          message={notify.message}
+          timer={notify.timer}
+        />
+      )}
       <motion.div className="relative flex gap-2 flex-col h-full w-full p-4">
         {/* Tabs */}
         <motion.div
@@ -166,70 +177,88 @@ export default function TeamManagement() {
           id="panel"
           className="relative flex flex-col w-full h-11/12 bg-zinc-950/30 rounded-md border border-zinc-800 drop-shadow-xl/50"
         >
-          <TeamPanel
-            title={tabs.find((t) => t.id === selectedTab)?.title ?? "Team"}
-            cards={team.map((user) => (
-              <PanelCard
-                key={String(user.uid ?? user.badge)}
-                user={user}
-                selectedUser={selectedUser}
-                setSelectedUser={setSelectedUser}
-                primaryAccent={primaryAccent}
-                secondaryAccent={secondaryAccent}
-                config={config}
-              />
-            ))}
-          />
+          {selectedTab && (
+            <TeamPanel
+              title={tabs.find((t) => t.id === selectedTab)?.title ?? "Team"}
+              supervisorCards={getSupervisors(
+                users,
+                config.Shifts.items[selectedTab].title
+              ).map((user) => (
+                <PanelCard
+                  key={user.uid}
+                  user={user}
+                  selectedUid={selectedUser}
+                  setSelectedUid={setSelectedUser}
+                  primaryAccent={primaryAccent}
+                  secondaryAccent={secondaryAccent}
+                  config={config}
+                  setNotify={setNotify}
+                />
+              ))}
+              employeeCards={getEmployees(
+                users,
+                config.Shifts.items[selectedTab].title
+              ).map((user) => (
+                <PanelCard
+                  key={user.uid}
+                  user={user}
+                  selectedUid={selectedUser}
+                  setSelectedUid={setSelectedUser}
+                  primaryAccent={primaryAccent}
+                  secondaryAccent={secondaryAccent}
+                  config={config}
+                  setNotify={setNotify}
+                />
+              ))}
+            />
+          )}
         </motion.div>
       </motion.div>
     </div>
   );
 }
 
-/* ---------- Types from your UserContext ---------- */
-type CustomValue = string | number | boolean | null;
-export interface User {
-  uid?: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  phone: string;
-  badge: string;
-  Shifts: string; // <-- used to map to tab
-  carNumber: string;
-  Role: string; // <-- used to rank/sort
-  oic: boolean;
-  fto: boolean;
-  mandate: boolean;
-  trainee: boolean;
-  firearms?: boolean;
-  trainer?: string;
-  phase?: string;
-  pit: boolean;
-  speed: boolean;
-  rifle: boolean;
-  active: boolean;
-  settings?: any;
-  custom?: Record<string, CustomValue>;
+function sortRank(user: User): number {
+  if (user.Ranks === "Sergeant") return 0;
+  if (user.oic) return 1;
+  return 2;
 }
 
-/* ---------- Presentational pieces ---------- */
+function getSupervisors(users: Record<string, User>, shift: string) {
+  return Object.values(users)
+    .filter(
+      (user) => user.Shifts === shift && (user.Ranks === "Sergeant" || user.oic)
+    )
+    .sort((a, b) => sortRank(a) - sortRank(b));
+}
+
+function getEmployees(users: Record<string, User>, shift: string) {
+  return Object.values(users).filter(
+    (user) => user.Shifts === shift && user.Ranks !== "Sergeant" && !user.oic
+  );
+}
 
 function TeamPanel({
   title,
-  cards,
+  supervisorCards,
+  employeeCards,
 }: {
   title: string;
-  cards: React.ReactNode;
+  supervisorCards: React.ReactNode;
+  employeeCards: React.ReactNode;
 }) {
   return (
-    <motion.div className="flex flex-col w-full h-3/5">
-      <div className="w-full h-1/10 relative p-4 border-t border-zinc-700 flex items-center justify-start text-lg font-semibold text-zinc-200">
+    <motion.div className="flex flex-col w-full h-full">
+      <div className="w-full p-2 relative flex items-center justify-start text-xl font-semibold text-zinc-200">
         {title}
       </div>
-      <div className="flex p-4 gap-4 items-center justify-evenly w-full h-full">
-        {cards}
+      <div className="flex p-2 flex-col items-center justify-evenly w-full h-full">
+        <div className="flex p-2 gap-4 border-b-2 border-zinc-900 items-center justify-evenly w-full h-2/5">
+          {supervisorCards}
+        </div>
+        <div className="flex p-2 gap-4 items-center justify-evenly w-full h-full">
+          {employeeCards}
+        </div>
       </div>
     </motion.div>
   );
@@ -237,76 +266,79 @@ function TeamPanel({
 
 function PanelCard({
   user,
-  selectedUser,
-  setSelectedUser,
+  selectedUid,
+  setSelectedUid,
   primaryAccent,
   secondaryAccent,
   config,
+  setNotify,
 }: {
   user: User;
-  selectedUser: User | null;
-  setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>;
+  selectedUid: string | null;
+  setSelectedUid: React.Dispatch<React.SetStateAction<string | null>>;
   primaryAccent: string;
   secondaryAccent: string;
-  config: any; // full configure object for child consumption
+  config: any;
+  setNotify: React.Dispatch<React.SetStateAction<ErrorNotify | null>>;
 }) {
-  const idForKey = String(user.uid ?? user.badge);
-  const isSelected =
-    (selectedUser?.uid ?? selectedUser?.badge) === (user.uid ?? user.badge);
+  const isSelected = !!user.uid && selectedUid === user.uid;
 
   return (
     <div className="w-full h-full">
       <motion.div
-        layoutId={!isSelected ? `person-${idForKey}` : undefined}
-        onClick={!isSelected ? () => setSelectedUser(user) : undefined}
+        layoutId={`user-${user.uid}`}
+        onClick={
+          !isSelected ? () => user.uid && setSelectedUid(user.uid) : undefined
+        }
+        style={{ borderColor: secondaryAccent }}
         whileHover={
           isSelected
             ? undefined
-            : { scale: 1.05, transition: { duration: 0.05 } }
+            : { scale: 1.02, transition: { duration: 0.05 } }
         }
-        className={`flex flex-col rounded-xl drop-shadow-lg/50 bg-zinc-900 text-zinc-200 w-full h-full items-center justify-center p-2 relative ${
+        className={`flex flex-col overflow-hidden rounded-xl border-2 drop-shadow-xl/30 bg-zinc-900 text-zinc-200 w-full h-full items-center justify-center p-2 relative ${
           isSelected ? "invisible" : "cursor-pointer"
         }`}
       >
         <div className="relative flex justify-center items-center">
-          <motion.div
-            style={{ borderColor: primaryAccent }}
-            className="relative rounded-full border-2 aspect-square flex justify-center items-center"
-          >
-            {/* Swap to your avatar component once you wire photos */}
-            <BsPersonCircle size={isSelected ? 160 : 100} />
+          <motion.div className="relative rounded-full aspect-square flex justify-center items-center">
+            <ProfilePhoto
+              user={user}
+              size={28}
+              borderColor={primaryAccent}
+              badge={true}
+            />
           </motion.div>
         </div>
 
         <div className="flex flex-col items-center justify-center gap-1 mt-2 text-sm font-semibold">
-          <div>{`${user.firstName} ${user.lastName}`.trim()}</div>
+          <div>{`${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()}</div>
           <motion.div
             style={{ backgroundColor: secondaryAccent }}
             className="text-zinc-950 px-1 py-0.5 rounded-xs"
           >
             {user.badge}
           </motion.div>
-          <div>{user.Role}</div>
-          <div>{user.phone || "000-000-0000"}</div>
+          {user.Ranks && <div className="">{user.Ranks}</div>}
         </div>
       </motion.div>
 
-      <AnimatePresence>
+      <AnimatePresence mode="sync">
         {isSelected && (
           <motion.div
-            key="overlay"
-            layoutId={`person-${idForKey}`}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ type: "tween", duration: 0.2 }}
+            key={`overlay-${user.uid}`}
+            layoutId={`user-${user.uid}`}
+            initial={{ scale: 0.98, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.98, opacity: 0 }}
+            transition={{ type: "tween", duration: 0.25 }}
             className="absolute inset-0 z-50"
           >
-            {/* EditCard now receives the whole user + whole config */}
             <EditCard
               user={user}
-              config={config}
-              onClose={() => setSelectedUser(null)}
+              selected={selectedUid}
+              setSelected={setSelectedUid}
+              setNotify={setNotify}
             />
           </motion.div>
         )}

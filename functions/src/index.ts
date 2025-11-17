@@ -1,5 +1,9 @@
 import * as admin from "firebase-admin";
-import { onCall, HttpsError } from "firebase-functions/v2/https";
+import {
+  onCall,
+  HttpsError,
+  CallableRequest,
+} from "firebase-functions/v2/https";
 
 admin.initializeApp();
 
@@ -66,11 +70,49 @@ export const setDisabled = onCall(async (req) => {
 });
 
 // This functions sets the users role and can give them admin access if set to admin
-export const setUserRole = onCall(async (req) => {
+export const setUserRole = onCall(async (req: CallableRequest) => {
+  // 1) Auth / permission check
   isAdmin(req);
+
+  // 2) Validate input
   const { uid, role } = req.data as { uid?: string; role?: string };
-  if (!uid || !role)
-    throw new HttpsError("invalid-argument", "uid & role required");
-  await admin.auth().setCustomUserClaims(uid, { role });
-  return { complete: true };
+
+  if (!uid || typeof uid !== "string") {
+    throw new HttpsError(
+      "invalid-argument",
+      "A valid 'uid' string is required."
+    );
+  }
+
+  if (!role || typeof role !== "string") {
+    throw new HttpsError(
+      "invalid-argument",
+      "A valid 'role' string is required."
+    );
+  }
+
+  try {
+    // 3) Set custom claim
+    await admin.auth().setCustomUserClaims(uid, { role });
+
+    // 4) Optional: force token refresh on next client sign-in / refresh
+    // await admin.auth().revokeRefreshTokens(uid);
+
+    // 5) Response to client (what you'll see in res.data on the frontend)
+    return { complete: true, uid, role };
+  } catch (err: any) {
+    console.error("setUserRole failed:", err);
+
+    // Wrap as internal error so the client gets a clean error code/message
+    throw new HttpsError(
+      "internal",
+      "Failed to set user role. Please try again later.",
+      {
+        uid,
+        role,
+        originalCode: err.code,
+        originalMessage: err.message,
+      }
+    );
+  }
 });
