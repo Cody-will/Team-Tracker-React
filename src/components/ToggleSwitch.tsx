@@ -2,11 +2,13 @@ import { motion, AnimatePresence } from "motion/react";
 import { useUser } from "../pages/context/UserContext";
 import * as React from "react";
 
-type ToggleSize = "sm" | "md" | "lg";
+type ToggleSize = "xs" | "sm" | "md" | "lg";
 
 interface ToggleSwitchProps {
   state: Boolean;
-  setState: React.Dispatch<React.SetStateAction<Boolean>>;
+  setState:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((next: boolean) => void);
   size?: ToggleSize;
   off?: string;
 }
@@ -18,6 +20,7 @@ export default function ToggleSwitch({
   off = "#71717a",
 }: ToggleSwitchProps) {
   const sizes = {
+    xs: { container: "h-4 w-8 p-0.5", knob: "size-3" },
     sm: { container: "h-6 w-12 p-0.5", knob: "size-5" },
     md: { container: "h-8 w-16 p-1", knob: "size-6" },
     lg: { container: "h-10 w-20 p-1", knob: "size-8" },
@@ -30,7 +33,7 @@ export default function ToggleSwitch({
       style={{ justifyContent: state ? "flex-end" : "flex-start" }}
       animate={{ backgroundColor: state ? primaryAccent : off }}
       transition={{ type: "tween", duration: 0.3 }}
-      className={`h-${sizes[size].container} flex items-center overflow-hidden rounded-full`}
+      className={`h-${sizes[size].container} flex items-center hover:cursor-pointer overflow-hidden rounded-full`}
       onClick={() => setState(!state)}
     >
       <motion.div

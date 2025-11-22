@@ -56,7 +56,7 @@ export default function Configure() {
   };
 
   return (
-    <div className="h-full w-full flex justify-center items-center">
+    <div className="h-full w-full flex p-4 justify-center items-center">
       <motion.div
         layout
         id="panel"
@@ -92,7 +92,7 @@ export default function Configure() {
             />
           </div>
         </div>
-        <div className="flex justify-center items-start gap-4">
+        <div className="flex max-w-screen max-h-[80vh] justify-evenly items-start gap-4 flex-wrap overflow-x-scroll">
           {panelData &&
             Object.entries(panelData).map(([panelKey, panel]) => (
               <ListPanel

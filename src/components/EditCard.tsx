@@ -161,7 +161,7 @@ export default function EditCard({
         location: "top-center",
         message: "User successfully updated!",
         onClose: closeNotification,
-        timer: 3,
+        timer: 2,
       });
       return true;
     }
@@ -169,7 +169,7 @@ export default function EditCard({
     if (!completed.success) {
       createNotification({
         key: "failure",
-        title: "Oops!",
+        title: `Oops! ${completed.code}`,
         location: "top-center",
         message: completed.message,
         onClose: closeNotification,
@@ -185,7 +185,8 @@ export default function EditCard({
   return (
     <motion.div
       layoutId={layoutKey}
-      className="relative flex p-4 gap-2 h-full w-full z-50 bg-zinc-900 border border-zinc-800 rounded-md"
+      style={{ borderColor: secondaryAccent }}
+      className="relative flex p-4 gap-2 h-full w-full z-50 bg-zinc-900 border rounded-md"
     >
       <motion.div
         whileHover={{ scale: 1.1 }}
@@ -202,7 +203,12 @@ export default function EditCard({
         </div>
 
         <div className="flex gap-2 flex-col items-center justify-center">
-          <ProfilePhoto user={user} size={48} borderColor={primaryAccent} />
+          <ProfilePhoto
+            user={user}
+            size={48}
+            borderColor={primaryAccent}
+            borderSize={"lg"}
+          />
           <div className="text-xl text-zinc-200 font-semibold">{`${user.lastName}, ${user.firstName}`}</div>
           <div className="flex w-full justify-center items-center gap-2">
             {badges}

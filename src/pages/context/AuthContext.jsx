@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
+import * as React from "react";
 import { auth } from "../../firebase.js";
 import {
   signInWithEmailAndPassword,

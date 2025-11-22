@@ -1,13 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import { motion } from "motion/react";
 import Button from "./Button";
 import { useUser } from "../pages/context/UserContext";
+import ToggleSwitch from "./ToggleSwitch";
+import type { TempParent } from "./TeamDisplay";
 
 export type Location = "top-center" | "bottom-right" | "bottom-left";
 
+export type Toggle = {
+  title: string;
+  state: boolean;
+  setState: React.Dispatch<SetStateAction<boolean>>;
+};
+
+export type ToggleProps = Toggle[];
+
 export interface PopUpProps {
   open?: boolean;
-  onClose: (result: boolean) => void;
+  onClose: (result: boolean, tempData?: TempParent) => void;
   location: Location;
   title: string;
   message: string;
@@ -15,6 +25,8 @@ export interface PopUpProps {
   trueText?: string;
   falseText?: string;
   timer?: number;
+  toggle?: ToggleProps;
+  tempData?: TempParent;
 }
 
 export default function PopUp(props: PopUpProps) {
@@ -28,6 +40,8 @@ export default function PopUp(props: PopUpProps) {
     trueText,
     falseText,
     timer = 5,
+    toggle,
+    tempData,
   } = props;
   const { userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
@@ -76,21 +90,33 @@ export default function PopUp(props: PopUpProps) {
     >
       <div className="text-2xl font-semibold">{title}</div>
       <div
-        className="text-lg"
+        className="text-lg flex items-center justify-center text-center"
         style={{ paddingBottom: !isConfirm ? "4px" : "0px" }}
       >
         {message}
       </div>
+      {toggle && (
+        <div className="flex w-full items-center justify-evenly">
+          {toggle.map((item) => (
+            <ToggleBundle
+              key={item.title}
+              title={item.title}
+              state={item.state}
+              setState={item.setState}
+            />
+          ))}
+        </div>
+      )}
       {isConfirm && (
         <div className="flex w-full gap-4">
           <Button
             text={trueText ?? "Confirm"}
-            action={onClose ? () => onClose(true) : () => {}}
+            action={onClose ? () => onClose(true, tempData) : () => {}}
             color={primaryAccent}
           />
           <Button
             text={falseText ?? "Cancel"}
-            action={onClose ? () => onClose(false) : () => {}}
+            action={onClose ? () => onClose(false, tempData) : () => {}}
             color={secondaryAccent}
           />
         </div>
@@ -113,5 +139,20 @@ export default function PopUp(props: PopUpProps) {
         </div>
       )}
     </motion.div>
+  );
+}
+
+function ToggleBundle(props: Toggle) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2">
+      <div className="text-zinc-200 flex items-center justify-center text-lg">
+        {props.title}
+      </div>
+      <ToggleSwitch
+        key={`toggle-${props.title}`}
+        state={props.state}
+        setState={props.setState}
+      />
+    </div>
   );
 }

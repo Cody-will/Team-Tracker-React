@@ -15,6 +15,7 @@ export interface BadgeProps {
   absolute?: boolean;
   anchorSize?: number;
   styles?: string;
+  fontSize?: number;
 }
 
 export default function ProfileBadge({
@@ -24,9 +25,10 @@ export default function ProfileBadge({
   absolute = false,
   anchorSize = 128,
   styles,
+  fontSize = 12,
 }: BadgeProps): React.ReactElement {
   const { posStyle, fontScaleStyle } = useMemo(
-    () => getPositionAndScale(position, anchorSize, absolute),
+    () => getPositionAndScale(position, anchorSize, absolute, fontSize),
     [position, anchorSize, absolute]
   );
 
@@ -40,7 +42,7 @@ export default function ProfileBadge({
         ...fontScaleStyle,
       }}
       className={`${styles && styles} ${
-        !styles && "font-medium"
+        !styles && "font-semibold"
       } rounded-sm flex items-center justify-center text-center text-zinc-900 whitespace-nowrap`}
     >
       {title}
@@ -51,7 +53,8 @@ export default function ProfileBadge({
 function getPositionAndScale(
   position: Position,
   anchorSize: number,
-  absolute: boolean
+  absolute: boolean,
+  fontSize: number
 ) {
   // Base everything on the circle radius.
   const diameter = anchorSize;
@@ -101,7 +104,7 @@ function getPositionAndScale(
   const scale = diameter / baseDiameter;
 
   const fontScaleStyle: React.CSSProperties = {
-    fontSize: `${12 * scale}px`,
+    fontSize: `${fontSize * scale}px`,
     paddingInline: `${3 * scale}px`,
     paddingBlock: `${0.5 * scale}px`,
     borderRadius: `${4 * scale}px`,

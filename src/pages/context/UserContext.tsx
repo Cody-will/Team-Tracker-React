@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect, SetStateAction } from "react";
+import { useContext, useState, useEffect, SetStateAction } from "react";
+import * as React from "react";
 import { db, storage } from "../../firebase.js";
 import {
   set,
@@ -44,6 +45,8 @@ export interface User {
   Role: string;
   oic: boolean;
   fto: boolean;
+  sick: boolean;
+  sickExpires?: number | null;
   mandate: boolean;
   Ranks: string;
   photo?: Photo;
@@ -54,6 +57,7 @@ export interface User {
   pit: boolean;
   speed: boolean;
   rifle: boolean;
+  medical: boolean;
   active: boolean;
   settings?: UserSettings;
   custom?: Record<string, CustomValue>;
@@ -67,7 +71,7 @@ export interface Value {
   error?: string;
   user?: User;
   userSettings: UserSettings;
-  addUser: (userData: User) => Promise<void>;
+  addUser: (userData: User) => Promise<AddUserReturn>;
   deleteUser: (uid: string) => Promise<void>;
   deactivateUser: (uid: string) => Promise<void>;
   updateUser: (uid: string, formData: FormValues) => Promise<UpdateUserResult>;
@@ -99,6 +103,11 @@ export interface Value {
   }) => Promise<{ src: string; path: string }>;
 
   removeProfilePhoto: (uid: string) => Promise<void>;
+  updateAfterDrag: (
+    uid: string,
+    field: string,
+    data: string | boolean | null | number
+  ) => Promise<AddUserReturn>;
 }
 
 type UserBackground = {
@@ -107,6 +116,9 @@ type UserBackground = {
   path: string;
   uploadedAt: number;
 };
+
+export type AddUserReturn = { success: boolean; message: string };
+
 export interface UserSettings {
   primaryAccent: string;
   secondaryAccent: string;
@@ -204,6 +216,7 @@ export function UserProvider({ children }: any) {
     usersWithoutShift,
     setProfilePhoto,
     removeProfilePhoto,
+    updateAfterDrag,
   };
 
   useEffect(() => {
@@ -213,18 +226,16 @@ export function UserProvider({ children }: any) {
 
   // Use effect to get the user data from the users section of the database
   useEffect(() => {
-    const confRef = ref(db, "users");
-    const unsubscribe = onValue(
-      confRef,
-      (snapshot) => {
-        setData(snapshot.exists() ? (snapshot.val() as UserRecord) : {});
-        setLoading(false);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    return unsubscribe;
+    const usersRef = ref(db, "users");
+
+    const unsub = onValue(usersRef, (snap) => {
+      const raw = (snap.val() || {}) as Record<string, User>;
+      const checked = fixExpiredSick(raw);
+      setData(checked);
+      setLoading(false);
+    });
+
+    return () => unsub();
   }, []);
 
   // This useEffect sets the user: Database to the currentUser: Auth by using the auth UID and linking it to users uid
@@ -251,6 +262,31 @@ export function UserProvider({ children }: any) {
     };
     setUserSettings(settings);
   }, [user]);
+
+  function fixExpiredSick(
+    raw: Record<string, User>,
+    now = Date.now()
+  ): Record<string, User> {
+    const result: Record<string, User> = {};
+
+    for (const [uid, user] of Object.entries(raw)) {
+      let fixed: User = { ...user };
+
+      if (fixed.sick && fixed.sickExpires && fixed.sickExpires <= now) {
+        fixed = {
+          ...fixed,
+          sick: false,
+          sickExpires: null,
+        };
+        updateAfterDrag(uid, "sick", false);
+        updateAfterDrag(uid, "sickExpires", null);
+      }
+
+      result[uid] = fixed;
+    }
+
+    return result;
+  }
 
   // Returns users email and password to be used when creating the auth account
   function getEmailAndPassword(user: User) {
@@ -295,6 +331,19 @@ export function UserProvider({ children }: any) {
     if (!data) return;
     const users = Object.values(data) as UserWithShift[];
     return users.filter((user) => user?.shift != shift);
+  }
+
+  async function updateAfterDrag(
+    uid: string,
+    field: string,
+    data: string | boolean | null | number
+  ) {
+    try {
+      await update(ref(db, `users/${uid}`), { [field]: data });
+      return { success: true, message: "Sucess" };
+    } catch (error: any) {
+      return { success: false, message: error.message };
+    }
   }
 
   async function updateUserBackground({
@@ -350,9 +399,7 @@ export function UserProvider({ children }: any) {
   // This function calls the function to create the users auth account, then
   // adds the users properties to the user section of the database under the returned
   // UID the user gets when their auth account gets created
-  async function addUser(userData: User) {
-    console.log(userData);
-    console.log("Role: ", userData.Role);
+  async function addUser(userData: User): Promise<AddUserReturn> {
     try {
       const { email, password } = getEmailAndPassword(userData);
       const uid = await createUserAccount(email, password);
@@ -366,9 +413,10 @@ export function UserProvider({ children }: any) {
         active: cleanData.active ?? true,
         createdAt: Date.now(),
       });
+      return { success: true, message: "Successful" };
     } catch (e) {
       console.error("addUser failed:", e);
-      throw e;
+      return { success: false, message: "Failed" };
     }
   }
 

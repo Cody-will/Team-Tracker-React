@@ -1,6 +1,6 @@
 import { db } from "../../firebase";
 import { ref, push, set, update, onValue } from "firebase/database";
-import React, {
+import {
   useState,
   useEffect,
   useContext,
@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { useUser } from "./UserContext";
 import Holidays from "date-holidays";
+import * as React from "react";
 
 export interface Value {
   events: ScheduleEvent[];

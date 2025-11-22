@@ -118,7 +118,7 @@ export default function TeamManagement() {
   }, [tabs, selectedTab, users, rankOrder]);
 
   return (
-    <div className="relative flex flex-col flex-shrink flex-grow gap-2 items-center p-4 justify-center w-full h-full">
+    <div className="relative flex flex-col shrink grow gap-2 items-center p-4 justify-center w-full h-full">
       {notify && (
         <PopUp
           key={notify.key}
@@ -307,6 +307,8 @@ function PanelCard({
               size={28}
               borderColor={primaryAccent}
               badge={true}
+              borderSize="md"
+              badgeFontSize={14}
             />
           </motion.div>
         </div>

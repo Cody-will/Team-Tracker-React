@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
-import Home from "./pages/Home";
+import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.jsx";
 import { motion, AnimatePresence } from "motion/react";
 import TeamManagement from "./pages/TeamManagement.tsx";
 import ShiftSwap from "./pages/ShiftSwap.tsx";
 import Vacation from "./pages/Vacation.tsx";
 import Settings from "./pages/Settings.tsx";
-import AddUser from "./pages/AddUser";
+import AddUser from "./pages/AddUser.tsx";
 import Coverage from "./pages/Coverage";
 import Configure from "./pages/Configure";
 import PoliceRadarWallpaper from "./pages/PoliceRadarWallpaper";

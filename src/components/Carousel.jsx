@@ -1,10 +1,10 @@
 import InfoCard from "./InfoCard";
 import { BsChevronCompactRight, BsChevronCompactLeft } from "react-icons/bs";
 import { useState, useEffect } from "react";
-import { createCards } from "../createCards";
 import { getMandate } from "../teamSorting";
 import { AnimatePresence, motion, wrap } from "motion/react";
-import { NewCard } from "./Card";
+import FrontCard from "./FrontCard";
+import InfoItem from "./InfoItem";
 
 export default function Carousel({ team }) {
   const [data, setData] = useState([]);
@@ -23,7 +23,7 @@ export default function Carousel({ team }) {
 
     const mandate = getMandate(data);
     const mandateCards = mandate.map((person) => (
-      <NewCard key={person.badgeNum} person={person} />
+      <FrontCard key={person.badgeNum} person={person} />
     ));
 
     const all = [

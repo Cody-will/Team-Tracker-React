@@ -1,6 +1,6 @@
 import { useUser } from "../pages/context/UserContext";
 import type { User } from "../pages/context/UserContext";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { BsPersonCircle } from "react-icons/bs";
 import ProfileBadge from "./ProfileBadge";
 import type { Position } from "./ProfileBadge";
@@ -11,6 +11,10 @@ interface ProfileProps {
   size?: number;
   badge?: boolean;
   borderColor?: string;
+  borderSize: "sm" | "md" | "lg";
+  badgeStyle?: string;
+  badgeFontSize?: number;
+  isDragging?: boolean;
 }
 
 const optionKeys = ["fto", "oic", "pit", "speed", "rifle", "trainee"] as const;
@@ -21,6 +25,10 @@ export default function ProfilePhoto({
   size = 32,
   badge = false,
   borderColor,
+  borderSize = "md",
+  badgeStyle,
+  badgeFontSize,
+  isDragging = false,
 }: ProfileProps) {
   const { userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
@@ -38,6 +46,8 @@ export default function ProfilePhoto({
             position={getPosition(index)}
             absolute
             anchorSize={px}
+            styles={badgeStyle}
+            fontSize={badgeFontSize}
           />
         )),
     [
@@ -57,32 +67,46 @@ export default function ProfilePhoto({
 
   return (
     <motion.div
-      layout
+      layout={!isDragging}
       style={{ height: px, width: px }}
       className="relative flex items-center justify-center text-zinc-200"
     >
       <motion.div
-        layout
+        layout={!isDragging}
         className="relative rounded-full flex h-full w-full justify-center items-center"
       >
         {user.photo ? (
           <img
             src={user.photo.src}
-            style={{ borderColor: border }}
-            className="w-full h-full border-4 rounded-full aspect-square"
+            style={{
+              borderColor: border,
+              borderWidth: `${getBorder(borderSize)}px`,
+            }}
+            className="w-full h-full rounded-full aspect-square"
           />
         ) : (
           <BsPersonCircle
             size={px} // make icon match container
-            style={{ borderColor: border }}
-            className="border-4 h-full w-full rounded-full"
+            style={{
+              borderColor: border,
+              borderWidth: borderSize === "lg" ? "4px" : "2px",
+            }}
+            className=" h-full w-full rounded-full"
           />
         )}
-        {badge && (
-          <div className="absolute inset-0 w-full h-full rounded-full">
-            {badges}
-          </div>
-        )}
+        <AnimatePresence initial={false}>
+          {badge && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ type: "tween", duration: 0.2 }}
+              className="absolute inset-0 w-full h-full rounded-full"
+            >
+              {badges}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </motion.div>
   );
@@ -102,5 +126,18 @@ function getPosition(num: number): Position {
       return "left";
     default:
       return "bottom";
+  }
+}
+
+function getBorder(size: string): number {
+  switch (size) {
+    case "sm":
+      return 2;
+    case "md":
+      return 3;
+    case "lg":
+      return 4;
+    default:
+      return 3;
   }
 }

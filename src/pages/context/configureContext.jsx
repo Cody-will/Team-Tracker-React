@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
+import * as React from "react";
 import { db } from "../../firebase.js";
 import {
   set,
