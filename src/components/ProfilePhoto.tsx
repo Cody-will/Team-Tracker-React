@@ -17,7 +17,15 @@ interface ProfileProps {
   isDragging?: boolean;
 }
 
-const optionKeys = ["fto", "oic", "pit", "speed", "rifle", "trainee"] as const;
+const optionKeys = [
+  "fto",
+  "oic",
+  "pit",
+  "speed",
+  "rifle",
+  "trainee",
+  "isMandated",
+] as const;
 type BadgeKey = (typeof optionKeys)[number];
 
 export default function ProfilePhoto({
@@ -33,17 +41,34 @@ export default function ProfilePhoto({
   const { userSettings } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
   const px = size * 4; // your scaling
+  const isUpd = user.Divisions === "UPD";
+
+  function getInfo() {
+    if (isUpd) {
+      return user.car.toString();
+    } else {
+      return "D/S";
+    }
+  }
 
   const badges = useMemo(
     () =>
       optionKeys
-        .filter((option) => Boolean(user[option as BadgeKey]))
+        .filter((option) =>
+          option === "isMandated" && isUpd
+            ? false
+            : Boolean(user[option as BadgeKey])
+        )
         .map((option, index) => (
           <ProfileBadge
             key={`${option}-${user.badge}`}
-            title={option.toUpperCase()}
+            title={
+              option === "isMandated" && user.Divisions === "ADC"
+                ? "D/S"
+                : option.toUpperCase()
+            }
             color={index % 2 === 0 ? primaryAccent : secondaryAccent}
-            position={getPosition(index)}
+            position={option === "isMandated" ? "top" : getPosition(index)}
             absolute
             anchorSize={px}
             styles={badgeStyle}
@@ -57,6 +82,7 @@ export default function ProfilePhoto({
       user.speed,
       user.rifle,
       user.trainee,
+      user.isMandated,
       user.badge,
       primaryAccent,
       secondaryAccent,
@@ -104,6 +130,18 @@ export default function ProfilePhoto({
               className="absolute inset-0 w-full h-full rounded-full"
             >
               {badges}
+              {isUpd && (
+                <ProfileBadge
+                  key={`${"upd"}-${user.badge}`}
+                  title={user.car.toString()}
+                  color={secondaryAccent}
+                  position={"top"}
+                  absolute
+                  anchorSize={px}
+                  styles={badgeStyle}
+                  fontSize={badgeFontSize}
+                />
+              )}
             </motion.div>
           )}
         </AnimatePresence>

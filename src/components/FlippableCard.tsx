@@ -5,17 +5,19 @@ interface FlippableCardProps {
   flipped: boolean;
   front: React.ReactNode;
   back: React.ReactNode;
+  noFlip: boolean;
 }
 
 export default function FlippableCard({
   flipped,
   front,
   back,
+  noFlip = false,
 }: FlippableCardProps) {
   return (
     <motion.div
       className="relative h-full w-full transform-3d"
-      animate={{ rotateY: flipped ? 180 : 0 }}
+      animate={noFlip ? {} : { rotateY: flipped ? 180 : 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <motion.div

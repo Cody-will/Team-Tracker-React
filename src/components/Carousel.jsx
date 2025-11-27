@@ -5,12 +5,15 @@ import { getMandate } from "../teamSorting";
 import { AnimatePresence, motion, wrap } from "motion/react";
 import FrontCard from "./FrontCard";
 import InfoItem from "./InfoItem";
+import { getAllNext30OfType, getAllRange } from "../helpers/schedulehelper";
+import { useSchedule } from "../pages/context/ScheduleContext";
 
 export default function Carousel({ team }) {
   const [data, setData] = useState([]);
   const [cardData, setCardData] = useState([]);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState(0);
+  const { events, coverage } = useSchedule();
 
   const itemsPerPage = 3;
 
@@ -23,8 +26,59 @@ export default function Carousel({ team }) {
 
     const mandate = getMandate(data);
     const mandateCards = mandate.map((person) => (
-      <FrontCard key={person.badgeNum} person={person} />
+      <FrontCard key={person.badgeNum} person={person} noFlip noFade />
     ));
+
+    const medicalCards = Object.values(team).map(
+      (user) =>
+        user.medical && (
+          <FrontCard
+            key={`${user.badge}${user.uid}`}
+            person={user}
+            noFlip
+            noFade
+          />
+        )
+    );
+
+    const vacation = getAllRange("Vacation", 30, events).map((e) => (
+      <InfoItem key={e.id} event={e} />
+    ));
+    const training = getAllRange("Training", 30, events).map((e) => (
+      <InfoItem key={e.id} event={e} />
+    ));
+
+    const range = getAllRange("Range", 30, events).map((e) => (
+      <InfoItem key={e.id} event={e} />
+    ));
+
+    const cover = getAllRange("Coverage", 30, coverage).map((e) => (
+      <InfoItem key={e.id} coverage={e} />
+    ));
+
+    const trainees = Object.values(team).map(
+      (user) =>
+        user.trainee && <FrontCard key={user.uid} person={user} noFlip noFade />
+    );
+
+    const jailSchool = Object.values(team).map(
+      (user) =>
+        user.jailSchool && (
+          <FrontCard
+            key={`${user.uid}-jailSchool`}
+            person={user}
+            noFlip
+            noFade
+          />
+        )
+    );
+
+    const ftoCards = Object.values(team).map(
+      (user) =>
+        user.ftoList && (
+          <FrontCard key={`${user.uid}-ftoList`} person={user} noFlip noFade />
+        )
+    );
 
     const all = [
       {
@@ -33,18 +87,44 @@ export default function Carousel({ team }) {
         props: mandateCards,
         column: false,
       },
-      { key: "extra-1", title: "Extra 1" },
-      { key: "extra-2", title: "Extra 2" },
-      { key: "extra-3", title: "Extra 3" },
-      { key: "extra-4", title: "Extra 4" },
-      { key: "extra-5", title: "Extra 5" },
-      { key: "extra-6", title: "Extra 6" },
-      { key: "extra-7", title: "Extra 7" },
-      { key: "extra-8", title: "Extra 8" },
+      {
+        key: "medical-user",
+        title: "Medical",
+        props: medicalCards,
+        column: false,
+      },
+      { key: "vacaton-card", title: "Vacation", props: vacation, column: true },
+      {
+        key: "training-card",
+        title: "Training",
+        props: training,
+        column: true,
+      },
+      { key: "cover-card", title: "Coverage", props: cover, column: true },
+      { key: "range-card", title: "Range", props: range, column: true },
+      {
+        key: "trainee-card",
+        title: "Trainee's",
+        props: trainees,
+        column: false,
+      },
+      {
+        key: "JailSchool-card",
+        title: "Jail School",
+        props: jailSchool,
+        titleDate: events.find((e) => e.eventType === "Jail-School"),
+        column: false,
+      },
+      {
+        key: "ftoList-card",
+        title: "FTO List",
+        props: ftoCards,
+        column: false,
+      },
     ];
 
     setCardData(all);
-  }, [data]);
+  }, [data, events, coverage]);
 
   const totalPages = Math.ceil(cardData.length / itemsPerPage);
 
@@ -105,6 +185,7 @@ export default function Carousel({ team }) {
                 key={card.key}
                 title={card.title}
                 props={card.props}
+                titleDate={card.titleDate}
                 column={card.column}
               />
             ))}

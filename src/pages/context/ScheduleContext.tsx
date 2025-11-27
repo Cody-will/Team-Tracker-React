@@ -33,7 +33,8 @@ export type EventType =
   | "Training"
   | "Shift-Swap"
   | "Coverage"
-  | "Range";
+  | "Range"
+  | "Jail-School";
 
 export interface ScheduleEvent {
   id?: string;
@@ -125,7 +126,7 @@ function toLocalMidnight(millis: number | string) {
 
 export function ScheduleProvider({ children }: any) {
   const [events, setEvents] = useState<AllEvents>([]);
-  const { userSettings } = useUser();
+  const { userSettings, user, data: users } = useUser();
 
   const {
     primaryAccent,
@@ -141,6 +142,7 @@ export function ScheduleProvider({ children }: any) {
   const [vacation, setVacation] = useState<ScheduleEvent[]>([]);
   const [range, setRange] = useState<ScheduleEvent[]>([]);
   const [swap, setSwap] = useState<ScheduleEvent[]>([]);
+  const [jailSchool, setJailSchool] = useState<ScheduleEvent[]>([]);
 
   useEffect(() => {
     const cRef = ref(db, "coverage");
@@ -148,11 +150,10 @@ export function ScheduleProvider({ children }: any) {
       cRef,
       (snapshot) => {
         startTransition(() => {
-          setCoverage(
-            snapshot.exists()
-              ? (Object.values(snapshot.val()) as DayEvent[])
-              : []
-          );
+          const raw = snapshot.exists()
+            ? (Object.values(snapshot.val()) as DayEvent[])
+            : [];
+          setCoverage(filterByDivision(raw));
         });
       },
       (error) => console.log(error)
@@ -177,6 +178,7 @@ export function ScheduleProvider({ children }: any) {
             setTraining([]);
             setRange([]);
             setSwap([]);
+            setJailSchool([]);
           });
           return;
         }
@@ -189,6 +191,7 @@ export function ScheduleProvider({ children }: any) {
         const nextTraining: ScheduleEvent[] = [];
         const nextRange: ScheduleEvent[] = [];
         const nextSwap: ScheduleEvent[] = [];
+        const nextJailSchool: ScheduleEvent[] = [];
 
         for (const e of values) {
           // Normalize once
@@ -212,15 +215,18 @@ export function ScheduleProvider({ children }: any) {
             case "Shift-Swap":
               nextSwap.push(normalized);
               break;
+            case "Jail-School":
+              nextJailSchool.push(normalized);
           }
         }
 
         startTransition(() => {
-          setEvents(nextEvents);
-          setVacation(nextVacation);
-          setTraining(nextTraining);
-          setRange(nextRange);
-          setSwap(nextSwap);
+          setEvents(filterByDivision(nextEvents));
+          setVacation(filterByDivision(nextVacation));
+          setTraining(filterByDivision(nextTraining));
+          setRange(filterByDivision(nextRange));
+          setSwap(filterByDivision(nextSwap));
+          setJailSchool(filterByDivision(nextJailSchool));
         });
       },
       (error) => console.log(error)
@@ -293,6 +299,27 @@ export function ScheduleProvider({ children }: any) {
     }),
     [secondaryAccent]
   );
+
+  function filterByDivision<
+    T extends { originUID: string; targetUID?: string; eventType?: EventType }
+  >(list: T[]): T[] {
+    if (!user || !users) return list;
+
+    return list.filter((e) => {
+      const origin = users[e.originUID];
+      const target = e.targetUID ? users[e.targetUID] : null;
+
+      if (e.eventType === "Jail-School" || e.eventType === "Range") {
+        return user.Divisions === "ADC";
+      }
+
+      const sameDivision =
+        (origin && origin.Divisions === user.Divisions) ||
+        (target && target.Divisions === user.Divisions);
+
+      return sameDivision;
+    });
+  }
 
   function addExtended(event: ScheduleEvent | DayEvent | any) {
     const extendedProps = {
@@ -460,6 +487,11 @@ export function ScheduleProvider({ children }: any) {
         events: range.map(addExtended),
         color: "#ef4444",
       },
+      {
+        id: "Jail-School",
+        events: jailSchool.map(addExtended),
+        color: "#ef4444",
+      },
     ],
     [
       currentHolidays,
@@ -477,6 +509,7 @@ export function ScheduleProvider({ children }: any) {
       coverageAccent,
       primaryAccent,
       secondaryAccent,
+      jailSchool,
     ]
   );
 

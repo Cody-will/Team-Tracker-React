@@ -1,7 +1,7 @@
 import FrontCard from "./FrontCard.tsx";
 import Shifts from "./Shifts";
 import { useEffect, useState, useRef } from "react";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, update } from "firebase/database";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { useConfigure } from "../pages/context/configureContext";
 import type { User, UserRecord } from "../pages/context/UserContext";
@@ -202,6 +202,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
           className="w-full h-1/4 flex  gap-2 items-center justify-center"
         >
           {team &&
+            configData &&
             Object.values(team)
               .filter((user) => user.Shifts === "Command Staff")
               .sort(
@@ -209,7 +210,12 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
                   getOrder(a.Ranks, configData) - getOrder(b.Ranks, configData)
               )
               .map((user) => (
-                <FrontCard key={user.uid} person={user} didDrag={didDrag} />
+                <FrontCard
+                  key={user.uid}
+                  person={user}
+                  didDrag={didDrag}
+                  currShift={user.Shifts}
+                />
               ))}
         </motion.div>
 
@@ -218,6 +224,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
           className="w-full h-full gap-4 flex items-center justify-center"
         >
           {team &&
+            configData &&
             shifts.map((shift) => (
               <Shifts
                 key={shift}

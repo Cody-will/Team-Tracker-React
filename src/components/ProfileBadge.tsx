@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useUser } from "../pages/context/UserContext";
 
 export type Position =
   | "bottom"
@@ -27,6 +28,11 @@ export default function ProfileBadge({
   styles,
   fontSize = 12,
 }: BadgeProps): React.ReactElement {
+  const { userSettings } = useUser();
+  const { secondaryAccent } = userSettings;
+  if (title === "D/S") color = secondaryAccent;
+  if (typeof title === "number") color = secondaryAccent;
+
   const { posStyle, fontScaleStyle } = useMemo(
     () => getPositionAndScale(position, anchorSize, absolute, fontSize),
     [position, anchorSize, absolute]
@@ -56,13 +62,11 @@ function getPositionAndScale(
   absolute: boolean,
   fontSize: number
 ) {
-  // Base everything on the circle radius.
   const diameter = anchorSize;
   const r = diameter / 2;
   const cx = r;
   const cy = r * 0.9;
 
-  // choose angle on the circle for each position
   let angleDeg = 90; // default bottom
   switch (position) {
     case "bottom":
@@ -88,18 +92,21 @@ function getPositionAndScale(
   }
 
   const rad = (angleDeg * Math.PI) / 180;
-  const x = cx + r * Math.cos(rad);
-  const y = cy + r * Math.sin(rad);
+
+  // 🔥 use a slightly smaller radius when on top so it sits just under the border
+  const effectiveRadius = position === "top" ? r * 0.8 : r; // tweak 0.85 up/down to taste
+
+  const x = cx + effectiveRadius * Math.cos(rad);
+  const y = cy + effectiveRadius * Math.sin(rad);
 
   const posStyle = absolute
     ? {
         left: `${x}px`,
         top: `${y}px`,
-        transform: "translate(-50%, -50%)", // center of badge sits on that point
+        transform: "translate(-50%, -50%)",
       }
     : {};
 
-  // Scale font and padding relative to some base diameter (e.g. 128px)
   const baseDiameter = 128;
   const scale = diameter / baseDiameter;
 

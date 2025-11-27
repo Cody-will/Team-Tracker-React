@@ -153,6 +153,7 @@ export default function EditCard({
   }
 
   async function handleSubmit(data: FormValues): Promise<boolean> {
+    console.log("pressed");
     const completed = await updateUser(data.uid, data);
     if (completed.success) {
       createNotification({

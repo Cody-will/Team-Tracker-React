@@ -38,6 +38,7 @@ export default function Vacation() {
   const [trainingInput, setTrainingInput] = useState("");
 
   const [mountCalendar, setMountCalendar] = useState(false);
+  const excludes = ["", "Range", "Jail-School"];
   useEffect(() => {
     const id = requestAnimationFrame(() => setMountCalendar(true));
     return () => cancelAnimationFrame(id);
@@ -100,6 +101,7 @@ export default function Vacation() {
       return `Training (${lastName}, ${
         firstName[0] ?? ""
       } #${badge}) ${trainingInput.trim()}`;
+    if (eventType === "Jail-School") return "Jail School";
     return "";
   }
 
@@ -116,7 +118,9 @@ export default function Vacation() {
 
   function handleSubmit() {
     if (
-      (selectedType !== "Range" && selectedUser === "") ||
+      (selectedType !== "Range" &&
+        selectedType !== "Jail-School" &&
+        selectedUser === "") ||
       selectedUser === "Select Employee"
     ) {
       const notify: ErrorNotify = {
@@ -141,9 +145,13 @@ export default function Vacation() {
       setError(notify);
       return;
     }
-    if (selectedType !== "Range") setShowCoverage(true);
+    if (selectedType !== "Range" && selectedType !== "Jail-School") {
+      setShowCoverage(true);
+    }
     setinteractive(false);
-    if (selectedType === "Range") handleSchedule(false);
+    if (selectedType === "Range" || selectedType === "Jail-School") {
+      handleSchedule(false);
+    }
   }
 
   function handleErrorPopUp() {
@@ -214,11 +222,14 @@ export default function Vacation() {
                 <option value="">Select Type</option>
                 <option value="Vacation">Vacation</option>
                 <option value="Training">Training</option>
+                {user?.Divisions === "ADC" && (
+                  <option value="Jail-School">Jail School</option>
+                )}
                 {user?.firearms && <option value="Range">Range Day</option>}
               </motion.select>
 
               <AnimatePresence>
-                {selectedType !== "" && selectedType !== "Range" && (
+                {!excludes.includes(selectedType) && (
                   <motion.select
                     layout
                     initial={{ width: 0 }}

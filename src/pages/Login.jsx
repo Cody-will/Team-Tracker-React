@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import Button from "../components/Button";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import PopUp from "../components/PopUp.jsx";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
@@ -13,6 +14,7 @@ export default function Login() {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [notify, setnotify] = useState(null);
   const navigate = useNavigate();
   const message = () => {
     toast(error);
@@ -20,6 +22,18 @@ export default function Login() {
 
   if (currentUser) {
     navigate("/home");
+  }
+
+  function createNotification(errorMessage) {
+    const mess = {
+      title: "Uh oh!",
+      message: errorMessage,
+      location: "top-center",
+      onClose: closePopup,
+      timer: 3,
+    };
+
+    setnotify(mess);
   }
 
   async function handleLogin(user) {
@@ -31,14 +45,27 @@ export default function Login() {
     } catch (error) {
       setError(error.code);
       setLoading(false);
-      message();
+      createNotification(error.code);
     }
+  }
+
+  function closePopup() {
+    setnotify(null);
   }
 
   return (
     <>
       <ToastContainer />
-      <div className="flex items-center bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover justify-center h-screen">
+      <div className="relative flex items-center bg-[url('./assets/background.svg')] bg-no-repeat bg-center bg-cover justify-center h-screen">
+        {notify && (
+          <PopUp
+            title={notify.title}
+            message={notify.message}
+            location={notify.location}
+            onClose={notify.onclose}
+            timer={notify.timer}
+          />
+        )}
         <div
           id="panel"
           className="w-full max-w-md bg-zinc-950/30 font-semibold drop-shadow-xl drop-shadow-zinc-950/30 p-10 rounded-xl shadow-lg/40 border border-zinc-800"

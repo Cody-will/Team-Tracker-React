@@ -45,12 +45,10 @@ export default function InfoItem(props: InfoItemProps) {
   return (
     <motion.div
       style={{ borderColor: primaryAccent }}
-      className="w-full flex justify-evenly items-center text-zinc-200 border-2 font-semibold rounded-md bg-zinc-900 shadow-lg/40 shadow-zinc-950"
+      className="w-full flex justify-evenly items-center text-zinc-200 border-2 font-medium rounded-md bg-zinc-900 shadow-lg/40 shadow-zinc-950"
     >
-      <div className="flex justify-start py-0.5 pl-3 items-center w-full">
-        {title}
-      </div>
-      <div className="flex justify-start px-3 py-0.5 items-center text-zinc-200 text-nowrap">
+      <div className="flex justify-start pl-3 items-center w-full">{title}</div>
+      <div className="flex justify-start px-3 items-center text-zinc-200 text-nowrap">
         {getDates()}
       </div>
     </motion.div>

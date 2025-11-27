@@ -65,6 +65,8 @@ export default function AddUser() {
 
     trainer: "",
     phase: "",
+    jailSchool: false,
+    ftoList: false,
 
     pit: false,
     speed: false,
@@ -245,6 +247,22 @@ function AddUserForm({
     // no local reset; parent will remount this whole component
   }
 
+  function toDigits(value: string) {
+    return value.replace(/\D/g, "");
+  }
+
+  function formatPhone(value: string) {
+    const digits = toDigits(value);
+    const len = digits.length;
+
+    if (len < 4) return digits;
+    if (len < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(
+      6,
+      10
+    )}`;
+  }
+
   return (
     <motion.form
       key="add-user-form"
@@ -284,13 +302,27 @@ function AddUserForm({
         type="password"
         placeholder="Temporary Password"
       />
-      <motion.input
-        layout
-        {...register("phone")}
-        className={inputStyle}
-        type="text"
-        placeholder="Phone Number"
+      <Controller
+        name="phone"
+        control={control}
+        defaultValue=""
+        render={({ field }) => {
+          const display = formatPhone(field.value); // UI formatted
+          return (
+            <motion.input
+              layout
+              className={inputStyle}
+              placeholder="Phone Number"
+              value={display}
+              onChange={(e) => {
+                const raw = toDigits(e.target.value); // store only digits
+                field.onChange(raw);
+              }}
+            />
+          );
+        }}
       />
+
       <motion.input
         layout
         {...register("badge")}
@@ -398,17 +430,19 @@ function AddUserForm({
             )}
           />
         </div>
-        <div className={toggleStyle}>
-          <span className="">Mandate</span>
-          <Controller
-            name="mandate"
-            control={control}
-            defaultValue={false}
-            render={({ field }) => (
-              <ToggleSwitch state={!!field.value} setState={field.onChange} />
-            )}
-          />
-        </div>
+        {upd === "ADC" && (
+          <div className={toggleStyle}>
+            <span className="">Mandate</span>
+            <Controller
+              name="mandate"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => (
+                <ToggleSwitch state={!!field.value} setState={field.onChange} />
+              )}
+            />
+          </div>
+        )}
         <div className={toggleStyle}>
           <span className="">Trainee</span>
           <Controller
@@ -420,6 +454,49 @@ function AddUserForm({
             )}
           />
         </div>
+        {upd === "ADC" && (
+          <>
+            <div className={toggleStyle}>
+              <span>FTO List</span>
+              <Controller
+                name="ftoList"
+                control={control}
+                render={({ field }) => (
+                  <ToggleSwitch
+                    state={!!field.value}
+                    setState={field.onChange}
+                  />
+                )}
+              />
+            </div>
+            <div className={toggleStyle}>
+              <span>Mandated</span>
+              <Controller
+                name="isMandated"
+                control={control}
+                render={({ field }) => (
+                  <ToggleSwitch
+                    state={!!field.value}
+                    setState={field.onChange}
+                  />
+                )}
+              />
+            </div>
+            <div className={toggleStyle}>
+              <span>Jail School</span>
+              <Controller
+                name="jailSchool"
+                control={control}
+                render={({ field }) => (
+                  <ToggleSwitch
+                    state={!!field.value}
+                    setState={field.onChange}
+                  />
+                )}
+              />
+            </div>
+          </>
+        )}
 
         {upd === "UPD" && (
           <>

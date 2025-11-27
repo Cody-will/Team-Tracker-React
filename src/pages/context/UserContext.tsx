@@ -39,6 +39,7 @@ export interface User {
   email: string;
   password: string;
   phone: string;
+  secondPhone?: string;
   badge: string;
   Shifts: string;
   car: string;
@@ -50,7 +51,11 @@ export interface User {
   mandate: boolean;
   Ranks: string;
   photo?: Photo;
+  ftoList?: boolean;
+  jailSchool?: boolean;
+  isMandated: boolean;
   trainee: boolean;
+  Divisions?: string;
   firearms?: boolean;
   trainer?: string;
   phase?: string;
@@ -224,19 +229,57 @@ export function UserProvider({ children }: any) {
     document.documentElement.style.setProperty("--accent", color);
   }, [userSettings?.primaryAccent]);
 
-  // Use effect to get the user data from the users section of the database
+  // Use effect to get the user data from the users section of the database,
+  // and filter it by the current user's division.
   useEffect(() => {
+    // ❌ No auth user yet → don't subscribe or compute anything
+    if (!currentUser) return;
+
+    const uid = currentUser.uid;
     const usersRef = ref(db, "users");
 
-    const unsub = onValue(usersRef, (snap) => {
-      const raw = (snap.val() || {}) as Record<string, User>;
-      const checked = fixExpiredSick(raw);
-      setData(checked);
-      setLoading(false);
-    });
+    const unsub = onValue(
+      usersRef,
+      (snap) => {
+        const raw = (snap.val() || {}) as Record<string, User>;
+        const checked = fixExpiredSick(raw);
+
+        const current = checked[uid];
+
+        // If we somehow don't have a DB record for this auth user, just clear and stop
+        if (!current) {
+          setData({});
+          setLoading(false);
+          return;
+        }
+
+        // If they don't have a division set yet, only load *them* so we don't
+        // blow out components with multiple teams.
+        if (!current.Divisions) {
+          setData({ [uid]: current });
+          setLoading(false);
+          return;
+        }
+
+        const division = current.Divisions;
+
+        const byDivision = Object.fromEntries(
+          Object.entries(checked).filter(([, u]) => u.Divisions === division)
+        ) as UserRecord;
+
+        setData(byDivision);
+        setLoading(false);
+      },
+      (err) => {
+        console.error("users onValue error:", err);
+        setError(err.message ?? "Failed to load users");
+        setData({});
+        setLoading(false);
+      }
+    );
 
     return () => unsub();
-  }, []);
+  }, [currentUser]);
 
   // This useEffect sets the user: Database to the currentUser: Auth by using the auth UID and linking it to users uid
   useEffect(() => {
@@ -278,6 +321,7 @@ export function UserProvider({ children }: any) {
           sick: false,
           sickExpires: null,
         };
+        // fire-and-forget; don't await inside loop
         updateAfterDrag(uid, "sick", false);
         updateAfterDrag(uid, "sickExpires", null);
       }
@@ -396,7 +440,7 @@ export function UserProvider({ children }: any) {
     return (response.data as { uid: string; disabled: boolean }).disabled;
   }
 
-  // This function calls the function to create the users auth account, then
+  // This function calls the service worker on the server to create the users auth account, then
   // adds the users properties to the user section of the database under the returned
   // UID the user gets when their auth account gets created
   async function addUser(userData: User): Promise<AddUserReturn> {
@@ -452,7 +496,6 @@ export function UserProvider({ children }: any) {
     try {
       // 1) Update role if it changed
       if (data[uid].Role !== formData.Role) {
-        // NOTE: callable takes an object, not (uid, role)
         await setRole({ uid, role: formData.Role });
       }
 
@@ -463,23 +506,19 @@ export function UserProvider({ children }: any) {
     } catch (err: any) {
       console.error("updateUser failed:", err);
 
-      // Default values
       let source: "role" | "profile" = "profile";
       let code: string | undefined = err?.code;
       let message = "Failed to update user.";
 
-      // Detect if this came from the callable (functions/...)
       if (typeof err?.code === "string" && err.code.startsWith("functions/")) {
         source = "role";
 
-        // Prefer the original message if you passed it via details
         if (err.details?.originalMessage) {
           message = err.details.originalMessage;
         } else if (err.message) {
           message = err.message;
         }
       } else {
-        // Probably a DB error or something else on the client
         if (err?.message) {
           message = err.message;
         }
@@ -526,7 +565,6 @@ export function UserProvider({ children }: any) {
     if (!uid) throw new Error("setProfilePhoto: uid is required");
     if (!file) throw new Error("setProfilePhoto: file is required");
 
-    // 1) Read the previous photo path (but don't delete yet)
     let oldPath: string | undefined;
     try {
       const pathSnap = await get(ref(db, `users/${uid}/photo/path`));
@@ -535,7 +573,6 @@ export function UserProvider({ children }: any) {
       console.warn("Could not read old photo path:", e);
     }
 
-    // 2) Upload the new file
     const storagePath = `users/${uid}/avatars/${Date.now()}_${file.name}`;
     const objectRef = storageRef(storage, storagePath);
     const upload = uploadBytesResumable(objectRef, file, {
@@ -557,11 +594,9 @@ export function UserProvider({ children }: any) {
       );
     });
 
-    // 3) Get URL and persist { src, path } on the user
     const src = await getDownloadURL(objectRef);
     await update(ref(db, `users/${uid}/photo`), { src, path: storagePath });
 
-    // 4) Now that the new one is live, delete the old one (if any)
     if (oldPath) {
       try {
         await deleteObject(storageRef(storage, oldPath));
@@ -595,7 +630,6 @@ export function UserProvider({ children }: any) {
         }
       }
     } finally {
-      // Clear DB entry regardless of delete outcome
       await update(ref(db), { [`users/${uid}/photo`]: null });
     }
   }

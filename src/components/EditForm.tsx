@@ -1,6 +1,12 @@
-import { useState, useEffect, SetStateAction, RefObject } from "react";
+import { useState, useEffect, RefObject, useMemo } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
-import { useForm, Controller, type DefaultValues } from "react-hook-form";
+import {
+  useForm,
+  Controller,
+  type DefaultValues,
+  type SubmitHandler,
+  type SubmitErrorHandler,
+} from "react-hook-form";
 
 import { useUser } from "../pages/context/UserContext";
 import type { User } from "../pages/context/UserContext";
@@ -12,16 +18,17 @@ import ToggleSwitch from "../components/ToggleSwitch";
 import type { Item, ListData } from "./ListPanel";
 
 // ---------- Config-derived types ----------
-/** One option tuple taken from a ListData.items entry: [id, title, order] */
+
 type ConfigOption = [id: string, title: string, order: number];
-/** One select group: [groupTitle, options[]] */
-type ConfigGroup = [groupTitle: string, options: ConfigOption[]];
+
+type ConfigGroup = {
+  field: string; // safe key in the form (e.g., "Special_Roles")
+  label: string; // display label (e.g., "Special Roles")
+  options: ConfigOption[];
+};
 
 // ---------- Form values ----------
-/**
- * Base static fields + dynamic keys by group title (e.g., "Divisions", "Shifts"...)
- * Dynamic keys are strings (selected option titles).
- */
+
 export type FormValues = {
   uid: string;
   firstName: string;
@@ -47,19 +54,81 @@ export type FormValues = {
   Ranks: string;
   active: boolean;
 
-  // Watch for your conditional:
   Divisions?: string;
 
-  // Dynamic select fields keyed by group title:
-  [dynamicKey: string]: unknown;
+  // config-driven extras:
+  Special_Roles?: string;
+
+  // ADC toggles
+  ftoList?: boolean;
+  jailSchool?: boolean;
+  isMandated?: boolean;
 };
 
 export type UserNoP = Omit<User, "password">;
 
 interface EditFormProps {
-  userProps: User; // you said "user is going to be userProps"
+  userProps: User;
   submitFunction: (data: FormValues) => Promise<boolean>;
   formRef?: RefObject<HTMLFormElement | null>;
+}
+
+// ---------- helpers ----------
+
+type ConfigureData = Record<string, ListData> | ListData[] | undefined;
+type FormFieldName = Extract<keyof FormValues, string>;
+
+function toFieldKey(title: string): string {
+  return title.trim().replace(/\s+/g, "_");
+}
+
+function toGroups(data: ConfigureData): ConfigGroup[] {
+  if (!data) return [];
+  const listArray: ListData[] = Array.isArray(data)
+    ? data
+    : Object.values(data);
+
+  return listArray.map((panel) => {
+    const options: ConfigOption[] = Object.entries(panel.items ?? {}).map(
+      ([id, it]: [string, Item]) => [id, it.title, it.order]
+    );
+    options.sort((a, b) => a[2] - b[2]);
+
+    const field =
+      panel.title === "Divisions" ? "Divisions" : toFieldKey(panel.title);
+
+    return {
+      field,
+      label: panel.title,
+      options,
+    };
+  });
+}
+
+function dynamicDefaultsFromUser(
+  groups: ConfigGroup[],
+  userProps: User
+): Partial<FormValues> {
+  return groups.reduce<Partial<FormValues>>((acc, { field, label }) => {
+    const byField = (userProps as any)?.[field];
+    const byLabel = (userProps as any)?.[label];
+    const v = typeof byField === "string" ? byField : byLabel;
+    (acc as any)[field] = v || "";
+    return acc;
+  }, {});
+}
+
+function toDigits(value: string) {
+  return value.replace(/\D/g, "");
+}
+
+function formatPhone(value: string) {
+  const digits = toDigits(value);
+  const len = digits.length;
+
+  if (len < 4) return digits;
+  if (len < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
 }
 
 export default function EditForm({
@@ -68,106 +137,115 @@ export default function EditForm({
   formRef,
 }: EditFormProps) {
   const { data: configData } = useConfigure();
-  const { addUser, data: users, userSettings } = useUser();
+  const { data: users, userSettings } = useUser();
   const [updating, setUpdating] = useState(false);
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent } = userSettings;
+  const [groups, setGroups] = useState<ConfigGroup[]>([]);
   const id = "formGroup";
 
-  const [groups, setGroups] = useState<ConfigGroup[]>([]);
+  const baseDefaults: DefaultValues<FormValues> = useMemo(
+    () => ({
+      uid: userProps.uid ?? "",
+      firstName: userProps.firstName ?? "",
+      lastName: userProps.lastName ?? "",
+      email: userProps.email ?? "",
+      phone: userProps.phone ?? "",
+      badge: userProps.badge ?? "",
+      car: userProps.car ?? "",
 
-  // ---------- helpers ----------
-  type ConfigureData = Record<string, ListData> | ListData[] | undefined;
+      oic: !!userProps.oic,
+      fto: !!userProps.fto,
+      mandate: !!userProps.mandate,
+      trainee: !!userProps.trainee,
+      Shifts: userProps.Shifts ?? "",
+      Ranks: userProps.Ranks ?? "",
+      Role: userProps.Role ?? "",
+      active: userProps.active ?? true,
 
-  function toGroups(data: ConfigureData): ConfigGroup[] {
-    if (!data) return [];
-    const listArray: ListData[] = Array.isArray(data)
-      ? data
-      : Object.values(data);
+      ftoList: userProps.ftoList,
+      jailSchool: userProps.jailSchool,
+      isMandated: userProps.isMandated,
 
-    return listArray.map((panel) => {
-      // panel.items is Record<string, Item>
-      const options: ConfigOption[] = Object.entries(panel.items ?? {}).map(
-        ([id, it]: [string, Item]) => [id, it.title, it.order]
-      );
-      // sort options by order (3rd tuple element)
-      options.sort((a, b) => a[2] - b[2]);
-      return [panel.title, options];
-    });
-  }
+      trainer: userProps.trainer ?? "",
+      phase: userProps.phase ?? "",
 
-  // ---------- base defaults from userProps ----------
-  const baseDefaults: DefaultValues<FormValues> = {
-    uid: (userProps as any).uid || "",
-    firstName: (userProps as any).firstName || "",
-    lastName: (userProps as any).lastName || "",
-    email: (userProps as any).email || "",
-    phone: (userProps as any).phone || "",
-    badge: (userProps as any).badge || "",
-    car: (userProps as any).car || "",
+      pit: !!userProps.pit,
+      speed: !!userProps.speed,
+      rifle: !!userProps.rifle,
 
-    oic: !!(userProps as any).oic,
-    fto: !!(userProps as any).fto,
-    mandate: !!(userProps as any).mandate,
-    trainee: !!(userProps as any).trainee,
-    Shifts: (userProps as any).Shifts || "",
-    Ranks: (userProps as any).Ranks || "",
-    Role: (userProps as any).Role || "",
-    active: !!(userProps as any).active,
+      Divisions: userProps.Divisions ?? "",
+    }),
+    [userProps]
+  );
 
-    trainer: (userProps as any).trainer || "",
-    phase: (userProps as any).phase || "",
-
-    pit: !!(userProps as any).pit,
-    speed: !!(userProps as any).speed,
-    rifle: !!(userProps as any).rifle,
-
-    Divisions: (userProps as any).Divisions || "",
-  };
-
-  // dynamic defaults: for each panel.title, use userProps[title] || ""
-  const dynamicDefaultsFromUser = (gs: ConfigGroup[]): Record<string, string> =>
-    gs.reduce<Record<string, string>>((acc, [groupTitle]) => {
-      const v = (userProps as any)?.[groupTitle];
-      acc[groupTitle] = (typeof v === "string" ? v : "") || "";
-      return acc;
-    }, {});
-
-  // ---------- form ----------
   const {
+    control,
     register,
     handleSubmit,
-    control,
     watch,
     reset,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: baseDefaults,
+    shouldUnregister: false,
   });
 
   const trainee = watch("trainee");
-  const upd = watch("Divisions"); // if your group is named exactly "Divisions"
+  const upd = watch("Divisions");
 
   const toggleStyle = "flex flex-col justify-center items-center gap-2";
   const inputStyle =
     "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
 
-  // prepare groups and reset defaults when config or user changes
+  // build groups from configure
   useEffect(() => {
     const gs = toGroups(configData);
     setGroups(gs);
+  }, [configData]);
+
+  // reset defaults whenever config groups or userProps change
+  useEffect(() => {
+    if (!groups.length) return;
     reset({
       ...baseDefaults,
-      ...dynamicDefaultsFromUser(gs),
+      ...dynamicDefaultsFromUser(groups, userProps),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [configData, userProps]);
+  }, [groups, baseDefaults, userProps, reset]);
 
-  const onSubmit = async (values: FormValues) => {
+  function cleanValues(values: FormValues): FormValues {
+    return {
+      ...values,
+      firstName: values.firstName ?? "",
+      lastName: values.lastName ?? "",
+      email: values.email ?? "",
+      badge: values.badge ?? "",
+      car: values.car ?? "",
+      Shifts: values.Shifts ?? "",
+      Role: values.Role ?? "",
+      Ranks: values.Ranks ?? "",
+      Divisions: values.Divisions ?? "",
+      phone: values.phone ?? "",
+      trainer: values.trainer ?? "",
+      phase: values.phase ?? "",
+    };
+  }
+
+  const onSubmit: SubmitHandler<FormValues> = async (values) => {
+    const cleaned = cleanValues(values);
+    console.log("SUBMIT VALUES:", cleaned);
     setUpdating(true);
-    const completed = await submitFunction(values as FormValues);
-    if (completed) reset(baseDefaults);
+    const completed = await submitFunction(cleaned);
+    if (completed) {
+      reset({
+        ...baseDefaults,
+        ...dynamicDefaultsFromUser(groups, userProps),
+      });
+    }
     setUpdating(false);
-    if (!completed) setUpdating(false);
+  };
+
+  const onError: SubmitErrorHandler<FormValues> = (errs) => {
+    console.log("FORM ERRORS:", errs);
   };
 
   return (
@@ -177,7 +255,7 @@ export default function EditForm({
           <motion.div
             layout
             id="panel"
-            className="flex p-4  gap-4 flex-col items-center justify-center rounded-xl text-zinc-200 font-semibold"
+            className="flex p-4 gap-4 flex-col items-center justify-center rounded-xl text-zinc-200 font-semibold"
           >
             <motion.div
               layout
@@ -187,66 +265,120 @@ export default function EditForm({
             </motion.div>
 
             <motion.form
-              onSubmit={handleSubmit(onSubmit)}
+              ref={formRef}
+              onSubmit={handleSubmit(onSubmit, onError)}
               layout="position"
               transition={{ type: "tween" }}
               className="grid grid-cols-2 gap-6 place-items-center font-medium"
             >
-              <motion.input
-                layout
-                {...register("firstName", {
-                  required: "First name is required",
-                })}
-                className={inputStyle}
-                type="text"
-                placeholder="First Name"
+              {/* FIRST NAME - controlled */}
+              <Controller
+                name="firstName"
+                control={control}
+                rules={{ required: "First name is required" }}
+                render={({ field }) => (
+                  <motion.input
+                    layout
+                    {...field}
+                    className={inputStyle}
+                    type="text"
+                    placeholder="First Name"
+                  />
+                )}
               />
-              <motion.input
-                layout
-                {...register("lastName")}
-                className={inputStyle}
-                type="text"
-                placeholder="Last Name"
+
+              {/* LAST NAME - controlled */}
+              <Controller
+                name="lastName"
+                control={control}
+                render={({ field }) => (
+                  <motion.input
+                    layout
+                    {...field}
+                    className={inputStyle}
+                    type="text"
+                    placeholder="Last Name"
+                  />
+                )}
               />
-              <motion.input
-                layout
-                {...register("email")}
-                style={{ gridColumn: "span 2" }}
-                className={inputStyle}
-                type="email"
-                placeholder="Email"
+
+              {/* EMAIL - controlled */}
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <motion.input
+                    layout
+                    {...field}
+                    style={{ gridColumn: "span 2" }}
+                    className={inputStyle}
+                    type="email"
+                    placeholder="Email"
+                  />
+                )}
               />
-              <motion.input
-                layout
-                {...register("phone")}
-                className={inputStyle}
-                type="text"
-                placeholder="Phone Number"
+
+              {/* PHONE - controlled with formatter */}
+              <Controller
+                name="phone"
+                control={control}
+                defaultValue={baseDefaults.phone ?? ""}
+                render={({ field }) => {
+                  const display = formatPhone(field.value || "");
+                  return (
+                    <motion.input
+                      layout
+                      className={inputStyle}
+                      placeholder="Phone Number"
+                      value={display}
+                      onChange={(e) => {
+                        const raw = toDigits(e.target.value);
+                        field.onChange(raw);
+                      }}
+                    />
+                  );
+                }}
               />
-              <motion.input
-                layout
-                {...register("badge")}
-                className={inputStyle}
-                type="text"
-                placeholder="Badge Number"
+
+              {/* BADGE - controlled */}
+              <Controller
+                name="badge"
+                control={control}
+                render={({ field }) => (
+                  <motion.input
+                    layout
+                    {...field}
+                    className={inputStyle}
+                    type="text"
+                    placeholder="Badge Number"
+                  />
+                )}
               />
-              <motion.input
-                layout
-                {...register("car")}
-                className={inputStyle}
-                type="text"
-                placeholder="Car Number"
+
+              {/* CAR - controlled */}
+              <Controller
+                name="car"
+                control={control}
+                render={({ field }) => (
+                  <motion.input
+                    layout
+                    {...field}
+                    className={inputStyle}
+                    type="text"
+                    placeholder="Car Number"
+                  />
+                )}
               />
 
               {/* Dynamic selects from configure data */}
-              {groups.map(([groupTitle, options]) => (
+              {groups.map(({ field, label, options }) => (
                 <motion.select
                   layout
-                  key={groupTitle}
-                  {...register(groupTitle)}
+                  key={field}
+                  {...register(field as FormFieldName)}
                   className={inputStyle}
                 >
-                  <option value="">select {groupTitle}</option>
+                  <option value="">select {label}</option>
                   {options.map(([id, title]) => (
                     <option key={id} value={title}>
                       {title}
@@ -255,8 +387,9 @@ export default function EditForm({
                 </motion.select>
               ))}
 
+              {/* Trainee extra fields */}
               <AnimatePresence>
-                {trainee && (
+                {(trainee || userProps.trainee) && (
                   <motion.div
                     key="train-container"
                     layoutId={id}
@@ -303,6 +436,7 @@ export default function EditForm({
                 )}
               </AnimatePresence>
 
+              {/* TOGGLES */}
               <motion.div
                 layout
                 className="col-span-2 gap-6 flex items-center justify-center"
@@ -335,19 +469,21 @@ export default function EditForm({
                   />
                 </div>
 
-                <div className={toggleStyle}>
-                  <span>Mandate</span>
-                  <Controller
-                    name="mandate"
-                    control={control}
-                    render={({ field }) => (
-                      <ToggleSwitch
-                        state={!!field.value}
-                        setState={field.onChange}
-                      />
-                    )}
-                  />
-                </div>
+                {upd === "ADC" && (
+                  <div className={toggleStyle}>
+                    <span>Mandate</span>
+                    <Controller
+                      name="mandate"
+                      control={control}
+                      render={({ field }) => (
+                        <ToggleSwitch
+                          state={!!field.value}
+                          setState={field.onChange}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
 
                 <div className={toggleStyle}>
                   <span>Trainee</span>
@@ -363,7 +499,51 @@ export default function EditForm({
                   />
                 </div>
 
-                {upd === "UPD" && (
+                {upd === "ADC" && (
+                  <>
+                    <div className={toggleStyle}>
+                      <span>FTO List</span>
+                      <Controller
+                        name="ftoList"
+                        control={control}
+                        render={({ field }) => (
+                          <ToggleSwitch
+                            state={!!field.value}
+                            setState={field.onChange}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className={toggleStyle}>
+                      <span>Mandated</span>
+                      <Controller
+                        name="isMandated"
+                        control={control}
+                        render={({ field }) => (
+                          <ToggleSwitch
+                            state={!!field.value}
+                            setState={field.onChange}
+                          />
+                        )}
+                      />
+                    </div>
+                    <div className={toggleStyle}>
+                      <span>Jail School</span>
+                      <Controller
+                        name="jailSchool"
+                        control={control}
+                        render={({ field }) => (
+                          <ToggleSwitch
+                            state={!!field.value}
+                            setState={field.onChange}
+                          />
+                        )}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {(upd === "UPD" || userProps.Divisions === "UPD") && (
                   <>
                     <div className={toggleStyle}>
                       <span>PIT</span>
@@ -407,6 +587,7 @@ export default function EditForm({
                   </>
                 )}
               </motion.div>
+
               <motion.div layout className="col-span-2 w-full">
                 <Button
                   text={updating ? "Updating..." : "Update User"}

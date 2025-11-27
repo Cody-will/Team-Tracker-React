@@ -14,16 +14,18 @@ import {
 
 import ProfilePhoto from "./ProfilePhoto.tsx";
 import { useUser } from "../pages/context/UserContext.tsx";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, LayoutGroup, AnimatePresence } from "motion/react";
 import { auth } from "../firebase.js";
 import { signOut } from "firebase/auth";
 import ToggleSwitch from "./ToggleSwitch";
-import { primaryAccent } from "../colors.jsx";
 
 export default function Sidebar({ toggleState, setToggleState }) {
-  const { user, userSettings } = useUser();
+  const [barItems, setBarItems] = useState([]);
+  const { user, userSettings, data: users } = useUser();
   const { primaryAccent, secondaryAccent } = userSettings;
+  const excludes = ["Add User", "Configure"];
   const links = [
     { to: "/home", icon: <BsHouse size={32} />, label: "Home" },
     { to: "/team-management", icon: <BsPeople size={32} />, label: "Team" },
@@ -42,9 +44,34 @@ export default function Sidebar({ toggleState, setToggleState }) {
     },
   ];
 
+  useEffect(() => {
+    if (!user) return;
+    const bar = links.map(
+      ({ to, action, icon, label }) =>
+        roleCheck(label) && (
+          <SideBarLink
+            key={to}
+            to={to}
+            action={action}
+            icon={icon}
+            label={label}
+          />
+        )
+    );
+    setBarItems(bar);
+  }, [user]);
+
   function logOut() {
     signOut(auth).then(() => {});
   }
+
+  function roleCheck(title) {
+    if (user.Role === "Admin") {
+      return true;
+    }
+    return !excludes.includes(title);
+  }
+
   return (
     <div className="relative w-20 z-50 flex items-end justify-center h-screen flex-col">
       <AnimatePresence>
@@ -65,25 +92,14 @@ export default function Sidebar({ toggleState, setToggleState }) {
         )}
       </AnimatePresence>
       <LayoutGroup>
-        <div
-          id="panel"
-          className="w-16 py-4 gap-2 rounded-xl flex flex-col items-center justify-center border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
-        >
-          {links.map(({ to, action, icon, label }) => (
-            <SideBarLink
-              key={to}
-              to={to}
-              action={action}
-              icon={icon}
-              label={label}
-            />
-          ))}
-          <ToggleSwitch
-            state={toggleState}
-            setState={setToggleState}
-            size="sm"
-          />
-        </div>
+        {user && (
+          <div
+            id="panel"
+            className="w-16 py-4 gap-2 rounded-xl flex flex-col items-center justify-center border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
+          >
+            {barItems}
+          </div>
+        )}
       </LayoutGroup>
     </div>
   );

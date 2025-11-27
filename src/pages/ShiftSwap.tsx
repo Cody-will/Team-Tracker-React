@@ -6,11 +6,12 @@ import { motion, AnimatePresence } from "motion/react";
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import Button from "../components/Button";
 import { BsArrowRight } from "react-icons/bs";
-import { useUser } from "./context/UserContext";
+import { User, useUser } from "./context/UserContext";
 import type { DateData, ErrorNotify } from "./Vacation";
 import PopUp from "../components/PopUp";
 import type { ScheduleEvent } from "./context/ScheduleContext";
 import { useSchedule } from "./context/ScheduleContext";
+import { ShiftName } from "../helpers/schedulehelper";
 
 export default function ShiftSwap() {
   const [step, setStep] = useState<0 | 1>(0);
@@ -105,8 +106,8 @@ export default function ShiftSwap() {
     const newTargEnd = new Date(targEnd).getTime();
 
     const reqUser: ScheduleEvent = {
-      originUID: currUser.uid,
-      targetUID: selectedEmployee,
+      originUID: selectedEmployee,
+      targetUID: currUser.uid,
       title: `Shift Swap ${currUser.lastName} #${currUser.badge} for ${selected.lastName} #${selected.badge}`,
       start: newTargStart,
       end: newTargEnd,
@@ -116,8 +117,8 @@ export default function ShiftSwap() {
     };
 
     const targUser: ScheduleEvent = {
-      originUID: selectedEmployee,
-      targetUID: currUser.uid,
+      originUID: currUser.uid,
+      targetUID: selected.uid,
       title: `Shift Swap ${selected.lastName} #${selected.badge} for ${currUser.lastName} #${currUser.badge}`,
       start: newReqStart,
       end: newReqEnd,
