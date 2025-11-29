@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "events": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+
+    "coverage": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.role === 'admin' || auth.token.admin === true)"
+    },
+
+    "configure": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.role === 'admin' || auth.token.admin === true)"
+    },
+
+    "meta": {
+      ".read": "auth != null",
+      ".write": "auth != null && (auth.token.role === 'admin' || auth.token.admin === true)"
+    }
+  }
+}

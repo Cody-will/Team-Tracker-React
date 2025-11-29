@@ -3,6 +3,7 @@ import { useUser } from "../pages/context/UserContext";
 import type { DayEvent } from "../pages/context/ScheduleContext";
 import { motion } from "motion/react";
 import Button from "./Button";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export interface CoverageItemProps {
   event: DayEvent;
@@ -13,7 +14,7 @@ export default function CoverageItem(props: CoverageItemProps) {
   const { event, onClick } = props;
   const { originUID, day } = event;
   const { data: users, userSettings, user } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   const { firstName, lastName, Shifts } = users[originUID];
   const date = toLocalDateFromISODateOnly(day).toDateString();
 

@@ -1,6 +1,6 @@
-import { useUser } from "../pages/context/UserContext";
 import { motion } from "motion/react";
 import React, { useRef } from "react";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export interface FileInputProps {
   selectedFile: File | null;
@@ -15,8 +15,7 @@ export default function FileInput({
   handlePreview,
   color,
 }: FileInputProps) {
-  const { userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   // This function handles opening the file input box when the button is pressed

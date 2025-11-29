@@ -1,6 +1,4 @@
-import { useState, useEffect, FC } from "react";
-import InfoItem from "./InfoItem";
-import { useUser } from "../pages/context/UserContext";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 import type { ScheduleEvent } from "../pages/context/ScheduleContext";
 
 export interface InfoCardProps {
@@ -18,8 +16,7 @@ export default function InfoCard({
   column = true,
   extendedProps,
 }: InfoCardProps) {
-  const { userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
 
   const startDate = titleDate && titleDate.start;
   const endDate = titleDate && titleDate.end;
@@ -51,8 +48,9 @@ export default function InfoCard({
         style={{
           flexDirection: column ? "column" : "row",
           justifyContent: column ? "flex-start" : "center",
+          gap: column ? ".25rem" : ".5rem",
         }}
-        className={`relative flex gap-1 items-center p-2 w-full h-full`}
+        className={`relative flex items-center p-2 w-full h-full`}
       >
         {props}
         {extendedProps && extendedProps}

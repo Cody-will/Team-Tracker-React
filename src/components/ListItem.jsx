@@ -1,7 +1,6 @@
 import { motion, Reorder, useDragControls } from "motion/react";
 import { BsTrash, BsList } from "react-icons/bs";
 import { useState } from "react";
-import { useConfigure } from "../pages/context/configureContext";
 
 /** @param {data: Object, action: Function, onDragend: Function} */
 

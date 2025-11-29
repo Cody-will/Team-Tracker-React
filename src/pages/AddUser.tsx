@@ -6,6 +6,7 @@ import ToggleSwitch from "../components/ToggleSwitch";
 import { useConfigure } from "./context/configureContext";
 import { useUser } from "./context/UserContext";
 import PopUp, { type PopUpProps } from "../components/PopUp";
+import { useSafeSettings } from "./hooks/useSafeSettings";
 
 // Shape of the form values
 export type FormValues = {
@@ -14,6 +15,7 @@ export type FormValues = {
   email: string;
   password: string;
   phone: string;
+  secondPhone: string;
   badge: string;
   car: string;
 
@@ -40,8 +42,8 @@ type DropDownItem = [string, [string, string, number][]];
 
 export default function AddUser() {
   const { data: configData } = useConfigure();
-  const { addUser, data: users, userSettings } = useUser();
-  const { primaryAccent } = userSettings;
+  const { addUser, data: users } = useUser();
+  const { primaryAccent } = useSafeSettings();
 
   const [notify, setNotify] = useState<PopUpProps | null>(null);
   const [creating, setCreating] = useState(false);
@@ -55,6 +57,7 @@ export default function AddUser() {
     email: "",
     password: "",
     phone: "",
+    secondPhone: "",
     badge: "",
     car: "",
 
@@ -322,6 +325,26 @@ function AddUserForm({
           );
         }}
       />
+      <Controller
+        name="secondPhone"
+        control={control}
+        defaultValue=""
+        render={({ field }) => {
+          const display = formatPhone(field.value); // UI formatted
+          return (
+            <motion.input
+              layout
+              className={inputStyle}
+              placeholder="Second Phone Number"
+              value={display}
+              onChange={(e) => {
+                const raw = toDigits(e.target.value); // store only digits
+                field.onChange(raw);
+              }}
+            />
+          );
+        }}
+      />
 
       <motion.input
         layout
@@ -330,14 +353,15 @@ function AddUserForm({
         type="text"
         placeholder="Badge Number"
       />
-      <motion.input
-        layout
-        {...register("car")}
-        className={inputStyle}
-        type="text"
-        placeholder="Car Number"
-      />
-
+      {upd === "UPD" && (
+        <motion.input
+          layout
+          {...register("car")}
+          className={inputStyle}
+          type="text"
+          placeholder="Car Number"
+        />
+      )}
       {dropDownData &&
         dropDownData.map(([groupTitle, items]) => (
           <motion.select

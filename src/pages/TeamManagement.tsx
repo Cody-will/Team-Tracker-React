@@ -8,6 +8,7 @@ import type { User } from "./context/UserContext";
 import ProfilePhoto from "../components/ProfilePhoto.tsx";
 import PopUp from "../components/PopUp.tsx";
 import type { ErrorNotify } from "./Vacation.tsx";
+import { useSafeSettings } from "./hooks/useSafeSettings.ts";
 
 type TabDef = { id: string; title: string; order?: number };
 
@@ -19,8 +20,8 @@ export default function TeamManagement() {
   const [notify, setNotify] = useState<ErrorNotify | null>(null);
 
   const { data: config } = useConfigure() as { data: any };
-  const { data: users, userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { data: users } = useUser();
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
 
   // Build tabs from configure.Shifts.items (ordered)
   useEffect(() => {

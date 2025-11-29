@@ -4,14 +4,15 @@ import { motion } from "motion/react";
 import Button from "../components/Button";
 import { useUser } from "./context/UserContext";
 import { useSchedule } from "./context/ScheduleContext";
-import type { ScheduleEvent, DayEvent } from "./context/ScheduleContext";
+import type { DayEvent } from "./context/ScheduleContext";
 import PopUp from "../components/PopUp";
 import type { PopUpProps } from "../components/PopUp";
+import { useSafeSettings } from "./hooks/useSafeSettings";
 
 export default function Coverage() {
   const [view, setView] = useState(true);
-  const { userSettings, user, data: users } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { user, data: users } = useUser();
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   const { coverage } = useSchedule();
   const [filteredEvents, setFilteredEvents] = useState<DayEvent[] | []>([]);
   const [notify, setNotify] = useState<PopUpProps | null>(null);

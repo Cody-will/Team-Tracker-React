@@ -14,6 +14,7 @@ import type { User } from "../pages/context/UserContext";
 import { useConfigure } from "../pages/context/configureContext";
 import Button from "../components/Button";
 import ToggleSwitch from "../components/ToggleSwitch";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 import type { Item, ListData } from "./ListPanel";
 
@@ -35,6 +36,7 @@ export type FormValues = {
   lastName: string;
   email: string;
   phone: string;
+  secondPhone: string;
   badge: string;
   car: string;
 
@@ -139,7 +141,7 @@ export default function EditForm({
   const { data: configData } = useConfigure();
   const { data: users, userSettings } = useUser();
   const [updating, setUpdating] = useState(false);
-  const { primaryAccent } = userSettings;
+  const { primaryAccent } = useSafeSettings();
   const [groups, setGroups] = useState<ConfigGroup[]>([]);
   const id = "formGroup";
 
@@ -150,6 +152,7 @@ export default function EditForm({
       lastName: userProps.lastName ?? "",
       email: userProps.email ?? "",
       phone: userProps.phone ?? "",
+      secondPhone: userProps.secondPhone ?? "",
       badge: userProps.badge ?? "",
       car: userProps.car ?? "",
 
@@ -225,6 +228,7 @@ export default function EditForm({
       Ranks: values.Ranks ?? "",
       Divisions: values.Divisions ?? "",
       phone: values.phone ?? "",
+      secondPhone: values.secondPhone ?? "",
       trainer: values.trainer ?? "",
       phase: values.phase ?? "",
     };
@@ -339,6 +343,26 @@ export default function EditForm({
                   );
                 }}
               />
+              <Controller
+                name="secondPhone"
+                control={control}
+                defaultValue={baseDefaults.phone ?? ""}
+                render={({ field }) => {
+                  const display = formatPhone(field.value || "");
+                  return (
+                    <motion.input
+                      layout
+                      className={inputStyle}
+                      placeholder="Second Phone Number"
+                      value={display}
+                      onChange={(e) => {
+                        const raw = toDigits(e.target.value);
+                        field.onChange(raw);
+                      }}
+                    />
+                  );
+                }}
+              />
 
               {/* BADGE - controlled */}
               <Controller
@@ -356,19 +380,21 @@ export default function EditForm({
               />
 
               {/* CAR - controlled */}
-              <Controller
-                name="car"
-                control={control}
-                render={({ field }) => (
-                  <motion.input
-                    layout
-                    {...field}
-                    className={inputStyle}
-                    type="text"
-                    placeholder="Car Number"
-                  />
-                )}
-              />
+              {upd === "UPD" && (
+                <Controller
+                  name="car"
+                  control={control}
+                  render={({ field }) => (
+                    <motion.input
+                      layout
+                      {...field}
+                      className={inputStyle}
+                      type="text"
+                      placeholder="Car Number"
+                    />
+                  )}
+                />
+              )}
 
               {/* Dynamic selects from configure data */}
               {groups.map(({ field, label, options }) => (

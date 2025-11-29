@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useUser } from "../pages/context/UserContext";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export type Position =
   | "bottom"
@@ -28,8 +28,7 @@ export default function ProfileBadge({
   styles,
   fontSize = 12,
 }: BadgeProps): React.ReactElement {
-  const { userSettings } = useUser();
-  const { secondaryAccent } = userSettings;
+  const { secondaryAccent } = useSafeSettings();
   if (title === "D/S") color = secondaryAccent;
   if (typeof title === "number") color = secondaryAccent;
 

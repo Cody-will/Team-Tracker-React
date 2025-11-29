@@ -9,6 +9,7 @@ import {
   update,
   remove,
   onValue,
+  runTransaction,
 } from "firebase/database";
 import {
   ref as storageRef,
@@ -25,6 +26,7 @@ import {
   primaryAccentHex,
   secondaryAccentHex,
   backgroundImage,
+  backgroundOptions,
 } from "../../colors.jsx";
 import type { FormValues } from "../../components/EditForm.tsx";
 
@@ -75,7 +77,11 @@ export interface Value {
   loading: boolean;
   error?: string;
   user?: User;
-  userSettings: UserSettings;
+  userSettings: UserSettings | null;
+  defaultSettings: DefaultSettings;
+  userReady: boolean;
+  usersReady: boolean;
+  settingsReady: boolean;
   addUser: (userData: User) => Promise<AddUserReturn>;
   deleteUser: (uid: string) => Promise<void>;
   deactivateUser: (uid: string) => Promise<void>;
@@ -191,6 +197,9 @@ export function UserProvider({ children }: any) {
   const [data, setData] = useState<UserRecord>({});
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | undefined>();
+  const [usersReady, setUsersReady] = useState(false);
+  const [userReady, setUserReady] = useState(false);
+  const [settingsReady, setSettingsReady] = useState(false);
   const defaultSettings: DefaultSettings = {
     primaryAccent: primaryAccentHex,
     secondaryAccent: secondaryAccentHex,
@@ -200,9 +209,7 @@ export function UserProvider({ children }: any) {
     coverageAccent: primaryAccentHex,
     bgImage: backgroundImage,
   };
-  const [userSettings, setUserSettings] = useState<
-    UserSettings | DefaultSettings
-  >(defaultSettings);
+  const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
   const { currentUser } = useAuth();
   const [error, setError] = useState<string | undefined>(undefined);
   const value: Value = {
@@ -211,6 +218,10 @@ export function UserProvider({ children }: any) {
     error,
     user,
     userSettings,
+    defaultSettings,
+    usersReady,
+    userReady,
+    settingsReady,
     addUser,
     deleteUser,
     deactivateUser,
@@ -225,15 +236,28 @@ export function UserProvider({ children }: any) {
   };
 
   useEffect(() => {
-    const color = userSettings?.primaryAccent || "#0ea5e9";
+    if (!userSettings) return;
+    const color = userSettings.primaryAccent || "#0ea5e9";
     document.documentElement.style.setProperty("--accent", color);
-  }, [userSettings?.primaryAccent]);
+  }, [userSettings]);
 
-  // Use effect to get the user data from the users section of the database,
-  // and filter it by the current user's division.
   useEffect(() => {
-    // ❌ No auth user yet → don't subscribe or compute anything
-    if (!currentUser) return;
+    // If no user, reset everything
+    if (!currentUser) {
+      setData({});
+      setUser(undefined);
+      setUserSettings(null);
+
+      setLoading(false);
+      setUsersReady(false);
+      setUserReady(false);
+      setSettingsReady(false);
+
+      return;
+    }
+
+    setLoading(true);
+    setUsersReady(false);
 
     const uid = currentUser.uid;
     const usersRef = ref(db, "users");
@@ -246,34 +270,34 @@ export function UserProvider({ children }: any) {
 
         const current = checked[uid];
 
-        // If we somehow don't have a DB record for this auth user, just clear and stop
         if (!current) {
           setData({});
+          setUsersReady(false);
           setLoading(false);
           return;
         }
 
-        // If they don't have a division set yet, only load *them* so we don't
-        // blow out components with multiple teams.
         if (!current.Divisions) {
           setData({ [uid]: current });
+          setUsersReady(true);
           setLoading(false);
           return;
         }
 
         const division = current.Divisions;
-
         const byDivision = Object.fromEntries(
           Object.entries(checked).filter(([, u]) => u.Divisions === division)
         ) as UserRecord;
 
         setData(byDivision);
+        setUsersReady(true);
         setLoading(false);
       },
       (err) => {
         console.error("users onValue error:", err);
         setError(err.message ?? "Failed to load users");
         setData({});
+        setUsersReady(false);
         setLoading(false);
       }
     );
@@ -283,27 +307,50 @@ export function UserProvider({ children }: any) {
 
   // This useEffect sets the user: Database to the currentUser: Auth by using the auth UID and linking it to users uid
   useEffect(() => {
-    if (!currentUser) return;
-    const uid: string = currentUser.uid;
+    if (!currentUser) {
+      setUser(undefined);
+      setUserReady(false);
+      return;
+    }
+
+    const uid = currentUser.uid;
     const cUser = data[uid];
-    setUser(cUser ?? null);
+
+    setUser(cUser ?? undefined);
+    setUserReady(!!cUser);
   }, [data, currentUser]);
 
   // This useEffect sets the userSettings to either default or the users settings if the user has changed their settings
   useEffect(() => {
-    if (!user) return;
-    const { primaryAccent, secondaryAccent, bgImage } = defaultSettings;
-    const settings = {
-      primaryAccent: user.settings?.primaryAccent ?? primaryAccent,
-      secondaryAccent: user.settings?.secondaryAccent ?? secondaryAccent,
-      trainingAccent: user.settings?.trainingAccent ?? primaryAccent,
-      coverageAccent: user.settings?.coverageAccent ?? primaryAccent,
-      swapAccent: user.settings?.swapAccent ?? primaryAccent,
-      vacationAccent: user.settings?.vacationAccent ?? primaryAccent,
-      bgImage: user.settings?.bgImage ?? bgImage,
-      backgrounds: user.settings?.backgrounds ?? undefined,
+    if (!user) {
+      setUserSettings(null);
+      setSettingsReady(false);
+      return;
+    }
+
+    // If user has no settings yet, fall back to defaults
+    if (!user.settings) {
+      setUserSettings({
+        ...defaultSettings,
+        backgrounds: undefined,
+      });
+      setSettingsReady(true);
+      return;
+    }
+
+    const settings: UserSettings = {
+      primaryAccent: user.settings.primaryAccent,
+      secondaryAccent: user.settings.secondaryAccent,
+      trainingAccent: user.settings.trainingAccent,
+      coverageAccent: user.settings.coverageAccent,
+      swapAccent: user.settings.swapAccent,
+      vacationAccent: user.settings.vacationAccent,
+      bgImage: user.settings.bgImage,
+      backgrounds: user.settings.backgrounds ?? undefined,
     };
+
     setUserSettings(settings);
+    setSettingsReady(true);
   }, [user]);
 
   function fixExpiredSick(
@@ -456,6 +503,7 @@ export function UserProvider({ children }: any) {
         email,
         active: cleanData.active ?? true,
         createdAt: Date.now(),
+        settings: { ...defaultSettings },
       });
       return { success: true, message: "Successful" };
     } catch (e) {

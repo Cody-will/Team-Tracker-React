@@ -3,7 +3,7 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.jsx";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import TeamManagement from "./pages/TeamManagement.tsx";
 import ShiftSwap from "./pages/ShiftSwap.tsx";
 import Vacation from "./pages/Vacation.tsx";
@@ -11,21 +11,36 @@ import Settings from "./pages/Settings.tsx";
 import AddUser from "./pages/AddUser.tsx";
 import Coverage from "./pages/Coverage";
 import Configure from "./pages/Configure";
-import PoliceRadarWallpaper from "./pages/PoliceRadarWallpaper";
-import { Outlet, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Outlet, Routes, Route, Navigate } from "react-router-dom";
 import { db } from "./firebase.js";
 import { onValue, ref } from "firebase/database";
 import { AuthProvider } from "./pages/context/AuthContext.jsx";
 import { ConfigureProvider } from "./pages/context/configureContext.jsx";
-import CometWallpaper from "./pages/CometWallpaper";
 import { useAuth } from "./pages/context/AuthContext.jsx";
 import { UserProvider } from "./pages/context/UserContext.tsx";
 import { useUser } from "./pages/context/UserContext.tsx";
+import { useSafeSettings } from "./pages/hooks/useSafeSettings.ts";
 import Schedule from "./pages/Schedule.tsx";
-import {
-  ScheduleProvider,
-  useSchedule,
-} from "./pages/context/ScheduleContext.tsx";
+import { ScheduleProvider } from "./pages/context/ScheduleContext.tsx";
+import SplashOverlay from "./components/SplashOverlay.tsx";
+import { VersionProvider } from "./pages/context/VersionContext.tsx";
+
+const LoginRoute = () => {
+  const { currentUser, authReady, forceSplash } = useAuth();
+
+  if (!authReady) {
+    // Still waiting on Firebase
+    return null;
+  }
+
+  // Only auto-redirect if user is logged in AND
+  // we are NOT in the middle of a login transition using the curtain.
+  if (currentUser && !forceSplash) {
+    return <Navigate to="/home" replace />;
+  }
+
+  return <Login />;
+};
 
 function useSeamlessWallpaper(initial, fadeMs = 300) {
   const [current, setCurrent] = useState(initial ?? null);
@@ -36,14 +51,17 @@ function useSeamlessWallpaper(initial, fadeMs = 300) {
 
   const startSwap = (url) => {
     if (!url || url === current) return;
+
     if (timerRef.current) {
       window.clearTimeout(timerRef.current);
       timerRef.current = null;
     }
+
     if (imgRef.current) {
       imgRef.current.onload = null;
       imgRef.current.onerror = null;
     }
+
     const img = new Image();
     imgRef.current = img;
     img.decoding = "async";
@@ -87,24 +105,30 @@ function App() {
       <ConfigureProvider>
         <UserProvider>
           <ScheduleProvider>
-            <Routes>
-              <Route path="/login" element={<Login />} />
+            <VersionProvider>
+              <SplashOverlay />
+              <Routes>
+                <Route path="/login" element={<LoginRoute />} />
 
-              <Route element={<ProtectedLayout />}>
-                <Route index element={<Navigate to="/home" replace />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/team-management" element={<TeamManagement />} />
-                <Route path="/schedule" element={<Schedule />} />
-                <Route path="/vacation" element={<Vacation />} />
-                <Route path="/add-user" element={<AddUser />} />
-                <Route path="/shift-swap" element={<ShiftSwap />} />
-                <Route path="/coverage" element={<Coverage />} />
-                <Route path="/configure" element={<Configure />} />
-                <Route path="/settings" element={<Settings />} />
-              </Route>
+                <Route element={<ProtectedLayout />}>
+                  <Route index element={<Navigate to="/home" replace />} />
+                  <Route path="/home" element={<Home />} />
+                  <Route path="/team-management" element={<TeamManagement />} />
+                  <Route path="/schedule" element={<Schedule />} />
+                  <Route path="/vacation" element={<Vacation />} />
+                  <Route path="/add-user" element={<AddUser />} />
+                  <Route path="/shift-swap" element={<ShiftSwap />} />
+                  <Route path="/coverage" element={<Coverage />} />
+                  <Route path="/configure" element={<Configure />} />
+                  <Route path="/settings" element={<Settings />} />
+                </Route>
 
-              <Route path="*" element={<div className="p-6">Not Found</div>} />
-            </Routes>
+                <Route
+                  path="*"
+                  element={<div className="p-6">Not Found</div>}
+                />
+              </Routes>
+            </VersionProvider>
           </ScheduleProvider>
         </UserProvider>
       </ConfigureProvider>
@@ -113,14 +137,14 @@ function App() {
 }
 
 const ProtectedLayout = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // team loading
   const [data, setData] = useState();
-  const [nightMode, setNightMode] = useState(false);
-  const { currentUser } = useAuth();
-  const { userSettings } = useUser();
+  const { currentUser, authReady } = useAuth();
+  const { bgImage } = useSafeSettings();
+  const { loading: usersLoading } = useUser(); // 🔹 user/settings loading from context
 
   const { current, next, showNext, startSwap, fadeMs } = useSeamlessWallpaper(
-    userSettings?.bgImage ?? null,
+    bgImage ?? null,
     300
   );
 
@@ -143,19 +167,33 @@ const ProtectedLayout = () => {
   }, []);
 
   useEffect(() => {
-    startSwap(userSettings?.bgImage ?? null);
-  }, [userSettings?.bgImage]);
+    startSwap(bgImage ?? null);
+  }, [bgImage]);
 
-  if (!currentUser) return <Navigate to="/login" replace />;
+  // 1️⃣ Wait until Firebase tells us if there's a user at all
+  if (!authReady) {
+    return null;
+  }
+
+  // 2️⃣ If there is NO user after auth is ready, redirect to login
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // 3️⃣ User is logged in, but user data/settings still loading -> don't render layout yet.
+  //    SplashOverlay is up during this, so the user won't see a flash of default settings.
+  if (usersLoading) {
+    return null;
+  }
 
   return (
     <motion.div
       style={{
-        backgroundColor: "#09090b",
+        backgroundColor: "#27272a",
       }}
-      className={`h-screen w-screen overflow-hidden flex relative`}
+      className="h-screen w-screen overflow-hidden flex relative"
     >
-      {!nightMode && current && (
+      {current && (
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -166,7 +204,8 @@ const ProtectedLayout = () => {
           }}
         />
       )}
-      {!nightMode && next && (
+
+      {next && (
         <div
           className="absolute inset-0 z-0 transition-opacity"
           style={{
@@ -179,9 +218,9 @@ const ProtectedLayout = () => {
           }}
         />
       )}
-      <AnimatePresence>{nightMode && <CometWallpaper />}</AnimatePresence>
-      <Sidebar toggleState={nightMode} setToggleState={setNightMode} />
-      <main className={`w-full h-full relative z-10`}>
+
+      <Sidebar />
+      <main className="w-full h-full relative z-10">
         <Outlet context={{ data, loading }} />
       </main>
     </motion.div>

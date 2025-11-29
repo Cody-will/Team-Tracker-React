@@ -10,6 +10,7 @@ import FlippableCard from "./FlippableCard";
 import BackCard from "./BackCard";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import { isOff, isWorking, type ShiftName } from "../helpers/schedulehelper";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export interface NewCardProps {
   person: User;
@@ -31,8 +32,8 @@ export default function FrontCard({
   const { events, coverage } = useSchedule();
   const { isOff: offToday, type: offReason } = isOff(person.uid, events);
 
-  const { userSettings, data: users } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { data: users } = useUser();
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   const { isWorking: covering, reason: coveringReason } = isWorking(
     person.uid,
     currShift as ShiftName,

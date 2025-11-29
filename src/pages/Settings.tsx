@@ -1,6 +1,5 @@
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
-import { useState, useEffect, useRef } from "react";
-import ToggleSwitch from "../components/ToggleSwitch.js";
+import { useState, useRef } from "react";
 import ColorPicker from "../components/ColorPicker.jsx";
 import Button from "../components/Button.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
@@ -9,14 +8,8 @@ import { backgroundOptions } from "../colors.jsx";
 import type { UploadTaskSnapshot } from "firebase/storage";
 import FileInput from "../components/FileInput.tsx";
 import ProgressBar from "../components/ProgressBar.tsx";
-import { DataSnapshot } from "firebase/database";
-import type { UserSettings } from "./context/UserContext.tsx";
-import {
-  BsChevronLeft,
-  BsChevronRight,
-  BsArrowRight,
-  BsArrowLeft,
-} from "react-icons/bs";
+import { BsArrowRight } from "react-icons/bs";
+import { useSafeSettings } from "./hooks/useSafeSettings.ts";
 
 export type Location =
   | "primaryAccent"
@@ -28,13 +21,8 @@ export type Location =
   | "trainingAccent";
 
 export default function Settings() {
-  const {
-    updateUserSettings,
-    user,
-    userSettings,
-    uploadPhoto,
-    updateUserBackground,
-  } = useUser();
+  const { updateUserSettings, user, uploadPhoto, updateUserBackground } =
+    useUser();
   const { currentUser } = useAuth();
   const {
     primaryAccent,
@@ -44,7 +32,8 @@ export default function Settings() {
     swapAccent,
     trainingAccent,
     coverageAccent,
-  } = userSettings;
+    backgrounds,
+  } = useSafeSettings();
   const [isClicked, setIsClicked] = useState(false); // <- Used for switching to upload view on wallpaper options
   const [selectedPrimary, setSelectedPrimary] = useState(primaryAccent); // <- Used for storing the new primary color
   const [selectedSecondary, setSelectedSecondary] = useState(secondaryAccent); // <- Used for storing the new secondary color
@@ -233,14 +222,12 @@ export default function Settings() {
                                 </option>
                               )
                             )}
-                            {userSettings.backgrounds &&
-                              Object.entries(userSettings.backgrounds).map(
-                                ([index, bg]) => (
-                                  <option key={index} value={bg.src}>
-                                    {bg.name}
-                                  </option>
-                                )
-                              )}
+                            {backgrounds &&
+                              Object.entries(backgrounds).map(([index, bg]) => (
+                                <option key={index} value={bg.src}>
+                                  {bg.name}
+                                </option>
+                              ))}
                           </select>
                         </motion.div>
                       )}

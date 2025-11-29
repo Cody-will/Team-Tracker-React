@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import type { ScheduleEvent, DayEvent } from "../pages/context/ScheduleContext";
 import { useUser } from "../pages/context/UserContext";
 import type { User } from "../pages/context/UserContext";
-import { BsArrows } from "react-icons/bs";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export interface InfoItemProps {
   event?: ScheduleEvent;
@@ -13,8 +13,8 @@ export interface InfoItemProps {
 export default function InfoItem(props: InfoItemProps) {
   const [user, setUser] = useState<User>();
   const { event, coverage } = props;
-  const { data: users, userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { data: users } = useUser();
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   useEffect(() => {
     if (event) setUser(users[event.originUID]);
     if (coverage) setUser(users[coverage.originUID]);

@@ -11,10 +11,10 @@ import React, {
   startTransition,
   memo,
 } from "react";
-import { useUser } from "../pages/context/UserContext";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import type { EventType } from "../pages/context/ScheduleContext";
 import { motion } from "motion/react";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export type Display =
   | "auto"
@@ -48,9 +48,8 @@ function ScheduleCalendar({
   handleSelect,
   selected,
 }: CalendarProps) {
-  const { userSettings } = useUser();
   const { allEvents, buildShiftEvents } = useSchedule();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
 
   const [shiftsOn, setShiftsOn] = useState(false);
   const calRef = useRef<FullCalendar>(null);
@@ -60,6 +59,7 @@ function ScheduleCalendar({
     Coverage: true,
     "Shift-Swap": true,
     Range: true,
+    "Jail-School": true,
   });
 
   // ---- memoized style vars to avoid new object each render

@@ -11,6 +11,7 @@ import { isCurrentShift, type ShiftName } from "../helpers/shiftHelper.ts";
 import { useUser } from "../pages/context/UserContext";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import { isWorking } from "../helpers/schedulehelper.ts";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 
 export interface ShiftBoxProps {
   shift: string;
@@ -30,7 +31,7 @@ export default function Shifts({
   const { data: configData } = useConfigure();
   const { data: users, userSettings } = useUser();
   const { events, coverage } = useSchedule();
-  const { primaryAccent } = userSettings;
+  const { primaryAccent } = useSafeSettings();
   const isCurrent = isCurrentShift(shift as ShiftName);
 
   const { setNodeRef: teamRef, isOver: teamIsOver } = useDroppable({

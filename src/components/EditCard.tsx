@@ -16,6 +16,8 @@ import { BsX } from "react-icons/bs";
 import ProgressBar from "./ProgressBar.tsx";
 import type { FormValues } from "./EditForm";
 import type { ErrorNotify } from "../pages/Vacation.tsx";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
+import { getAllRange } from "../helpers/schedulehelper.ts";
 
 export interface EditProps {
   user: User;
@@ -34,7 +36,7 @@ export default function EditCard({
 }: EditProps) {
   const { userSettings, setProfilePhoto, removeProfilePhoto, updateUser } =
     useUser(); // ← add new methods
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   const { events, coverage } = useSchedule();
   const layoutKey = `user-${user.badge}`;
 
@@ -283,22 +285,40 @@ export default function EditCard({
       <div className="w-full h-full flex flex-col gap-4">
         <InfoCard
           title="Vacation"
-          props={getEvents(user, events, "Vacation")}
+          props={getAllRange("Vacation", 60, events)
+            .filter((e) => e.originUID === user.uid)
+            .map((e) => (
+              <InfoItem key={e.id} event={e as ScheduleEvent} />
+            ))}
         />
         <InfoCard
           title="Shift Swaps / Coverage"
           props={[
-            ...getEvents(user, events, "Shift-Swap"),
-            ...getCover(user, coverage),
+            ...getAllRange("Shift-Swap", 60, events)
+              .filter((e) => e.targetUID === user.uid)
+              .map((e) => <InfoItem key={e.id} event={e as ScheduleEvent} />),
+            ...getAllRange("Coverage", 60, coverage)
+              .filter((e) => isUserCoverage(e, user.uid))
+              .map((e) => <InfoItem key={e.id} coverage={e} />),
+            ,
           ]}
         />
         <InfoCard
           title="Training"
-          props={getEvents(user, events, "Training")}
+          props={getAllRange("Training", 60, events).map(
+            (e) =>
+              e.originUID === user.uid && (
+                <InfoItem key={e.id} event={e as ScheduleEvent} />
+              )
+          )}
         />
       </div>
     </motion.div>
   );
+}
+
+function isUserCoverage(e: any, uid: string): e is DayEvent {
+  return e && e.targetUID === uid && e.claimed;
 }
 
 function getEvents(user: User, events: ScheduleEvent[], type: EventType) {

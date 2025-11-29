@@ -4,7 +4,7 @@ import { primaryAccentHex, secondaryAccentHex } from "../colors";
 
 export default function UpperCard({ firstname, lastname, badge, title, icon }) {
   return (
-    <div className="bg-gradient-to-br flex-shrink from-zinc-900 to-zinc-800 rounded-md shadow-lg/50 flex justify-between items-center px-4 py-2 w-full h-full hover:scale-110 duration-300 ease-in-out hover:z-30">
+    <div className="bg-linear-to-br shrink from-zinc-900 to-zinc-800 rounded-md shadow-lg/50 flex justify-between items-center px-4 py-2 w-full h-full hover:scale-110 duration-300 ease-in-out hover:z-30">
       <div className="flex items-center justify-center">
         <div
           style={{ borderColor: primaryAccentHex }}
@@ -18,7 +18,7 @@ export default function UpperCard({ firstname, lastname, badge, title, icon }) {
         <div className="">{`${lastname}, ${firstname[0]}`}</div>
         <div
           style={{ backgroundColor: secondaryAccentHex }}
-          className={`flex-grow-0 mt-1 text-sm text-zinc-900 rounded-xs px-2 py-0.5 shadow-md/30`}
+          className={`grow-0 mt-1 text-sm text-zinc-900 rounded-xs px-2 py-0.5 shadow-md/30`}
         >
           {badge}
         </div>

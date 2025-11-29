@@ -1,10 +1,8 @@
-import { useState, useEffect, useRef, useCallback, useReducer } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { input } from "@material-tailwind/react";
 import Button from "../components/Button";
 import ListPanel from "../components/ListPanel.tsx";
 import { useConfigure } from "./context/configureContext.jsx";
-import { BsPlusLg } from "react-icons/bs";
 
 export default function Configure() {
   const [loading, setLoading] = useState(true);

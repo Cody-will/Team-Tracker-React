@@ -1,4 +1,4 @@
-import { useUser } from "../pages/context/UserContext";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 import type { User } from "../pages/context/UserContext";
 import { AnimatePresence, motion } from "motion/react";
 import { BsPersonCircle } from "react-icons/bs";
@@ -38,8 +38,7 @@ export default function ProfilePhoto({
   badgeFontSize,
   isDragging = false,
 }: ProfileProps) {
-  const { userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   const px = size * 4; // your scaling
   const isUpd = user.Divisions === "UPD";
 

@@ -1,6 +1,6 @@
-import { motion, AnimatePresence } from "motion/react";
-import { useUser } from "../pages/context/UserContext";
+import { motion } from "motion/react";
 import * as React from "react";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 type ToggleSize = "xs" | "sm" | "md" | "lg";
 
@@ -25,8 +25,7 @@ export default function ToggleSwitch({
     md: { container: "h-8 w-16 p-1", knob: "size-6" },
     lg: { container: "h-10 w-20 p-1", knob: "size-8" },
   } as const satisfies Record<ToggleSize, { container: string; knob: string }>;
-  const { userSettings } = useUser();
-  const { primaryAccent } = userSettings;
+  const { primaryAccent } = useSafeSettings();
 
   return (
     <motion.div

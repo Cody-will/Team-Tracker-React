@@ -1,5 +1,5 @@
 // pages/Schedule.tsx (or wherever your page lives)
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ScheduleCalendarLazy from "../components/ScheduleCalendarLazy";
 
 export default function Schedule() {

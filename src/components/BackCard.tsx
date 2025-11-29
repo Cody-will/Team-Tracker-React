@@ -5,6 +5,7 @@ import { useUser } from "../pages/context/UserContext";
 import { motion } from "motion/react";
 import ToggleSwitch from "./ToggleSwitch";
 import { calculateSickExpires } from "../helpers/sickHelper";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export interface BackCardProps {
   user: User;
@@ -14,7 +15,7 @@ export default function BackCard({ user }: BackCardProps) {
   const [isSick, setSick] = useState(user.sick ?? false);
   const [isMedical, setMedical] = useState(user.medical ?? false);
   const { userSettings, updateAfterDrag } = useUser();
-  const { secondaryAccent } = userSettings;
+  const { secondaryAccent } = useSafeSettings();
 
   useEffect(() => {
     // user.sick here is already "fixed" by UserContext

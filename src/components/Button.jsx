@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useUser } from "../pages/context/UserContext";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 /** @param {{ text: String, action: function, type?: button, disabled?: Boolean, color?: String, styles?: String, fontSize?: String, reference?: any }} props */
 
@@ -13,8 +13,7 @@ export default function Button({
   fontSize,
   reference,
 }) {
-  const { userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   return (
     <motion.button
       disabled={disabled}

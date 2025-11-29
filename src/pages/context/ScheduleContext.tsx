@@ -11,6 +11,7 @@ import {
 import { useUser } from "./UserContext";
 import Holidays from "date-holidays";
 import * as React from "react";
+import { useSafeSettings } from "../hooks/useSafeSettings";
 
 export interface Value {
   events: ScheduleEvent[];
@@ -126,7 +127,7 @@ function toLocalMidnight(millis: number | string) {
 
 export function ScheduleProvider({ children }: any) {
   const [events, setEvents] = useState<AllEvents>([]);
-  const { userSettings, user, data: users } = useUser();
+  const { user, data: users } = useUser();
 
   const {
     primaryAccent,
@@ -135,7 +136,7 @@ export function ScheduleProvider({ children }: any) {
     swapAccent,
     coverageAccent,
     trainingAccent,
-  } = userSettings;
+  } = useSafeSettings();
 
   const [coverage, setCoverage] = useState<Coverage>([]);
   const [training, setTraining] = useState<ScheduleEvent[]>([]);

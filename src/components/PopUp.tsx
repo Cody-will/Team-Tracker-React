@@ -1,9 +1,9 @@
 import { useState, useEffect, SetStateAction } from "react";
 import { motion } from "motion/react";
 import Button from "./Button";
-import { useUser } from "../pages/context/UserContext";
 import ToggleSwitch from "./ToggleSwitch";
 import type { TempParent } from "./TeamDisplay";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 
 export type Location = "top-center" | "bottom-right" | "bottom-left";
 
@@ -43,8 +43,7 @@ export default function PopUp(props: PopUpProps) {
     toggle,
     tempData,
   } = props;
-  const { userSettings } = useUser();
-  const { primaryAccent, secondaryAccent } = userSettings;
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
   const position = getLocation(location);
   const [time, setTime] = useState<number>(timer);
 
