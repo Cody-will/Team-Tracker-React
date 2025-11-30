@@ -9,6 +9,7 @@ import ProfilePhoto from "../components/ProfilePhoto.tsx";
 import PopUp from "../components/PopUp.tsx";
 import type { ErrorNotify } from "./Vacation.tsx";
 import { useSafeSettings } from "./hooks/useSafeSettings.ts";
+import { useBreakpoint } from "./hooks/useBreakoint.ts";
 
 type TabDef = { id: string; title: string; order?: number };
 
@@ -248,18 +249,29 @@ function TeamPanel({
   supervisorCards: React.ReactNode;
   employeeCards: React.ReactNode;
 }) {
+  const exclude = ["Alpha", "Bravo", "Charlie", "Delta"];
+  const allCards = [supervisorCards, employeeCards];
   return (
     <motion.div className="flex flex-col w-full h-full">
-      <div className="w-full p-2 relative flex items-center justify-start text-xl font-semibold text-zinc-200">
+      <div className="w-full p-2 relative flex items-center justify-start text-lg font-medium 2xl:text-xl 2xl:font-semibold text-zinc-200">
         {title}
       </div>
       <div className="flex p-2 flex-col items-center justify-evenly w-full h-full">
-        <div className="flex p-2 gap-4 border-b-2 border-zinc-900 items-center justify-evenly w-full h-2/5">
-          {supervisorCards}
-        </div>
-        <div className="flex p-2 gap-4 items-center justify-evenly w-full h-full">
-          {employeeCards}
-        </div>
+        {exclude.includes(title) && (
+          <>
+            <div className="flex p-2 gap-4 border-b-2 border-zinc-900 items-center justify-evenly w-full h-2/5">
+              {supervisorCards}
+            </div>
+            <div className="flex p-2 gap-4 items-center justify-evenly w-full h-full">
+              {employeeCards}
+            </div>{" "}
+          </>
+        )}
+        {!exclude.includes(title) && (
+          <motion.div className="flex p-2 gap-4 items-center justify-evenly w-full h-full">
+            {allCards}
+          </motion.div>
+        )}
       </div>
     </motion.div>
   );
@@ -283,6 +295,9 @@ function PanelCard({
   setNotify: React.Dispatch<React.SetStateAction<ErrorNotify | null>>;
 }) {
   const isSelected = !!user.uid && selectedUid === user.uid;
+  const { twoXlUp } = useBreakpoint();
+  const photoSize = twoXlUp ? 28 : 22;
+  const badgeFont = twoXlUp ? 14 : 12;
 
   return (
     <div className="w-full h-full">
@@ -305,20 +320,20 @@ function PanelCard({
           <motion.div className="relative rounded-full aspect-square flex justify-center items-center">
             <ProfilePhoto
               user={user}
-              size={28}
+              size={photoSize}
               borderColor={primaryAccent}
               badge={true}
               borderSize="md"
-              badgeFontSize={14}
+              badgeFontSize={badgeFont}
             />
           </motion.div>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-1 mt-2 text-sm font-semibold">
+        <div className="flex flex-col items-center justify-center gap-0.5 mt-2 text-xs 2xl:text-sm font-semibold">
           <div>{`${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()}</div>
           <motion.div
             style={{ backgroundColor: secondaryAccent }}
-            className="text-zinc-950 px-1 py-0.5 rounded-xs"
+            className="text-zinc-950 px-1 py-0.5 rounded-xs 2xl:text-sm text-xs font-medium"
           >
             {user.badge}
           </motion.div>

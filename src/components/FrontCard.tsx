@@ -11,6 +11,7 @@ import BackCard from "./BackCard";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import { isOff, isWorking, type ShiftName } from "../helpers/schedulehelper";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
+import { useBreakpoint } from "../pages/hooks/useBreakoint";
 
 export interface NewCardProps {
   person: User;
@@ -18,6 +19,9 @@ export interface NewCardProps {
   currShift: string;
   noFlip?: boolean;
   noFade?: boolean;
+  noBadge?: boolean;
+  photoSize?: number;
+  isCurrentShift?: boolean;
 }
 
 export default function FrontCard({
@@ -26,11 +30,15 @@ export default function FrontCard({
   currShift,
   noFlip = false,
   noFade = false,
+  noBadge = false,
+  photoSize = 18,
+  isCurrentShift = false,
 }: NewCardProps) {
   const [hovered, setHovered] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const { events, coverage } = useSchedule();
   const { isOff: offToday, type: offReason } = isOff(person.uid, events);
+  const { isBelowHd, isShortDesktop, isTallDesktop, twoXlUp } = useBreakpoint();
 
   const { data: users } = useUser();
   const { primaryAccent, secondaryAccent } = useSafeSettings();
@@ -41,8 +49,14 @@ export default function FrontCard({
     coverage,
     users
   );
+
+  const newPhotoSize = twoXlUp ? photoSize : 12;
+  const bannerText = twoXlUp ? 12 : 10;
+  const photoBorder = twoXlUp ? "md" : "sm";
+  const badgeFont = twoXlUp ? 18 : 16;
   const isCovering = person.Shifts !== currShift && covering;
   if (isCovering) noFlip = true;
+
   const id = isCovering ? `${person.uid}-${person.badge}-covering` : person.uid;
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -60,11 +74,30 @@ export default function FrontCard({
     setFlipped((prev) => !prev);
   };
 
+  // --- NEW LOGIC (YOUR OLD FUNCTION LEFT THE SAME) ---
   function checkOff() {
     return person.sick || offToday || person.medical;
   }
 
-  // Your existing front card content (unchanged styling)
+  // FADE CONDITIONS:
+  // - Medical always fades (unless noFade)
+  // - Sick/off fade only when this is the current shift
+  const shouldFade =
+    !noFade &&
+    (person.medical || (isCurrentShift && (person.sick || offToday)));
+
+  // SIDE BANNER for sick/off:
+  const showOffBanner =
+    person.medical || (isCurrentShift && !noFade && (person.sick || offToday));
+
+  function getOffReason() {
+    return person.medical
+      ? { value: person.medical, reason: "Medical" }
+      : { value: person.sick, reason: "Sick" };
+  }
+
+  // ----------------------------------------------
+
   const front = (
     <motion.div
       onHoverStart={() => setHovered(true)}
@@ -72,33 +105,40 @@ export default function FrontCard({
       transition={{ layout: { type: "tween", duration: 0.3 } }}
       style={{
         borderColor: hovered && !noFlip ? primaryAccent : secondaryAccent,
-        backgroundColor: checkOff() ? `#18181b85` : "#18181b",
+        backgroundColor: shouldFade ? `#18181b85` : "#18181b",
         opacity: isDragging ? 0.8 : 1,
       }}
-      className="relative h-full w-full p-2 gap-1 flex border items-center rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
+      className="relative h-full w-full p-2 2xl:gap-1 gap-0.5 flex border items-center rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
     >
-      {(offToday || (person.sick && !noFade)) && (
+      {showOffBanner && (
         <div
           style={{ backgroundColor: primaryAccent }}
-          className="absolute inset-y-0 left-0 w-5 rounded-l-lg flex items-center justify-center"
+          className="absolute inset-y-0 left-0 2xlw-5 w-3 rounded-l-lg flex items-center justify-center"
         >
-          <span className="text-[12px] font-semibold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]">
-            {person.sick ? "Sick" : offReason?.replaceAll("-", " ")}
+          <span className="2xl:text-[12px] text-[8px] font-semibold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]">
+            {getOffReason().value
+              ? getOffReason().reason
+              : offReason?.replaceAll("-", " ")}
           </span>
         </div>
       )}
+
       {isCovering && !noFade && (
         <div
           style={{ backgroundColor: primaryAccent }}
-          className="absolute inset-y-0 left-0 w-5 rounded-l-lg flex items-center justify-center"
+          className="absolute inset-y-0 left-0 2xl:w-5 w-2 rounded-l-lg flex items-center justify-center"
         >
-          <span className="text-[12px] font-semibold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]">
+          <span
+            style={{ fontSize: bannerText }}
+            className="2xl:text-[12px] text-[8px] font-semibold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]"
+          >
             {coveringReason?.replaceAll("-", " ")}
           </span>
         </div>
       )}
+
       <motion.div
-        style={{ opacity: checkOff() && !noFade ? 0.7 : 1 }}
+        style={{ opacity: shouldFade ? 0.7 : 1 }}
         layout={isDragging ? false : true}
         transition={{
           layout: isDragging ? {} : { type: "tween", duration: 0.3 },
@@ -106,24 +146,24 @@ export default function FrontCard({
       >
         <ProfilePhoto
           user={person}
-          size={20}
-          badge={noFlip ? true : !flipped}
-          borderSize="md"
+          size={newPhotoSize}
+          badge={noFlip ? !noBadge : !flipped}
+          borderSize={photoBorder}
           badgeStyle="font-semibold"
-          badgeFontSize={18}
+          badgeFontSize={badgeFont}
           isDragging={isDragging}
         />
       </motion.div>
 
       <div
-        style={{ opacity: checkOff() && !noFade ? 0.7 : 1 }}
-        className="flex flex-col gap-1 font-mediums justify-center items-center"
+        style={{ opacity: shouldFade ? 0.7 : 1 }}
+        className="flex flex-col gap-1 2xl:text-[16px] 2xl:font-medium justify-center items-center text-xs font-semibold text-nowrap"
       >
         <div>{`${person.lastName}, ${person.firstName[0]}`}</div>
 
         <div
           style={{ backgroundColor: secondaryAccent }}
-          className="flex items-center justify-center px-1.5 py-0.2 text-sm rounded-xs text-zinc-950"
+          className="flex items-center justify-center 2xl:px-1 2xl:py-0.2 2xl:text-sm rounded-xs text-zinc-950 text-xs px-0.5 py-0"
         >
           {person.badge}
         </div>

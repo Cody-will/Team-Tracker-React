@@ -45,7 +45,7 @@ export default function Vacation() {
   }, []);
 
   const inputStyle =
-    "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:border-[var(--accent)] focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
+    "border-2 border-zinc-500 w-full 2xl:text-base text-md text-zinc-200 bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:outline-none focus:border-[var(--accent)] focus:ring-1 f2xl:ocus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
 
   function handleSelect(dateData: DateSelectArg) {
     const { start, end, allDay } = dateData;
@@ -202,7 +202,7 @@ export default function Vacation() {
 
       <div
         id="panel"
-        className="p-4 bg-zinc-950/70 border border-zinc-800 text-zinc-200 flex flex-col gap-4 items-center justify-center h-full w-full rounded-xl"
+        className="2xl:p-4 p-2 bg-zinc-950/70 border border-zinc-800 text-zinc-200 flex flex-col gap-4 items-center justify-center h-full w-full rounded-xl"
       >
         <motion.div layout className="w-full flex gap-4">
           <div className="w-full gap-2 flex items-center justify-start">

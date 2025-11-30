@@ -18,6 +18,7 @@ import type { FormValues } from "./EditForm";
 import type { ErrorNotify } from "../pages/Vacation.tsx";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 import { getAllRange } from "../helpers/schedulehelper.ts";
+import { useBreakpoint } from "../pages/hooks/useBreakoint.ts";
 
 export interface EditProps {
   user: User;
@@ -45,6 +46,7 @@ export default function EditCard({
   const [uploadPreview, setUploadPreview] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
+  const { twoXlUp } = useBreakpoint();
 
   type BadgeKey = "fto" | "oic" | "pit" | "speed" | "rifle" | "trainee";
   const optionKeys = [
@@ -197,10 +199,10 @@ export default function EditCard({
         transition={{ type: "tween", duration: 0.02 }}
         className="absolute p-2 top-0 left-0 text-zinc-200 hover:cursor-pointer"
       >
-        <BsX size={64} />
+        <BsX size={twoXlUp ? 62 : 44} />
       </motion.div>
 
-      <div className="w-1/2 h-full flex gap-2 items-center justify-center flex-col">
+      <div className="2xl:w-1/2 w-1/4 h-full flex gap-2 items-center justify-center flex-col">
         <div className="h-full w-full flex justify-center items-end">
           <div className="flex w-full justify-center items-center gap-2" />
         </div>
@@ -208,7 +210,7 @@ export default function EditCard({
         <div className="flex gap-2 flex-col items-center justify-center">
           <ProfilePhoto
             user={user}
-            size={48}
+            size={twoXlUp ? 48 : 38}
             borderColor={primaryAccent}
             borderSize={"lg"}
           />

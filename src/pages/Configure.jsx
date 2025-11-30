@@ -30,7 +30,7 @@ export default function Configure() {
 
   // Styling for all inputs to keep consistent styling
   const inputStyle =
-    "border-2 border-zinc-900  text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:shadow-[0_0_15px_2px_rgba(3,105,161,7)] ";
+    "border-2 border-zinc-800 w-full text-zinc-200 text-sm 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
 
   // Handles creating the new list panel by adding a new child under the configure section of the database
   const handleAddNew = async () => {
@@ -54,14 +54,14 @@ export default function Configure() {
   };
 
   return (
-    <div className="h-full w-full flex p-4 justify-center items-center">
+    <div className="h-full w-full flex p-2 2xl:p-4 justify-center items-center">
       <motion.div
         layout
         id="panel"
-        className="bg-zinc-950/30 rounded-lg border border-zinc-800 text-zinc-200 font-semibold flex flex-col p-4 gap-4"
+        className="bg-zinc-950/30 rounded-lg border border-zinc-800 text-zinc-200 font-semibold flex flex-col p-2 2xl:p-4 gap-4"
       >
-        <div className="flex gap-4 justify-center items-center w-full">
-          <div className="flex w-full justify-start items-center text-3xl">
+        <div className="flex gap-2 2xl:gap-4 justify-center items-center w-full">
+          <div className="flex w-full justify-start items-center text-2xl 2xl:text-3xl">
             Configure
           </div>
           <div className="w-full flex justify-center items-center">
@@ -90,7 +90,7 @@ export default function Configure() {
             />
           </div>
         </div>
-        <div className="flex max-w-screen max-h-[80vh] justify-evenly items-start gap-4 flex-wrap overflow-x-scroll">
+        <div className="flex max-w-screen max-h-[80vh] justify-evenly items-start gap-2 2xl:gap-4 flex-wrap overflow-x-scroll">
           {panelData &&
             Object.entries(panelData).map(([panelKey, panel]) => (
               <ListPanel

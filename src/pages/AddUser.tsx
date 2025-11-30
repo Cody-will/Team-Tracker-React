@@ -7,6 +7,7 @@ import { useConfigure } from "./context/configureContext";
 import { useUser } from "./context/UserContext";
 import PopUp, { type PopUpProps } from "../components/PopUp";
 import { useSafeSettings } from "./hooks/useSafeSettings";
+import { useBreakpoint } from "./hooks/useBreakoint";
 
 // Shape of the form values
 export type FormValues = {
@@ -23,6 +24,8 @@ export type FormValues = {
   fto: boolean;
   mandate: boolean;
   trainee: boolean;
+  isMandated: boolean;
+  ftoList: boolean;
 
   trainer: string;
   phase: string;
@@ -70,6 +73,7 @@ export default function AddUser() {
     phase: "",
     jailSchool: false,
     ftoList: false,
+    isMandated: false,
 
     pit: false,
     speed: false,
@@ -190,6 +194,7 @@ function AddUserForm({
   onCreate,
 }: AddUserFormProps) {
   const [dropDownData, setDropDownData] = useState<DropDownItem[]>([]);
+  const { twoXlUp } = useBreakpoint();
 
   const {
     register,
@@ -205,9 +210,12 @@ function AddUserForm({
   const trainee = watch("trainee");
   const upd = watch("Divisions");
 
-  const toggleStyle = "flex flex-col justify-center items-center gap-2";
+  const toggleStyle =
+    "flex flex-col justify-center items-center 2xl:text-base text-xs text-nowrap gap-2 2xl:gap-2";
   const inputStyle =
-    "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
+    "border-2 border-zinc-500 w-full text-zinc-200 text-sm 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
+
+  const toggleSize = twoXlUp ? "md" : "xs";
 
   // Debug: watch firstName every render of this inner form
   useEffect(() => {
@@ -275,7 +283,7 @@ function AddUserForm({
       }}
       transition={{ type: "tween" }}
       onSubmit={handleSubmit(handleValidSubmit, onError)}
-      className="grid grid-cols-2 place-items-center gap-6"
+      className="grid grid-cols-2 place-items-center gap-4 2xl:gap-6"
     >
       <motion.input
         layout
@@ -430,7 +438,7 @@ function AddUserForm({
 
       <motion.div
         layout
-        className="col-span-2 gap-6 flex items-center justify-center"
+        className="col-span-2 2xl:gap-6 gap-4 flex items-center justify-center"
       >
         <div className={toggleStyle}>
           <span className="">OIC</span>
@@ -439,7 +447,11 @@ function AddUserForm({
             control={control}
             defaultValue={false}
             render={({ field }) => (
-              <ToggleSwitch state={!!field.value} setState={field.onChange} />
+              <ToggleSwitch
+                state={!!field.value}
+                setState={field.onChange}
+                size={toggleSize}
+              />
             )}
           />
         </div>
@@ -450,7 +462,11 @@ function AddUserForm({
             control={control}
             defaultValue={false}
             render={({ field }) => (
-              <ToggleSwitch state={!!field.value} setState={field.onChange} />
+              <ToggleSwitch
+                state={!!field.value}
+                setState={field.onChange}
+                size={toggleSize}
+              />
             )}
           />
         </div>
@@ -462,7 +478,11 @@ function AddUserForm({
               control={control}
               defaultValue={false}
               render={({ field }) => (
-                <ToggleSwitch state={!!field.value} setState={field.onChange} />
+                <ToggleSwitch
+                  state={!!field.value}
+                  setState={field.onChange}
+                  size={toggleSize}
+                />
               )}
             />
           </div>
@@ -474,7 +494,11 @@ function AddUserForm({
             control={control}
             defaultValue={false}
             render={({ field }) => (
-              <ToggleSwitch state={!!field.value} setState={field.onChange} />
+              <ToggleSwitch
+                state={!!field.value}
+                setState={field.onChange}
+                size={toggleSize}
+              />
             )}
           />
         </div>
@@ -489,6 +513,7 @@ function AddUserForm({
                   <ToggleSwitch
                     state={!!field.value}
                     setState={field.onChange}
+                    size={toggleSize}
                   />
                 )}
               />
@@ -502,6 +527,7 @@ function AddUserForm({
                   <ToggleSwitch
                     state={!!field.value}
                     setState={field.onChange}
+                    size={toggleSize}
                   />
                 )}
               />
@@ -515,6 +541,7 @@ function AddUserForm({
                   <ToggleSwitch
                     state={!!field.value}
                     setState={field.onChange}
+                    size={toggleSize}
                   />
                 )}
               />
@@ -534,6 +561,7 @@ function AddUserForm({
                   <ToggleSwitch
                     state={!!field.value}
                     setState={field.onChange}
+                    size={toggleSize}
                   />
                 )}
               />
@@ -548,6 +576,7 @@ function AddUserForm({
                   <ToggleSwitch
                     state={!!field.value}
                     setState={field.onChange}
+                    size={toggleSize}
                   />
                 )}
               />
@@ -562,6 +591,7 @@ function AddUserForm({
                   <ToggleSwitch
                     state={!!field.value}
                     setState={field.onChange}
+                    size={toggleSize}
                   />
                 )}
               />

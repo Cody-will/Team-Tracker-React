@@ -111,7 +111,7 @@ function getPositionAndScale(
 
   const fontScaleStyle: React.CSSProperties = {
     fontSize: `${fontSize * scale}px`,
-    paddingInline: `${3 * scale}px`,
+    paddingInline: `${4 * scale}px`,
     paddingBlock: `${0.5 * scale}px`,
     borderRadius: `${4 * scale}px`,
   };

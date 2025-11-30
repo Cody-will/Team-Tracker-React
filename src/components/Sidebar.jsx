@@ -21,29 +21,56 @@ import { auth } from "../firebase.js";
 import { signOut } from "firebase/auth";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 import { useAppVersion } from "../pages/context/VersionContext.tsx";
+import { useBreakpoint } from "../pages/hooks/useBreakoint.ts";
 
 export default function Sidebar() {
   const [barItems, setBarItems] = useState([]);
   const { user } = useUser();
   const { primaryAccent } = useSafeSettings();
   const { updateAvailable } = useAppVersion();
-
+  const { isShortDesktop } = useBreakpoint();
   const excludes = ["Add User", "Configure"];
 
+  const iconSize = !isShortDesktop ? 32 : 24;
+
   const links = [
-    { to: "/home", icon: <BsHouse size={32} />, label: "Home" },
-    { to: "/team-management", icon: <BsPeople size={32} />, label: "Team" },
-    { to: "/schedule", icon: <BsCalendarWeek size={32} />, label: "Schedule" },
-    { to: "/vacation", icon: <BsAirplane size={32} />, label: "Scheduling" },
-    { to: "/shift-swap", icon: <BsShuffle size={32} />, label: "Shift Swap" },
-    { to: "/add-user", icon: <BsPersonPlus size={32} />, label: "Add User" },
-    { to: "/coverage", icon: <BsCalendar2Plus size={32} />, label: "Coverage" },
-    { to: "/settings", icon: <BsSliders size={32} />, label: "Settings" },
-    { to: "/configure", icon: <BsGear size={32} />, label: "Configure" },
+    { to: "/home", icon: <BsHouse size={iconSize} />, label: "Home" },
+    {
+      to: "/team-management",
+      icon: <BsPeople size={iconSize} />,
+      label: "Team",
+    },
+    {
+      to: "/schedule",
+      icon: <BsCalendarWeek size={iconSize} />,
+      label: "Schedule",
+    },
+    {
+      to: "/vacation",
+      icon: <BsAirplane size={iconSize} />,
+      label: "Scheduling",
+    },
+    {
+      to: "/shift-swap",
+      icon: <BsShuffle size={iconSize} />,
+      label: "Shift Swap",
+    },
+    {
+      to: "/add-user",
+      icon: <BsPersonPlus size={iconSize} />,
+      label: "Add User",
+    },
+    {
+      to: "/coverage",
+      icon: <BsCalendar2Plus size={iconSize} />,
+      label: "Coverage",
+    },
+    { to: "/settings", icon: <BsSliders size={iconSize} />, label: "Settings" },
+    { to: "/configure", icon: <BsGear size={iconSize} />, label: "Configure" },
     {
       to: "/login",
       action: logOut,
-      icon: <BsDoorClosed size={32} />,
+      icon: <BsDoorClosed size={iconSize} />,
       label: "Logout",
     },
   ];
@@ -70,8 +97,10 @@ export default function Sidebar() {
     signOut(auth).then(() => {});
   }
 
+  const photoSize = !isShortDesktop ? 16 : 12;
+
   return (
-    <div className="relative w-20 z-50 flex items-end justify-center h-screen flex-col">
+    <div className="relative 2xl:w-20 w-18 z-50 flex items-end justify-center h-screen flex-col">
       <AnimatePresence>
         {user && (
           <motion.div
@@ -79,12 +108,20 @@ export default function Sidebar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ type: "tween", duration: 0.5 }}
-            className="absolute top-4 left-1.5 w-20 flex flex-col items-center justify-center"
+            className="absolute top-4 left-1.5 w-18 2xl:w-20 flex flex-col items-center justify-center"
           >
             <div className="flex flex-col items-center justify-center">
-              <ProfilePhoto user={user} size={16} borderColor={primaryAccent} />
-              <div className="text-zinc-200 font-medium">{user.Ranks}</div>
-              <div className="text-zinc-200 font-medium">{user.lastName}</div>
+              <ProfilePhoto
+                user={user}
+                size={photoSize}
+                borderColor={primaryAccent}
+              />
+              <div className="text-zinc-200 2xl:text-sm text-sm font-medium 2xl:font-medium">
+                {user.Ranks}
+              </div>
+              <div className="text-zinc-200 2xl:text-sm text-sm font-medium 2xl:font-medium">
+                {user.lastName}
+              </div>
             </div>
           </motion.div>
         )}
@@ -94,7 +131,7 @@ export default function Sidebar() {
         {user && (
           <div
             id="panel"
-            className="w-16 py-4 gap-2 rounded-xl flex flex-col items-center justify-between border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
+            className="2xl:w-16 w-14 py-4 gap-2 2xl:gap-2 rounded-xl flex flex-col items-center justify-between border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
           >
             {/* Top: main nav items */}
             <div className="flex flex-col items-center gap-2">{barItems}</div>
@@ -122,7 +159,7 @@ function SideBarLink({ to, action, icon, label }) {
       onClick={action ? () => action() : undefined}
       className={({ isActive }) =>
         [
-          "relative flex items-center justify-center h-12 w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
+          "relative flex items-center justify-center 2xl:w-12 2xl:h-12 h-10 w-10 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
           "hover:scale-110",
           isActive ? "text-zinc-950" : "",
         ].join(" ")
@@ -157,24 +194,38 @@ function SideBarLink({ to, action, icon, label }) {
  */
 function UpdateButton() {
   const { updateAvailable, latestVersion, appVersion } = useAppVersion();
+  const { isShortDesktop } = useBreakpoint();
+  const iconSize = !isShortDesktop ? 32 : 20;
 
   if (!updateAvailable) return null;
 
-  function handleClick() {
-    window.location.reload();
+  async function handleClick() {
+    try {
+      // 1) Clear Cache Storage (if any)
+      if ("caches" in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map((name) => caches.delete(name)));
+      }
+
+      // 2) Reload page (Firebase Auth session will remain)
+      window.location.reload();
+    } catch (err) {
+      console.error("Error while updating app:", err);
+      window.location.reload(); // fallback
+    }
   }
 
   return (
     <button
       onClick={handleClick}
-      className="relative flex items-center hover:cursor-pointer justify-center h-12 w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300 hover:scale-110"
+      className="relative flex items-center hover:cursor-pointer justify-center 2xl:h-12 h-10 w-10 2xl:w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300 hover:scale-110"
       title={
         latestVersion
           ? `Update available: v${latestVersion} (you are on v${appVersion}). Click to update.`
           : "Update available. Click to reload."
       }
     >
-      <BsArrowRepeat size={32} />
+      <BsArrowRepeat size={iconSize} />
 
       {/* Red dot badge */}
       <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-zinc-950" />

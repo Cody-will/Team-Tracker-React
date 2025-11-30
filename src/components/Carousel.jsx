@@ -26,20 +26,27 @@ export default function Carousel({ team }) {
 
     const mandate = getMandate(data);
     const mandateCards = mandate.map((person) => (
-      <FrontCard key={person.badgeNum} person={person} noFlip noFade />
+      <FrontCard
+        key={person.badgeNum}
+        person={person}
+        noFlip
+        noFade
+        noBadge
+        photoSize={16}
+      />
     ));
 
-    const medicalCards = Object.values(team).map(
-      (user) =>
-        user.medical && (
-          <FrontCard
-            key={`${user.badge}${user.uid}`}
-            person={user}
-            noFlip
-            noFade
-          />
-        )
-    );
+    const medicalCards = Object.values(team)
+      .filter((u) => u.medical)
+      .map((user) => (
+        <FrontCard
+          key={`${user.badge}${user.uid}`}
+          person={user}
+          noFlip
+          noFade
+          noBadge
+        />
+      ));
 
     const vacation = getAllRange("Vacation", 30, events).map((e) => (
       <InfoItem key={e.id} event={e} />
@@ -56,29 +63,44 @@ export default function Carousel({ team }) {
       <InfoItem key={e.id} coverage={e} />
     ));
 
-    const trainees = Object.values(team).map(
-      (user) =>
-        user.trainee && <FrontCard key={user.uid} person={user} noFlip noFade />
-    );
+    const trainees = Object.values(team)
+      .filter((u) => u.trainee)
+      .map(
+        (user) =>
+          user.trainee && (
+            <FrontCard key={user.uid} person={user} noFlip noFade noBadge />
+          )
+      );
 
-    const jailSchool = Object.values(team).map(
-      (user) =>
-        user.jailSchool && (
-          <FrontCard
-            key={`${user.uid}-jailSchool`}
-            person={user}
-            noFlip
-            noFade
-          />
-        )
-    );
+    const jailSchool = Object.values(team)
+      .filter((u) => u.jailSchool)
+      .map(
+        (user) =>
+          user.jailSchool && (
+            <FrontCard
+              key={`${user.uid}-jailSchool`}
+              person={user}
+              noFlip
+              noFade
+              noBadge
+            />
+          )
+      );
 
-    const ftoCards = Object.values(team).map(
-      (user) =>
-        user.ftoList && (
-          <FrontCard key={`${user.uid}-ftoList`} person={user} noFlip noFade />
-        )
-    );
+    const ftoCards = Object.values(team)
+      .filter((u) => u.ftoList)
+      .map(
+        (user) =>
+          user.ftoList && (
+            <FrontCard
+              key={`${user.uid}-ftoList`}
+              person={user}
+              noFlip
+              noFade
+              noBadge
+            />
+          )
+      );
 
     const all = [
       {

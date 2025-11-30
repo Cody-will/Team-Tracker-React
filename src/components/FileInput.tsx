@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import React, { useRef } from "react";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
+import { useBreakpoint } from "../pages/hooks/useBreakoint";
 
 export interface FileInputProps {
   selectedFile: File | null;
@@ -17,6 +18,7 @@ export default function FileInput({
 }: FileInputProps) {
   const { primaryAccent, secondaryAccent } = useSafeSettings();
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const { twoXlUp } = useBreakpoint();
 
   // This function handles opening the file input box when the button is pressed
   function handleClick(): void {
@@ -43,7 +45,7 @@ export default function FileInput({
         onChange={(event) => handleOnChange(event)}
       />
       <motion.button
-        className="text-center hover:cursor-pointer text-lg text-zinc-950 font-semibold px-3 py-2 rounded-l-lg"
+        className="text-center hover:cursor-pointer 2xl:text-lg text-sm text-zinc-950 font-semibold 2xl:px-3 2xl:py-2 px-1.5 py-1 2xl:rounded-l-lg rounded-l-md"
         style={{ backgroundColor: primaryAccent }}
         whileHover={{ scale: 1.05 }}
         onClick={handleClick}
@@ -52,7 +54,7 @@ export default function FileInput({
       </motion.button>
       <input
         style={{ borderColor: color ? color : "#09090b" }}
-        className="px-3 py-2 border-2 rounded-r-lg bg-zinc-900 text-zinc-200"
+        className="2xl:px-3 2xl:py-2 px-1.5 py-1 border-2 2xl:rounded-r-lg rounded-r-md text-sm  bg-zinc-900 text-zinc-200"
         value={selectedFile ? selectedFile.name : "No file selected"}
         placeholder={selectedFile ? selectedFile.name : "No file selected"}
         disabled

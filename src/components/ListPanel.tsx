@@ -27,6 +27,7 @@ export default function ListPanel({
   const [title, setTitle] = useState<string>("");
   const [items, setItems] = useState<ListItem[] | undefined>();
   const { addItem, updateList, removePanel, removeItem } = useConfigure();
+  const noDelete = ["Shifts", "Ranks", "Divisions", "Role"];
 
   // This useEffect is what first gets and checks the data,
   // listens for when the data changes in the database,
@@ -121,19 +122,23 @@ export default function ListPanel({
   return (
     <motion.div
       layout
-      className="flex flex-col border border-zinc-700 rounded-lg gap-2 justify-start items-center p-4"
+      className="flex flex-col border border-zinc-700 rounded-md 2xl:rounded-lg gap-2 justify-start items-center p-2 2xl:p-4"
     >
-      <div className="flex gap-2 w-full items-center justify-center">
+      <div className="flex w-full text-md items-center justify-center">
         <div className="w-full"></div>
-        <div className="text-xl w-full">{title}</div>
-        <motion.div className="text-red-500 w-full text-2xl flex items-center justify-end">
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            onClick={() => onPanelRemove()}
-            className="hover:cursor-pointer"
-          >
-            {<BsTrash />}
-          </motion.div>
+        <div className="w-full 2xl:text-xl text-nowrap flex items-center jusitfy-center ">
+          <div className="w-full flex items-center justify-center">{title}</div>
+        </div>
+        <motion.div className="text-red-500 w-full text-xl 2xl:text-2xl flex items-center justify-end">
+          {!noDelete.includes(title) && (
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              onClick={() => onPanelRemove()}
+              className="hover:cursor-pointer text-red-500"
+            >
+              {<BsTrash />}
+            </motion.div>
+          )}
         </motion.div>
       </div>
       <input

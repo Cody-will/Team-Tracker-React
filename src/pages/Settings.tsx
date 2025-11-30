@@ -49,7 +49,7 @@ export default function Settings() {
   const nicknameRef = useRef<HTMLInputElement | null>(null);
   const id = "settingsLayout";
   const inputStyle =
-    "border-2 border-zinc-900 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
+    "border-2 border-zinc-500 w-full text-zinc-200 text-sm 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
 
   // This function will update the users settings in the database under users/uid/settings
   async function updateSettings(location: Location, value: string) {
@@ -127,13 +127,13 @@ export default function Settings() {
         <motion.div
           layout
           id="panel"
-          className="bg-zinc-950/30 overflow-hidden flex flex-col gap-4 p-8 justify-center items-center border border-zinc-800 rounded-xl"
+          className="bg-zinc-950/30 overflow-hidden flex flex-col gap-2 2xl:gap-4 p-4 2xl:p-8 justify-center items-center border border-zinc-800 rounded-xl"
         >
           <div className="flex w-full">
-            <div className="font-semibold text-zinc-200 text-3xl flex items-start justify-start w-full">
+            <div className="font-semibold text-zinc-200 text-lg 2xl:text-3xl flex items-start justify-start w-full">
               Settings/Customization
             </div>
-            <div className="flex justify-between items-between text-zinc-200 font-semibold">
+            <div className="flex justify-between items-between text-zinc-200 font-medium 2xl:font-semibold">
               <motion.div
                 animate={{ rotate: next ? -180 : 0 }}
                 transition={{ duration: 0.3, type: "tween" }}
@@ -158,7 +158,7 @@ export default function Settings() {
                   className="flex gap-4"
                 >
                   <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-                    <div className="font-semibold text-2xl text-zinc-200">
+                    <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Primary Accent
                     </div>
                     <ColorPicker
@@ -175,7 +175,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-                    <div className="font-semibold text-2xl text-zinc-200">
+                    <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Secondary Accent
                     </div>
                     <ColorPicker
@@ -196,7 +196,7 @@ export default function Settings() {
                     layout
                     className="flex flex-col gap-4 justify-center items-center border-2 border-zinc-900 rounded-xl p-4"
                   >
-                    <div className="font-semibold text-2xl text-zinc-200">
+                    <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Background Image
                     </div>
                     <AnimatePresence>
@@ -289,7 +289,7 @@ export default function Settings() {
                   className="flex gap-4"
                 >
                   <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-                    <div className="font-semibold text-2xl text-zinc-200">
+                    <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Vacation Color
                     </div>
                     <ColorPicker
@@ -306,7 +306,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-                    <div className="font-semibold text-2xl text-zinc-200">
+                    <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Training Accent
                     </div>
                     <ColorPicker
@@ -323,7 +323,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-                    <div className="font-semibold text-2xl text-zinc-200">
+                    <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Swap Color
                     </div>
                     <ColorPicker
@@ -340,7 +340,7 @@ export default function Settings() {
                     />
                   </div>
                   <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
-                    <div className="font-semibold text-2xl text-zinc-200">
+                    <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Coverage Color
                     </div>
                     <ColorPicker

@@ -27,7 +27,7 @@ export default function ColorPicker({ selectedColor, setSelectedColor }) {
   return (
     <motion.div
       layout
-      className="relative grid grid-cols-4 gap-2 flex-wrap text-lg font-semibold text-zinc-200"
+      className="relative grid grid-cols-4 gap-2 flex-wrap text-sm 2xl:text-lg font-medium 2xl:font-semibold text-zinc-200"
     >
       <AnimatePresence>
         {colors.map((color) => (

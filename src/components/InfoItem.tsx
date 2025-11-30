@@ -4,6 +4,7 @@ import type { ScheduleEvent, DayEvent } from "../pages/context/ScheduleContext";
 import { useUser } from "../pages/context/UserContext";
 import type { User } from "../pages/context/UserContext";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
+import { useBreakpoint } from "../pages/hooks/useBreakoint";
 
 export interface InfoItemProps {
   event?: ScheduleEvent;
@@ -15,6 +16,7 @@ export default function InfoItem(props: InfoItemProps) {
   const { event, coverage } = props;
   const { data: users } = useUser();
   const { primaryAccent, secondaryAccent } = useSafeSettings();
+  const { twoXlUp } = useBreakpoint();
   useEffect(() => {
     if (event) setUser(users[event.originUID]);
     if (coverage) setUser(users[coverage.originUID]);
@@ -24,8 +26,22 @@ export default function InfoItem(props: InfoItemProps) {
   const endDate = event && event.end;
   const coverDate = coverage && coverage.day;
 
+  function checkType() {
+    if (!event) {
+      return false;
+    }
+    if (event.eventType === "Range") {
+      return true;
+    }
+    return false;
+  }
+
   function getDates() {
     if (coverage) return `${splitDate(coverDate as string)}`;
+    if (checkType()) {
+      return `${splitDate(startDate as string)}`;
+    }
+
     if (event)
       return `${splitDate(startDate as string)} - ${splitDate(
         endDate as string
@@ -45,10 +61,12 @@ export default function InfoItem(props: InfoItemProps) {
   return (
     <motion.div
       style={{ borderColor: primaryAccent }}
-      className="w-full flex justify-evenly items-center text-zinc-200 border-2 font-medium rounded-md bg-zinc-900 shadow-lg/40 shadow-zinc-950"
+      className="w-full flex justify-evenly items-center text-zinc-200 border-2 2xl:text-base font-medium rounded-md bg-zinc-900 shadow-lg/40 shadow-zinc-950 text-xs"
     >
-      <div className="flex justify-start pl-3 items-center w-full">{title}</div>
-      <div className="flex justify-start px-3 items-center text-zinc-200 text-nowrap">
+      <div className="flex justify-start 2xl:pl-3 pl-1 items-center w-full">
+        {twoXlUp ? title : title?.split("#")[0]}
+      </div>
+      <div className="flex justify-start 2xl:px-3 px-1 items-center text-zinc-200 text-nowrap">
         {getDates()}
       </div>
     </motion.div>

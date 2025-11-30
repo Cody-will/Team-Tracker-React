@@ -61,18 +61,26 @@ export default function BackCard({ user }: BackCardProps) {
           )} - ${user.phone.slice(6, 10)}`}
         </div>
       )}
+      {user.secondPhone && user.secondPhone.length >= 10 && (
+        <div className="font-semibold text-xs">
+          {`(${user.secondPhone.slice(0, 3)}) ${user.secondPhone.slice(
+            3,
+            6
+          )} - ${user.secondPhone.slice(6, 10)}`}
+        </div>
+      )}
 
       <div
         className="flex items-center justify-evenly gap-2"
         onClick={stopClick}
       >
         <motion.div className="flex items-center flex-col justify-center">
-          <div className="text-sm font-semibold">Sick</div>
+          <div className="text-xs font-semibold">Sick</div>
           <ToggleSwitch state={isSick} setState={handleSickToggle} size="xs" />
         </motion.div>
 
         <motion.div className="flex items-center justify-center flex-col">
-          <div className="text-sm font-semibold">Medical</div>
+          <div className="text-xs font-semibold">Medical</div>
           <ToggleSwitch
             state={isMedical}
             setState={handleMedicalToggle}

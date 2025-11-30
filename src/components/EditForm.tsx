@@ -15,6 +15,7 @@ import { useConfigure } from "../pages/context/configureContext";
 import Button from "../components/Button";
 import ToggleSwitch from "../components/ToggleSwitch";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
+import { useBreakpoint } from "../pages/hooks/useBreakoint";
 
 import type { Item, ListData } from "./ListPanel";
 
@@ -144,6 +145,9 @@ export default function EditForm({
   const { primaryAccent } = useSafeSettings();
   const [groups, setGroups] = useState<ConfigGroup[]>([]);
   const id = "formGroup";
+  const { twoXlUp } = useBreakpoint();
+
+  const toggleSize = twoXlUp ? "md" : "xs";
 
   const baseDefaults: DefaultValues<FormValues> = useMemo(
     () => ({
@@ -196,9 +200,14 @@ export default function EditForm({
   const trainee = watch("trainee");
   const upd = watch("Divisions");
 
-  const toggleStyle = "flex flex-col justify-center items-center gap-2";
+  const toggleStyle =
+    "flex flex-col justify-center items-center 2xl:text-base text-xs text-nowrap gap-2 2xl:gap-2";
   const inputStyle =
-    "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-lg py-2 px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
+    "border-2 border-zinc-500 w-full text-zinc-200 text-md 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
+
+  useEffect(() => {
+    console.log(upd);
+  }, [upd]);
 
   // build groups from configure
   useEffect(() => {
@@ -236,7 +245,6 @@ export default function EditForm({
 
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     const cleaned = cleanValues(values);
-    console.log("SUBMIT VALUES:", cleaned);
     setUpdating(true);
     const completed = await submitFunction(cleaned);
     if (completed) {
@@ -259,7 +267,7 @@ export default function EditForm({
           <motion.div
             layout
             id="panel"
-            className="flex p-4 gap-4 flex-col items-center justify-center rounded-xl text-zinc-200 font-semibold"
+            className="flex p-2 2xl:p-4 gap-2 2xl:gap-4 flex-col items-center justify-center rounded-xl text-zinc-200 font-semibold"
           >
             <motion.div
               layout
@@ -273,7 +281,7 @@ export default function EditForm({
               onSubmit={handleSubmit(onSubmit, onError)}
               layout="position"
               transition={{ type: "tween" }}
-              className="grid grid-cols-2 gap-6 place-items-center font-medium"
+              className="grid grid-cols-2 2xl:gap-6 gap-4 place-items-center font-normal 2xl:font-medium"
             >
               {/* FIRST NAME - controlled */}
               <Controller
@@ -465,7 +473,7 @@ export default function EditForm({
               {/* TOGGLES */}
               <motion.div
                 layout
-                className="col-span-2 gap-6 flex items-center justify-center"
+                className="col-span-2 gap-4 2xl:gap-6 flex items-center justify-center"
               >
                 <div className={toggleStyle}>
                   <span>OIC</span>
@@ -476,6 +484,7 @@ export default function EditForm({
                       <ToggleSwitch
                         state={!!field.value}
                         setState={field.onChange}
+                        size={toggleSize}
                       />
                     )}
                   />
@@ -490,6 +499,7 @@ export default function EditForm({
                       <ToggleSwitch
                         state={!!field.value}
                         setState={field.onChange}
+                        size={toggleSize}
                       />
                     )}
                   />
@@ -505,6 +515,7 @@ export default function EditForm({
                         <ToggleSwitch
                           state={!!field.value}
                           setState={field.onChange}
+                          size={toggleSize}
                         />
                       )}
                     />
@@ -520,6 +531,7 @@ export default function EditForm({
                       <ToggleSwitch
                         state={!!field.value}
                         setState={field.onChange}
+                        size={toggleSize}
                       />
                     )}
                   />
@@ -536,6 +548,7 @@ export default function EditForm({
                           <ToggleSwitch
                             state={!!field.value}
                             setState={field.onChange}
+                            size={toggleSize}
                           />
                         )}
                       />
@@ -549,6 +562,7 @@ export default function EditForm({
                           <ToggleSwitch
                             state={!!field.value}
                             setState={field.onChange}
+                            size={toggleSize}
                           />
                         )}
                       />
@@ -562,6 +576,7 @@ export default function EditForm({
                           <ToggleSwitch
                             state={!!field.value}
                             setState={field.onChange}
+                            size={toggleSize}
                           />
                         )}
                       />
@@ -580,6 +595,7 @@ export default function EditForm({
                           <ToggleSwitch
                             state={!!field.value}
                             setState={field.onChange}
+                            size={toggleSize}
                           />
                         )}
                       />
@@ -593,6 +609,7 @@ export default function EditForm({
                           <ToggleSwitch
                             state={!!field.value}
                             setState={field.onChange}
+                            size={toggleSize}
                           />
                         )}
                       />
@@ -606,6 +623,7 @@ export default function EditForm({
                           <ToggleSwitch
                             state={!!field.value}
                             setState={field.onChange}
+                            size={toggleSize}
                           />
                         )}
                       />

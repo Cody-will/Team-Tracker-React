@@ -23,8 +23,8 @@ export default function Button({
       style={{ backgroundColor: color ? color : primaryAccent }}
       transition={{ type: "tween", duration: 0.2 }}
       className={`relative w-full whitespace-nowrap flex items-center justify-center text-center hover:cursor-pointer text-zinc-900 ${
-        fontSize ? fontSize : "text-lg"
-      } font-semibold rounded-lg shadow-lg/40 px-3 py-2 ${styles}`}
+        fontSize ? fontSize : "2xl:text-lg text-md"
+      } font-semibold 2xl:rounded-lg rounded-md shadow-lg/40 2xl:px-3 2xl:py-2 px-1.5 py-1 ${styles}`}
       onClick={action ? (event) => action(event) : () => {}}
     >
       {text}

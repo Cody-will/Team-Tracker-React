@@ -1,5 +1,6 @@
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 import type { ScheduleEvent } from "../pages/context/ScheduleContext";
+import { useBreakpoint } from "../pages/hooks/useBreakoint";
 
 export interface InfoCardProps {
   title: string;
@@ -17,6 +18,7 @@ export default function InfoCard({
   extendedProps,
 }: InfoCardProps) {
   const { primaryAccent, secondaryAccent } = useSafeSettings();
+  const { twoXlUp } = useBreakpoint();
 
   const startDate = titleDate && titleDate.start;
   const endDate = titleDate && titleDate.end;
@@ -31,12 +33,39 @@ export default function InfoCard({
     return `${sep[1]}/${sep[2]}/${sep[0]}`;
   }
 
+  function getLayout(): React.CSSProperties {
+    if (column) {
+      return {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        gap: twoXlUp ? ".25rem" : ".12rem",
+      };
+    }
+    if (props.length > 2) {
+      return {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        placeItems: "center",
+        gap: twoXlUp ? ".5rem" : ".25rem",
+      };
+    }
+    return {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: twoXlUp ? ".5rem" : ".25rem",
+    };
+  }
+
   return (
     <div
       style={{ borderColor: secondaryAccent }}
-      className="relative p-2 rounded-md flex flex-col justify-center border-2 items-center h-full w-full overflow-hidden bg-zinc-900 shadow-lg/30"
+      className="relative 2xl:p-2 p-1 rounded-md flex flex-col justify-center border-2 items-center h-full w-full overflow-hidden bg-zinc-900 shadow-lg/30"
     >
-      <div className="flex w-full items-center text-nowrap justify-start gap-2 text-lg font-bold text-zinc-200">
+      <div className="flex w-full items-center text-nowrap justify-start 2xl:gap-2 gap-1 2xl:text-lg 2xl:font-bold font-semibold text-sm text-zinc-200">
         {title}
         {titleDate && (
           <div className="flex items-center justify-end w-full font-medium">
@@ -44,14 +73,7 @@ export default function InfoCard({
           </div>
         )}
       </div>
-      <div
-        style={{
-          flexDirection: column ? "column" : "row",
-          justifyContent: column ? "flex-start" : "center",
-          gap: column ? ".25rem" : ".5rem",
-        }}
-        className={`relative flex items-center p-2 w-full h-full`}
-      >
+      <div style={getLayout()} className={`relative p-2 w-full h-full`}>
         {props}
         {extendedProps && extendedProps}
       </div>

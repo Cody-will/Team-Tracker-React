@@ -24,6 +24,7 @@ import Schedule from "./pages/Schedule.tsx";
 import { ScheduleProvider } from "./pages/context/ScheduleContext.tsx";
 import SplashOverlay from "./components/SplashOverlay.tsx";
 import { VersionProvider } from "./pages/context/VersionContext.tsx";
+import { useBreakpoint } from "./pages/hooks/useBreakoint.ts";
 
 const LoginRoute = () => {
   const { currentUser, authReady, forceSplash } = useAuth();
@@ -142,6 +143,7 @@ const ProtectedLayout = () => {
   const { currentUser, authReady } = useAuth();
   const { bgImage } = useSafeSettings();
   const { loading: usersLoading } = useUser(); // 🔹 user/settings loading from context
+  const { isTallDesktop } = useBreakpoint();
 
   const { current, next, showNext, startSwap, fadeMs } = useSeamlessWallpaper(
     bgImage ?? null,

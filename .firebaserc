@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "team-tracker-8d615"
-  }
+    "default": "team-tracker-8d615",
+    "pickens": "teamtrackerpickens"
+  },
+  "targets": {},
+  "etags": {}
 }
