@@ -15,7 +15,7 @@ import { useConfigure } from "../pages/context/configureContext";
 import Button from "../components/Button";
 import ToggleSwitch from "../components/ToggleSwitch";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
-import { useBreakpoint } from "../pages/hooks/useBreakoint";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint";
 
 import type { Item, ListData } from "./ListPanel";
 

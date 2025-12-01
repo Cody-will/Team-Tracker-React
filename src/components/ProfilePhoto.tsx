@@ -6,12 +6,14 @@ import ProfileBadge from "./ProfileBadge";
 import type { Position } from "./ProfileBadge";
 import { useMemo } from "react";
 
+export type BorderSize = "sm" | "md" | "lg";
+
 interface ProfileProps {
   user: User;
   size?: number;
   badge?: boolean;
   borderColor?: string;
-  borderSize: "sm" | "md" | "lg";
+  borderSize: BorderSize;
   badgeStyle?: string;
   badgeFontSize?: number;
   isDragging?: boolean;

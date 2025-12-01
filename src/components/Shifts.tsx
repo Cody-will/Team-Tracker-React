@@ -12,7 +12,7 @@ import { useUser } from "../pages/context/UserContext";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import { isWorking } from "../helpers/schedulehelper.ts";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
-import { useBreakpoint } from "../pages/hooks/useBreakoint.ts";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
 
 export interface ShiftBoxProps {
   shift: string;
@@ -34,7 +34,7 @@ export default function Shifts({
   const { events, coverage } = useSchedule();
   const { primaryAccent } = useSafeSettings();
   const isCurrent = isCurrentShift(shift as ShiftName);
-  const { twoXlUp } = useBreakpoint();
+  const { lgUp, twoXlUp } = useBreakpoint();
 
   const shadow = twoXlUp
     ? `0px 0px 5px 5px ${primaryAccent}`
@@ -63,7 +63,7 @@ export default function Shifts({
         borderColor: isCurrent ? primaryAccent : "#27272a",
         boxShadow: isCurrent ? shadow : "none",
       }}
-      className="flex flex-col h-full w-full bg-zinc-950/50 border-2 rounded-lg 2xl:rounded-xl"
+      className="flex flex-col 2xl:h-full lg:h-full w-full bg-zinc-950/50 border-2 rounded-lg 2xl:rounded-xl"
     >
       <motion.div className="flex items-center justify-center text-zinc-200 text-lg bg-zinc-950/60 rounded-t-md 2xl:rounded-t-lg p-1 font-semibold">
         {shift}
@@ -73,7 +73,7 @@ export default function Shifts({
       <motion.div
         ref={superRef}
         style={superIsOver ? overStyle : {}}
-        className="h-1/3 w-full border-b-2 rounded-md border-zinc-950 flex items-center justify-center 2xl:gap-2 2xl:p-2 p-1.5 gap-1"
+        className="lg:h-1/3 2xl:h-1/3 w-full border-b-2 rounded-md border-zinc-950 flex items-center justify-center 2xl:gap-2 2xl:p-2 p-2 gap-1"
       >
         {Object.values(team)
           .filter((user) => {
@@ -194,7 +194,7 @@ export default function Shifts({
       <motion.div
         ref={teamRef}
         style={teamIsOver ? overStyle : {}}
-        className="h-full w-full grid grid-cols-2 rounded-md place-items-start 2xl:gap-2 2xl:p-2 p-1.5 gap-1"
+        className=" 2xl:h-full lg:h-full w-full grid grid-cols-2 rounded-md place-items-start 2xl:gap-2 2xl:p-2 p-1.5 gap-1"
       >
         {Object.values(team)
           .filter((user) => {

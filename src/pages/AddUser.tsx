@@ -7,7 +7,7 @@ import { useConfigure } from "./context/configureContext";
 import { useUser } from "./context/UserContext";
 import PopUp, { type PopUpProps } from "../components/PopUp";
 import { useSafeSettings } from "./hooks/useSafeSettings";
-import { useBreakpoint } from "./hooks/useBreakoint";
+import { useBreakpoint } from "./hooks/useBreakpoint";
 
 // Shape of the form values
 export type FormValues = {

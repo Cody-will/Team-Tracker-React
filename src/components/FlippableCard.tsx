@@ -16,12 +16,12 @@ export default function FlippableCard({
 }: FlippableCardProps) {
   return (
     <motion.div
-      className="relative h-full w-full transform-3d"
+      className="relative lg:h-full w-full transform-3d"
       animate={noFlip ? {} : { rotateY: flipped ? 180 : 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <motion.div
-        className="absolute inset-0 backface-hidden"
+        className="lg:absolute inset-0 backface-hidden"
         style={{ rotateY: 0 }}
       >
         {front}

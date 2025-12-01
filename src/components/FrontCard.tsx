@@ -11,7 +11,8 @@ import BackCard from "./BackCard";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import { isOff, isWorking, type ShiftName } from "../helpers/schedulehelper";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
-import { useBreakpoint } from "../pages/hooks/useBreakoint";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint";
+import type { BorderSize } from "./ProfilePhoto";
 
 export interface NewCardProps {
   person: User;
@@ -23,6 +24,13 @@ export interface NewCardProps {
   photoSize?: number;
   isCurrentShift?: boolean;
 }
+
+type Sizing = {
+  newPhotoSize: number;
+  bannerText: number;
+  photoBorder: BorderSize;
+  badgeFont: number;
+};
 
 export default function FrontCard({
   person,
@@ -38,7 +46,7 @@ export default function FrontCard({
   const [flipped, setFlipped] = useState(false);
   const { events, coverage } = useSchedule();
   const { isOff: offToday, type: offReason } = isOff(person.uid, events);
-  const { isBelowHd, isShortDesktop, isTallDesktop, twoXlUp } = useBreakpoint();
+  const { lgUp, twoXlUp } = useBreakpoint();
 
   const { data: users } = useUser();
   const { primaryAccent, secondaryAccent } = useSafeSettings();
@@ -50,12 +58,34 @@ export default function FrontCard({
     users
   );
 
-  const newPhotoSize = twoXlUp ? photoSize : 12;
-  const bannerText = twoXlUp ? 12 : 10;
-  const photoBorder = twoXlUp ? "md" : "sm";
-  const badgeFont = twoXlUp ? 18 : 16;
+  const { newPhotoSize, bannerText, photoBorder, badgeFont } = getSizing();
   const isCovering = person.Shifts !== currShift && covering;
   if (isCovering) noFlip = true;
+
+  function getSizing(): Sizing {
+    if (twoXlUp) {
+      return {
+        newPhotoSize: photoSize,
+        bannerText: 12,
+        photoBorder: "md",
+        badgeFont: 18,
+      };
+    }
+    if (lgUp) {
+      return {
+        newPhotoSize: 12,
+        bannerText: 10,
+        photoBorder: "sm",
+        badgeFont: 16,
+      };
+    }
+    return {
+      newPhotoSize: 10,
+      bannerText: 8,
+      photoBorder: "sm",
+      badgeFont: 14,
+    };
+  }
 
   const id = isCovering ? `${person.uid}-${person.badge}-covering` : person.uid;
 
@@ -108,12 +138,12 @@ export default function FrontCard({
         backgroundColor: shouldFade ? `#18181b85` : "#18181b",
         opacity: isDragging ? 0.8 : 1,
       }}
-      className="relative h-full w-full p-2 2xl:gap-1 gap-0.5 flex border items-center rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
+      className="relative lg:h-full h-auto 2xl:h-full  p-2 2xl:gap-1 gap-0.5 flex border items-center rounded-md lg:rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
     >
-      {showOffBanner && (
+      {showOffBanner && !noFlip && (
         <div
           style={{ backgroundColor: primaryAccent }}
-          className="absolute inset-y-0 left-0 2xlw-5 w-3 rounded-l-lg flex items-center justify-center"
+          className="absolute inset-y-0 left-0 2xl:w-5 w-3 rounded-l-lg flex items-center justify-center"
         >
           <span className="2xl:text-[12px] text-[8px] font-semibold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]">
             {getOffReason().value
@@ -157,13 +187,13 @@ export default function FrontCard({
 
       <div
         style={{ opacity: shouldFade ? 0.7 : 1 }}
-        className="flex flex-col gap-1 2xl:text-[16px] 2xl:font-medium justify-center items-center text-xs font-semibold text-nowrap"
+        className="flex flex-col gap-1 2xl:text-[16px] 2xl:font-medium justify-center items-center text-xs font-medium text-nowrap"
       >
         <div>{`${person.lastName}, ${person.firstName[0]}`}</div>
 
         <div
           style={{ backgroundColor: secondaryAccent }}
-          className="flex items-center justify-center 2xl:px-1 2xl:py-0.2 2xl:text-sm rounded-xs text-zinc-950 text-xs px-0.5 py-0"
+          className="flex items-center justify-center 2xl:px-1 2xl:py-0.5 2xl:text-sm rounded-xs text-zinc-950 text-[.5rem] lg:text-xs px-0.5 py-0"
         >
           {person.badge}
         </div>
@@ -181,12 +211,16 @@ export default function FrontCard({
       style={
         noFlip
           ? {}
-          : { ...dragStyle, cursor: flipped ? "pointer" : dragStyle.cursor }
+          : {
+              ...dragStyle,
+              cursor: flipped ? "pointer" : dragStyle.cursor,
+              touchAction: "none",
+            }
       }
       {...(flipped || noFlip ? {} : listeners)}
       {...(flipped || noFlip ? {} : attributes)}
       onClick={handleCardClick}
-      className="h-full w-full"
+      className="lg:h-full h-auto w-full "
     >
       <FlippableCard
         flipped={flipped}

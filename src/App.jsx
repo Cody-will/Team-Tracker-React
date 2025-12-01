@@ -24,7 +24,7 @@ import Schedule from "./pages/Schedule.tsx";
 import { ScheduleProvider } from "./pages/context/ScheduleContext.tsx";
 import SplashOverlay from "./components/SplashOverlay.tsx";
 import { VersionProvider } from "./pages/context/VersionContext.tsx";
-import { useBreakpoint } from "./pages/hooks/useBreakoint.ts";
+import { useBreakpoint } from "./pages/hooks/useBreakpoint.ts";
 
 const LoginRoute = () => {
   const { currentUser, authReady, forceSplash } = useAuth();
@@ -193,7 +193,7 @@ const ProtectedLayout = () => {
       style={{
         backgroundColor: "#27272a",
       }}
-      className="h-screen w-screen overflow-hidden flex relative"
+      className="lg:h-screen min-h-screen w-screen overflow-scroll lg:overflow-hidden flex relative"
     >
       {current && (
         <div
@@ -222,7 +222,7 @@ const ProtectedLayout = () => {
       )}
 
       <Sidebar />
-      <main className="w-full h-full relative z-10">
+      <main className="lg:w-full 2xl:w-full 2xl:h-full lg:h-full min-h-screen lg:min-h-full 2xl:min-h-0 w-full lg:overflow-hidden relative z-10">
         <Outlet context={{ data, loading }} />
       </main>
     </motion.div>

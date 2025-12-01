@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import React, { useRef } from "react";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
-import { useBreakpoint } from "../pages/hooks/useBreakoint";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint";
 
 export interface FileInputProps {
   selectedFile: File | null;

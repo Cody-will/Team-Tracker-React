@@ -4,7 +4,7 @@ import type { ScheduleEvent, DayEvent } from "../pages/context/ScheduleContext";
 import { useUser } from "../pages/context/UserContext";
 import type { User } from "../pages/context/UserContext";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
-import { useBreakpoint } from "../pages/hooks/useBreakoint";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint";
 
 export interface InfoItemProps {
   event?: ScheduleEvent;

@@ -9,7 +9,7 @@ import ProfilePhoto from "../components/ProfilePhoto.tsx";
 import PopUp from "../components/PopUp.tsx";
 import type { ErrorNotify } from "./Vacation.tsx";
 import { useSafeSettings } from "./hooks/useSafeSettings.ts";
-import { useBreakpoint } from "./hooks/useBreakoint.ts";
+import { useBreakpoint } from "./hooks/useBreakpoint.ts";
 
 type TabDef = { id: string; title: string; order?: number };
 

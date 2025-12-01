@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { useUser } from "./context/UserContext.tsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import SplashOverlay from "../components/SplashOverlay.tsx";
-import { useBreakpoint } from "./hooks/useBreakoint.ts";
+import { useBreakpoint } from "./hooks/useBreakpoint.ts";
 
 export default function Home() {
   const { currentUser, forceSplash } = useAuth();
@@ -26,17 +26,17 @@ export default function Home() {
 
   // 🔹 Once ready, render the real dashboard.
   return (
-    <motion.div className="flex flex-col items-start justify-between p-4 gap-1 2xl:gap-2 relative w-full h-full">
+    <motion.div className="flex flex-col  items-start overflow-auto lg:overflow-hidden 2xl:overflow-hidden justify-between p-2 md:p-4 2xl:p-4 gap-1 2xl:gap-2 relative min-h-screen w-full lg:min-h-0 2xl:min-h-0 lg:h-full 2xl:h-full">
       <div
         id="panel"
-        className="h-full w-full flex items-center justify-center p-2 border border-zinc-800 bg-zinc-950/10 rounded-md"
+        className="lg:h-full 2xl:h-full w-full min-h-screen lg:min-h-0 2xl:min-h-0 flex items-center justify-center p-2 border border-zinc-800 bg-zinc-950/10 rounded-md"
       >
         <TeamDisplay key="team-display-comp" team={data} />
       </div>
 
       <div
         id="panel"
-        className="relative w-full flex items-start justify-center 2xl:h-4/10 h-[30%] border border-zinc-800 p-2 rounded-md backdrop-blur-sm bg-zinc-950/10"
+        className="relative w-full flex items-start justify-center 2xl:h-4/10  lg:h-[30%] border border-zinc-800 p-2 rounded-md backdrop-blur-sm bg-zinc-950/10"
       >
         <Carousel key="carousel-comp" team={data} />
       </div>

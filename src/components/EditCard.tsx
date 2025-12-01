@@ -18,7 +18,7 @@ import type { FormValues } from "./EditForm";
 import type { ErrorNotify } from "../pages/Vacation.tsx";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 import { getAllRange } from "../helpers/schedulehelper.ts";
-import { useBreakpoint } from "../pages/hooks/useBreakoint.ts";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
 
 export interface EditProps {
   user: User;

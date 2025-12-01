@@ -15,7 +15,7 @@ import {
 import type { DragEndEvent, UniqueIdentifier } from "@dnd-kit/core";
 import { useUser } from "../pages/context/UserContext";
 import PopUp, { ToggleProps, type PopUpProps } from "./PopUp.tsx";
-import { useBreakpoint } from "../pages/hooks/useBreakoint.ts";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
 
 export interface TeamDisplayProps {
   team: UserRecord;
@@ -47,7 +47,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
   const [temp, setTemp] = useState<TempParent | null>(null);
   const [rankChoice, setRankChoice] = useState<"oic" | "sgt" | null>(null);
   const rankChoiceRef = useRef<"oic" | "sgt" | null>(null);
-  const { isTallDesktop } = useBreakpoint();
+  const { lgUp, twoXlUp } = useBreakpoint();
   const toggles: ToggleProps = [
     {
       title: "Sergeant",
@@ -179,7 +179,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
   }
 
   return (
-    <motion.div className="relative w-full h-full gap-4 flex flex-col">
+    <motion.div className="relative lg:h-full w-full min-h-screen lg:min-h-0 2xl:min-h-0 2xl:h-full gap-2 lg:gap-4 flex flex-col">
       <AnimatePresence>
         {notify && (
           <PopUp
@@ -201,7 +201,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
       >
         <motion.div
           id="CommandStaff"
-          className="w-full h-1/4 flex  2xl:gap-2 gap-1 items-center justify-center"
+          className="w-full lg:h-1/5 2xl:h-1/5 flex 2xl:gap-2 gap-2 items-center justify-center"
         >
           {team &&
             configData &&
@@ -223,7 +223,12 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
 
         <motion.div
           id="Shifts"
-          className="w-full h-full 2xl:gap-4 gap-0.5 flex items-center justify-center"
+          style={{
+            flexGrow: !lgUp && !twoXlUp ? 1 : 0,
+            flexShrink: 1,
+            flexBasis: "auto",
+          }}
+          className=" lg:h-full 2xl:h-full w-full 2xl:gap-4 overflow-y-auto lg:overflow-hidden 2xl:overflow-hidden gap-0.5 flex lg:flex-row 2xl:flex-row flex-col items-center justify-center"
         >
           {team &&
             configData &&

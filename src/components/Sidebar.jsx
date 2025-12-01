@@ -21,17 +21,17 @@ import { auth } from "../firebase.js";
 import { signOut } from "firebase/auth";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 import { useAppVersion } from "../pages/context/VersionContext.tsx";
-import { useBreakpoint } from "../pages/hooks/useBreakoint.ts";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
 
 export default function Sidebar() {
   const [barItems, setBarItems] = useState([]);
   const { user } = useUser();
   const { primaryAccent } = useSafeSettings();
   const { updateAvailable } = useAppVersion();
-  const { isShortDesktop } = useBreakpoint();
+  const { isShortDesktop, mdUp, twoXlUp, lgUp } = useBreakpoint();
   const excludes = ["Add User", "Configure"];
 
-  const iconSize = !isShortDesktop ? 32 : 24;
+  const iconSize = twoXlUp ? 32 : 24;
 
   const links = [
     { to: "/home", icon: <BsHouse size={iconSize} />, label: "Home" },
@@ -97,7 +97,9 @@ export default function Sidebar() {
     signOut(auth).then(() => {});
   }
 
-  const photoSize = !isShortDesktop ? 16 : 12;
+  const photoSize = twoXlUp ? 16 : 12;
+
+  if (!lgUp) return null;
 
   return (
     <div className="relative 2xl:w-20 w-18 z-50 flex items-end justify-center h-screen flex-col">
@@ -116,10 +118,10 @@ export default function Sidebar() {
                 size={photoSize}
                 borderColor={primaryAccent}
               />
-              <div className="text-zinc-200 2xl:text-sm text-sm font-medium 2xl:font-medium">
+              <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
                 {user.Ranks}
               </div>
-              <div className="text-zinc-200 2xl:text-sm text-sm font-medium 2xl:font-medium">
+              <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
                 {user.lastName}
               </div>
             </div>

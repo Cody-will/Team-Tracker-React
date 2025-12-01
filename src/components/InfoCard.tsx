@@ -1,6 +1,6 @@
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 import type { ScheduleEvent } from "../pages/context/ScheduleContext";
-import { useBreakpoint } from "../pages/hooks/useBreakoint";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint";
 
 export interface InfoCardProps {
   title: string;

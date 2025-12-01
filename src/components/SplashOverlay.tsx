@@ -4,7 +4,7 @@ import { useAuth } from "../pages/context/AuthContext.jsx";
 import { useUser } from "../pages/context/UserContext.tsx";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 
-const MIN_VISIBLE_MS = 1500; // how long to keep splash after data is ready
+const MIN_VISIBLE_MS = 3000; // how long to keep splash after data is ready
 const CURTAIN_DURATION = 0.6; // seconds, must match your login navigate delay (600ms)
 
 export default function SplashOverlay() {

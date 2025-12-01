@@ -7,6 +7,7 @@ import FrontCard from "./FrontCard";
 import InfoItem from "./InfoItem";
 import { getAllNext30OfType, getAllRange } from "../helpers/schedulehelper";
 import { useSchedule } from "../pages/context/ScheduleContext";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint";
 
 export default function Carousel({ team }) {
   const [data, setData] = useState([]);
@@ -14,6 +15,7 @@ export default function Carousel({ team }) {
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState(0);
   const { events, coverage } = useSchedule();
+  const { lgUp, twoXlUp } = useBreakpoint();
 
   const itemsPerPage = 3;
 
@@ -180,49 +182,65 @@ export default function Carousel({ team }) {
   };
 
   return (
-    <div className="relative flex gap-2 justify-center items-center w-full h-full overflow-hidden">
-      <motion.button
-        className="text-zinc-200 py-2 px-1"
-        onClick={() => paginate(-1)}
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <BsChevronCompactLeft size="40" />
-      </motion.button>
-
-      <div className="relative w-full h-full flex justify-center items-center">
-        <AnimatePresence custom={direction} mode="wait" initial={false}>
-          <motion.div
-            key={page}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.2 }}
-            className="flex gap-2 w-full h-full justify-center items-center"
+    <div className="relative flex lg:gap-2 justify-center items-center w-full h-full overflow-hidden">
+      {lgUp ? (
+        <>
+          <motion.button
+            className="text-zinc-200 py-2 px-1"
+            onClick={() => paginate(-1)}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
           >
-            {paginatedCards.map((card) => (
-              <InfoCard
-                key={card.key}
-                title={card.title}
-                props={card.props}
-                titleDate={card.titleDate}
-                column={card.column}
-              />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+            <BsChevronCompactLeft size="40" />
+          </motion.button>
 
-      <motion.button
-        className="text-zinc-200 py-2 px-1"
-        onClick={() => paginate(1)}
-        whileHover={{ scale: 1.2 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <BsChevronCompactRight size="40" />
-      </motion.button>
+          <div className="relative w-full h-full flex justify-center items-center">
+            <AnimatePresence custom={direction} mode="wait" initial={false}>
+              <motion.div
+                key={page}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.2 }}
+                className="flex gap-2 w-full h-full justify-center items-center"
+              >
+                {paginatedCards.map((card) => (
+                  <InfoCard
+                    key={card.key}
+                    title={card.title}
+                    props={card.props}
+                    titleDate={card.titleDate}
+                    column={card.column}
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <motion.button
+            className="text-zinc-200 py-2 px-1"
+            onClick={() => paginate(1)}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <BsChevronCompactRight size="40" />
+          </motion.button>
+        </>
+      ) : (
+        <motion.div className="w-full flex flex-col gap-4">
+          {cardData.map((card) => (
+            <InfoCard
+              key={card.key}
+              title={card.title}
+              props={card.props}
+              titleDate={card.titleDate}
+              column={card.column}
+            />
+          ))}
+        </motion.div>
+      )}
     </div>
   );
 }

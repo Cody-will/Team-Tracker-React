@@ -11,7 +11,7 @@ import type { DateData, ErrorNotify } from "./Vacation";
 import PopUp from "../components/PopUp";
 import type { ScheduleEvent } from "./context/ScheduleContext";
 import { useSchedule } from "./context/ScheduleContext";
-import { useBreakpoint } from "./hooks/useBreakoint";
+import { useBreakpoint } from "./hooks/useBreakpoint";
 
 export default function ShiftSwap() {
   const [step, setStep] = useState<0 | 1>(0);
