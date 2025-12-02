@@ -172,6 +172,22 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
     setTimeout(() => setDrag(false), 0);
   }
 
+  const commandStaff =
+    configData &&
+    Object.values(team)
+      .filter((user) => user.Shifts === "Command Staff")
+      .sort(
+        (a, b) => getOrder(a.Ranks, configData) - getOrder(b.Ranks, configData)
+      )
+      .map((user) => (
+        <FrontCard
+          key={user.uid}
+          person={user}
+          didDrag={didDrag}
+          currShift={user.Shifts}
+        />
+      ));
+
   function getOrder(rank: string, data: ConfigureData): number {
     const ranks = data.Ranks.items;
     const order = Object.values(ranks).filter((ranks) => ranks.title === rank);
@@ -201,24 +217,18 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
       >
         <motion.div
           id="CommandStaff"
-          className="w-full lg:h-1/5 2xl:h-1/5 flex 2xl:gap-2 gap-2 items-center justify-center"
+          className="w-full lg:h-1/5 2xl:h-1/5 flex lg:flex-row flex-col 2xl:gap-2 gap-2 items-center justify-center"
         >
-          {team &&
-            configData &&
-            Object.values(team)
-              .filter((user) => user.Shifts === "Command Staff")
-              .sort(
-                (a, b) =>
-                  getOrder(a.Ranks, configData) - getOrder(b.Ranks, configData)
-              )
-              .map((user) => (
-                <FrontCard
-                  key={user.uid}
-                  person={user}
-                  didDrag={didDrag}
-                  currShift={user.Shifts}
-                />
-              ))}
+          {team && lgUp ? (
+            [commandStaff]
+          ) : (
+            <>
+              <div className="w-full">{commandStaff[0]}</div>
+              <div className="w-full gap-2 flex">
+                {commandStaff.slice(1, 3)}
+              </div>
+            </>
+          )}
         </motion.div>
 
         <motion.div
@@ -228,7 +238,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
             flexShrink: 1,
             flexBasis: "auto",
           }}
-          className=" lg:h-full 2xl:h-full w-full 2xl:gap-4 overflow-y-auto lg:overflow-hidden 2xl:overflow-hidden gap-0.5 flex lg:flex-row 2xl:flex-row flex-col items-center justify-center"
+          className=" lg:h-full 2xl:h-full w-full 2xl:gap-4 overflow-y-auto lg:overflow-hidden 2xl:overflow-hidden gap-4 lg:gap-1 flex lg:flex-row 2xl:flex-row flex-col items-center justify-center"
         >
           {team &&
             configData &&

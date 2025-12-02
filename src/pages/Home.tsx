@@ -36,7 +36,7 @@ export default function Home() {
 
       <div
         id="panel"
-        className="relative w-full flex items-start justify-center 2xl:h-4/10  lg:h-[30%] border border-zinc-800 p-2 rounded-md backdrop-blur-sm bg-zinc-950/10"
+        className="relative w-full flex items-start justify-center 2xl:h-4/10 grow-0 lg:h-[30%] border border-zinc-800 p-2 rounded-md backdrop-blur-sm bg-zinc-950/10"
       >
         <Carousel key="carousel-comp" team={data} />
       </div>

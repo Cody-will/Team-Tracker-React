@@ -39,7 +39,7 @@ export default function FrontCard({
   noFlip = false,
   noFade = false,
   noBadge = false,
-  photoSize = 18,
+  photoSize = 16,
   isCurrentShift = false,
 }: NewCardProps) {
   const [hovered, setHovered] = useState(false);
@@ -47,8 +47,9 @@ export default function FrontCard({
   const { events, coverage } = useSchedule();
   const { isOff: offToday, type: offReason } = isOff(person.uid, events);
   const { lgUp, twoXlUp } = useBreakpoint();
+  const flipAccess = ["Sergeant", "Major", "Lieutenant"];
 
-  const { data: users } = useUser();
+  const { data: users, user } = useUser();
   const { primaryAccent, secondaryAccent } = useSafeSettings();
   const { isWorking: covering, reason: coveringReason } = isWorking(
     person.uid,
@@ -60,7 +61,18 @@ export default function FrontCard({
 
   const { newPhotoSize, bannerText, photoBorder, badgeFont } = getSizing();
   const isCovering = person.Shifts !== currShift && covering;
+  const canDrag = getDrag();
   if (isCovering) noFlip = true;
+
+  function getDrag() {
+    if (!user) return;
+    return user.Shifts === "Command Staff" || user.badge === "3816";
+  }
+
+  function canFlip() {
+    if (!user) return;
+    return user.oic || flipAccess.includes(user.Ranks);
+  }
 
   function getSizing(): Sizing {
     if (twoXlUp) {
@@ -80,17 +92,17 @@ export default function FrontCard({
       };
     }
     return {
-      newPhotoSize: 10,
-      bannerText: 8,
+      newPhotoSize: 16,
+      bannerText: 10,
       photoBorder: "sm",
-      badgeFont: 14,
+      badgeFont: 18,
     };
   }
 
   const id = isCovering ? `${person.uid}-${person.badge}-covering` : person.uid;
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({ id });
+    useDraggable({ id, disabled: !canDrag });
 
   const dragStyle: React.CSSProperties = {
     transform: transform ? CSS.Translate.toString(transform) : undefined,
@@ -103,11 +115,6 @@ export default function FrontCard({
     if (didDrag) return;
     setFlipped((prev) => !prev);
   };
-
-  // --- NEW LOGIC (YOUR OLD FUNCTION LEFT THE SAME) ---
-  function checkOff() {
-    return person.sick || offToday || person.medical;
-  }
 
   // FADE CONDITIONS:
   // - Medical always fades (unless noFade)
@@ -138,14 +145,14 @@ export default function FrontCard({
         backgroundColor: shouldFade ? `#18181b85` : "#18181b",
         opacity: isDragging ? 0.8 : 1,
       }}
-      className="relative lg:h-full h-auto 2xl:h-full  p-2 2xl:gap-1 gap-0.5 flex border items-center rounded-md lg:rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
+      className="relative lg:h-full h-auto 2xl:h-full  p-2  flex border items-center rounded-md lg:rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
     >
       {showOffBanner && !noFlip && (
         <div
           style={{ backgroundColor: primaryAccent }}
-          className="absolute inset-y-0 left-0 2xl:w-5 w-3 rounded-l-lg flex items-center justify-center"
+          className="absolute inset-y-0 left-0 2xl:w-4 w-3 rounded-l-[0.3rem] lg:rounded-l-lg flex items-center justify-center"
         >
-          <span className="2xl:text-[12px] text-[8px] font-semibold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]">
+          <span className="2xl:text-[10px] lg:text-[8px] text-[10px] lg:font-semibold font-bold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]">
             {getOffReason().value
               ? getOffReason().reason
               : offReason?.replaceAll("-", " ")}
@@ -156,11 +163,11 @@ export default function FrontCard({
       {isCovering && !noFade && (
         <div
           style={{ backgroundColor: primaryAccent }}
-          className="absolute inset-y-0 left-0 2xl:w-5 w-2 rounded-l-lg flex items-center justify-center"
+          className="absolute inset-y-0 left-0 2xl:w-5 w-2 rounded-l-[0.3rem] lg:rounded-l-lg flex items-center justify-center"
         >
           <span
             style={{ fontSize: bannerText }}
-            className="2xl:text-[12px] text-[8px] font-semibold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]"
+            className="2xl:text-[12px] lg:text-[8px] text-[10px] lg:font-semibold font-bold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]"
           >
             {coveringReason?.replaceAll("-", " ")}
           </span>
@@ -187,13 +194,13 @@ export default function FrontCard({
 
       <div
         style={{ opacity: shouldFade ? 0.7 : 1 }}
-        className="flex flex-col gap-1 2xl:text-[16px] 2xl:font-medium justify-center items-center text-xs font-medium text-nowrap"
+        className="flex flex-col gap-1 2xl:text-[16px] 2xl:font-medium justify-center items-center text-xs lg:font-normal font-medium text-nowrap"
       >
         <div>{`${person.lastName}, ${person.firstName[0]}`}</div>
 
         <div
           style={{ backgroundColor: secondaryAccent }}
-          className="flex items-center justify-center 2xl:px-1 2xl:py-0.5 2xl:text-sm rounded-xs text-zinc-950 text-[.5rem] lg:text-xs px-0.5 py-0"
+          className="flex items-center justify-center 2xl:px-1 2xl:py-0.5 2xl:text-xs rounded-xs text-zinc-950 text lg:text-xs px-1 py-0.5"
         >
           {person.badge}
         </div>
@@ -217,8 +224,8 @@ export default function FrontCard({
               touchAction: "none",
             }
       }
-      {...(flipped || noFlip ? {} : listeners)}
-      {...(flipped || noFlip ? {} : attributes)}
+      {...(flipped || noFlip || !canFlip() ? {} : listeners)}
+      {...(flipped || noFlip || !canFlip() ? {} : attributes)}
       onClick={handleCardClick}
       className="lg:h-full h-auto w-full "
     >

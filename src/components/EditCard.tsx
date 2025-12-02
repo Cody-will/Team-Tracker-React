@@ -19,12 +19,13 @@ import type { ErrorNotify } from "../pages/Vacation.tsx";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 import { getAllRange } from "../helpers/schedulehelper.ts";
 import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
+import type { PopUpProps } from "./PopUp.tsx";
 
 export interface EditProps {
   user: User;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<any>>;
-  setNotify: React.Dispatch<React.SetStateAction<ErrorNotify | null>>;
+  setNotify: React.Dispatch<React.SetStateAction<PopUpProps | null>>;
 }
 
 type EventType = "Vacation" | "Training" | "Shift-Swap";
@@ -35,8 +36,13 @@ export default function EditCard({
   setSelected,
   setNotify,
 }: EditProps) {
-  const { userSettings, setProfilePhoto, removeProfilePhoto, updateUser } =
-    useUser(); // ← add new methods
+  const {
+    userSettings,
+    setProfilePhoto,
+    deleteUser: fullDelete,
+    removeProfilePhoto,
+    updateUser,
+  } = useUser(); // ← add new methods
   const { primaryAccent, secondaryAccent } = useSafeSettings();
   const { events, coverage } = useSchedule();
   const layoutKey = `user-${user.badge}`;
@@ -120,7 +126,6 @@ export default function EditCard({
       clearPreview();
     } catch (err) {
       createNotification({
-        key: "Error",
         title: "Oops!",
         message: "Upload failed",
         location: "top-center",
@@ -131,20 +136,26 @@ export default function EditCard({
     }
   }
 
-  // optional “Remove Photo” action
-  async function handleRemovePhoto() {
-    if (!user?.uid || uploading) return;
-    try {
-      setUploading(true);
-      await removeProfilePhoto(user.uid!);
-    } catch (e) {
-      console.error("Remove photo failed:", e);
-    } finally {
-      setUploading(false);
-    }
+  function handleDelete() {
+    createNotification({
+      title: "Are you sure?",
+      message:
+        "Are you sure you wish to delete user? This action cannot be undone.",
+      location: "top-center",
+      onClose: deleteUser,
+      trueText: "Confirm Delete",
+      falseText: "Cancel",
+      isConfirm: true,
+    });
   }
 
-  function createNotification(info: ErrorNotify) {
+  async function deleteUser(result: boolean) {
+    setNotify(null);
+    if (!result) return;
+    await fullDelete(user.uid);
+  }
+
+  function createNotification(info: PopUpProps) {
     setNotify(info);
   }
 
@@ -161,7 +172,6 @@ export default function EditCard({
     const completed = await updateUser(data.uid, data);
     if (completed.success) {
       createNotification({
-        key: "success",
         title: "Success",
         location: "top-center",
         message: "User successfully updated!",
@@ -173,7 +183,6 @@ export default function EditCard({
 
     if (!completed.success) {
       createNotification({
-        key: "failure",
         title: `Oops! ${completed.code}`,
         location: "top-center",
         message: completed.message,
@@ -191,7 +200,7 @@ export default function EditCard({
     <motion.div
       layoutId={layoutKey}
       style={{ borderColor: secondaryAccent }}
-      className="relative flex p-4 gap-2 h-full w-full z-50 bg-zinc-900 border rounded-md"
+      className="relative flex p-4 gap-2 lg:flex-row flex-col min-h-dvh lg:min-h-0 lg:h-full w-full z-50 bg-zinc-900 border rounded-md"
     >
       <motion.div
         whileHover={{ scale: 1.1 }}
@@ -202,7 +211,7 @@ export default function EditCard({
         <BsX size={twoXlUp ? 62 : 44} />
       </motion.div>
 
-      <div className="2xl:w-1/2 w-1/4 h-full flex gap-2 items-center justify-center flex-col">
+      <div className="2xl:w-1/2 lg:w-1/4 w-full h-full flex gap-2 items-center justify-center flex-col">
         <div className="h-full w-full flex justify-center items-end">
           <div className="flex w-full justify-center items-center gap-2" />
         </div>
@@ -266,8 +275,8 @@ export default function EditCard({
           )}
           <div className="w-full flex gap-2 items-center justify-center">
             <Button
-              text="Disable User"
-              action={() => {}}
+              text="Delete User"
+              action={() => handleDelete()}
               color={secondaryAccent}
             />
             <Button

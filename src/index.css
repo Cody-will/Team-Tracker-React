@@ -3,3 +3,9 @@
 #panel {
   backdrop-filter: blur(2px);
 }
+
+html,
+body {
+  background-color: #09090b; /* match your app’s dark bg */
+  color: #e5e7eb;
+}

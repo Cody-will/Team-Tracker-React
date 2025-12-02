@@ -122,12 +122,12 @@ export default function Settings() {
   }
 
   return (
-    <motion.div className="h-full w-full flex items-center justify-center">
+    <motion.div className="h-full w-full flex p-4 items-center justify-center">
       <LayoutGroup id={id}>
         <motion.div
           layout
           id="panel"
-          className="bg-zinc-950/30 overflow-hidden flex flex-col gap-2 2xl:gap-4 p-4 2xl:p-8 justify-center items-center border border-zinc-800 rounded-xl"
+          className="bg-zinc-950/30 overflow-hidden flex flex-col w-full lg:w-auto gap-2 2xl:gap-4 p-2 lg:p-4 2xl:p-8 justify-center items-center border border-zinc-800 rounded-xl"
         >
           <div className="flex w-full">
             <div className="font-semibold text-zinc-200 text-lg 2xl:text-3xl flex items-start justify-start w-full">
@@ -155,9 +155,9 @@ export default function Settings() {
                   animate={{ x: 0, filter: "none" }}
                   exit={{ x: next ? 1200 : -1200, filter: "blur(15px)" }}
                   transition={{ duration: 0.3, type: "tween" }}
-                  className="flex gap-4"
+                  className="flex lg:flex-row flex-col gap-4"
                 >
-                  <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="flex flex-col w-full lg:w-auto items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
                     <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Primary Accent
                     </div>
@@ -174,7 +174,7 @@ export default function Settings() {
                       }}
                     />
                   </div>
-                  <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
+                  <div className="flex flex-col w-full lg:w-auto items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
                     <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">
                       Secondary Accent
                     </div>
@@ -208,7 +208,7 @@ export default function Settings() {
                               borderWidth: "4px",
                               borderColor: secondaryAccent,
                             }}
-                            className="max-w-68 bg-white rounded-md"
+                            className="lg:max-w-68 w-full rounded-md"
                           />
                           <select
                             className={inputStyle}
@@ -286,7 +286,7 @@ export default function Settings() {
                   animate={{ x: 0, filter: "none" }}
                   exit={{ x: next ? 1200 : -1200, filter: "blur(15px)" }}
                   transition={{ duration: 0.3, type: "tween" }}
-                  className="flex gap-4"
+                  className="flex lg:flex-row flex-col w-full gap-4"
                 >
                   <div className="flex flex-col items-center justify-center gap-4 border-2 border-zinc-900 rounded-xl p-4">
                     <div className="font-semibold text-lg 2xl:text-2xl text-zinc-200">

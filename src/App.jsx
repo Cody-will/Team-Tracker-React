@@ -193,11 +193,11 @@ const ProtectedLayout = () => {
       style={{
         backgroundColor: "#27272a",
       }}
-      className="lg:h-screen min-h-screen w-screen overflow-scroll lg:overflow-hidden flex relative"
+      className="lg:h-screen min-h-screen w-screen overflow-x-hidden lg:overflow-hidden flex relative"
     >
       {current && (
         <div
-          className="absolute inset-0 z-0"
+          className="fixed inset-0 z-0"
           style={{
             backgroundImage: `url(${current})`,
             backgroundRepeat: "no-repeat",
@@ -209,7 +209,7 @@ const ProtectedLayout = () => {
 
       {next && (
         <div
-          className="absolute inset-0 z-0 transition-opacity"
+          className="fixed inset-0 z-0 transition-opacity"
           style={{
             opacity: showNext ? 1 : 0,
             transitionDuration: `${fadeMs}ms`,

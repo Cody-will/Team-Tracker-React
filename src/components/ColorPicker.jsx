@@ -27,7 +27,7 @@ export default function ColorPicker({ selectedColor, setSelectedColor }) {
   return (
     <motion.div
       layout
-      className="relative grid grid-cols-4 gap-2 flex-wrap text-sm 2xl:text-lg font-medium 2xl:font-semibold text-zinc-200"
+      className="relative w-full lg:w-auto grid grid-cols-4 gap-2 lg:gap-2 flex-wrap text-sm 2xl:text-lg font-medium 2xl:font-semibold text-zinc-200"
     >
       <AnimatePresence>
         {colors.map((color) => (
@@ -42,7 +42,7 @@ export default function ColorPicker({ selectedColor, setSelectedColor }) {
             whileHover={{ scale: 1.2 }}
             onClick={() => setSelectedColor(color)}
             key={color}
-            className={`size-10 border rounded-lg hover:cursor-pointer`}
+            className={`lg:size-10 size-16 border rounded-lg hover:cursor-pointer`}
           />
         ))}
       </AnimatePresence>

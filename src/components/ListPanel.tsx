@@ -122,7 +122,7 @@ export default function ListPanel({
   return (
     <motion.div
       layout
-      className="flex flex-col border border-zinc-700 rounded-md 2xl:rounded-lg gap-2 justify-start items-center p-2 2xl:p-4"
+      className="flex flex-col border w-full lg:w-auto border-zinc-700 rounded-md 2xl:rounded-lg gap-2 justify-start items-center p-2 2xl:p-4"
     >
       <div className="flex w-full text-md items-center justify-center">
         <div className="w-full"></div>

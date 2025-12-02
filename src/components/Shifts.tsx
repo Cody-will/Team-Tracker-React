@@ -73,7 +73,7 @@ export default function Shifts({
       <motion.div
         ref={superRef}
         style={superIsOver ? overStyle : {}}
-        className="lg:h-1/3 2xl:h-1/3 w-full border-b-2 rounded-md border-zinc-950 flex items-center justify-center 2xl:gap-2 2xl:p-2 p-2 gap-1"
+        className="lg:h-1/3 2xl:h-1/3 w-full border-b-2 rounded-t-md border-zinc-950 flex items-center justify-center 2xl:gap-2 2xl:p-2 p-2 gap-1"
       >
         {Object.values(team)
           .filter((user) => {

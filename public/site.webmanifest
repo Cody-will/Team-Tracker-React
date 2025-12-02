@@ -1,0 +1,15 @@
+{
+  "name": "Team Tracker",
+  "short_name": "Tracker",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000"
+}

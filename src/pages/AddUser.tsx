@@ -128,7 +128,7 @@ export default function AddUser() {
   return (
     <motion.div
       layout
-      className="h-full w-full relative flex items-center justify-center"
+      className="lg:h-full w-full p-4 lg:p-0 min-h-dvh relative flex items-center justify-center"
     >
       {notify && (
         <PopUp
@@ -145,7 +145,7 @@ export default function AddUser() {
           <motion.div
             layout
             id="panel"
-            className="flex p-10 gap-4 flex-col items-center justify-center bg-zinc-950/30 border border-zinc-800 rounded-xl text-zinc-200 font-semibold"
+            className="flex lg:p-10 p-6  gap-4 flex-col items-center justify-center bg-zinc-950/30 border border-zinc-800 rounded-xl text-zinc-200 font-semibold"
           >
             <motion.div
               layout
@@ -283,7 +283,7 @@ function AddUserForm({
       }}
       transition={{ type: "tween" }}
       onSubmit={handleSubmit(handleValidSubmit, onError)}
-      className="grid grid-cols-2 place-items-center gap-4 2xl:gap-6"
+      className="grid grid-cols-2  place-items-center gap-4 2xl:gap-6"
     >
       <motion.input
         layout

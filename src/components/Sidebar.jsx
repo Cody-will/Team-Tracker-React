@@ -8,6 +8,8 @@ import {
   BsDoorClosed,
   BsPersonPlus,
   BsCalendar2Plus,
+  BsList,
+  BsXCircle,
   BsSliders,
   BsCalendarWeek,
 } from "react-icons/bs";
@@ -25,13 +27,20 @@ import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
 
 export default function Sidebar() {
   const [barItems, setBarItems] = useState([]);
+  const [showNav, setShowNav] = useState(false);
   const { user } = useUser();
   const { primaryAccent } = useSafeSettings();
   const { updateAvailable } = useAppVersion();
   const { isShortDesktop, mdUp, twoXlUp, lgUp } = useBreakpoint();
   const excludes = ["Add User", "Configure"];
 
-  const iconSize = twoXlUp ? 32 : 24;
+  const iconSize = getIcon();
+
+  function getIcon() {
+    if (twoXlUp) return 32;
+    if (lgUp) return 24;
+    return 28;
+  }
 
   const links = [
     { to: "/home", icon: <BsHouse size={iconSize} />, label: "Home" },
@@ -99,51 +108,72 @@ export default function Sidebar() {
 
   const photoSize = twoXlUp ? 16 : 12;
 
-  if (!lgUp) return null;
-
   return (
-    <div className="relative 2xl:w-20 w-18 z-50 flex items-end justify-center h-screen flex-col">
-      <AnimatePresence>
-        {user && (
+    <AnimatePresence initial={false}>
+      <LayoutGroup id="mobileNave">
+        {!showNav && !lgUp ? (
+          <Hamburger state={showNav} setState={setShowNav} />
+        ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ type: "tween", duration: 0.5 }}
-            className="absolute top-4 left-1.5 w-18 2xl:w-20 flex flex-col items-center justify-center"
+            layoutId="mobileNav"
+            transition={{ type: "tween" }}
+            className="lg:relative fixed right-2 lg:left-0 2xl:w-20 lg:w-18 w-20 z-50 flex items-end justify-center h-screen flex-col"
           >
-            <div className="flex flex-col items-center justify-center">
-              <ProfilePhoto
-                user={user}
-                size={photoSize}
-                borderColor={primaryAccent}
-              />
-              <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
-                {user.Ranks}
-              </div>
-              <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
-                {user.lastName}
-              </div>
-            </div>
+            <AnimatePresence>
+              {user && lgUp && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ type: "tween", duration: 0.5 }}
+                  className="absolute top-4 left-1.5 w-18 2xl:w-20 flex flex-col items-center justify-center"
+                >
+                  <div className="flex flex-col items-center justify-center">
+                    <ProfilePhoto
+                      user={user}
+                      size={photoSize}
+                      borderColor={primaryAccent}
+                    />
+                    <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
+                      {user.Ranks}
+                    </div>
+                    <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
+                      {user.lastName}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <LayoutGroup>
+              {user && (
+                <div
+                  id="panel"
+                  className="2xl:w-16 w-14 py-4 gap-2 2xl:gap-2 rounded-xl flex flex-col items-center justify-between border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
+                >
+                  {/* Top: main nav items */}
+                  <div className="flex flex-col items-center gap-2">
+                    {!lgUp && (
+                      <motion.div
+                        layout={!showNav}
+                        onClick={() => setShowNav(false)}
+                        className="relative flex items-center justify-center 2xl:w-12 2xl:h-12 h-10 w-10 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300 hover:scale-110"
+                      >
+                        <BsXCircle size={iconSize} />
+                      </motion.div>
+                    )}
+                    {barItems}
+                  </div>
+
+                  {/* Bottom: update button (only when update is available) */}
+                  <UpdateButton />
+                </div>
+              )}
+            </LayoutGroup>
           </motion.div>
         )}
-      </AnimatePresence>
-
-      <LayoutGroup>
-        {user && (
-          <div
-            id="panel"
-            className="2xl:w-16 w-14 py-4 gap-2 2xl:gap-2 rounded-xl flex flex-col items-center justify-between border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
-          >
-            {/* Top: main nav items */}
-            <div className="flex flex-col items-center gap-2">{barItems}</div>
-
-            {/* Bottom: update button (only when update is available) */}
-            <UpdateButton />
-          </div>
-        )}
       </LayoutGroup>
-    </div>
+    </AnimatePresence>
   );
 }
 
@@ -161,7 +191,7 @@ function SideBarLink({ to, action, icon, label }) {
       onClick={action ? () => action() : undefined}
       className={({ isActive }) =>
         [
-          "relative flex items-center justify-center 2xl:w-12 2xl:h-12 h-10 w-10 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
+          "relative flex items-center justify-center w-12 h-12 2xl:w-12 2xl:h-12 lg:h-10 lg:w-10 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
           "hover:scale-110",
           isActive ? "text-zinc-950" : "",
         ].join(" ")
@@ -187,13 +217,6 @@ function SideBarLink({ to, action, icon, label }) {
   );
 }
 
-/**
- * Update button at the very bottom of the sidebar.
- * - Only shows when updateAvailable === true
- * - Uses BsArrowRepeat icon
- * - Red dot in top-right when update is available
- * - Click => hard reload (fetch latest build)
- */
 function UpdateButton() {
   const { updateAvailable, latestVersion, appVersion } = useAppVersion();
   const { isShortDesktop } = useBreakpoint();
@@ -237,5 +260,18 @@ function UpdateButton() {
         Update Available
       </span>
     </button>
+  );
+}
+
+function Hamburger({ state, setState }) {
+  return (
+    <motion.div
+      id="panel"
+      layoutId="mobileNav"
+      onClick={() => setState(true)}
+      className="fixed right-2 bottom-2 z-50 p-5 rounded-full text-zinc-200 border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
+    >
+      <BsList size={24} />
+    </motion.div>
   );
 }

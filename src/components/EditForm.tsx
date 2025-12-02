@@ -473,7 +473,7 @@ export default function EditForm({
               {/* TOGGLES */}
               <motion.div
                 layout
-                className="col-span-2 gap-4 2xl:gap-6 flex items-center justify-center"
+                className="col-span-2 gap-2 lg:gap-4 2xl:gap-6 flex items-center justify-center"
               >
                 <div className={toggleStyle}>
                   <span>OIC</span>

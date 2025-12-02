@@ -100,7 +100,7 @@ export default function Login() {
     <>
       <motion.div
         layout
-        className="relative w-full flex items-center bg-[url('./assets/default4.webp')] bg-no-repeat bg-center bg-cover justify-center h-screen"
+        className="relative w-full flex items-center bg-[url('./assets/default4.webp')] bg-no-repeat bg-center bg-cover justify-center h-dvh"
       >
         {notify && (
           <PopUp
@@ -114,7 +114,7 @@ export default function Login() {
         <motion.div
           id="panel"
           layout
-          className="bg-zinc-950/30 flex w-full max-w-1/5 font-semibold overflow-hidden drop-shadow-xl drop-shadow-zinc-950/30 p-4 rounded-xl shadow-lg/40 border border-zinc-800"
+          className="bg-zinc-950/30 flex w-full lg:max-w-1/5 max-w-8/10 font-semibold overflow-hidden drop-shadow-xl drop-shadow-zinc-950/30 p-4 rounded-xl shadow-lg/40 border border-zinc-800"
         >
           <AnimatePresence mode="wait" initial={false}>
             <LayoutGroup id="FormGroup">

@@ -6,7 +6,7 @@ import type { Item } from "../components/ListPanel";
 import { useEffect, useMemo, useState } from "react";
 import type { User } from "./context/UserContext";
 import ProfilePhoto from "../components/ProfilePhoto.tsx";
-import PopUp from "../components/PopUp.tsx";
+import PopUp, { PopUpProps } from "../components/PopUp.tsx";
 import type { ErrorNotify } from "./Vacation.tsx";
 import { useSafeSettings } from "./hooks/useSafeSettings.ts";
 import { useBreakpoint } from "./hooks/useBreakpoint.ts";
@@ -18,7 +18,7 @@ export default function TeamManagement() {
   const [tabs, setTabs] = useState<TabDef[]>([]);
   const [team, setTeam] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  const [notify, setNotify] = useState<ErrorNotify | null>(null);
+  const [notify, setNotify] = useState<PopUpProps | null>(null);
 
   const { data: config } = useConfigure() as { data: any };
   const { data: users } = useUser();
@@ -120,22 +120,24 @@ export default function TeamManagement() {
   }, [tabs, selectedTab, users, rankOrder]);
 
   return (
-    <div className="relative flex flex-col shrink grow gap-2 items-center p-4 justify-center w-full h-full">
+    <div className="relative flex flex-col shrink grow gap-2 items-center lg:p-4 justify-center w-full h-full">
       {notify && (
         <PopUp
-          key={notify.key}
           onClose={notify.onClose}
           title={notify.title}
           location={notify.location}
           message={notify.message}
           timer={notify.timer}
+          trueText={notify.trueText}
+          falseText={notify.falseText}
+          isConfirm={notify.isConfirm ? notify.isConfirm : false}
         />
       )}
-      <motion.div className="relative flex gap-2 flex-col h-full w-full p-4">
+      <motion.div className="relative flex gap-2 flex-col h-full w-full p-2 lg:p-4">
         {/* Tabs */}
         <motion.div
           id="panel"
-          className="relative w-full h-1/12 flex bg-zinc-950/30 rounded-md border border-zinc-800 drop-shadow-xl/50"
+          className="relative w-full lg:h-1/12 flex bg-zinc-950/30 rounded-md border border-zinc-800 drop-shadow-xl/50"
         >
           <ul className="relative flex items-center justify-around cursor-pointer overflow-hidden p-1 w-full h-full">
             {tabs.map((tab) => {
@@ -143,7 +145,7 @@ export default function TeamManagement() {
               return (
                 <li
                   key={tab.id}
-                  className="relative flex justify-center items-center text-center w-full h-full text-lg"
+                  className="relative flex justify-center items-center text-center w-full h-full lg:p-0 p-1 text-xs lg:font-normal font-medium lg:text-lg"
                   onClick={() => setSelectedTab(tab.id)}
                 >
                   {active && (
@@ -262,13 +264,13 @@ function TeamPanel({
             <div className="flex p-2 gap-4 border-b-2 border-zinc-900 items-center justify-evenly w-full h-2/5">
               {supervisorCards}
             </div>
-            <div className="flex p-2 gap-4 items-center justify-evenly w-full h-full">
+            <div className="flex p-2 lg:flex-row flex-col gap-4 items-center justify-evenly w-full h-full">
               {employeeCards}
             </div>{" "}
           </>
         )}
         {!exclude.includes(title) && (
-          <motion.div className="flex p-2 gap-4 items-center justify-evenly w-full h-full">
+          <motion.div className="flex lg:flex-row flex-col p-2 gap-4 items-center justify-evenly w-full h-full">
             {allCards}
           </motion.div>
         )}
@@ -292,19 +294,27 @@ function PanelCard({
   primaryAccent: string;
   secondaryAccent: string;
   config: any;
-  setNotify: React.Dispatch<React.SetStateAction<ErrorNotify | null>>;
+  setNotify: React.Dispatch<React.SetStateAction<PopUpProps | null>>;
 }) {
   const isSelected = !!user.uid && selectedUid === user.uid;
   const { twoXlUp } = useBreakpoint();
-  const photoSize = twoXlUp ? 28 : 22;
+  const photoSize = twoXlUp ? 24 : 22;
   const badgeFont = twoXlUp ? 14 : 12;
+  const { user: currUser } = useUser();
+
+  function hasAccess() {
+    if (!currUser) return;
+    return currUser.Shifts === "Command Staff" || currUser.badge === "3816";
+  }
 
   return (
     <div className="w-full h-full">
       <motion.div
         layoutId={`user-${user.uid}`}
         onClick={
-          !isSelected ? () => user.uid && setSelectedUid(user.uid) : undefined
+          !isSelected && hasAccess()
+            ? () => user.uid && setSelectedUid(user.uid)
+            : undefined
         }
         style={{ borderColor: secondaryAccent }}
         whileHover={
