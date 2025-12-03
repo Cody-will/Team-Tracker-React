@@ -138,8 +138,6 @@ function App() {
 }
 
 const ProtectedLayout = () => {
-  const [loading, setLoading] = useState(true); // team loading
-  const [data, setData] = useState();
   const { currentUser, authReady } = useAuth();
   const { bgImage } = useSafeSettings();
   const { loading: usersLoading } = useUser(); // 🔹 user/settings loading from context
@@ -149,24 +147,6 @@ const ProtectedLayout = () => {
     bgImage ?? null,
     300
   );
-
-  useEffect(() => {
-    const teamData = ref(db, "team");
-
-    const unsubscribe = onValue(
-      teamData,
-      (snapshot) => {
-        setData(snapshot.exists() ? Object.values(snapshot.val()) : null);
-        setLoading(false);
-      },
-      (error) => {
-        console.log(error);
-        setLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
-  }, []);
 
   useEffect(() => {
     startSwap(bgImage ?? null);
@@ -223,7 +203,7 @@ const ProtectedLayout = () => {
 
       <Sidebar />
       <main className="lg:w-full 2xl:w-full 2xl:h-full lg:h-full min-h-screen lg:min-h-full 2xl:min-h-0 w-full lg:overflow-hidden relative z-10">
-        <Outlet context={{ data, loading }} />
+        <Outlet />
       </main>
     </motion.div>
   );

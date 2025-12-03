@@ -74,8 +74,8 @@ export default function InfoCard({
         )}
       </div>
       <div
-        style={{ ...getLayout(), overflow: column ? "scroll" : "hidden" }}
-        className={`relative p-2 w-full h-full`}
+        style={{ ...getLayout(), overflow: column ? "auto" : "hidden" }}
+        className={`relative p-2 w-full  h-full`}
       >
         {props}
         {extendedProps && extendedProps}

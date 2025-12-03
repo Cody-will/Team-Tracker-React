@@ -8,6 +8,7 @@ import { DateSelectArg } from "@fullcalendar/core/index.js";
 import PopUp from "../components/PopUp";
 import type { ScheduleEvent, EventType } from "./context/ScheduleContext";
 import type { Location } from "../components/PopUp";
+import { useBreakpoint } from "./hooks/useBreakpoint";
 
 export type DateData = {
   start: Date | string;
@@ -36,6 +37,7 @@ export default function Vacation() {
   const [interactive, setinteractive] = useState<boolean>(true);
   const [selectedType, setSelectedType] = useState<EventType | "">("");
   const [trainingInput, setTrainingInput] = useState("");
+  const { lgUp } = useBreakpoint();
 
   const [mountCalendar, setMountCalendar] = useState(false);
   const excludes = ["", "Range", "Jail-School"];
@@ -158,6 +160,25 @@ export default function Vacation() {
     setError(null);
   }
 
+  if (!lgUp) {
+    return (
+      <div className="h-dvh w-full p-4">
+        <div
+          id="panel"
+          className="min-h-dvh w-full border p-4 gap-4 border-zinc-900 bg-zinc-900/40 text-zinc-200 flex flex-col items-center justify-center rounded-md"
+        >
+          <div className="text-3xl font-bold flex items-center justify-center">
+            Sorry!
+          </div>
+          <div className="text-lg flex items-center justify-center text-center">
+            The scheduling page is currently under construction for mobile.
+            Please use the desktop version for scheduling.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <motion.div
       layout
@@ -206,7 +227,7 @@ export default function Vacation() {
       >
         <motion.div layout className="w-full flex gap-4">
           <div className="w-full gap-2 flex items-center justify-start">
-            <div className="text-zinc-200 flex justify-start items-center text-3xl py-2">
+            <div className="text-zinc-200 flex justify-start items-center text-xl lg:text-3xl py-2">
               Scheduling
             </div>
           </div>

@@ -238,7 +238,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
             flexShrink: 1,
             flexBasis: "auto",
           }}
-          className=" lg:h-full 2xl:h-full w-full 2xl:gap-4 overflow-y-auto lg:overflow-hidden 2xl:overflow-hidden gap-4 lg:gap-1 flex lg:flex-row 2xl:flex-row flex-col items-center justify-center"
+          className=" lg:h-full 2xl:h-full w-full 2xl:gap-4 overflow-y-auto lg:overflow-visible 2xl:overflow-visible gap-4 lg:gap-1 flex lg:flex-row 2xl:flex-row flex-col items-center justify-center"
         >
           {team &&
             configData &&

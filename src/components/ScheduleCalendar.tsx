@@ -1,8 +1,9 @@
 import FullCalendar from "@fullcalendar/react";
-import { DateSelectArg } from "@fullcalendar/core/index.js";
+import { DateSelectArg, EventClickArg } from "@fullcalendar/core/index.js";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import rrulePlugin from "@fullcalendar/rrule";
+import listPlugin from "@fullcalendar/list";
 import React, {
   useState,
   useEffect,
@@ -12,9 +13,14 @@ import React, {
   memo,
 } from "react";
 import { useSchedule } from "../pages/context/ScheduleContext";
-import type { EventType } from "../pages/context/ScheduleContext";
-import { motion } from "motion/react";
+import type {
+  DayEvent,
+  EventType,
+  ScheduleEvent,
+} from "../pages/context/ScheduleContext";
+import { LayoutGroup, motion } from "motion/react";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
+import { useBreakpoint } from "../pages/hooks/useBreakpoint";
 
 export type Display =
   | "auto"
@@ -40,6 +46,7 @@ interface CalendarProps {
   interactive?: boolean;
   handleSelect?: (dateData: DateSelectArg) => void;
   selected?: boolean;
+  clickable: boolean;
 }
 
 function ScheduleCalendar({
@@ -47,9 +54,12 @@ function ScheduleCalendar({
   interactive = false,
   handleSelect,
   selected,
+  clickable = false,
 }: CalendarProps) {
+  const [clickedEvent, setClickedEvent] = useState<string | null>(null);
   const { allEvents, buildShiftEvents } = useSchedule();
   const { primaryAccent, secondaryAccent } = useSafeSettings();
+  const { lgUp } = useBreakpoint();
 
   const [shiftsOn, setShiftsOn] = useState(false);
   const calRef = useRef<FullCalendar>(null);
@@ -61,6 +71,23 @@ function ScheduleCalendar({
     Range: true,
     "Jail-School": true,
   });
+
+  function handleEventDidMount(info: any) {
+    if (lgUp && clickable) {
+      info.el.style.cursor = "pointer";
+    } else {
+      info.el.style.cursor = "default";
+    }
+  }
+
+  function handleClickEvent(info: EventClickArg) {
+    return;
+    if (!lgUp) return;
+    info.jsEvent.preventDefault();
+    const ev = info.event;
+
+    setClickedEvent(ev.id);
+  }
 
   // ---- memoized style vars to avoid new object each render
   const styleVars = useMemo(
@@ -83,40 +110,157 @@ function ScheduleCalendar({
   // ---- memoized CSS text to avoid realloc on every render
   const styleText = useMemo(
     () => `
+      /* ---------- Toolbar Layout Override ---------- */
       #calWrap .fc .fc-toolbar.fc-header-toolbar {
         display: grid !important;
         grid-template-columns: 1fr auto 1fr;
         align-items: center;
       }
-      #calWrap .fc .fc-toolbar-chunk:nth-child(1) { justify-self: start; }
-      #calWrap .fc .fc-toolbar-chunk:nth-child(2) { justify-self: center; }
-      #calWrap .fc .fc-toolbar-chunk:nth-child(3) { justify-self: end; }
 
-      #calWrap .fc { --fc-page-bg-color: #09090b1; }
-
-      .fc .fc-button { transition: transform .15s ease-out; transform-origin: center; }
-      .fc .fc-button:hover { transform: scale(1.1); }
-      .fc .fc-button:active { transform: scale(1.05); }
-      .fc .fc-button:focus-visible {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(14,165,233,.6);
+      #calWrap .fc .fc-toolbar-chunk:nth-child(1) {
+        justify-self: start;
+      }
+      #calWrap .fc .fc-toolbar-chunk:nth-child(2) {
+        justify-self: center;
+      }
+      #calWrap .fc .fc-toolbar-chunk:nth-child(3) {
+        justify-self: end;
       }
 
-      .fc .fc-day-other .fc-daygrid-day-number { color: rgba(148,163,184,0.99); }
-      .fc .fc-day-other .fc-daygrid-day-frame { opacity: 1; }
+      /* ---------- Calendar Title (Desktop) ---------- */
+      #calWrap .fc .fc-toolbar-title {
+        font-size: 1.4rem !important;
+        font-weight: 700 !important;
+        color: #f1f5f9 !important;
+      }
 
-      #calWrap .fc .fc-daygrid-day.fc-day-other .fc-daygrid-day-number { color: #a1a1aa; }
+      /* ---------- Calendar Title (Mobile) ---------- */
+      @media (max-width: 768px) {
+        #calWrap .fc .fc-toolbar-title {
+          font-size: 1rem !important;
+        }
+      }
+
+      /* ---------- LIST VIEW: Day Header Bar ---------- */
+      /* Use .fc-list-heading td (no theme prefix) so it works regardless of themeSystem */
+      #calWrap .fc .fc-list-heading td {
+        background: ${primaryAccent} !important;
+        color: #09090b !important;
+        font-size: 0.9rem !important;
+        font-weight: 600 !important;
+      }
+
+      #calWrap .fc .fc-list-heading-main,
+      #calWrap .fc .fc-list-heading-alt {
+        color: ${primaryAccent} !important;
+        border-color: #27272a
+      }
+
+      & .fc-list-table tr > * {
+        /* event background color */
+        color: #e4e4e7
+        border-color: #09090b
+      }
+
+      .fc-theme-standard {
+
+        & .fc-list {
+          border: 1px solid #27272a;
+       }
+
+       & .fc-list-event:hover td {
+        background-color: ${secondaryAccent};
+        color: #09090b;
+        font-weight: 500;
+      }
+
+      }
+
+      & .fc-list-table tr > * {
+        border-color: #27272a
+      }
+
+      & .fc-list-table th {
+        border-color: #27272a
+      }
+
+      .fc-theme-standard {
+
+        & .fc-list-day-cushion {
+          background-color: ${primaryAccent};
+          color: #09090b;
+          
+        }
+
+      } 
+
+      /* ---------- BUTTON STYLE + SIZE (prev/next + custom toggles) ---------- */
+
+      #calWrap .fc .fc-toolbar-chunk {
+        display: flex !important;
+        gap: .4rem !important; /* EXACT Tailwind gap-2 */
+        align-items: center;
+      }
+
+      #calWrap .fc .fc-button {
+        transition: transform .15s ease-out;
+        transform-origin: center;
+        padding: 0.2rem 0.5rem !important;   /* width/height */
+        font-size: 1.1rem !important;        /* text size */
+        border-radius: 5px !important;     /* pill shape */
+        line-height: 1.2 !important;
+        min-height: 1.75rem;
+      }
+
+      #calWrap .fc .fc-button:hover {
+        transform: scale(1.1);
+      }
+      #calWrap .fc .fc-button:active {
+        transform: scale(1.05);
+      }
+      #calWrap .fc .fc-button:focus-visible {
+        outline: none !important;
+        box-shadow: 0 0 0 2px rgba(14,165,233,.6) !important;
+      }
+
+      /* Smaller buttons on mobile */
+      @media (max-width: 768px) {
+        #calWrap .fc .fc-button {
+          padding: 0.2rem 0.6rem !important;
+          font-size: 1rem !important;
+          font-weight: 600;
+          min-height: 1.5rem;
+          
+        }
+      }
+
+      /* ---------- Day Grid: Other Month Days ---------- */
+      #calWrap .fc .fc-day-other .fc-daygrid-day-number {
+        color: rgba(148,163,184,0.99) !important;
+      }
+      #calWrap .fc .fc-day-other .fc-daygrid-day-frame {
+        opacity: 1 !important;
+      }
+
+      #calWrap .fc .fc-daygrid-day.fc-day-other .fc-daygrid-day-number {
+        color: #a1a1aa !important;
+      }
       #calWrap .fc .fc-daygrid-day.fc-day-other .fc-daygrid-day-top,
-      #calWrap .fc .fc-daygrid-day.fc-day-other .fc-event { opacity: 1; }
-
-      #calWrap .fc { --fc-highlight-color: ${primaryAccent}98; }
-
-      #calWrap .fc .fc-daygrid-day.fc-day-today {
-        outline: none;
-        box-shadow: inset 0 0 0 3px ${primaryAccent};
+      #calWrap .fc .fc-daygrid-day.fc-day-other .fc-event {
+        opacity: 1 !important;
       }
 
-      #calWrap .fc { --fc-today-bg-color: ${primaryAccent}30; }
+      /* ---------- Today Styles ---------- */
+      #calWrap .fc .fc-daygrid-day.fc-day-today {
+        outline: none !important;
+        box-shadow: inset 0 0 0 3px ${primaryAccent} !important;
+      }
+
+      #calWrap .fc {
+        --fc-highlight-color: ${primaryAccent}98 !important;
+        --fc-today-bg-color: ${primaryAccent}30 !important;
+        --fc-page-bg-color: #09090b !important;
+      }
     `,
     [primaryAccent]
   );
@@ -193,9 +337,11 @@ function ScheduleCalendar({
 
   const headerToolbar = useMemo(
     () => ({
-      left: "toggleShifts,toggleVac,toggleTrain,toggleCov,toggleSwap",
+      left: lgUp
+        ? "toggleShifts,toggleVac,toggleTrain,toggleCov,toggleSwap"
+        : "toggleShifts",
       center: "title",
-      right: "prev,next,today",
+      right: "prev,next",
     }),
     []
   );
@@ -212,8 +358,8 @@ function ScheduleCalendar({
 
       <FullCalendar
         ref={calRef}
-        plugins={[dayGridPlugin, interactionPlugin, rrulePlugin]}
-        initialView="dayGridMonth"
+        plugins={[dayGridPlugin, interactionPlugin, rrulePlugin, listPlugin]}
+        initialView={lgUp ? "dayGridMonth" : "listWeek"}
         height={height}
         unselectAuto={false}
         // allEvents is already memoized in the provider; pass through directly
@@ -222,6 +368,8 @@ function ScheduleCalendar({
         select={handleSelect ? handleSelect : () => {}}
         customButtons={customButtons}
         headerToolbar={headerToolbar}
+        eventClick={handleClickEvent}
+        eventDidMount={handleEventDidMount}
       />
     </motion.div>
   );

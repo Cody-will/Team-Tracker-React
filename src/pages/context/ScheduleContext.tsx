@@ -50,6 +50,8 @@ export interface ScheduleEvent {
   eventType: EventType;
   coverage?: boolean;
   color?: string;
+  backgroundColor?: string;
+  textColor?: string;
 }
 
 export type ScheduleEventMilli = Omit<ScheduleEvent, "start" | "end"> & {
@@ -322,10 +324,31 @@ export function ScheduleProvider({ children }: any) {
     });
   }
 
+  function getColor(type: string) {
+    switch (type) {
+      case "Vacation":
+        return vacationAccent;
+      case "Training":
+        return trainingAccent;
+      case "Shift-Swap":
+        return swapAccent;
+      case "Coverage":
+        return coverageAccent;
+      case "Jail-School":
+        return "#ef4444";
+      case "Range":
+        return "#ef4444";
+      default:
+        return primaryAccent;
+    }
+  }
+
   function addExtended(event: ScheduleEvent | DayEvent | any) {
     const extendedProps = {
       originDisplay: event.display,
       eventType: event.eventType ? event.eventType : null,
+      backgroundColor: getColor(event.eventType),
+      textColor: "#09090b",
     };
     return { ...event, extendedProps };
   }
@@ -357,6 +380,8 @@ export function ScheduleProvider({ children }: any) {
           day: toDayOnly(d),
           allDay: e.allDay,
           claimed: false,
+          backgroundColor: e.color,
+          textColor: "#09090b",
         };
         void addUnclaimedCoverage(entry);
       }
@@ -380,6 +405,11 @@ export function ScheduleProvider({ children }: any) {
     },
     [expandRange]
   );
+
+  function deleteEvent(id: string) {
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // must complete this delete function for eveerthing
+  }
 
   const addClaimedCoverage = useCallback(async (event: DayEvent) => {
     const cRef = ref(db, `coverage/${event.id}`);

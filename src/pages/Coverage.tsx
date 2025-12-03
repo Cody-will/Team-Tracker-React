@@ -53,6 +53,25 @@ export default function Coverage() {
     setNotify(null);
   }
 
+  if (filteredEvents.length == 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center p-4">
+        <motion.div
+          id="panel"
+          layout
+          className="flex flex-col gap-4 items-center justify-center bg-zinc-950/30 border border-zinc-700 rounded-xl p-4"
+        >
+          <div className="flex w-full">
+            <div className="flex items-center justify-center text-2xl text-zinc-200 font-semibold">
+              Coverage
+            </div>
+          </div>
+          <div className=" text-zinc-200">No days currently available.</div>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full flex items-center justify-center p-4">
       {notify && (

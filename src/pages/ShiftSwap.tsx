@@ -22,7 +22,7 @@ export default function ShiftSwap() {
   const [error, setError] = useState<ErrorNotify | null>(null);
   const [selectedEmployee, setEmployee] = useState<string>("");
   const { scheduleEvent } = useSchedule();
-  const { twoXlUp } = useBreakpoint();
+  const { twoXlUp, lgUp } = useBreakpoint();
 
   const inputStyle =
     "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-md py-1 px-1.5 2xl:rounded-lg 2xl:py-2 2xl:px-3 focus:outline-none focus:border-[var(--accent)] focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] 2xl:focus:shadow-[0_0_5px_1px_var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
@@ -187,6 +187,25 @@ export default function ShiftSwap() {
     }),
     []
   );
+
+  if (!lgUp) {
+    return (
+      <div className="h-dvh w-full p-4">
+        <div
+          id="panel"
+          className="min-h-dvh w-full border p-4 gap-4 border-zinc-900 bg-zinc-900/40 text-zinc-200 flex flex-col items-center justify-center rounded-md"
+        >
+          <div className="text-3xl font-bold flex items-center justify-center">
+            Sorry!
+          </div>
+          <div className="text-lg flex items-center justify-center text-center">
+            The shift swap page is currently under construction for mobile.
+            Please use the desktop version for scheduling shift swaps.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <motion.div className="h-full w-full flex items-center justify-center p-4">
