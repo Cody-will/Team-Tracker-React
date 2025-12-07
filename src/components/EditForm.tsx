@@ -82,7 +82,7 @@ type ConfigureData = Record<string, ListData> | ListData[] | undefined;
 type FormFieldName = Extract<keyof FormValues, string>;
 
 function toFieldKey(title: string): string {
-  return title.trim().replace(/\s+/g, "_");
+  return title.trim().replace(/\s+/g, "");
 }
 
 function toGroups(data: ConfigureData): ConfigGroup[] {
@@ -98,7 +98,9 @@ function toGroups(data: ConfigureData): ConfigGroup[] {
     options.sort((a, b) => a[2] - b[2]);
 
     const field =
-      panel.title === "Divisions" ? "Divisions" : toFieldKey(panel.title);
+      panel.title === "Divisions"
+        ? "Divisions"
+        : toFieldKey(panel.title.replace("-", ""));
 
     return {
       field,
@@ -246,13 +248,8 @@ export default function EditForm({
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     const cleaned = cleanValues(values);
     setUpdating(true);
-    const completed = await submitFunction(cleaned);
-    if (completed) {
-      reset({
-        ...baseDefaults,
-        ...dynamicDefaultsFromUser(groups, userProps),
-      });
-    }
+    await submitFunction(cleaned);
+
     setUpdating(false);
   };
 

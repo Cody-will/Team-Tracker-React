@@ -25,6 +25,7 @@ import { ScheduleProvider } from "./pages/context/ScheduleContext.tsx";
 import SplashOverlay from "./components/SplashOverlay.tsx";
 import { VersionProvider } from "./pages/context/VersionContext.tsx";
 import { useBreakpoint } from "./pages/hooks/useBreakpoint.ts";
+import CardConfigure from "./pages/CardConfigure.tsx";
 
 const LoginRoute = () => {
   const { currentUser, authReady, forceSplash } = useAuth();
@@ -122,6 +123,7 @@ function App() {
                   <Route path="/coverage" element={<Coverage />} />
                   <Route path="/configure" element={<Configure />} />
                   <Route path="/settings" element={<Settings />} />
+                  <Route path="/cardsettings" element={<CardConfigure />} />
                 </Route>
 
                 <Route

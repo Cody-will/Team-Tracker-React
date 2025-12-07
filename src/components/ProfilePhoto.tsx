@@ -20,12 +20,12 @@ interface ProfileProps {
 }
 
 const optionKeys = [
-  "fto",
+  "trainee",
   "oic",
+  "fto",
   "pit",
   "speed",
   "rifle",
-  "trainee",
   "isMandated",
 ] as const;
 type BadgeKey = (typeof optionKeys)[number];
@@ -44,11 +44,16 @@ export default function ProfilePhoto({
   const px = size * 4; // your scaling
   const isUpd = user.Divisions === "UPD";
 
-  function getInfo() {
-    if (isUpd) {
-      return user.car.toString();
-    } else {
-      return "D/S";
+  function getShort(title: string) {
+    switch (title) {
+      case "speed":
+        return "SPD";
+      case "rifle":
+        return "RFL";
+      case "trainee":
+        return "TRN";
+      default:
+        return title;
     }
   }
 
@@ -66,7 +71,7 @@ export default function ProfilePhoto({
             title={
               option === "isMandated" && user.Divisions === "ADC"
                 ? "D/S"
-                : option.toUpperCase()
+                : getShort(option).toUpperCase()
             }
             color={index % 2 === 0 ? primaryAccent : secondaryAccent}
             position={option === "isMandated" ? "top" : getPosition(index)}
@@ -156,13 +161,13 @@ function getPosition(num: number): Position {
     case 0:
       return "bottom";
     case 1:
-      return "bottom-right";
-    case 2:
       return "bottom-left";
-    case 3:
-      return "right";
-    case 4:
+    case 2:
       return "left";
+    case 3:
+      return "top-left";
+    case 4:
+      return "bottom-right";
     default:
       return "bottom";
   }

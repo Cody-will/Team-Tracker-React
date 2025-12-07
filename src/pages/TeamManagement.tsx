@@ -10,6 +10,8 @@ import PopUp, { PopUpProps } from "../components/PopUp.tsx";
 import type { ErrorNotify } from "./Vacation.tsx";
 import { useSafeSettings } from "./hooks/useSafeSettings.ts";
 import { useBreakpoint } from "./hooks/useBreakpoint.ts";
+import type { ConfigureData } from "../components/TeamDisplay.tsx";
+import type { UserRecord } from "./context/UserContext";
 
 type TabDef = { id: string; title: string; order?: number };
 
@@ -201,7 +203,8 @@ export default function TeamManagement() {
               ))}
               employeeCards={getEmployees(
                 users,
-                config.Shifts.items[selectedTab].title
+                config.Shifts.items[selectedTab].title,
+                config
               ).map((user) => (
                 <PanelCard
                   key={user.uid}
@@ -236,10 +239,18 @@ function getSupervisors(users: Record<string, User>, shift: string) {
     .sort((a, b) => sortRank(a) - sortRank(b));
 }
 
-function getEmployees(users: Record<string, User>, shift: string) {
-  return Object.values(users).filter(
-    (user) => user.Shifts === shift && user.Ranks !== "Sergeant" && !user.oic
-  );
+function getEmployees(users: Record<string, User>, shift: string, conf: any) {
+  return Object.values(users)
+    .filter(
+      (user) => user.Shifts === shift && user.Ranks !== "Sergeant" && !user.oic
+    )
+    .sort((a, b) => getOrder(a.Ranks, conf) - getOrder(b.Ranks, conf));
+}
+
+function getOrder(rank: string, data: ConfigureData): number {
+  const ranks = data.Ranks.items;
+  const order = Object.values(ranks).filter((ranks) => ranks.title === rank);
+  return order[0].order;
 }
 
 function TeamPanel({
@@ -307,6 +318,8 @@ function PanelCard({
     return currUser.Shifts === "Command Staff" || currUser.badge === "3816";
   }
 
+  const includes = ["Alpha", "Bravo", "Charlie", "Delta", "Command-Staff"];
+
   return (
     <div className="w-full h-full">
       <motion.div
@@ -348,6 +361,9 @@ function PanelCard({
             {user.badge}
           </motion.div>
           {user.Ranks && <div className="">{user.Ranks}</div>}
+          {!includes.includes(user.Shifts) && (
+            <div className="">{user.SpecialRoles}</div>
+          )}
         </div>
       </motion.div>
 

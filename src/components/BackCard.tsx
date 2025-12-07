@@ -14,7 +14,7 @@ export interface BackCardProps {
 export default function BackCard({ user }: BackCardProps) {
   const [isSick, setSick] = useState(user.sick ?? false);
   const [isMedical, setMedical] = useState(user.medical ?? false);
-  const { userSettings, updateAfterDrag } = useUser();
+  const { userSettings, updateAfterDrag, user: currUser } = useUser();
   const { secondaryAccent } = useSafeSettings();
 
   useEffect(() => {
@@ -45,16 +45,21 @@ export default function BackCard({ user }: BackCardProps) {
     e.stopPropagation();
   };
 
+  function permission() {
+    if (!currUser) return;
+    return currUser.Role === "Admin" || currUser.oic;
+  }
+
   return (
     <motion.div
       layout
       style={{ borderColor: secondaryAccent }}
       className="flex items-center justify-center flex-col h-full w-full p-4 bg-zinc-900 rounded-lg border text-zinc-200"
     >
-      <div className="text-md font-semibold">{`${user.firstName} ${user.lastName}`}</div>
+      <div className="text-md lg:text-xs 2xl:text-md text-nowrap font-semibold">{`${user.firstName} ${user.lastName}`}</div>
 
       {user.phone && user.phone.length >= 10 && (
-        <div className="font-semibold text-xs">
+        <div className="font-semibold text-xs lg:font-medium 2xl:font-semibold">
           {`(${user.phone.slice(0, 3)}) ${user.phone.slice(
             3,
             6
@@ -62,7 +67,7 @@ export default function BackCard({ user }: BackCardProps) {
         </div>
       )}
       {user.secondPhone && user.secondPhone.length >= 10 && (
-        <div className="font-semibold text-xs">
+        <div className="font-semibold text-xs lg:font-medium 2xl:font-semibold">
           {`(${user.secondPhone.slice(0, 3)}) ${user.secondPhone.slice(
             3,
             6
@@ -74,19 +79,28 @@ export default function BackCard({ user }: BackCardProps) {
         className="flex items-center justify-evenly gap-2"
         onClick={stopClick}
       >
-        <motion.div className="flex items-center flex-col justify-center">
-          <div className="text-xs font-semibold">Sick</div>
-          <ToggleSwitch state={isSick} setState={handleSickToggle} size="xs" />
-        </motion.div>
+        {" "}
+        {permission() && (
+          <>
+            <motion.div className="flex items-center flex-col justify-center">
+              <div className="text-xs font-normal 2xl:font-medium">Sick</div>
+              <ToggleSwitch
+                state={isSick}
+                setState={handleSickToggle}
+                size="xs"
+              />
+            </motion.div>
 
-        <motion.div className="flex items-center justify-center flex-col">
-          <div className="text-xs font-semibold">Medical</div>
-          <ToggleSwitch
-            state={isMedical}
-            setState={handleMedicalToggle}
-            size="xs"
-          />
-        </motion.div>
+            <motion.div className="flex items-center justify-center flex-col">
+              <div className="text-xs font-bormal 2xl:font-medium">Medical</div>
+              <ToggleSwitch
+                state={isMedical}
+                setState={handleMedicalToggle}
+                size="xs"
+              />
+            </motion.div>
+          </>
+        )}
       </div>
     </motion.div>
   );

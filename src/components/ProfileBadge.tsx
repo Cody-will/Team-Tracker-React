@@ -7,7 +7,8 @@ export type Position =
   | "bottom-left"
   | "top"
   | "left"
-  | "right";
+  | "right"
+  | "top-left";
 
 export interface BadgeProps {
   title: string;
@@ -82,6 +83,9 @@ function getPositionAndScale(
       break;
     case "left":
       angleDeg = 180;
+      break;
+    case "top-left":
+      angleDeg = 215;
       break;
     case "top":
       angleDeg = 270;

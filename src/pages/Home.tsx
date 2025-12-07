@@ -5,11 +5,12 @@ import { useUser } from "./context/UserContext.tsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import SplashOverlay from "../components/SplashOverlay.tsx";
 import { useBreakpoint } from "./hooks/useBreakpoint.ts";
-
+import { useSafeSettings } from "./hooks/useSafeSettings.ts";
 export default function Home() {
   const { currentUser, forceSplash } = useAuth();
   const { data, loading } = useUser();
-  const { isShortDesktop } = useBreakpoint();
+  const { lgUp } = useBreakpoint();
+  const { primaryAccent, secondaryAccent } = useSafeSettings();
 
   // ✅ "Ready" means:
   // - we have a logged-in user
@@ -29,14 +30,16 @@ export default function Home() {
     <motion.div className="flex flex-col  items-start overflow-auto lg:overflow-visible 2xl:overflow-visible  justify-between p-2 md:p-4 2xl:p-4 gap-1 2xl:gap-2 relative min-h-screen w-full lg:min-h-0 2xl:min-h-0 lg:h-full 2xl:h-full">
       <div
         id="panel"
-        className="lg:h-full 2xl:h-full w-full min-h-screen overflow-visible lg:min-h-0 2xl:min-h-0 flex items-center justify-center p-2 border border-zinc-800 bg-zinc-950/10 rounded-md"
+        style={{ borderColor: primaryAccent }}
+        className="lg:h-full 2xl:h-full w-full min-h-screen rounded-lg overflow-visible lg:min-h-0 2xl:min-h-0 flex items-center justify-center p-2"
       >
-        <TeamDisplay key="team-display-comp" team={data} />
+        {data && <TeamDisplay key="team-display-comp" team={data} />}
       </div>
 
       <div
         id="panel"
-        className="relative w-full flex items-start justify-center 2xl:h-4/10 grow-0 lg: max-h-[30%] lg:h-[30%] border border-zinc-800 p-2 rounded-md backdrop-blur-sm bg-zinc-950/10"
+        style={{ borderColor: primaryAccent }}
+        className="relative w-full flex items-start rounded-lg justify-center 2xl:h-4/10 2xl:max-h-[30%] grow-0 lg:max-h-[30%] lg:h-[30%] p-2"
       >
         <Carousel key="carousel-comp" team={data} />
       </div>

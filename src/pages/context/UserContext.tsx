@@ -55,6 +55,7 @@ export interface User {
   photo?: Photo;
   ftoList?: boolean;
   jailSchool?: boolean;
+  SpecialRoles?: string;
   isMandated: boolean;
   trainee: boolean;
   Divisions?: string;
@@ -82,6 +83,8 @@ export interface Value {
   userReady: boolean;
   usersReady: boolean;
   settingsReady: boolean;
+  view: View;
+  setView: React.Dispatch<SetStateAction<View>>;
   addUser: (userData: User) => Promise<AddUserReturn>;
   deleteUser: (uid: string) => Promise<void>;
   deactivateUser: (uid: string) => Promise<void>;
@@ -181,6 +184,8 @@ export type UpdateBackground = {
   path: string;
 };
 
+export type View = "ADC" | "UPD" | null;
+
 type UserWithShift = User & { shift: string };
 
 const userContext = React.createContext<Value | undefined>(undefined);
@@ -200,6 +205,7 @@ export function UserProvider({ children }: any) {
   const [usersReady, setUsersReady] = useState(false);
   const [userReady, setUserReady] = useState(false);
   const [settingsReady, setSettingsReady] = useState(false);
+
   const defaultSettings: DefaultSettings = {
     primaryAccent: primaryAccentHex,
     secondaryAccent: secondaryAccentHex,
@@ -209,9 +215,22 @@ export function UserProvider({ children }: any) {
     coverageAccent: primaryAccentHex,
     bgImage: backgroundImage,
   };
+
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
   const { currentUser } = useAuth();
   const [error, setError] = useState<string | undefined>(undefined);
+
+  // Single source of truth for all users from DB
+  const [allUsers, setAllUsers] = useState<UserRecord>({});
+
+  // Per-division caches so toggling view is cheap
+  const [usersByDivision, setUsersByDivision] = useState<{
+    ADC: UserRecord;
+    UPD: UserRecord;
+  }>({ ADC: {}, UPD: {} });
+
+  const [view, setView] = useState<"ADC" | "UPD" | null>(null);
+
   const value: Value = {
     data,
     loading,
@@ -222,6 +241,8 @@ export function UserProvider({ children }: any) {
     usersReady,
     userReady,
     settingsReady,
+    view,
+    setView,
     addUser,
     deleteUser,
     deactivateUser,
@@ -235,16 +256,20 @@ export function UserProvider({ children }: any) {
     updateAfterDrag,
   };
 
+  // Apply accent color to :root
   useEffect(() => {
     if (!userSettings) return;
     const color = userSettings.primaryAccent || "#0ea5e9";
     document.documentElement.style.setProperty("--accent", color);
   }, [userSettings]);
 
+  // Main users listener: fills allUsers + per-division caches
   useEffect(() => {
-    // If no user, reset everything
     if (!currentUser) {
+      // reset everything if logged out
       setData({});
+      setAllUsers({});
+      setUsersByDivision({ ADC: {}, UPD: {} });
       setUser(undefined);
       setUserSettings(null);
 
@@ -252,14 +277,13 @@ export function UserProvider({ children }: any) {
       setUsersReady(false);
       setUserReady(false);
       setSettingsReady(false);
-
+      setView(null);
       return;
     }
 
     setLoading(true);
     setUsersReady(false);
 
-    const uid = currentUser.uid;
     const usersRef = ref(db, "users");
 
     const unsub = onValue(
@@ -268,34 +292,29 @@ export function UserProvider({ children }: any) {
         const raw = (snap.val() || {}) as Record<string, User>;
         const checked = fixExpiredSick(raw);
 
-        const current = checked[uid];
+        // single source of truth
+        setAllUsers(checked);
 
-        if (!current) {
-          setData({});
-          setUsersReady(false);
-          setLoading(false);
-          return;
-        }
+        // pre-split by division ONCE per snapshot
+        const adcEntries = Object.entries(checked).filter(
+          ([, u]) => u.Divisions === "ADC"
+        );
+        const updEntries = Object.entries(checked).filter(
+          ([, u]) => u.Divisions === "UPD"
+        );
 
-        if (!current.Divisions) {
-          setData({ [uid]: current });
-          setUsersReady(true);
-          setLoading(false);
-          return;
-        }
+        setUsersByDivision({
+          ADC: Object.fromEntries(adcEntries) as UserRecord,
+          UPD: Object.fromEntries(updEntries) as UserRecord,
+        });
 
-        const division = current.Divisions;
-        const byDivision = Object.fromEntries(
-          Object.entries(checked).filter(([, u]) => u.Divisions === division)
-        ) as UserRecord;
-
-        setData(byDivision);
-        setUsersReady(true);
         setLoading(false);
       },
       (err) => {
         console.error("users onValue error:", err);
         setError(err.message ?? "Failed to load users");
+        setAllUsers({});
+        setUsersByDivision({ ADC: {}, UPD: {} });
         setData({});
         setUsersReady(false);
         setLoading(false);
@@ -305,7 +324,42 @@ export function UserProvider({ children }: any) {
     return () => unsub();
   }, [currentUser]);
 
-  // This useEffect sets the user: Database to the currentUser: Auth by using the auth UID and linking it to users uid
+  // Derived: data (visible users) based on currentUser + view
+  useEffect(() => {
+    if (!currentUser) {
+      setData({});
+      setUsersReady(false);
+      return;
+    }
+
+    const uid = currentUser.uid;
+    const current = allUsers[uid];
+
+    // current user not yet loaded
+    if (!current) {
+      setData({});
+      setUsersReady(false);
+      return;
+    }
+
+    // no division -> they only ever see themselves
+    if (!current.Divisions) {
+      setData({ [uid]: current });
+      setUsersReady(true);
+      return;
+    }
+
+    // which division are we *viewing*?
+    // view overrides, otherwise user's own division
+    const division = (view ?? current.Divisions) as "ADC" | "UPD";
+
+    const fromCache = usersByDivision[division] ?? {};
+
+    setData(fromCache);
+    setUsersReady(true);
+  }, [allUsers, usersByDivision, view, currentUser]);
+
+  // Derived: user object (DB user tied to auth)
   useEffect(() => {
     if (!currentUser) {
       setUser(undefined);
@@ -314,13 +368,13 @@ export function UserProvider({ children }: any) {
     }
 
     const uid = currentUser.uid;
-    const cUser = data[uid];
+    const cUser = allUsers[uid];
 
     setUser(cUser ?? undefined);
     setUserReady(!!cUser);
-  }, [data, currentUser]);
+  }, [allUsers, currentUser]);
 
-  // This useEffect sets the userSettings to either default or the users settings if the user has changed their settings
+  // Derived: userSettings from user or defaults
   useEffect(() => {
     if (!user) {
       setUserSettings(null);
@@ -328,7 +382,6 @@ export function UserProvider({ children }: any) {
       return;
     }
 
-    // If user has no settings yet, fall back to defaults
     if (!user.settings) {
       setUserSettings({
         ...defaultSettings,
@@ -384,8 +437,6 @@ export function UserProvider({ children }: any) {
     return { email: user.email.trim(), password: user.password.trim() };
   }
 
-  // This function will handle uploading the users background image, may also make it to handle
-  // uploading the users profile photo also.
   async function uploadPhoto({
     uid,
     file,
@@ -420,17 +471,17 @@ export function UserProvider({ children }: any) {
 
   function usersWithoutShift(shift: string): UserWithShift[] | void {
     if (!data) return;
-    const users = Object.values(data) as UserWithShift[];
-    return users.filter((user) => user?.shift != shift);
+    const usersArr = Object.values(data) as UserWithShift[];
+    return usersArr.filter((user) => user?.shift != shift);
   }
 
   async function updateAfterDrag(
     uid: string,
     field: string,
-    data: string | boolean | null | number
+    dataVal: string | boolean | null | number
   ) {
     try {
-      await update(ref(db, `users/${uid}`), { [field]: data });
+      await update(ref(db, `users/${uid}`), { [field]: dataVal });
       return { success: true, message: "Sucess" };
     } catch (error: any) {
       return { success: false, message: error.message };
@@ -449,9 +500,6 @@ export function UserProvider({ children }: any) {
     return src;
   }
 
-  // This functions calls the service worker on the server to create the users account
-  // using the Admin SDK, so the admin can create the user without being logged
-  // in as the new user afterwards
   async function createUserAccount(
     email: string,
     password: string
@@ -461,35 +509,24 @@ export function UserProvider({ children }: any) {
     return (response.data as { uid: string; created: boolean }).uid;
   }
 
-  // This function calls the service worker on the server to delete the users auth account
-  // using the Admin SDK
   async function deleteUserAccount(uid: string): Promise<boolean> {
     const deleteAuthUser = httpsCallable(getFunctions(), "deleteAuthUser");
     const response = await deleteAuthUser({ uid });
     return (response.data as { ok: boolean }).ok;
   }
 
-  // This function calls the service worker on the server to set the users role
   async function setUserRole(uid: string, role: string): Promise<boolean> {
     const setRole = httpsCallable(getFunctions(), "setUserRole");
     const response = await setRole({ uid, role });
     return (response.data as { complete: boolean }).complete;
   }
 
-  // This function disables the users auth account by calling the service worker
-  // that is using the Admin SDK, the service worker takes a disabled argument
-  // but the function calling this function has an active argument, so when
-  // calling this function active === false, but disabled === true, so this function
-  // will send !active / !disabled to the database
   async function disableUser(uid: string, disabled: boolean) {
     const setDisabled = httpsCallable(getFunctions(), "setDisabled");
     const response = await setDisabled({ uid, disabled });
     return (response.data as { uid: string; disabled: boolean }).disabled;
   }
 
-  // This function calls the service worker on the server to create the users auth account, then
-  // adds the users properties to the user section of the database under the returned
-  // UID the user gets when their auth account gets created
   async function addUser(userData: User): Promise<AddUserReturn> {
     try {
       const { email, password } = getEmailAndPassword(userData);
@@ -512,7 +549,6 @@ export function UserProvider({ children }: any) {
     }
   }
 
-  // This function completely deletes the users auth account and user info
   async function deleteUser(uid: string) {
     try {
       await deleteUserAccount(uid);
@@ -523,7 +559,6 @@ export function UserProvider({ children }: any) {
     }
   }
 
-  // This function deactivated the user, but keeps their auth account and user info
   async function deactivateUser(uid: string) {
     try {
       const disabled = true;
@@ -542,12 +577,10 @@ export function UserProvider({ children }: any) {
     const setRole = httpsCallable(getFunctions(), "setUserRole");
 
     try {
-      // 1) Update role if it changed
       if (data[uid].Role !== formData.Role) {
         await setRole({ uid, role: formData.Role });
       }
 
-      // 2) Update user record in Realtime DB
       await update(ref(db, `users/${uid}`), formData);
 
       return { success: true };
@@ -581,7 +614,6 @@ export function UserProvider({ children }: any) {
     }
   }
 
-  // This function will update the users settings in the database
   async function updateUserSettings(
     uid: string,
     location: Location,
@@ -596,11 +628,6 @@ export function UserProvider({ children }: any) {
     }
   }
 
-  /**
-   * Uploads a new profile photo, then deletes the old one (if any),
-   * and stores { src, path } at users/{uid}/photo.
-   * Old photo stays in place until the new one is uploaded + saved.
-   */
   async function setProfilePhoto({
     uid,
     file,
@@ -656,11 +683,6 @@ export function UserProvider({ children }: any) {
     return { src, path: storagePath };
   }
 
-  /**
-   * Removes the user's current profile photo:
-   * - deletes the Storage object using saved path (if found)
-   * - clears `users/{uid}/photo`
-   */
   async function removeProfilePhoto(uid: string): Promise<void> {
     if (!uid) throw new Error("removeProfilePhoto: uid is required");
 

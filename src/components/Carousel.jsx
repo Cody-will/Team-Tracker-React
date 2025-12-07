@@ -8,6 +8,7 @@ import InfoItem from "./InfoItem";
 import { getAllNext30OfType, getAllRange } from "../helpers/schedulehelper";
 import { useSchedule } from "../pages/context/ScheduleContext";
 import { useBreakpoint } from "../pages/hooks/useBreakpoint";
+import { useUser } from "../pages/context/UserContext";
 
 export default function Carousel({ team }) {
   const [data, setData] = useState([]);
@@ -16,6 +17,7 @@ export default function Carousel({ team }) {
   const [direction, setDirection] = useState(0);
   const { events, coverage } = useSchedule();
   const { lgUp, twoXlUp } = useBreakpoint();
+  const { view } = useUser();
 
   const itemsPerPage = 3;
 
@@ -104,7 +106,31 @@ export default function Carousel({ team }) {
           )
       );
 
-    const all = [
+    const allUPD = [
+      {
+        key: "trainee-card",
+        title: "Trainee's",
+        props: trainees,
+        column: false,
+      },
+      { key: "vacaton-card", title: "Vacation", props: vacation, column: true },
+      { key: "cover-card", title: "Coverage", props: cover, column: true },
+      {
+        key: "medical-user",
+        title: "Medical",
+        props: medicalCards,
+        column: false,
+      },
+
+      {
+        key: "training-card",
+        title: "Training",
+        props: training,
+        column: true,
+      },
+    ];
+
+    const allADC = [
       {
         key: "mandate-cards",
         title: "Mandate",
@@ -147,8 +173,10 @@ export default function Carousel({ team }) {
       },
     ];
 
-    setCardData(all);
-  }, [data, events, coverage]);
+    const cards = view === "ADC" ? allADC : allUPD;
+
+    setCardData(cards);
+  }, [data, events, coverage, view]);
 
   const totalPages = Math.ceil(cardData.length / itemsPerPage);
 

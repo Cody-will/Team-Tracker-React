@@ -156,6 +156,11 @@ export default function Vacation() {
     }
   }
 
+  function hasPermission() {
+    if (!user) return;
+    return user.Role === "Admin";
+  }
+
   function handleErrorPopUp() {
     setError(null);
   }
@@ -262,12 +267,24 @@ export default function Vacation() {
                   >
                     <option value="">Select employee</option>
                     {data &&
+                      hasPermission() &&
                       Object.entries(data).map(([id, user]) => (
                         <option
                           key={id}
                           value={user.uid}
                         >{`${user.lastName}, ${user.firstName} - ${user.badge}`}</option>
                       ))}
+                    {data &&
+                      !hasPermission() &&
+                      Object.entries(data).map(
+                        ([id, u]) =>
+                          u.uid === user?.uid && (
+                            <option
+                              key={id}
+                              value={u.uid}
+                            >{`${u.lastName}, ${u.firstName} - ${u.badge}`}</option>
+                          )
+                      )}
                   </motion.select>
                 )}
               </AnimatePresence>

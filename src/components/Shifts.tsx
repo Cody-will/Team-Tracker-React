@@ -34,7 +34,7 @@ export default function Shifts({
   const { events, coverage } = useSchedule();
   const { primaryAccent } = useSafeSettings();
   const isCurrent = isCurrentShift(shift as ShiftName);
-  const { lgUp, twoXlUp } = useBreakpoint();
+  const { lgUp, twoXlUp, mdUp } = useBreakpoint();
 
   const shadow = twoXlUp
     ? `0px 0px 5px 5px ${primaryAccent}`
@@ -61,9 +61,8 @@ export default function Shifts({
       layout
       style={{
         borderColor: isCurrent ? primaryAccent : "#27272a",
-        boxShadow: isCurrent ? shadow : "none",
       }}
-      className="flex flex-col 2xl:h-full lg:h-full w-full bg-zinc-950/50 border-2 rounded-lg 2xl:rounded-xl"
+      className="flex flex-col 2xl:h-full lg:h-full w-full border-3 rounded-lg 2xl:rounded-xl"
     >
       <motion.div className="flex items-center justify-center text-zinc-200 text-lg bg-zinc-950/60 rounded-t-md 2xl:rounded-t-lg p-1 font-semibold">
         {shift}

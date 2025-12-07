@@ -14,6 +14,8 @@ import {
   BsCalendarWeek,
 } from "react-icons/bs";
 
+import { Columns3Cog } from "lucide-react";
+
 import ProfilePhoto from "./ProfilePhoto.tsx";
 import { useUser } from "../pages/context/UserContext.tsx";
 import { useState, useEffect } from "react";
@@ -24,15 +26,24 @@ import { signOut } from "firebase/auth";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings.ts";
 import { useAppVersion } from "../pages/context/VersionContext.tsx";
 import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
+import ToggleSwitch from "./ToggleSwitch.tsx";
+import { useConfigure } from "../pages/context/configureContext.jsx";
 
 export default function Sidebar() {
   const [barItems, setBarItems] = useState([]);
   const [showNav, setShowNav] = useState(false);
-  const { user } = useUser();
+  const { user, view, setView } = useUser();
   const { primaryAccent } = useSafeSettings();
   const { updateAvailable } = useAppVersion();
   const { isShortDesktop, mdUp, twoXlUp, lgUp } = useBreakpoint();
   const excludes = ["Add User", "Configure"];
+  const { data: conf } = useConfigure();
+  const oppShift =
+    conf && user
+      ? Object.values(conf.Divisions.items).filter(
+          (item) => item.title !== user.Divisions
+        )[0]
+      : "";
 
   const iconSize = getIcon();
 
@@ -77,6 +88,11 @@ export default function Sidebar() {
     { to: "/settings", icon: <BsSliders size={iconSize} />, label: "Settings" },
     { to: "/configure", icon: <BsGear size={iconSize} />, label: "Configure" },
     {
+      to: "/cardsettings",
+      icon: <Columns3Cog size={iconSize} />,
+      label: "Info Card Configuration",
+    },
+    {
       to: "/login",
       action: logOut,
       icon: <BsDoorClosed size={iconSize} />,
@@ -88,7 +104,7 @@ export default function Sidebar() {
     if (!user) return;
 
     const bar = links.map(({ to, action, icon, label }) =>
-      roleCheck(label, user.Role, excludes) ? (
+      roleCheck(label, user.Role, excludes, user.Divisions, view, user) ? (
         <SideBarLink
           key={to}
           to={to}
@@ -106,6 +122,10 @@ export default function Sidebar() {
     signOut(auth).then(() => {});
   }
 
+  function getToggle() {
+    return { isOn: oppShift, isOff: user.Divisions };
+  }
+
   const photoSize = twoXlUp ? 16 : 12;
 
   return (
@@ -116,6 +136,7 @@ export default function Sidebar() {
         ) : (
           <motion.div
             layoutId="mobileNav"
+            style={{ borderColor: primaryAccent }}
             transition={{ type: "tween" }}
             className="lg:relative fixed right-2 lg:left-0 2xl:w-20 lg:w-18 w-20 z-50 flex items-end justify-center h-screen flex-col"
           >
@@ -149,7 +170,11 @@ export default function Sidebar() {
               {user && (
                 <div
                   id="panel"
-                  className="2xl:w-16 w-14 py-4 gap-2 2xl:gap-2 rounded-xl flex flex-col items-center justify-between border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
+                  style={{
+                    borderColor: `${primaryAccent}90`,
+                    borderWidth: "2px",
+                  }}
+                  className="2xl:w-16 w-14 py-4 gap-2 2xl:gap-2 rounded-xl flex flex-col items-center justify-between  shadow-xl/40"
                 >
                   {/* Top: main nav items */}
                   <div className="flex flex-col items-center gap-2">
@@ -163,6 +188,16 @@ export default function Sidebar() {
                       </motion.div>
                     )}
                     {barItems}
+                    {true && (
+                      <ToggleSwitch
+                        state={view !== user.Divisions}
+                        setState={() =>
+                          setView((prev) => (prev === "ADC" ? "UPD" : "ADC"))
+                        }
+                        text={{ isOn: "", isOff: "" }}
+                        size="sm"
+                      />
+                    )}
                   </div>
 
                   {/* Bottom: update button (only when update is available) */}
@@ -177,7 +212,9 @@ export default function Sidebar() {
   );
 }
 
-function roleCheck(title, role, excludes) {
+function roleCheck(title, role, excludes, division, view, user) {
+  if (title === "Info Card Configuration" && user.lastName !== "Willard")
+    return false;
   if (role === "Admin") return true;
   return !excludes.includes(title);
 }
@@ -264,12 +301,14 @@ function UpdateButton() {
 }
 
 function Hamburger({ state, setState }) {
+  const { primaryAccent } = useSafeSettings();
   return (
     <motion.div
       id="panel"
       layoutId="mobileNav"
+      style={{ borderColor: `${primaryAccent}90` }}
       onClick={() => setState(true)}
-      className="fixed right-2 bottom-2 z-50 p-5 rounded-full text-zinc-200 border border-zinc-800 shadow-xl/40 bg-zinc-950/30"
+      className="fixed right-4 bottom-4 z-50 p-5 rounded-full text-zinc-200 border shadow-xl/40 "
     >
       <BsList size={24} />
     </motion.div>

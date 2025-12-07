@@ -11,6 +11,7 @@ interface ToggleSwitchProps {
     | ((next: boolean) => void);
   size?: ToggleSize;
   off?: string;
+  text?: { isOn: string; isOff: string };
 }
 
 export default function ToggleSwitch({
@@ -18,6 +19,7 @@ export default function ToggleSwitch({
   setState,
   size = "md",
   off = "#71717a",
+  text,
 }: ToggleSwitchProps) {
   const sizes = {
     xs: { container: "h-4 w-8 p-0.5", knob: "size-3" },
@@ -32,12 +34,22 @@ export default function ToggleSwitch({
       style={{ justifyContent: state ? "flex-end" : "flex-start" }}
       animate={{ backgroundColor: state ? primaryAccent : off }}
       transition={{ type: "tween", duration: 0.3 }}
-      className={`h-${sizes[size].container} flex items-center hover:cursor-pointer overflow-hidden rounded-full`}
+      className={`h-${sizes[size].container} relative flex items-center hover:cursor-pointer overflow-hidden rounded-full`}
       onClick={() => setState(!state)}
     >
+      {text && (
+        <motion.div
+          layout
+          transition={{ type: "spring", duration: 0.3 }}
+          style={{ justifyContent: state ? "flex-start" : "flex-end" }}
+          className="absolute w-full h-full text-[.6rem] font-medium text-zinc-950 p-1.5 z-0 flex items-center"
+        >
+          {state ? text.isOn : text.isOff}
+        </motion.div>
+      )}
       <motion.div
         layout
-        className={`${sizes[size].knob} bg-zinc-900 rounded-full`}
+        className={`${sizes[size].knob} bg-zinc-900 z-10 rounded-full`}
       />
     </motion.div>
   );

@@ -51,6 +51,7 @@ export interface ScheduleEvent {
   coverage?: boolean;
   color?: string;
   backgroundColor?: string;
+  Division?: "ADC" | "UPD";
   textColor?: string;
 }
 
@@ -129,7 +130,7 @@ function toLocalMidnight(millis: number | string) {
 
 export function ScheduleProvider({ children }: any) {
   const [events, setEvents] = useState<AllEvents>([]);
-  const { user, data: users } = useUser();
+  const { user, data: users, view } = useUser();
 
   const {
     primaryAccent,
@@ -140,13 +141,51 @@ export function ScheduleProvider({ children }: any) {
     trainingAccent,
   } = useSafeSettings();
 
-  const [coverage, setCoverage] = useState<Coverage>([]);
+  // RAW coverage & event-type arrays from DB
+  const [coverageRaw, setCoverageRaw] = useState<Coverage>([]);
   const [training, setTraining] = useState<ScheduleEvent[]>([]);
   const [vacation, setVacation] = useState<ScheduleEvent[]>([]);
   const [range, setRange] = useState<ScheduleEvent[]>([]);
   const [swap, setSwap] = useState<ScheduleEvent[]>([]);
   const [jailSchool, setJailSchool] = useState<ScheduleEvent[]>([]);
 
+  // Per-division caches (pre-split so toggling view is cheap)
+  const [eventsByDivision, setEventsByDivision] = useState<{
+    ADC: AllEvents;
+    UPD: AllEvents;
+  }>({ ADC: [], UPD: [] });
+
+  const [coverageByDivision, setCoverageByDivision] = useState<{
+    ADC: Coverage;
+    UPD: Coverage;
+  }>({ ADC: [], UPD: [] });
+
+  const [vacationByDivision, setVacationByDivision] = useState<{
+    ADC: ScheduleEvent[];
+    UPD: ScheduleEvent[];
+  }>({ ADC: [], UPD: [] });
+
+  const [trainingByDivision, setTrainingByDivision] = useState<{
+    ADC: ScheduleEvent[];
+    UPD: ScheduleEvent[];
+  }>({ ADC: [], UPD: [] });
+
+  const [rangeByDivision, setRangeByDivision] = useState<{
+    ADC: ScheduleEvent[];
+    UPD: ScheduleEvent[];
+  }>({ ADC: [], UPD: [] });
+
+  const [swapByDivision, setSwapByDivision] = useState<{
+    ADC: ScheduleEvent[];
+    UPD: ScheduleEvent[];
+  }>({ ADC: [], UPD: [] });
+
+  const [jailSchoolByDivision, setJailSchoolByDivision] = useState<{
+    ADC: ScheduleEvent[];
+    UPD: ScheduleEvent[];
+  }>({ ADC: [], UPD: [] });
+
+  // ---- COVERAGE LISTENER (raw) ----
   useEffect(() => {
     const cRef = ref(db, "coverage");
     const unsubscribe = onValue(
@@ -156,7 +195,7 @@ export function ScheduleProvider({ children }: any) {
           const raw = snapshot.exists()
             ? (Object.values(snapshot.val()) as DayEvent[])
             : [];
-          setCoverage(filterByDivision(raw));
+          setCoverageRaw(raw);
         });
       },
       (error) => console.log(error)
@@ -164,11 +203,7 @@ export function ScheduleProvider({ children }: any) {
     return unsubscribe;
   }, []);
 
-  const claimedCoverage = useMemo(
-    () => coverage.filter((e) => e.coverage),
-    [coverage]
-  );
-
+  // ---- EVENTS LISTENER (raw) ----
   useEffect(() => {
     const confRef = ref(db, "events");
     const unsubscribe = onValue(
@@ -197,7 +232,6 @@ export function ScheduleProvider({ children }: any) {
         const nextJailSchool: ScheduleEvent[] = [];
 
         for (const e of values) {
-          // Normalize once
           const normalized: ScheduleEvent = {
             ...e,
             start: toDayOnly(toLocalMidnight(e.start)),
@@ -220,16 +254,17 @@ export function ScheduleProvider({ children }: any) {
               break;
             case "Jail-School":
               nextJailSchool.push(normalized);
+              break;
           }
         }
 
         startTransition(() => {
-          setEvents(filterByDivision(nextEvents));
-          setVacation(filterByDivision(nextVacation));
-          setTraining(filterByDivision(nextTraining));
-          setRange(filterByDivision(nextRange));
-          setSwap(filterByDivision(nextSwap));
-          setJailSchool(filterByDivision(nextJailSchool));
+          setEvents(nextEvents);
+          setVacation(nextVacation);
+          setTraining(nextTraining);
+          setRange(nextRange);
+          setSwap(nextSwap);
+          setJailSchool(nextJailSchool);
         });
       },
       (error) => console.log(error)
@@ -303,26 +338,167 @@ export function ScheduleProvider({ children }: any) {
     [secondaryAccent]
   );
 
-  function filterByDivision<
-    T extends { originUID: string; targetUID?: string; eventType?: EventType }
-  >(list: T[]): T[] {
-    if (!user || !users) return list;
-
+  // ----- helpers for division splitting (no view here) -----
+  function filterEventsForDivision(
+    list: ScheduleEvent[],
+    division: "ADC" | "UPD",
+    users: Record<string, any>
+  ): ScheduleEvent[] {
     return list.filter((e) => {
+      if (e.Division) return e.Division === division;
+
       const origin = users[e.originUID];
-      const target = e.targetUID ? users[e.targetUID] : null;
+      const target = e.targetUID ? users[e.targetUID] : undefined;
 
       if (e.eventType === "Jail-School" || e.eventType === "Range") {
-        return user.Divisions === "ADC";
+        return division === "ADC";
       }
 
       const sameDivision =
-        (origin && origin.Divisions === user.Divisions) ||
-        (target && target.Divisions === user.Divisions);
+        (origin && origin.Divisions === division) ||
+        (target && target.Divisions === division);
 
       return sameDivision;
     });
   }
+
+  function filterCoverageForDivision(
+    list: DayEvent[],
+    division: "ADC" | "UPD",
+    users: Record<string, any>
+  ): DayEvent[] {
+    return list.filter((e) => {
+      if ((e as any).Division) {
+        return (e as any).Division === division;
+      }
+
+      const origin = users[e.originUID];
+      const target = e.targetUID ? users[e.targetUID] : undefined;
+
+      if (e.eventType === "Jail-School" || e.eventType === "Range") {
+        return division === "ADC";
+      }
+
+      const sameDivision =
+        (origin && origin.Divisions === division) ||
+        (target && target.Divisions === division);
+
+      return sameDivision;
+    });
+  }
+
+  // ---- build per-division caches when raw data OR users change ----
+  useEffect(() => {
+    if (!users || !user) {
+      setEventsByDivision({ ADC: [], UPD: [] });
+      setCoverageByDivision({ ADC: [], UPD: [] });
+      setVacationByDivision({ ADC: [], UPD: [] });
+      setTrainingByDivision({ ADC: [], UPD: [] });
+      setRangeByDivision({ ADC: [], UPD: [] });
+      setSwapByDivision({ ADC: [], UPD: [] });
+      setJailSchoolByDivision({ ADC: [], UPD: [] });
+      return;
+    }
+
+    setEventsByDivision({
+      ADC: filterEventsForDivision(events, "ADC", users),
+      UPD: filterEventsForDivision(events, "UPD", users),
+    });
+
+    setCoverageByDivision({
+      ADC: filterCoverageForDivision(coverageRaw, "ADC", users),
+      UPD: filterCoverageForDivision(coverageRaw, "UPD", users),
+    });
+
+    setVacationByDivision({
+      ADC: filterEventsForDivision(vacation, "ADC", users),
+      UPD: filterEventsForDivision(vacation, "UPD", users),
+    });
+
+    setTrainingByDivision({
+      ADC: filterEventsForDivision(training, "ADC", users),
+      UPD: filterEventsForDivision(training, "UPD", users),
+    });
+
+    setRangeByDivision({
+      ADC: filterEventsForDivision(range, "ADC", users),
+      UPD: filterEventsForDivision(range, "UPD", users),
+    });
+
+    setSwapByDivision({
+      ADC: filterEventsForDivision(swap, "ADC", users),
+      UPD: filterEventsForDivision(swap, "UPD", users),
+    });
+
+    setJailSchoolByDivision({
+      ADC: filterEventsForDivision(jailSchool, "ADC", users),
+      UPD: filterEventsForDivision(jailSchool, "UPD", users),
+    });
+  }, [
+    events,
+    coverageRaw,
+    vacation,
+    training,
+    range,
+    swap,
+    jailSchool,
+    users,
+    user,
+  ]);
+
+  // ---- figure out which division we *should* be showing ----
+  const effectiveDivision: "ADC" | "UPD" | null = useMemo(() => {
+    if (view) return view; // override from sidebar
+    if (user?.Divisions === "ADC" || user?.Divisions === "UPD") {
+      return user.Divisions;
+    }
+    return null;
+  }, [view, user]);
+
+  // ---- final filtered arrays used by the app (cheap on toggle) ----
+  const filteredEvents = useMemo(
+    () => (effectiveDivision ? eventsByDivision[effectiveDivision] : events),
+    [eventsByDivision, effectiveDivision, events]
+  );
+
+  const filteredCoverage = useMemo(
+    () =>
+      effectiveDivision ? coverageByDivision[effectiveDivision] : coverageRaw,
+    [coverageByDivision, effectiveDivision, coverageRaw]
+  );
+
+  const filteredVacation = useMemo(
+    () =>
+      effectiveDivision ? vacationByDivision[effectiveDivision] : vacation,
+    [vacationByDivision, effectiveDivision, vacation]
+  );
+
+  const filteredTraining = useMemo(
+    () =>
+      effectiveDivision ? trainingByDivision[effectiveDivision] : training,
+    [trainingByDivision, effectiveDivision, training]
+  );
+
+  const filteredRange = useMemo(
+    () => (effectiveDivision ? rangeByDivision[effectiveDivision] : range),
+    [rangeByDivision, effectiveDivision, range]
+  );
+
+  const filteredSwap = useMemo(
+    () => (effectiveDivision ? swapByDivision[effectiveDivision] : swap),
+    [swapByDivision, effectiveDivision, swap]
+  );
+
+  const filteredJailSchool = useMemo(
+    () =>
+      effectiveDivision ? jailSchoolByDivision[effectiveDivision] : jailSchool,
+    [jailSchoolByDivision, effectiveDivision, jailSchool]
+  );
+
+  const claimedCoverage = useMemo(
+    () => filteredCoverage.filter((e) => e.coverage),
+    [filteredCoverage]
+  );
 
   function getColor(type: string) {
     switch (type) {
@@ -335,7 +511,6 @@ export function ScheduleProvider({ children }: any) {
       case "Coverage":
         return coverageAccent;
       case "Jail-School":
-        return "#ef4444";
       case "Range":
         return "#ef4444";
       default:
@@ -360,13 +535,16 @@ export function ScheduleProvider({ children }: any) {
 
   const expandRange = useCallback(
     (e: ScheduleEvent) => {
-      // robustly handle number|string
       const start = toLocalMidnight(e.start);
       let end = toLocalMidnight(e.end);
       end = addDays(end, -1);
       const last = end < start ? start : end;
 
       for (let d = start; d <= last; d = addDays(d, 1)) {
+        const originUser = users?.[e.originUID];
+        const division =
+          (originUser?.Divisions as "ADC" | "UPD" | undefined) ?? undefined;
+
         const entry: DayEvent = {
           id: `${e.id}-${toDayOnly(d)}`,
           originUID: e.originUID,
@@ -380,13 +558,14 @@ export function ScheduleProvider({ children }: any) {
           day: toDayOnly(d),
           allDay: e.allDay,
           claimed: false,
+          Division: division,
           backgroundColor: e.color,
           textColor: "#09090b",
         };
         void addUnclaimedCoverage(entry);
       }
     },
-    [addUnclaimedCoverage]
+    [addUnclaimedCoverage, users]
   );
 
   const scheduleEvent = useCallback(
@@ -394,21 +573,25 @@ export function ScheduleProvider({ children }: any) {
       const eRef = ref(db, "events");
       const eventRef = push(eRef);
       const key = eventRef.key!;
+      const originUser = users?.[event.originUID];
+      const division =
+        (originUser?.Divisions as "ADC" | "UPD" | undefined) ?? undefined;
+
       const newEvent: ScheduleEvent = {
         id: key,
         ...event,
         originDisplay: event.display,
+        Division: division,
       };
       await set(eventRef, newEvent);
       if (event.coverage) expandRange(newEvent);
       return true;
     },
-    [expandRange]
+    [expandRange, users]
   );
 
   function deleteEvent(id: string) {
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // must complete this delete function for eveerthing
+    // TODO: implement when you're ready
   }
 
   const addClaimedCoverage = useCallback(async (event: DayEvent) => {
@@ -495,17 +678,17 @@ export function ScheduleProvider({ children }: any) {
       { id: "payPeriod", events: [payPeriod] },
       {
         id: "vacation",
-        events: vacation.map(addExtended),
+        events: filteredVacation.map(addExtended),
         color: vacationAccent,
       },
       {
         id: "shift-swap",
-        events: swap.map(addExtended),
+        events: filteredSwap.map(addExtended),
         color: swapAccent,
       },
       {
         id: "training",
-        events: training.map(addExtended),
+        events: filteredTraining.map(addExtended),
         color: trainingAccent,
       },
       {
@@ -515,12 +698,12 @@ export function ScheduleProvider({ children }: any) {
       },
       {
         id: "Range",
-        events: range.map(addExtended),
+        events: filteredRange.map(addExtended),
         color: "#ef4444",
       },
       {
         id: "Jail-School",
-        events: jailSchool.map(addExtended),
+        events: filteredJailSchool.map(addExtended),
         color: "#ef4444",
       },
     ],
@@ -529,36 +712,36 @@ export function ScheduleProvider({ children }: any) {
       nextHolidays,
       payDay,
       payPeriod,
-      vacation,
-      swap,
-      training,
+      filteredVacation,
+      filteredSwap,
+      filteredTraining,
       claimedCoverage,
-      range,
+      filteredRange,
       vacationAccent,
       swapAccent,
       trainingAccent,
       coverageAccent,
       primaryAccent,
       secondaryAccent,
-      jailSchool,
+      filteredJailSchool,
     ]
   );
 
   const value = useMemo(
     () => ({
-      events,
+      events: filteredEvents,
       allEvents,
       scheduleEvent,
       buildShiftEvents,
-      coverage,
+      coverage: filteredCoverage,
       addClaimedCoverage,
     }),
     [
-      events,
+      filteredEvents,
       allEvents,
       scheduleEvent,
       buildShiftEvents,
-      coverage,
+      filteredCoverage,
       addClaimedCoverage,
     ]
   );

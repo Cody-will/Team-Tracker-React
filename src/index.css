@@ -1,7 +1,32 @@
 @import "tailwindcss";
 
+:root {
+  /* Geometry */
+  --panel-border-size: 2px;
+  --panel-radius: 18px;
+
+  /* Effects */
+  --panel-blur-amount: 8px;
+  --panel-shadow-range: 15px;
+
+  /* Color hooks – you set these somewhere else */
+  --panel-border-color: currentColor;
+  --panel-shadow-color: currentColor;
+}
+
 #panel {
-  backdrop-filter: blur(2px);
+  box-sizing: border-box;
+
+  /* Border */
+  border-style: solid;
+  border-width: var(--panel-border-size);
+  background-color: rgba(9, 9, 11, 0.6);
+
+  /* Blur “behind” the panel */
+  backdrop-filter: blur(var(--panel-blur-amount));
+  -webkit-backdrop-filter: blur(var(--panel-blur-amount));
+
+  /* Shadow */
 }
 
 html,

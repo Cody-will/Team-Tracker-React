@@ -221,9 +221,10 @@ function AddUserForm({
   useEffect(() => {
     const sub = watch((values, info) => {
       console.log("WATCH VALUES:", values);
+      console.log("ERRORS:", errors);
     });
     return () => sub.unsubscribe();
-  }, [watch]);
+  }, [watch, errors]);
 
   // Build dropdown options from config
   useEffect(() => {
@@ -238,7 +239,7 @@ function AddUserForm({
       item.title as string,
       Object.entries(item?.items).map(([key, value]: [string, any]) => [
         key,
-        value.title as string,
+        value.title.replace("-", "") as string,
         Number(value.order ?? 0),
       ]),
     ]);
@@ -274,6 +275,8 @@ function AddUserForm({
     )}`;
   }
 
+  const isRequired = ["Ranks", "Shifts", "Role", "Division"];
+
   return (
     <motion.form
       key="add-user-form"
@@ -287,28 +290,28 @@ function AddUserForm({
     >
       <motion.input
         layout
-        {...register("firstName")}
+        {...register("firstName", { required: "First name is required" })}
         className={inputStyle}
         type="text"
         placeholder="First Name"
       />
       <motion.input
         layout
-        {...register("lastName")}
+        {...register("lastName", { required: "Last name is required" })}
         className={inputStyle}
         type="text"
         placeholder="Last Name"
       />
       <motion.input
         layout
-        {...register("email")}
+        {...register("email", { required: "Email is required" })}
         className={inputStyle}
         type="email"
         placeholder="Email"
       />
       <motion.input
         layout
-        {...register("password")}
+        {...register("password", { required: "Password is required" })}
         className={inputStyle}
         type="password"
         placeholder="Temporary Password"
@@ -316,6 +319,7 @@ function AddUserForm({
       <Controller
         name="phone"
         control={control}
+        rules={{ required: "Phone number is required" }}
         defaultValue=""
         render={({ field }) => {
           const display = formatPhone(field.value); // UI formatted
@@ -336,6 +340,7 @@ function AddUserForm({
       <Controller
         name="secondPhone"
         control={control}
+        rules={{ required: false }}
         defaultValue=""
         render={({ field }) => {
           const display = formatPhone(field.value); // UI formatted
@@ -356,7 +361,7 @@ function AddUserForm({
 
       <motion.input
         layout
-        {...register("badge")}
+        {...register("badge", { required: "Badge number is required" })}
         className={inputStyle}
         type="text"
         placeholder="Badge Number"
@@ -364,7 +369,7 @@ function AddUserForm({
       {upd === "UPD" && (
         <motion.input
           layout
-          {...register("car")}
+          {...register("car", { required: "Car number is required" })}
           className={inputStyle}
           type="text"
           placeholder="Car Number"
@@ -375,7 +380,11 @@ function AddUserForm({
           <motion.select
             layout
             key={groupTitle}
-            {...register(groupTitle)}
+            {...register(groupTitle, {
+              required: isRequired.includes(groupTitle)
+                ? `${groupTitle} is required`
+                : false,
+            })}
             className={inputStyle}
           >
             <option value={""}>select {groupTitle}</option>
@@ -400,7 +409,9 @@ function AddUserForm({
             transition={{ duration: 0.3 }}
           >
             <motion.select
-              {...register("trainer", { required: trainee })}
+              {...register("trainer", {
+                required: trainee ? "Trainer is required" : false,
+              })}
               key="trainer"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -420,7 +431,9 @@ function AddUserForm({
                   ))}
             </motion.select>
             <motion.select
-              {...register("phase", { required: trainee })}
+              {...register("phase", {
+                required: trainee ? "Phase is required" : false,
+              })}
               key="phase"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -601,7 +614,6 @@ function AddUserForm({
       </motion.div>
 
       <motion.div layout className="flex w-full gap-3 col-span-2">
-        {/* If this still breaks, temporarily swap this for a plain <button> */}
         <Button
           text={creating ? "Creating User..." : "Create User"}
           type="submit"

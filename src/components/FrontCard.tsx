@@ -16,8 +16,8 @@ import type { BorderSize } from "./ProfilePhoto";
 
 export interface NewCardProps {
   person: User;
-  didDrag: boolean;
-  currShift: string;
+  didDrag?: boolean;
+  currShift?: string;
   noFlip?: boolean;
   noFade?: boolean;
   noBadge?: boolean;
@@ -145,7 +145,7 @@ export default function FrontCard({
         backgroundColor: shouldFade ? `#18181b85` : "#18181b",
         opacity: isDragging ? 0.8 : 1,
       }}
-      className="relative lg:h-full h-auto 2xl:h-full  p-2  flex border items-center rounded-md lg:rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
+      className="relative lg:h-full h-auto 2xl:h-full gap-2  p-2  flex border items-center rounded-md lg:rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
     >
       {showOffBanner && !noFlip && (
         <div
