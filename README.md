@@ -3,7 +3,7 @@
 <!-- HEADER STYLE: CLASSIC -->
 <div align="center">
 
-<img src="Team-Tracker-React.png" width="30%" style="position: relative; top: 0; right: 0;" alt="Project Logo"/>
+<img src="public/Team-Tracker-React.png" width="30%" style="position: relative; top: 0; right: 0;" alt="Project Logo"/>
 
 # TEAM-TRACKER-REACT
 
