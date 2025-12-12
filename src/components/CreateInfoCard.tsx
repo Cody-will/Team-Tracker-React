@@ -1,7 +1,9 @@
-import { motion, LayoutGroup } from "motion/react";
+import Button from "./Button.jsx";
+import { motion, LayoutGroup, AnimatePresence } from "motion/react";
 import InfoCard, { Filter, InfoCardProps } from "./InfoCard";
 import { useUser } from "../pages/context/UserContext";
-import FrontCard from "./FrontCard";
+import { useSafeSettings } from "../pages/hooks/useSafeSettings";
+import type { SignupProp } from "./InfoCard";
 import {
   DayEvent,
   EventType,
@@ -9,55 +11,79 @@ import {
   useSchedule,
 } from "../pages/context/ScheduleContext";
 import InfoItem from "./InfoItem";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useCard } from "../pages/context/CardContext.tsx";
 
 type AllEvents = ScheduleEvent | DayEvent;
-type CardType = "Schedule Card" | "Employee Card" | "Event Signup Card";
+export type CardType = "Schedule Card" | "Employee Card" | "Event Signup Card";
 interface TextDict {
   [key: string]: string;
 }
+
+const EVENT_TYPES_UI = [
+  "Vacation",
+  "Shift-Swap",
+  "Training",
+  "coverage",
+] as const;
+
+const FIX_TEXT: TextDict = {
+  Vacation: "Vacation",
+  "Shift-Swap": "Shift Swap",
+  Training: "Training",
+  coverage: "Coverage",
+};
+
+const CARD_OPTIONS: CardType[] = [
+  "Schedule Card",
+  "Employee Card",
+  "Event Signup Card",
+];
+
+const FILTERABLE = [
+  "OIC",
+  "FTO",
+  "Trainee",
+  "PIT",
+  "Rifle",
+  "Mandate",
+  "Mandated",
+  "Jail School",
+  "Special Roles",
+  "Sick",
+  "Medical",
+  "FTO List",
+];
+
+const EXCLUDED = ["", "Select Card Type"];
 
 export default function CreateInfoCard() {
   const [selectedCard, setSelected] = useState<CardType | "">("");
   const [title, setTitle] = useState("");
   const [range, setRange] = useState(15);
   const [eventType, setEventType] = useState<EventType | undefined>(undefined);
-  const [filter, setFilter] = useState("");
-  const [selectOption, setoption] = useState("");
+  const [filter, setFilter] = useState<Filter | "">("");
+  const [selectOption, setOption] = useState("");
   const [eventDate, setEventDate] = useState("");
-  const eventTypes = ["Vacation", "Shift-Swap", "Training", "coverage"];
-  const filterable = [
-    "OIC",
-    "FTO",
-    "Trainee",
-    "PIT",
-    "Rifle",
-    "Mandate",
-    "Mandated",
-    "Jail School",
-    "Special Roles",
-    "Sick",
-    "Medical",
-    "FTO List",
-    "Jail School",
-  ];
-  const fixText: TextDict = {
-    Vacation: "Vacation",
-    "Shift-Swap": "Shift Swap",
-    Training: "Training",
-    coverage: "Coverage",
-  };
-  const options: CardType[] = [
-    "Schedule Card",
-    "Employee Card",
-    "Event Signup Card",
-  ];
+  const [showExamples, setShowExamples] = useState(false);
+
+  const { primaryAccent } = useSafeSettings();
+  const { user, view } = useUser();
+  const { info, addCard } = useCard();
+
+  const options = CARD_OPTIONS;
   const baseId = "card-selector";
-  const exclude = ["", "Select Card Type"];
   const isSelected = options.includes(selectedCard as CardType);
+  const hasSelection =
+    isSelected && !EXCLUDED.includes(selectedCard as CardType);
 
   const inputStyle =
     "border-2 border-zinc-500 w-full text-zinc-200 text-md 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_10px_2px_var(--accent)]";
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShowExamples(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   useEffect(() => {
     if (!options.includes(selectedCard as CardType)) {
@@ -66,122 +92,274 @@ export default function CreateInfoCard() {
       setEventDate("");
       setEventType(undefined);
       setFilter("");
-      setoption("");
+      setOption("");
     }
-  }, [selectedCard]);
+  }, [selectedCard, options]);
+
+  function requirements(card: CardType | ""): boolean {
+    switch (card) {
+      case "Schedule Card":
+        return !!title && !!eventType && range > 0;
+      case "Employee Card":
+        return !!title && !!filter;
+      case "Event Signup Card":
+        return !!title && !!selectOption;
+      default:
+        return false;
+    }
+  }
+
+  function handleCreate() {
+    if (!user || !view) return;
+    if (!requirements(selectedCard)) return;
+    if (!selectedCard) return;
+
+    const division = user.Divisions;
+    const order = info.length > 0 ? info[info.length - 1].order + 10 : 10;
+
+    const scheduleCardProp: InfoCardProps = {
+      title,
+      cardType: "Schedule Card",
+      range,
+      eventType,
+      division,
+      order,
+    };
+
+    const employeeCardProp: InfoCardProps = {
+      title,
+      cardType: "Employee Card",
+      filter,
+      division,
+      order,
+    };
+
+    const eventSignupProps: InfoCardProps = {
+      title,
+      cardType: "Event Signup Card",
+      division,
+      order,
+    };
+
+    const getValues: Record<CardType, InfoCardProps> = {
+      "Schedule Card": scheduleCardProp,
+      "Employee Card": employeeCardProp,
+      "Event Signup Card": eventSignupProps,
+    };
+
+    addCard(getValues[selectedCard]);
+    setSelected("");
+  }
 
   return (
     <LayoutGroup id={baseId}>
-      <motion.div
-        layout
-        className="text-zinc-200 flex flex-col items-center justify-center gap-8 w-full h-dvh2 2xl:h-full lg:h-full"
-      >
-        <div className="text-2xl w-full pl-2 pt-2 font-semibold">
-          Create Cards
-        </div>
-
-        <motion.div className="flex flex-col p-6 items-center gap-4 justify-center w-3/4 h-full">
+      <motion.div className="text-zinc-200 flex flex-col w-full flex-1 items-center justify-center gap-2">
+        <motion.div
+          layout="position"
+          transition={{ type: "tween", duration: 0.3 }}
+          animate={
+            !EXCLUDED.includes(selectedCard)
+              ? { justifyContent: "center", alignItems: "center" }
+              : {}
+          }
+          className="flex flex-col p-4 gap-3 w-full lg:w-1/3 h-full"
+        >
           <motion.select
+            layout="position"
             value={selectedCard}
             onChange={(e) => setSelected(e.target.value as CardType | "")}
             className={inputStyle}
           >
             <option value="">Select Card Type</option>
-            {options.map((title, i) => (
-              <option key={`${title}${i}`} value={title}>
-                {title}
+            {options.map((t, i) => (
+              <option key={`${t}${i}`} value={t}>
+                {t}
               </option>
             ))}
           </motion.select>
 
-          {selectedCard === "Schedule Card" && (
-            <div className="w-full h-full flex items-center justify-center gap-4">
-              <input
-                className={inputStyle}
-                placeholder="Card Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <select
-                className={inputStyle}
-                value={eventType ?? ""}
-                onChange={(e) =>
-                  setEventType(
-                    e.target.value === ""
-                      ? undefined
-                      : (e.target.value as EventType)
-                  )
-                }
-              >
-                <option value="">Select Event Type</option>
-                {eventTypes.map((e, i) => (
-                  <option key={`${e}1${i}`} value={e}>
-                    {fixText[e]}
-                  </option>
-                ))}
-              </select>
-              <select
-                className={inputStyle}
-                value={range}
-                onChange={(e) => setRange(Number(e.target.value))}
-              >
-                {Array.from({ length: 30 }, (_, i) => i + 1).map((i) => (
-                  <option key={i} value={i}>
-                    {i}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-          {selectedCard === "Employee Card" && (
-            <div className="w-full h-full flex items-center justify-center gap-4">
-              <select
-                className={inputStyle}
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              >
-                <option value={""}>Select Filter</option>
-                {filterable.map((title) => (
-                  <option key={title} value={title}>
-                    {title}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {selectedCard == "Event Signup Card" && (
-            <motion.select
-              value={selectOption}
-              onChange={(e) => setoption(e.target.value)}
+          {!EXCLUDED.includes(selectedCard) && (
+            <input
               className={inputStyle}
-            >
-              <option value="withDate">Event Date</option>
-              <option value="count">Count of Total Signed Up</option>
-            </motion.select>
-          )}
-          {selectOption === "withDate" && (
-            <motion.input
-              type="date"
-              value={eventDate}
-              onChange={(e) => setEventDate(e.target.value)}
-              className={inputStyle}
+              placeholder="Card Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           )}
 
-          {/* Cards area */}
-          <motion.div className="w-full h-full">
-            {!isSelected && <ExampleCards baseId={baseId} />}
-            {isSelected && !exclude.includes(selectedCard) && (
-              <CreateChosen
-                id={baseId}
-                title={title}
-                eventType={eventType}
-                range={range}
-                cardType={selectedCard as CardType}
-                filter={filter as Filter}
-              />
+          <AnimatePresence mode="wait">
+            {selectedCard === "Schedule Card" && (
+              <motion.div
+                key="schedule-controls"
+                layout="position"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.2 }}
+                className="w-full flex items-center justify-center gap-2"
+              >
+                <select
+                  className={inputStyle}
+                  value={eventType ?? ""}
+                  onChange={(e) =>
+                    setEventType(
+                      e.target.value === ""
+                        ? undefined
+                        : (e.target.value as EventType)
+                    )
+                  }
+                >
+                  <option value="">Select Event Type</option>
+                  {EVENT_TYPES_UI.map((e, i) => (
+                    <option key={`${e}1${i}`} value={e}>
+                      {FIX_TEXT[e]}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  className={inputStyle}
+                  value={range}
+                  onChange={(e) => setRange(Number(e.target.value))}
+                >
+                  {Array.from({ length: 30 }, (_, i) => i + 1).map((i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
+                </select>
+              </motion.div>
             )}
+
+            {selectedCard === "Employee Card" && (
+              <motion.div
+                key="employee-controls"
+                layout="position"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.2 }}
+                className="w-full flex items-start justify-center gap-4"
+              >
+                <select
+                  className={inputStyle}
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value as Filter)}
+                >
+                  <option value={""}>Select Filter</option>
+                  {FILTERABLE.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </motion.div>
+            )}
+
+            {selectedCard === "Event Signup Card" && (
+              <motion.div
+                key="signup-controls"
+                layout="position"
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.2 }}
+                className="w-full flex items-start justify-center gap-2"
+              >
+                <motion.select
+                  layout="position"
+                  value={selectOption}
+                  onChange={(e) => setOption(e.target.value)}
+                  className={inputStyle}
+                >
+                  <option value="">Select Option</option>
+                  <option value="withDate">Event Date</option>
+                  <option value="count">Count of Total Signed Up</option>
+                </motion.select>
+
+                <AnimatePresence initial={false}>
+                  {selectOption === "withDate" && (
+                    <motion.input
+                      key="event-date-input"
+                      layout="position"
+                      type="date"
+                      initial={{ opacity: 0, x: 8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -8 }}
+                      transition={{ duration: 0.2 }}
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                      className={inputStyle}
+                    />
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <motion.div
+            layout="position"
+            animate={
+              hasSelection
+                ? {
+                    height: "35%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexGrow: 0,
+                  }
+                : { flexGrow: 1 }
+            }
+            transition={{ type: "tween", duration: 0.3 }}
+            className="w-full flex"
+          >
+            <AnimatePresence mode="wait">
+              {!hasSelection && (
+                <motion.div
+                  key="examples"
+                  layout="position"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="w-full h-full"
+                >
+                  {showExamples ? <ExampleCards baseId={baseId} /> : null}
+                </motion.div>
+              )}
+
+              {hasSelection && (
+                <motion.div
+                  key="chosen"
+                  layout="position"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                  className="flex flex-col gap-2 w-full h-full"
+                >
+                  <CreateChosen
+                    id={baseId}
+                    title={title}
+                    eventType={eventType}
+                    range={range}
+                    cardType={selectedCard as CardType}
+                    filter={filter as Filter}
+                    order={0}
+                    division={user?.Divisions}
+                  />
+                  <Button
+                    text="Create Card"
+                    action={() => handleCreate()}
+                    disabled={!requirements(selectedCard)}
+                    color={
+                      requirements(selectedCard)
+                        ? primaryAccent
+                        : `${primaryAccent}90`
+                    }
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </motion.div>
       </motion.div>
@@ -189,59 +367,66 @@ export default function CreateInfoCard() {
   );
 }
 
-/* ------------------------ Example cards ------------------------ */
-
 type TotalEvents = [
   { id: string; events: ScheduleEvent[] | DayEvent[]; color: string }
 ];
 
-function getEventsForExample(events: TotalEvents, include: string[]) {
-  if (!events) return;
-  return (
-    events.find((e) => include.includes(e.id) && e.events.length >= 5)
-      ?.events ?? []
-  );
-}
-
 type ExampleProps = { baseId: string };
 
 function ExampleCards({ baseId }: ExampleProps) {
-  const { events, allEvents } = useSchedule();
-  const { user, data } = useUser();
-  const included = ["vacation", "shift-swap", "training"];
+  const { allEvents } = useSchedule();
+  const { data, view } = useUser();
 
-  const cardProps: InfoCardProps = {
-    title: "Event Name",
-    signUpProps: Object.values(data)
-      .slice(0, 13)
-      .map((u) => u.uid),
-    signUp: true,
-    cardType: "Employee Card",
-  };
+  const exampleProps = useMemo(() => {
+    return Object.fromEntries(
+      Object.entries(data)
+        .slice(0, 13)
+        .map(([key, val]) => [
+          key,
+          {
+            uid: val.uid,
+            firstName: val.firstName,
+            lastName: val.lastName,
+            badge: val.badge,
+          } satisfies SignupProp,
+        ])
+    );
+  }, [data]);
 
-  const foundEvents = getEventsForExample(
-    allEvents as TotalEvents,
-    included
-  ) as ScheduleEvent[];
+  const foundEvents = useMemo(() => {
+    const included = ["vacation", "shift-swap", "training"];
+    const list = (allEvents as TotalEvents) ?? ([] as unknown as TotalEvents);
+    return (
+      list.find((e) => included.includes(e.id) && e.events.length >= 5)
+        ?.events ?? []
+    );
+  }, [allEvents]);
 
-  const infoItems =
-    foundEvents
-      ?.slice(0, 5)
-      .map((e) => <InfoItem key={e.originUID} event={e} />) ?? [];
+  const infoItems = useMemo(() => {
+    const events = (foundEvents as ScheduleEvent[]) ?? [];
+    return events.slice(0, 5).map((e) => {
+      const key =
+        (e as any).id ??
+        `${(e as any).originUID ?? "o"}-${(e as any).start ?? ""}-${
+          (e as any).end ?? ""
+        }-${(e as any).eventType ?? ""}`;
+      return <InfoItem key={key} event={e} />;
+    });
+  }, [foundEvents]);
 
   return (
-    <motion.div layout className="grid grid-rows-3 gap-4 h-full w-full">
-      {/* Employee example */}
+    <motion.div className="flex flex-col gap-2 h-full w-full">
       <div className="w-full h-full">
         <InfoCard
           id={`${baseId}-employee`}
           title="Employee Card"
-          props={user ? [<FrontCard person={user} noFade noFlip />] : []}
+          filter="OIC"
           cardType="Employee Card"
+          division={view ? view : "ADC"}
+          order={10}
         />
       </div>
 
-      {/* Schedule example */}
       <div className="w-full h-full">
         {foundEvents && (
           <InfoCard
@@ -250,25 +435,26 @@ function ExampleCards({ baseId }: ExampleProps) {
             props={infoItems}
             range={30}
             cardType="Schedule Card"
+            order={10}
+            division={view ? view : "ADC"}
           />
         )}
       </div>
 
-      {/* Signup example */}
       <div className="w-full h-full">
         <InfoCard
           id={`${baseId}-signup`}
-          title={cardProps.title}
-          signUpProps={cardProps.signUpProps}
-          signUp={cardProps.signUp}
-          cardType="Sign Up Card"
+          title={"Sign Up Card"}
+          signUpProps={exampleProps}
+          signUp={true}
+          cardType="Event Signup Card"
+          order={10}
+          division={view ? view : "ADC"}
         />
       </div>
     </motion.div>
   );
 }
-
-/* ------------------------ Chosen card ------------------------ */
 
 interface CreateChosenProps extends InfoCardProps {
   cardType: CardType;
@@ -285,18 +471,6 @@ function CreateChosen({
   range,
   filter,
 }: CreateChosenProps) {
-  const { user } = useUser();
-  const { events } = useSchedule();
-
-  const eventTypes = ["vacation", "shift-swap", "training", "coverage"];
-
-  function getEvents() {
-    if (!user) return;
-    if (typeof eventType !== "string") return;
-    if (!eventTypes.includes(eventType)) return;
-    return events.filter((e) => e.eventType === eventType);
-  }
-
   function getCard() {
     if (cardType === "Employee Card") {
       return (
@@ -315,7 +489,7 @@ function CreateChosen({
           title={title || "Event Signup Card"}
           signUp
           signUpProps={signUpProps}
-          cardType="Sign Up Card"
+          cardType="Event Signup Card"
         />
       );
     } else if (cardType === "Schedule Card") {
@@ -323,7 +497,6 @@ function CreateChosen({
         <InfoCard
           id={`${id}-schedule`}
           title={title || "Schedule Card"}
-          column
           range={range ?? 0}
           eventType={eventType}
           cardType="Schedule Card"
@@ -335,7 +508,7 @@ function CreateChosen({
   }
 
   return (
-    <motion.div layout className="w-full h-full">
+    <motion.div layout="position" className="w-full h-full">
       {getCard()}
     </motion.div>
   );

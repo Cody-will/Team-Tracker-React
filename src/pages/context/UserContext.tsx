@@ -352,6 +352,7 @@ export function UserProvider({ children }: any) {
     // which division are we *viewing*?
     // view overrides, otherwise user's own division
     const division = (view ?? current.Divisions) as "ADC" | "UPD";
+    if (!view) setView(division);
 
     const fromCache = usersByDivision[division] ?? {};
 

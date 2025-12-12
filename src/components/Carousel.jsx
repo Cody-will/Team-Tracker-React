@@ -110,16 +110,18 @@ export default function Carousel({ team }) {
       {
         key: "trainee-card",
         title: "Trainee's",
-        props: trainees,
+        filter: "Trainee",
         column: false,
+        cardType: "Employee Card",
       },
       { key: "vacaton-card", title: "Vacation", props: vacation, column: true },
       { key: "cover-card", title: "Coverage", props: cover, column: true },
       {
         key: "medical-user",
         title: "Medical",
-        props: medicalCards,
         column: false,
+        cardType: "Employee Card",
+        filter: "Medical",
       },
 
       {
@@ -134,14 +136,16 @@ export default function Carousel({ team }) {
       {
         key: "mandate-cards",
         title: "Mandate",
-        props: mandateCards,
         column: false,
+        cardType: "Employee Card",
+        filter: "Mandate",
       },
       {
         key: "medical-user",
         title: "Medical",
-        props: medicalCards,
         column: false,
+        cardType: "Employee Card",
+        filter: "Medical",
       },
       { key: "vacaton-card", title: "Vacation", props: vacation, column: true },
       {
@@ -155,8 +159,9 @@ export default function Carousel({ team }) {
       {
         key: "trainee-card",
         title: "Trainee's",
-        props: trainees,
         column: false,
+        cardType: "Employee Card",
+        filter: "Trainee",
       },
       {
         key: "JailSchool-card",
@@ -164,12 +169,15 @@ export default function Carousel({ team }) {
         props: jailSchool,
         titleDate: events.find((e) => e.eventType === "Jail-School"),
         column: false,
+        cardType: "Employee Card",
+        filter: "Jail School",
       },
       {
         key: "ftoList-card",
         title: "FTO List",
-        props: ftoCards,
         column: false,
+        cardType: "Employee Card",
+        filter: "FTO List",
       },
     ];
 
@@ -210,7 +218,7 @@ export default function Carousel({ team }) {
   };
 
   return (
-    <div className="relative flex lg:gap-2 justify-center items-center w-full h-full overflow-hidden">
+    <div className="relative flex lg:gap-2 justify-center items-center w-full h-full  overflow-hidden">
       {lgUp ? (
         <>
           <motion.button
@@ -238,9 +246,11 @@ export default function Carousel({ team }) {
                   <InfoCard
                     key={card.key}
                     title={card.title}
+                    filter={card.filter ?? ""}
                     props={card.props}
                     titleDate={card.titleDate}
                     column={card.column}
+                    cardType={card.cardType ?? "Schedule Card"}
                   />
                 ))}
               </motion.div>
@@ -257,14 +267,16 @@ export default function Carousel({ team }) {
           </motion.button>
         </>
       ) : (
-        <motion.div className="w-full flex flex-col gap-4">
+        <motion.div className="w-full h-full flex flex-col gap-4">
           {cardData.map((card) => (
             <InfoCard
               key={card.key}
               title={card.title}
               props={card.props}
+              filter={card.filter ?? ""}
               titleDate={card.titleDate}
               column={card.column}
+              cardType={card.cardType ?? "Schedule Card"}
             />
           ))}
         </motion.div>

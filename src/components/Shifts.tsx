@@ -62,9 +62,9 @@ export default function Shifts({
       style={{
         borderColor: isCurrent ? primaryAccent : "#27272a",
       }}
-      className="flex flex-col 2xl:h-full lg:h-full w-full border-3 rounded-lg 2xl:rounded-xl"
+      className="flex flex-col w-full flex-1 basis-1/4 border-3 rounded-lg 2xl:rounded-xl"
     >
-      <motion.div className="flex items-center justify-center text-zinc-200 text-lg bg-zinc-950/60 rounded-t-md 2xl:rounded-t-lg p-1 font-semibold">
+      <motion.div className="flex items-center justify-center text-zinc-200 text-lg lg:text-xs 2xl:text-lg bg-zinc-950/60 rounded-t-md 2xl:rounded-t-lg p-1 font-semibold">
         {shift}
       </motion.div>
 
@@ -72,7 +72,7 @@ export default function Shifts({
       <motion.div
         ref={superRef}
         style={superIsOver ? overStyle : {}}
-        className="lg:h-1/3 2xl:h-1/3 w-full border-b-2 rounded-t-md border-zinc-950 flex items-center justify-center 2xl:gap-2 2xl:p-2 p-2 gap-1"
+        className="lg:h-1/4 2xl:h-1/3 w-full border-b-2 rounded-t-md border-zinc-950 flex 2xl:gap-2 2xl:p-2 p-2 gap-1"
       >
         {Object.values(team)
           .filter((user) => {
@@ -193,7 +193,7 @@ export default function Shifts({
       <motion.div
         ref={teamRef}
         style={teamIsOver ? overStyle : {}}
-        className=" 2xl:h-full lg:h-full w-full grid grid-cols-2 rounded-md place-items-start 2xl:gap-2 2xl:p-2 p-1.5 gap-1"
+        className=" 2xl:h-full lg:h-full w-full flex flex-wrap rounded-md 2xl:gap-2 2xl:p-2 p-1.5 gap-1"
       >
         {Object.values(team)
           .filter((user) => {

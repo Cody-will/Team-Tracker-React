@@ -61,7 +61,7 @@ export default function InfoItem(props: InfoItemProps) {
   return (
     <motion.div
       style={{ borderColor: primaryAccent }}
-      className="w-full flex justify-evenly items-center text-zinc-200 border 2xl:text-sm rounded-md bg-zinc-900 shadow-lg/40 shadow-zinc-950 text-xs"
+      className="w-full flex justify-evenly items-center text-zinc-200 border 2xl:text-xs lg:text-[.5rem] lg:rounded-xs rounded-md bg-zinc-900 shadow-lg/40 shadow-zinc-950 text-xs"
     >
       <div className="flex justify-start 2xl:pl-3 pl-1 items-center w-full">
         {twoXlUp ? title : title?.split("#")[0]}

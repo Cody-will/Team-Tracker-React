@@ -35,10 +35,10 @@ export default function Sidebar() {
   const { user, view, setView } = useUser();
   const { primaryAccent } = useSafeSettings();
   const { updateAvailable } = useAppVersion();
-  const { isShortDesktop, mdUp, twoXlUp, lgUp } = useBreakpoint();
+  const { isShortDesktop, mdUp, xlUp, twoXlUp, lgUp } = useBreakpoint();
   const excludes = ["Add User", "Configure"];
   const { data: conf } = useConfigure();
-  const oppShift =
+    const oppShift =
     conf && user
       ? Object.values(conf.Divisions.items).filter(
           (item) => item.title !== user.Divisions
@@ -46,13 +46,13 @@ export default function Sidebar() {
       : "";
 
   const iconSize = getIcon();
-
-  function getIcon() {
+    function getIcon() {
     if (twoXlUp) return 32;
-    if (lgUp) return 24;
+    if (xlUp) return 32;
+    if (lgUp) return 16;
     return 28;
   }
-
+  
   const links = [
     { to: "/home", icon: <BsHouse size={iconSize} />, label: "Home" },
     {
@@ -116,7 +116,7 @@ export default function Sidebar() {
     );
 
     setBarItems(bar.filter(Boolean));
-  }, [user]);
+  }, [view, user]);
 
   function logOut() {
     signOut(auth).then(() => {});
@@ -126,7 +126,11 @@ export default function Sidebar() {
     return { isOn: oppShift, isOff: user.Divisions };
   }
 
-  const photoSize = twoXlUp ? 16 : 12;
+  function photoSize() {
+    if (twoXlUp) return 14;
+    if (xlUp) return 12;
+    if (lgUp) return 10;
+  }
 
   return (
     <AnimatePresence initial={false}>
@@ -136,47 +140,49 @@ export default function Sidebar() {
         ) : (
           <motion.div
             layoutId="mobileNav"
-            style={{ borderColor: primaryAccent }}
+            style={{ borderColor: `${primaryAccent}E6` }}
             transition={{ type: "tween" }}
-            className="lg:relative fixed right-2 lg:left-0 2xl:w-20 lg:w-18 w-20 z-50 flex items-end justify-center h-screen flex-col"
+            className="lg:relative fixed right-2 lg:left-0 2xl:w-20 lg:w-14 w-20 z-50 flex items-end justify-center h-screen flex-col"
           >
-            <AnimatePresence>
-              {user && lgUp && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ type: "tween", duration: 0.5 }}
-                  className="absolute top-4 left-1.5 w-18 2xl:w-20 flex flex-col items-center justify-center"
-                >
-                  <div className="flex flex-col items-center justify-center">
-                    <ProfilePhoto
-                      user={user}
-                      size={photoSize}
-                      borderColor={primaryAccent}
-                    />
-                    <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
-                      {user.Ranks}
-                    </div>
-                    <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
-                      {user.lastName}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
+           
             <LayoutGroup>
               {user && (
                 <div
                   id="panel"
                   style={{
-                    borderColor: `${primaryAccent}90`,
+                    borderColor: `${primaryAccent}E6`,
                     borderWidth: "2px",
                   }}
-                  className="2xl:w-16 w-14 py-4 gap-2 2xl:gap-2 rounded-xl flex flex-col items-center justify-between  shadow-xl/40"
+                  className="relative 2xl:w-14 w-14 lg:w-10  py-4 gap-2 2xl:gap-2 rounded-xl flex flex-col items-center justify-between  shadow-xl/40"
                 >
                   {/* Top: main nav items */}
+                  <AnimatePresence>
+              
+                      {user && xlUp && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ type: "tween", duration: 0.5 }}
+                          className="absolute top-0 -translate-y-[110%] w-18 2xl:w-22 lg:w-14 flex flex-col items-center justify-center"
+                        >
+                          <div className="flex flex-col items-center justify-center">
+                            <ProfilePhoto
+                              user={user}
+                              size={photoSize()}
+                              borderColor={primaryAccent}
+                            />
+                           <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
+                              {user.Ranks}
+                            </div>
+                            <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
+                              {user.lastName}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
                   <div className="flex flex-col items-center gap-2">
                     {!lgUp && (
                       <motion.div
@@ -195,13 +201,13 @@ export default function Sidebar() {
                           setView((prev) => (prev === "ADC" ? "UPD" : "ADC"))
                         }
                         text={{ isOn: "", isOff: "" }}
-                        size="sm"
+                        size={lgUp && !xlUp ? "xs" : "sm"}
                       />
                     )}
                   </div>
 
                   {/* Bottom: update button (only when update is available) */}
-                  <UpdateButton />
+                  <UpdateButton iconSize={iconSize} />
                 </div>
               )}
             </LayoutGroup>
@@ -213,6 +219,9 @@ export default function Sidebar() {
 }
 
 function roleCheck(title, role, excludes, division, view, user) {
+  if (title === "Scheduling" && user.Divisions !== view && user.lastName !== "Willard") {
+    return false;
+  }
   if (title === "Info Card Configuration" && user.lastName !== "Willard")
     return false;
   if (role === "Admin") return true;
@@ -228,7 +237,7 @@ function SideBarLink({ to, action, icon, label }) {
       onClick={action ? () => action() : undefined}
       className={({ isActive }) =>
         [
-          "relative flex items-center justify-center w-12 h-12 2xl:w-12 2xl:h-12 lg:h-10 lg:w-10 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
+          "relative flex items-center justify-center size-12 2xl:size-12 lg:size-8 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300",
           "hover:scale-110",
           isActive ? "text-zinc-950" : "",
         ].join(" ")
@@ -241,11 +250,13 @@ function SideBarLink({ to, action, icon, label }) {
               layoutId="sidebar-highlight"
               transition={{ type: "spring", bounce: 0.25, duration: 0.3 }}
               style={{ backgroundColor: primaryAccent }}
-              className="absolute inset-0 rounded-lg -z-10"
+              className="absolute inset-0 rounded-lg z-0"
             />
           )}
+          <motion.div className="z-10">
           {icon}
-          <span className="absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md text-zinc-200 bg-zinc-950 text-xs font-bold transition-all duration-100 scale-0 origin-left group-hover:scale-100">
+          </motion.div>
+          <span className="absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md text-zinc-200 bg-zinc-950 text-xs font-bold transition-all duration-100 scale-0 origin-left group-hover:scale-100 z-10">
             {label}
           </span>
         </>
@@ -254,12 +265,10 @@ function SideBarLink({ to, action, icon, label }) {
   );
 }
 
-function UpdateButton() {
-  const { updateAvailable, latestVersion, appVersion } = useAppVersion();
-  const { isShortDesktop } = useBreakpoint();
-  const iconSize = !isShortDesktop ? 32 : 20;
-
-  if (!updateAvailable) return null;
+function UpdateButton({iconSize}) {
+  const { updateAvailable, latestVersion, appVersion } =
+    useAppVersion();
+    if (!updateAvailable) return null;
 
   async function handleClick() {
     try {
@@ -280,7 +289,7 @@ function UpdateButton() {
   return (
     <button
       onClick={handleClick}
-      className="relative flex items-center hover:cursor-pointer justify-center 2xl:h-12 h-10 w-10 2xl:w-12 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300 hover:scale-110"
+      className="relative flex items-center justify-center size-12 2xl:size-12 lg:size-8 mx-auto text-zinc-200 rounded-lg group transition-transform duration-300 hover:scale-110"
       title={
         latestVersion
           ? `Update available: v${latestVersion} (you are on v${appVersion}). Click to update.`
@@ -306,7 +315,7 @@ function Hamburger({ state, setState }) {
     <motion.div
       id="panel"
       layoutId="mobileNav"
-      style={{ borderColor: `${primaryAccent}90` }}
+      style={{ borderColor: `${primaryAccent}E6` }}
       onClick={() => setState(true)}
       className="fixed right-4 bottom-4 z-50 p-5 rounded-full text-zinc-200 border shadow-xl/40 "
     >

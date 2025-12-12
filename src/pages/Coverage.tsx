@@ -59,7 +59,8 @@ export default function Coverage() {
         <motion.div
           id="panel"
           layout
-          className="flex flex-col gap-4 items-center justify-center bg-zinc-950/30 border border-zinc-700 rounded-xl p-4"
+          style={{borderColor: `${primaryAccent}E6`}}
+          className="flex flex-col gap-4 items-center justify-center  border  rounded-xl p-4"
         >
           <div className="flex w-full">
             <div className="flex items-center justify-center text-2xl text-zinc-200 font-semibold">
@@ -86,7 +87,8 @@ export default function Coverage() {
       <motion.div
         id="panel"
         layout
-        className="flex flex-col gap-4 items-center justify-center bg-zinc-950/30 border border-zinc-700 rounded-xl p-4"
+        style={{borderColor: `${primaryAccent}E6`}}
+        className="flex flex-col gap-4 items-center justify-center  border  rounded-xl p-4"
       >
         <div className="flex w-full">
           <div className="flex items-center justify-center text-2xl text-zinc-200 font-semibold">

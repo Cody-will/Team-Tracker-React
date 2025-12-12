@@ -20,6 +20,7 @@ export interface Value {
   buildShiftEvents: () => any[];
   coverage: Coverage | [];
   addClaimedCoverage: (event: DayEvent) => Promise<boolean>;
+  deleteEvent: (id: string) => Promise<void>;
 }
 
 export type Display =
@@ -590,8 +591,9 @@ export function ScheduleProvider({ children }: any) {
     [expandRange, users]
   );
 
-  function deleteEvent(id: string) {
-    // TODO: implement when you're ready
+  async function deleteEvent(id: string) {
+    const evRef = ref(db, `events/${id}`);
+    await set(evRef, null);
   }
 
   const addClaimedCoverage = useCallback(async (event: DayEvent) => {
@@ -735,6 +737,7 @@ export function ScheduleProvider({ children }: any) {
       buildShiftEvents,
       coverage: filteredCoverage,
       addClaimedCoverage,
+      deleteEvent,
     }),
     [
       filteredEvents,

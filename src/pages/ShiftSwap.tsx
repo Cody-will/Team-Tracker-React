@@ -12,6 +12,7 @@ import PopUp from "../components/PopUp";
 import type { ScheduleEvent } from "./context/ScheduleContext";
 import { useSchedule } from "./context/ScheduleContext";
 import { useBreakpoint } from "./hooks/useBreakpoint";
+import { useSafeSettings } from "./hooks/useSafeSettings";
 
 export default function ShiftSwap() {
   const [step, setStep] = useState<0 | 1>(0);
@@ -23,6 +24,7 @@ export default function ShiftSwap() {
   const [selectedEmployee, setEmployee] = useState<string>("");
   const { scheduleEvent } = useSchedule();
   const { twoXlUp, lgUp } = useBreakpoint();
+  const {primaryAccent} = useSafeSettings();
 
   const inputStyle =
     "border-2 border-zinc-500 w-full text-zinc-200 bg-zinc-900 rounded-md py-1 px-1.5 2xl:rounded-lg 2xl:py-2 2xl:px-3 focus:outline-none focus:border-[var(--accent)] focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] 2xl:focus:shadow-[0_0_5px_1px_var(--accent)] focus:shadow-[0_0_15px_2px_var(--accent)]";
@@ -223,7 +225,8 @@ export default function ShiftSwap() {
 
       <motion.div
         id="panel"
-        className="flex h-full w-full flex-col gap-4 p-4 items-center justify-center bg-zinc-950/70 border border-zinc-800 rounded-xl"
+        style={{borderColor: `${primaryAccent}E6`}}
+        className="flex h-full w-full flex-col gap-4 p-4 items-center justify-center  border  rounded-xl"
       >
         <motion.div className="w-full flex items-center justify-center gap-2">
           <div className="font-semibold w-full text-2xl 2xl:text-3xl text-zinc-200 flex items-center justify-start">

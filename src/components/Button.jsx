@@ -18,7 +18,7 @@ export default function Button({
     <motion.button
       disabled={disabled}
       type={type || "button"}
-      whileHover={{ scale: 1.02 }}
+      whileHover={disabled ? {} : { scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       style={{ backgroundColor: color ? color : primaryAccent }}
       transition={{ type: "tween", duration: 0.2 }}

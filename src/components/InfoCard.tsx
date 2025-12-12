@@ -11,7 +11,8 @@ import { useUser } from "../pages/context/UserContext";
 import { motion } from "motion/react";
 import NameItem from "./NameItem";
 import FrontCard from "./FrontCard";
-
+import type { CardType } from "./CreateInfoCard";
+import {useCard} from "../pages/context/CardContext.tsx"
 export type Filter =
   | "oic"
   | "fto"
@@ -26,20 +27,27 @@ export type Filter =
   | "speed"
   | "rifle";
 
+export type SignupProp = {uid: string, firstName: string, lastName: string, badge: string};
+
+export type SignUpProps = Record<string, SignupProp>;
+
 export interface InfoCardProps {
   title: string;
   uid?: string;
   props?: React.ReactNode[];
   titleDate?: ScheduleEvent;
-  column?: boolean; // kept for backwards compat, but not needed for most variants now
   extendedProps?: React.ReactNode[];
   eventType?: EventType;
   signUp?: boolean;
-  signUpProps?: UID[];
+  signUpProps?: SignUpProps;
   range?: number;
   id?: string;
   filter?: Filter;
-  cardType: string; // we'll use filter === "employee" for Employee cards
+  isConfigure?: boolean;
+  division: "ADC" | "UPD";
+  order: number;
+  
+  cardType: CardType; // we'll use filter === "employee" for Employee cards
 }
 
 type UID = string;
@@ -49,10 +57,9 @@ type UID = string;
  * ------------------------------------------------- */
 export default function InfoCard(props: InfoCardProps) {
   const { signUp, eventType, range, cardType } = props;
-  console.log(cardType);
 
   // 1. Sign-up variant
-  if (cardType === "Sign Up Card") {
+  if (cardType === "Event Signup Card") {
     return <SignUpInfoCard {...props} />;
   }
 
@@ -85,6 +92,7 @@ interface CardFrameProps {
   titleDate?: ScheduleEvent;
   headerRight?: React.ReactNode;
   children: React.ReactNode;
+  isConfigure: boolean;
 }
 
 function CardFrame({
@@ -93,6 +101,7 @@ function CardFrame({
   titleDate,
   headerRight,
   children,
+  isConfigure
 }: CardFrameProps) {
   const { secondaryAccent } = useSafeSettings();
 
@@ -112,11 +121,12 @@ function CardFrame({
   return (
     <motion.div
       layoutId={id}
-      transition={{ type: "tween", duration: 0.3 }}
+      whileHover={isConfigure ? {scale: 1.05} : {}}
+      transition={{ type: "tween", duration: isConfigure ? 0.1 :  0.3 }}
       style={{ borderColor: secondaryAccent }}
-      className="relative 2xl:p-2 p-1 rounded-md flex flex-col items-stretch border-2 h-full w-full overflow-hidden bg-zinc-900 shadow-lg/30"
+      className="relative 2xl:p-2 p-1 rounded-md flex flex-col items-stretch border-2 h-full w-full overflow-hidden bg-zinc-900/80 shadow-lg/30"
     >
-      <div className="flex w-full items-center text-nowrap justify-start 2xl:gap-2 gap-1 2xl:text-lg 2xl:font-bold font-semibold text-sm text-zinc-200">
+      <div className="flex w-full  items-center text-nowrap justify-start lg:text-xs 2xl:gap-2 gap-1 2xl:text-lg 2xl:font-bold font-semibold text-sm text-zinc-200">
         <div className="w-full flex items-center justify-start">{title}</div>
         {titleDate && (
           <div className="flex items-center justify-end w-full font-medium">
@@ -125,8 +135,7 @@ function CardFrame({
         )}
         {headerRight}
       </div>
-
-      {children}
+      <div className="h-full flex w-full overflow-auto">{children}</div>
     </motion.div>
   );
 }
@@ -142,10 +151,11 @@ function BasicInfoCard({
   props,
   extendedProps,
   id,
+  isConfigure
 }: InfoCardProps) {
   // Always column layout for basic cards
   return (
-    <CardFrame id={id} title={title} titleDate={titleDate}>
+    <CardFrame id={id} title={title} titleDate={titleDate} isConfigure={isConfigure}>
       <div
         style={{
           display: "flex",
@@ -153,9 +163,8 @@ function BasicInfoCard({
           justifyContent: "flex-start",
           alignItems: "center",
           gap: ".25rem",
-          overflow: "auto",
         }}
-        className="relative p-2 w-full flex-1"
+        className="relative p-2 w-full flex-1 overflow-y-scroll"
       >
         {props && props}
         {extendedProps && extendedProps}
@@ -172,12 +181,10 @@ function BasicInfoCard({
 function EmployeeInfoCard({
   title,
   titleDate,
-  props,
-  extendedProps,
   id,
   filter,
+  isConfigure
 }: InfoCardProps) {
-  const { twoXlUp } = useBreakpoint();
   const { data: users } = useUser();
   const notFilterable = ["", "Select Filter"];
   const filterable = [
@@ -209,7 +216,6 @@ function EmployeeInfoCard({
     "FTO List": "ftoList",
   };
 
-  const newFilter = filter && filterable.includes(filter) && convert[filter];
 
   const cards =
     filter &&
@@ -221,32 +227,9 @@ function EmployeeInfoCard({
         )
     );
 
-  function getLayout(): React.CSSProperties {
-    if (cards && cards.length > 2) {
-      // Grid layout when there are lots of items
-      return {
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr",
-        placeItems: "center",
-        gap: twoXlUp ? ".5rem" : ".25rem",
-      };
-    }
-    // Row layout for 1–2 items
-    return {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      gap: twoXlUp ? ".5rem" : ".25rem",
-    };
-  }
-
   return (
-    <CardFrame id={id} title={title} titleDate={titleDate}>
-      <div
-        style={{ ...getLayout(), overflow: "hidden" }}
-        className="relative p-2 w-full flex-1"
-      >
+    <CardFrame id={id} title={title} titleDate={titleDate} isConfigure={isConfigure}>
+      <div className="relative w-full flex flex-1 flex-wrap gap-2 p-1">
         {cards && cards}
       </div>
     </CardFrame>
@@ -264,6 +247,7 @@ function ScheduleInfoCard({
   eventType,
   range,
   id,
+  isConfigure
 }: InfoCardProps) {
   const { twoXlUp } = useBreakpoint();
   const { events } = useSchedule();
@@ -281,12 +265,12 @@ function ScheduleInfoCard({
     const items = result.map((e) =>
       isCoverage ? (
         <InfoItem
-          key={(e as DayEvent).id ?? (e as any).originUID}
+          key={(e as DayEvent).id}
           coverage={e as DayEvent}
         />
       ) : (
         <InfoItem
-          key={(e as ScheduleEvent).originUID ?? (e as any).id}
+          key={(e as any).id}
           event={e as ScheduleEvent}
         />
       )
@@ -296,7 +280,7 @@ function ScheduleInfoCard({
   }, [eventType, range, events, isCoverage]);
 
   return (
-    <CardFrame id={id} title={title} titleDate={titleDate}>
+    <CardFrame id={id} title={title} titleDate={titleDate} isConfigure={isConfigure}>
       <div
         style={{
           display: "flex",
@@ -304,9 +288,8 @@ function ScheduleInfoCard({
           justifyContent: "flex-start",
           alignItems: "center",
           gap: twoXlUp ? ".25rem" : ".12rem",
-          overflow: "auto",
         }}
-        className="relative p-2 w-full flex-1"
+        className="relative p-2 flex flex-col items-center justify-start gap-[.12rem] 2xl:gap-[.25rem] w-full flex-1 overflow-auto"
       >
         {eventItems}
       </div>
@@ -319,45 +302,51 @@ function ScheduleInfoCard({
  * → custom flex-wrap layout for NameItems
  * ----------------------------------------- */
 
-interface SignUpInfoCardProps extends InfoCardProps {
-  signUpProps?: UID[];
-}
+
 
 function SignUpInfoCard({
   title,
   titleDate,
   signUpProps,
   id,
-}: SignUpInfoCardProps) {
+  isConfigure
+}: InfoCardProps) {
   const { primaryAccent } = useSafeSettings();
   const { user, data: users } = useUser();
-  const [signedUp, setSignedUp] = useState<UID[]>([]);
+  const [signedUp, setSignedUp] = useState<SignUpProps>({});
   const [count, setCount] = useState(0);
+  const {addSignup} = useCard();
+ 
 
   useEffect(() => {
     if (!signUpProps) {
-      setSignedUp([]);
+      setSignedUp({});
       setCount(0);
       return;
     }
+    
+    
     setSignedUp(signUpProps);
-    setCount(signUpProps.length);
+    const total = Object.values(signUpProps).length;
+    setCount(total);
   }, [signUpProps]);
-
-  useEffect(() => {
-    setCount(signedUp.length);
-  }, [signedUp]);
 
   function handleClick() {
     if (!user) return;
-    if (signedUp.includes(user.uid)) return;
-    setSignedUp((prev) => [...prev, user.uid]);
+    if (!id) return;
+    if (checkIncluded()) return;
+    addSignup(id);
   }
 
   function checkIncluded() {
+    if (isConfigure) return true;
     if (!user) return false;
-    return signedUp.includes(user.uid);
+    const contains = Object.values(signedUp).some(u => u.uid === user.uid);
+    return contains;
   }
+
+  
+  const sup = Object.values(signedUp).length > 0 ? Object.values(signedUp).map(u => <NameItem key={u.uid} {...u} />) : [];
 
   const headerRight = (
     <>
@@ -365,7 +354,7 @@ function SignUpInfoCard({
         <div className="w-full text-sm">{`Signed Up: ${count}`}</div>
       </div>
       <div className="flex items-center w-full justify-center gap-2">
-        <div className="w-full" />
+        <div className="w-full py-2" />
         <Button
           text="Sign Up"
           disabled={checkIncluded()}
@@ -376,10 +365,7 @@ function SignUpInfoCard({
     </>
   );
 
-  const sup =
-    signedUp && users
-      ? signedUp.map((u) => <NameItem key={u} user={users[u]} />)
-      : [];
+  
 
   return (
     <CardFrame
@@ -387,8 +373,9 @@ function SignUpInfoCard({
       title={title}
       titleDate={titleDate}
       headerRight={headerRight}
+      isConfigure={isConfigure}
     >
-      <motion.div className="relative p-2 flex-1 w-full flex flex-wrap content-start gap-2 overflow-auto">
+      <motion.div className="relative p-2 flex-1 w-full flex flex-wrap gap-2 overflow-auto">
         {sup}
       </motion.div>
     </CardFrame>

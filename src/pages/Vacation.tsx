@@ -9,6 +9,8 @@ import PopUp from "../components/PopUp";
 import type { ScheduleEvent, EventType } from "./context/ScheduleContext";
 import type { Location } from "../components/PopUp";
 import { useBreakpoint } from "./hooks/useBreakpoint";
+import { useSafeSettings } from "./hooks/useSafeSettings";
+
 
 export type DateData = {
   start: Date | string;
@@ -27,6 +29,7 @@ export type ErrorNotify = {
 export default function Vacation() {
   const { data, user } = useUser();
   const { scheduleEvent } = useSchedule();
+  const {primaryAccent} = useSafeSettings();
 
   const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
   const [showCoverage, setShowCoverage] = useState<boolean>(false);
@@ -228,7 +231,8 @@ export default function Vacation() {
 
       <div
         id="panel"
-        className="2xl:p-4 p-2 bg-zinc-950/70 border border-zinc-800 text-zinc-200 flex flex-col gap-4 items-center justify-center h-full w-full rounded-xl"
+        style={{borderColor: `${primaryAccent}E6`}}
+        className="2xl:p-4 p-2  border  text-zinc-200 flex flex-col gap-4 items-center justify-center h-full w-full rounded-xl"
       >
         <motion.div layout className="w-full flex gap-4">
           <div className="w-full gap-2 flex items-center justify-start">

@@ -75,7 +75,6 @@ export function useBreakpoint(): BreakpointState {
     }
   });
 
-  console.log(`height: ${height}, width: ${width}`);
 
   // height logic – only care when it's truly "desktop width"
   const isDesktop = width >= BREAKPOINTS.lg; // >= 1024 wide

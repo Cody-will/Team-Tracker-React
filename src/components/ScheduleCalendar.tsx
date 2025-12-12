@@ -21,6 +21,9 @@ import type {
 import { LayoutGroup, motion } from "motion/react";
 import { useSafeSettings } from "../pages/hooks/useSafeSettings";
 import { useBreakpoint } from "../pages/hooks/useBreakpoint";
+import type{PopUpProps} from "../components/PopUp";
+import PopUp from "../components/PopUp"
+import {useUser} from "../pages/context/UserContext";
 
 export type Display =
   | "auto"
@@ -56,10 +59,11 @@ function ScheduleCalendar({
   selected,
   clickable = false,
 }: CalendarProps) {
-  const [clickedEvent, setClickedEvent] = useState<string | null>(null);
-  const { allEvents, buildShiftEvents } = useSchedule();
+  const [popUp, setPopup] = useState<PopUpProps | null>(null);
+  const { allEvents, buildShiftEvents, deleteEvent } = useSchedule();
   const { primaryAccent, secondaryAccent } = useSafeSettings();
   const { lgUp } = useBreakpoint();
+  const {user} = useUser();
 
   const [shiftsOn, setShiftsOn] = useState(false);
   const calRef = useRef<FullCalendar>(null);
@@ -80,13 +84,39 @@ function ScheduleCalendar({
     }
   }
 
-  function handleClickEvent(info: EventClickArg) {
-    return;
-    if (!lgUp) return;
-    info.jsEvent.preventDefault();
-    const ev = info.event;
+  function handlePopup(response: boolean, data: EventClickArg){
+    setPopup(null);
+    if (!response) return;
+    const eventID = data.event._def.publicId;
+    deleteEvent(eventID);
+  }
 
-    setClickedEvent(ev.id);
+ 
+ 
+  function handleClickEvent(info: EventClickArg) {
+    if (!lgUp) return;
+    if (!user) return;
+    info.jsEvent.preventDefault();
+
+    const { originUID, targetUID, Division } = info.event._def.extendedProps;
+
+    const sameDivision = user.Divisions === Division; // or includes() if it's an array
+    const isAdmin = user.Role === "Admin";
+    const isOrigin = originUID === user.uid;
+    const isTarget = targetUID === user.uid;
+    
+    // Must be same division AND (admin OR origin OR target)
+    const canDelete = sameDivision && (isAdmin || isOrigin || isTarget);
+
+    if (!canDelete) return;
+
+    createPopup(info);
+  }
+
+
+  function createPopup(tempData: EventClickArg) {
+    setPopup({title: "Delete Event", message: "Are you sure you want to delete this event", onClose: handlePopup, location: "top-center", isConfirm: true, trueText: "Delete", falseText: "Cancel", tempData: tempData});
+
   }
 
   // ---- memoized style vars to avoid new object each render
@@ -349,12 +379,13 @@ function ScheduleCalendar({
   return (
     <motion.div
       id="calWrap"
-      className="w-full h-full rounded-xl text-zinc-200"
+      className="w-full h-full relative rounded-xl text-zinc-200"
       style={styleVars}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
       <style>{styleText}</style>
+      {popUp && <PopUp props{...popUp} />}
 
       <FullCalendar
         ref={calRef}
@@ -365,7 +396,7 @@ function ScheduleCalendar({
         // allEvents is already memoized in the provider; pass through directly
         eventSources={allEvents}
         selectable={interactive}
-        select={handleSelect ? handleSelect : () => {}}
+        select={handleSelect}
         customButtons={customButtons}
         headerToolbar={headerToolbar}
         eventClick={handleClickEvent}

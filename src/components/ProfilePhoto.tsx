@@ -10,7 +10,7 @@ export type BorderSize = "sm" | "md" | "lg";
 
 interface ProfileProps {
   user: User;
-  size?: number;
+  size?: number; // optional – controls visual size if provided
   badge?: boolean;
   borderColor?: string;
   borderSize: BorderSize;
@@ -41,7 +41,8 @@ export default function ProfilePhoto({
   isDragging = false,
 }: ProfileProps) {
   const { primaryAccent, secondaryAccent } = useSafeSettings();
-  const px = size * 4; // your scaling
+  // anchorSize is used for badge positioning, not the actual rendered width/height
+  const anchorSize = size * 4;
   const isUpd = user.Divisions === "UPD";
 
   function getShort(title: string) {
@@ -76,7 +77,7 @@ export default function ProfilePhoto({
             color={index % 2 === 0 ? primaryAccent : secondaryAccent}
             position={option === "isMandated" ? "top" : getPosition(index)}
             absolute
-            anchorSize={px}
+            anchorSize={anchorSize}
             styles={badgeStyle}
             fontSize={badgeFontSize}
           />
@@ -92,19 +93,26 @@ export default function ProfilePhoto({
       user.badge,
       primaryAccent,
       secondaryAccent,
+      anchorSize,
+      isUpd,
+      badgeStyle,
+      badgeFontSize,
     ]
   );
 
   const border = borderColor ?? secondaryAccent;
 
+  // If size is provided, we use it as an explicit width.
+  // Height will follow from aspect-square.
+  const explicitWidth = size ? anchorSize : undefined;
+
   return (
     <motion.div
-      layout={!isDragging}
-      style={{ height: px, width: px }}
-      className="relative flex items-center justify-center text-zinc-200"
+      style={explicitWidth ? { width: explicitWidth } : undefined}
+      className="relative flex items-center justify-center text-zinc-200 aspect-square"
     >
       <motion.div
-        layout={!isDragging}
+      
         className="relative rounded-full flex h-full w-full justify-center items-center"
       >
         {user.photo ? (
@@ -114,18 +122,20 @@ export default function ProfilePhoto({
               borderColor: border,
               borderWidth: `${getBorder(borderSize)}px`,
             }}
-            className="w-full h-full rounded-full aspect-square"
+            className="w-full h-full rounded-full object-cover"
           />
         ) : (
           <BsPersonCircle
-            size={px} // make icon match container
+            // Icon uses anchorSize when provided; otherwise it scales via w-full/h-full
+            size={explicitWidth}
             style={{
               borderColor: border,
               borderWidth: borderSize === "lg" ? "4px" : "2px",
             }}
-            className=" h-full w-full rounded-full"
+            className="w-full h-full rounded-full"
           />
         )}
+
         <AnimatePresence initial={false}>
           {badge && (
             <motion.div
@@ -133,7 +143,7 @@ export default function ProfilePhoto({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ type: "tween", duration: 0.2 }}
-              className="absolute inset-0 w-full h-full rounded-full"
+              className="absolute inset-0 w-full h-full rounded-full pointer-events-none"
             >
               {badges}
               {isUpd && (
@@ -143,7 +153,7 @@ export default function ProfilePhoto({
                   color={secondaryAccent}
                   position={"top"}
                   absolute
-                  anchorSize={px}
+                  anchorSize={anchorSize}
                   styles={badgeStyle}
                   fontSize={badgeFontSize}
                 />

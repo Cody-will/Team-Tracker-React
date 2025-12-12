@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "motion/react";
 import Button from "../components/Button";
 import ListPanel from "../components/ListPanel.tsx";
 import { useConfigure } from "./context/configureContext.jsx";
+import { primaryAccent } from "../colors.jsx";
+import { useSafeSettings } from "./hooks/useSafeSettings.ts";
+
 
 export default function Configure() {
   const [loading, setLoading] = useState(true);
@@ -12,6 +15,7 @@ export default function Configure() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [panelData, setPanelData] = useState(null);
+  const {primaryAccent} = useSafeSettings();
 
   // Handles changing the input for the create new panel input
   const handleChange = (event, setState) => {
@@ -58,7 +62,8 @@ export default function Configure() {
       <motion.div
         layout
         id="panel"
-        className="bg-zinc-950/30 rounded-lg border border-zinc-800 text-zinc-200 font-semibold flex flex-col p-2 2xl:p-4 gap-4"
+        style={{borderColor: `${primaryAccent}E6`}}
+        className=" rounded-lg border text-zinc-200 font-semibold flex flex-col p-2 2xl:p-4 gap-4"
       >
         <div className="flex gap-2 2xl:gap-4 justify-center items-center w-full">
           <div className="flex w-full justify-start items-center text-2xl 2xl:text-3xl">

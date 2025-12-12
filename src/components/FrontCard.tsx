@@ -85,7 +85,7 @@ export default function FrontCard({
     }
     if (lgUp) {
       return {
-        newPhotoSize: 12,
+        newPhotoSize: 8,
         bannerText: 10,
         photoBorder: "sm",
         badgeFont: 16,
@@ -145,12 +145,12 @@ export default function FrontCard({
         backgroundColor: shouldFade ? `#18181b85` : "#18181b",
         opacity: isDragging ? 0.8 : 1,
       }}
-      className="relative lg:h-full h-auto 2xl:h-full gap-2  p-2  flex border items-center rounded-md lg:rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
+      className="relative h-full gap-2 lg:gap-0 border overflow-hidden p-1 flex items-center rounded-md lg:rounded-lg justify-center text-zinc-200 text-sm font-semibold bg-zinc-900"
     >
       {showOffBanner && !noFlip && (
         <div
           style={{ backgroundColor: primaryAccent }}
-          className="absolute inset-y-0 left-0 2xl:w-4 w-3 rounded-l-[0.3rem] lg:rounded-l-lg flex items-center justify-center"
+          className="absolute inset-y-0 left-0 2xl:w-4 w-3 flex items-center justify-center"
         >
           <span className="2xl:text-[10px] lg:text-[8px] text-[10px] lg:font-semibold font-bold text-zinc-900 [writing-mode:vertical-rl] rotate-180 tracking-[0.15em]">
             {getOffReason().value
@@ -176,9 +176,8 @@ export default function FrontCard({
 
       <motion.div
         style={{ opacity: shouldFade ? 0.7 : 1 }}
-        layout={isDragging ? false : true}
-        transition={{
-          layout: isDragging ? {} : { type: "tween", duration: 0.3 },
+          transition={{
+          
         }}
       >
         <ProfilePhoto
@@ -194,13 +193,13 @@ export default function FrontCard({
 
       <div
         style={{ opacity: shouldFade ? 0.7 : 1 }}
-        className="flex flex-col gap-1 2xl:text-[16px] 2xl:font-medium justify-center items-center text-xs lg:font-normal font-medium text-nowrap"
+        className="flex flex-col 2xl:text-sm 2xl:font-medium justify-center items-center text-xs lg:text-[.6rem] lg:font-normal font-medium text-nowrap"
       >
         <div>{`${person.lastName}, ${person.firstName[0]}`}</div>
 
         <div
           style={{ backgroundColor: secondaryAccent }}
-          className="flex items-center justify-center 2xl:px-1 2xl:py-0.5 2xl:text-xs rounded-xs text-zinc-950 text lg:text-xs px-1 py-0.5"
+          className="flex items-center justify-center lg:px-0.5 lg:py-0 2xl:px-1  2xl:py-0.5 2xl:text-xs rounded-xs text-zinc-950 text lg:text-[.5rem] px-1 py-0.5"
         >
           {person.badge}
         </div>
@@ -227,7 +226,7 @@ export default function FrontCard({
       {...(flipped || noFlip || !canFlip() ? {} : listeners)}
       {...(flipped || noFlip || !canFlip() ? {} : attributes)}
       onClick={handleCardClick}
-      className="lg:h-full h-auto w-full "
+      className="basis-1/3 flex-1 min-w-fit"
     >
       <FlippableCard
         flipped={flipped}

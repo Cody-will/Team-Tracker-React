@@ -127,7 +127,8 @@ export default function Settings() {
         <motion.div
           layout
           id="panel"
-          className="bg-zinc-950/30 overflow-hidden flex flex-col w-full lg:w-auto gap-2 2xl:gap-4 p-2 lg:p-4 2xl:p-8 justify-center items-center border border-zinc-800 rounded-xl"
+          style={{borderColor: `${primaryAccent}E6`}}
+          className=" overflow-hidden flex flex-col w-full lg:w-auto gap-2 2xl:gap-4 p-2 lg:p-4 2xl:p-8 justify-center items-center border  rounded-xl"
         >
           <div className="flex w-full">
             <div className="font-semibold text-zinc-200 text-lg 2xl:text-3xl flex items-start justify-start w-full">

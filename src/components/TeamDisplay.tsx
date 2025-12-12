@@ -195,7 +195,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
   }
 
   return (
-    <motion.div className="relative lg:h-full w-full min-h-screen lg:min-h-0 2xl:min-h-0 2xl:h-full gap-2 lg:gap-4 flex flex-col">
+    <motion.div className="relative lg:h-full w-full min-h-screen lg:min-h-0 2xl:min-h-0 flex-1 gap-2 lg:gap-2 flex flex-col">
       <AnimatePresence>
         {notify && (
           <PopUp
@@ -217,7 +217,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
       >
         <motion.div
           id="CommandStaff"
-          className="w-full lg:h-1/5 2xl:h-1/5 flex lg:flex-row flex-col 2xl:gap-2 gap-2 items-center justify-center"
+          className="w-full lg:h-1/5 2xl:h-1/6 flex lg:flex-row flex-col 2xl:gap-2 gap-2"
         >
           {team && lgUp ? (
             [commandStaff]
@@ -233,12 +233,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
 
         <motion.div
           id="Shifts"
-          style={{
-            flexGrow: !lgUp && !twoXlUp ? 1 : 0,
-            flexShrink: 1,
-            flexBasis: "auto",
-          }}
-          className=" lg:h-full 2xl:h-full w-full 2xl:gap-4 overflow-y-auto lg:overflow-visible 2xl:overflow-visible gap-4 lg:gap-1 flex lg:flex-row 2xl:flex-row flex-col items-center justify-center"
+          className="flex-1 w-full max-w-full 2xl:gap-2 overflow-y-auto lg:overflow-visible  2xl:overflow-visible gap-2 lg:gap-1 flex lg:flex-row 2xl:flex-row flex-col"
         >
           {team &&
             configData &&

@@ -139,7 +139,8 @@ export default function TeamManagement() {
         {/* Tabs */}
         <motion.div
           id="panel"
-          className="relative w-full lg:h-1/12 flex bg-zinc-950/30 rounded-md border border-zinc-800 drop-shadow-xl/50"
+          style={{borderColor: `${primaryAccent}E6`}}
+          className="relative w-full lg:h-1/12 flex  rounded-md border  drop-shadow-xl/50"
         >
           <ul className="relative flex items-center justify-around cursor-pointer overflow-hidden p-1 w-full h-full">
             {tabs.map((tab) => {
@@ -181,7 +182,8 @@ export default function TeamManagement() {
         {/* Grid */}
         <motion.div
           id="panel"
-          className="relative flex flex-col w-full h-11/12 bg-zinc-950/30 rounded-md border border-zinc-800 drop-shadow-xl/50"
+          style={{borderColor: `${primaryAccent}E6`}}
+          className="relative flex flex-col w-full h-11/12  rounded-md border  drop-shadow-xl/50"
         >
           {selectedTab && (
             <TeamPanel

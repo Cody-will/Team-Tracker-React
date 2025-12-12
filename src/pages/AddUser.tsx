@@ -145,7 +145,8 @@ export default function AddUser() {
           <motion.div
             layout
             id="panel"
-            className="flex lg:p-10 p-6  gap-4 flex-col items-center justify-center bg-zinc-950/30 border border-zinc-800 rounded-xl text-zinc-200 font-semibold"
+            style={{borderColor: `${primaryAccent}E6`}}
+            className="flex lg:p-10 p-6  gap-4 flex-col items-center justify-center  border  rounded-xl text-zinc-200 font-semibold"
           >
             <motion.div
               layout

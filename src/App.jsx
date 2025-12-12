@@ -26,6 +26,7 @@ import SplashOverlay from "./components/SplashOverlay.tsx";
 import { VersionProvider } from "./pages/context/VersionContext.tsx";
 import { useBreakpoint } from "./pages/hooks/useBreakpoint.ts";
 import CardConfigure from "./pages/CardConfigure.tsx";
+import { CardProvider } from "./pages/context/CardContext.tsx";
 
 const LoginRoute = () => {
   const { currentUser, authReady, forceSplash } = useAuth();
@@ -107,31 +108,33 @@ function App() {
       <ConfigureProvider>
         <UserProvider>
           <ScheduleProvider>
-            <VersionProvider>
-              <SplashOverlay />
-              <Routes>
-                <Route path="/login" element={<LoginRoute />} />
+            <CardProvider>
+              <VersionProvider>
+                <SplashOverlay />
+                <Routes>
+                  <Route path="/login" element={<LoginRoute />} />
 
-                <Route element={<ProtectedLayout />}>
-                  <Route index element={<Navigate to="/home" replace />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/team-management" element={<TeamManagement />} />
-                  <Route path="/schedule" element={<Schedule />} />
-                  <Route path="/vacation" element={<Vacation />} />
-                  <Route path="/add-user" element={<AddUser />} />
-                  <Route path="/shift-swap" element={<ShiftSwap />} />
-                  <Route path="/coverage" element={<Coverage />} />
-                  <Route path="/configure" element={<Configure />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/cardsettings" element={<CardConfigure />} />
-                </Route>
+                  <Route element={<ProtectedLayout />}>
+                    <Route index element={<Navigate to="/home" replace />} />
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/team-management" element={<TeamManagement />} />
+                    <Route path="/schedule" element={<Schedule />} />
+                    <Route path="/vacation" element={<Vacation />} />
+                    <Route path="/add-user" element={<AddUser />} />
+                    <Route path="/shift-swap" element={<ShiftSwap />} />
+                    <Route path="/coverage" element={<Coverage />} />
+                    <Route path="/configure" element={<Configure />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/cardsettings" element={<CardConfigure />} />
+                  </Route>
 
-                <Route
-                  path="*"
-                  element={<div className="p-6">Not Found</div>}
-                />
-              </Routes>
-            </VersionProvider>
+                  <Route
+                    path="*"
+                    element={<div className="p-6">Not Found</div>}
+                  />
+                </Routes>
+              </VersionProvider>
+            </CardProvider>
           </ScheduleProvider>
         </UserProvider>
       </ConfigureProvider>
