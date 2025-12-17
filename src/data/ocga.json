@@ -1,0 +1,4754 @@
+[
+  {
+    "charge": "CRIMINAL SOLICITATION",
+    "ocga": "16-4-7(b)"
+  },
+  {
+    "charge": "CRIMINAL ATTEMPT TO COMMIT A MISDEMEANOR",
+    "ocga": "16-4-1"
+  },
+  {
+    "charge": "CRIMINAL ATTEMPT TO COMMIT A FELONY",
+    "ocga": "16-4-1"
+  },
+  {
+    "charge": "CONSPIRACY TO COMMIT A MISDEMEANOR",
+    "ocga": "16-4-8"
+  },
+  {
+    "charge": "POSSESSION OF TOOLS FOR COMMISSION OF A CRIME",
+    "ocga": "16-7-20"
+  },
+  {
+    "charge": "CONSPIRACY TO COMMIT A FELONY",
+    "ocga": "16-4-8"
+  },
+  {
+    "charge": "DOMESTIC TERRORISM",
+    "ocga": "16-11-220"
+  },
+  {
+    "charge": "TREASON",
+    "ocga": "16-11-1"
+  },
+  {
+    "charge": "ADVOCATING OVERTHROW OF GOVERNMENT",
+    "ocga": "16-11-4"
+  },
+  {
+    "charge": "INCITING TO INSURRECTION",
+    "ocga": "16-11-3"
+  },
+  {
+    "charge": "INSURRECTION",
+    "ocga": "16-11-2"
+  },
+  {
+    "charge": "FALSE SWEARING IN CONNECTION WITH SUBVERSIVE ACTIVITIES",
+    "ocga": "16-11-14"
+  },
+  {
+    "charge": "CLOSING PLACES WHERE FIREARMS AND AMMUNITION SOLD, WHERE DISORDER LIKELY TO OCCUR",
+    "ocga": "38-2-301(b)"
+  },
+  {
+    "charge": "CONTROL OF STREETS IN CASE OF RIOT, ROUT, MOB, TUMULT, OR UNLAWFUL ASSEMBLY",
+    "ocga": "38-2-302(b)"
+  },
+  {
+    "charge": "DISPERSION OF MOB; ORDERS; WHERE ORDER UNNECESSARY; PENALTY FOR FAILURE TO DISPERSE",
+    "ocga": "38-2-303(b)"
+  },
+  {
+    "charge": "DUTY OF CITIZENS TO DISPERSE WHEN SHOT FIRED OR MISSILE THROWN",
+    "ocga": "38-2-304(b)"
+  },
+  {
+    "charge": "AUTHORITY OF COMMANDING OFFICER TO ORDER JAIL, BUILDING, OR OTHER PLACES OFF LIMITS",
+    "ocga": "38-2-305(b)"
+  },
+  {
+    "charge": "SECURE BENEFIT BY FALSE STATEMENT OR REPRESENTION AS A MILITARY VETERAN",
+    "ocga": "16-9-63(b)"
+  },
+  {
+    "charge": "INTENT TO DECEIVE\u00a0 BY APPEARING IN COURT WEARING MILITARY UNIFORM OR DECORATION",
+    "ocga": "16-9-63(c )"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT WITH A MINOR BY A PERSON IN A POSITION OF TRUST IN THE FIRST DEGREE",
+    "ocga": "16-6-5.1(b.2)"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT WITH A MINOR BY A PERSON IN A POSITION  OF TRUST IN THE SECOND DEGREE",
+    "ocga": "16-6-5.1(c.2)"
+  },
+  {
+    "charge": "HOAX DEVICES",
+    "ocga": "16-7-85"
+  },
+  {
+    "charge": "MANUFACTURE, DISTRIBUTE, POSSESS WITH INTENT TO DISTRIBUTE, OFFER TO DISTRIBUTE EXPLOSIVE DEVICE",
+    "ocga": "16-7-82"
+  },
+  {
+    "charge": "PERSON UNDER INDICTMENT OR CONVICTED OF FELONY TO MANUFACTURE, POSSESS, DISTRIBUTE EXPLOSIVES, ETC",
+    "ocga": "16-7-83"
+  },
+  {
+    "charge": "DISTRIBUTION OF DESTRUCTIVE DEVICE, DETONATOR, EXPLOSIVES, POISON GAS TO PERSON UNDER 21 YOA",
+    "ocga": "16-7-84"
+  },
+  {
+    "charge": "HOAX DEVICES",
+    "ocga": "16-7-85"
+  },
+  {
+    "charge": "ATTEMPT OR CONSPIRE TO COMMIT OFFENSE INVOLVING EXPLOSIVES, DESTRUCTIVE DEVICE, ETC.",
+    "ocga": "16-7-86"
+  },
+  {
+    "charge": "UNLAWFUL TO HINDER OR OBSTRUCT OFFICIAL IN THE DETECTION OR DESTRUCTION OF DESTRUCTIVE DEVICE",
+    "ocga": "16-7-87"
+  },
+  {
+    "charge": "USE OR ATTEMPT TO USE DESTRUCTIVE DEVICE TO KILL, INJURE, INTIMIDATE OR DESTROY BUILDINGS",
+    "ocga": "16-7-88(b)"
+  },
+  {
+    "charge": "POSSESS/TRANSPORT/RECEIVE EXPLOSIVES/DESTRUCTIVE DEVICES WITH INTENT TO KILL/INJURE OR DESTROY BLDG",
+    "ocga": "16-7-88(a)"
+  },
+  {
+    "charge": "INTENTIONALLY DISABLE OR INHIBIT THE OPERATION OR EFFECTIVENESS OF SAFETY DEVICE",
+    "ocga": "16-12-126(a)"
+  },
+  {
+    "charge": "INTERFERE WITH SECURITY MEASURE BY INTRODUCING INTO A TERMINAL  EXPLOSIVES, DESTRUCTIVE DEVICE, ETC",
+    "ocga": "16-12-127(a)"
+  },
+  {
+    "charge": "INTENTIONALLY RENDER TRAFFIC CONTROL DEVICE INOPERABLE",
+    "ocga": "16-12-126(b)"
+  },
+  {
+    "charge": "POSSESSION OF ANHYDROUS AMMONIA",
+    "ocga": "16-11-111 (a)(2)"
+  },
+  {
+    "charge": "AVOIDING OR INTERFERING WITH SECURITY MEASURES",
+    "ocga": "16-12-125(a)"
+  },
+  {
+    "charge": "AVOIDING OR INTERFERING WITH SECURITY MEASURE WITH INTENT TO COMMIT A FELONY",
+    "ocga": "16-12-125(a)"
+  },
+  {
+    "charge": "CONCEALING DEATH OF ANOTHER",
+    "ocga": "16-10-31"
+  },
+  {
+    "charge": "REMOVAL OF HUMAN BODY PARTS FROM SCENE OF DEATH/DISMEMBERMENT",
+    "ocga": "16-12-161"
+  },
+  {
+    "charge": "HOMICIDE BY INTERFERENCE WITH OFFICIAL TRAFFIC-CONTROL DEVICE OR RAILROAD SIGN OR SIGNAL",
+    "ocga": "40-6-396(a)"
+  },
+  {
+    "charge": "HOMICIDE BY AIRCRAFT; UNDER THE INFLUENCE OF ALCOHOL/DRUGS",
+    "ocga": "6-2-5.2"
+  },
+  {
+    "charge": "HOMICIDE BY VEHICLE IN 2ND DEGREE",
+    "ocga": "40-6-393(c )"
+  },
+  {
+    "charge": "HOMICIDE BY VEHICLE/HABITUAL VIOLATOR/REVOKED LICENSE",
+    "ocga": "40-6-393(d)"
+  },
+  {
+    "charge": "HOMICIDE BY VEHICLE - LEAVING THE SCENE",
+    "ocga": "40-6-393(b)"
+  },
+  {
+    "charge": "HOMICIDE BY VEHICLE IN 1ST DEGREE",
+    "ocga": "40-6-393(a)"
+  },
+  {
+    "charge": "FETICIDE BY VEHICLE IN 2ND DEGREE",
+    "ocga": "40-6-393.1(c )(1)"
+  },
+  {
+    "charge": "FETICIDE BY VEHICLE IN 1ST DEGREE",
+    "ocga": "40-6-393.1(b)1"
+  },
+  {
+    "charge": "FETICIDE BY VESSEL IN 2ND DEGREE",
+    "ocga": "52-7-12.3(b)"
+  },
+  {
+    "charge": "HOMICIDE BY VESSEL IN 1ST DEGREE",
+    "ocga": "52-7-12.2(a)"
+  },
+  {
+    "charge": "HOMICIDE BY VESSEL IN 2ND DEGREE",
+    "ocga": "52-7-12.2(b)"
+  },
+  {
+    "charge": "FETICIDE BY VESSEL IN 1ST DEGREE",
+    "ocga": "52-7-12.3(a)"
+  },
+  {
+    "charge": "SERIOUS INJURY BY VESSEL",
+    "ocga": "52-7-12.4"
+  },
+  {
+    "charge": "INVOLUNTARY MANSLAUGHTER",
+    "ocga": "16-5-3(b)"
+  },
+  {
+    "charge": "INVOLUNTARY MANSLAUGHTER",
+    "ocga": "16-5-3(a)"
+  },
+  {
+    "charge": "AGGRAVATED INVOLUNTARY MANSLAUGHTER",
+    "ocga": "16-5-3.1"
+  },
+  {
+    "charge": "MURDER IN THE SECOND DEGREE",
+    "ocga": "16-5-1(d)"
+  },
+  {
+    "charge": "MURDER",
+    "ocga": "16-5-1"
+  },
+  {
+    "charge": "ANY PERSON WITH ACTUAL KNOWLEDGE THAT PERSON INTENTS TO COMMIT SUICIDE WHO KNOWINGLY AND WILLFULLY ASSIST",
+    "ocga": "16-5-5(b)"
+  },
+  {
+    "charge": "FETICIDE",
+    "ocga": "16-5-80(d)"
+  },
+  {
+    "charge": "VOLUNTARY MANSLAUGHTER OF AN UNBORN CHILD",
+    "ocga": "16-5-80(d)"
+  },
+  {
+    "charge": "VOLUNTARY MANSLAUGHTER",
+    "ocga": "16-5-2"
+  },
+  {
+    "charge": "KIDNAPPING",
+    "ocga": "16-5-40"
+  },
+  {
+    "charge": "INTERFERENCE WITH CUSTODY - 1ST OR 2ND CONVICTION",
+    "ocga": "16-5-45(b)(2)(A)(B)"
+  },
+  {
+    "charge": "INTERFERENCE WITH CUSTODY 3RD OR SUBSEQUENT CONVICTION",
+    "ocga": "16-5-45(b)(2)(C)"
+  },
+  {
+    "charge": "INTERSTATE INTERFERENCE WITH CUSTODY",
+    "ocga": "16-5-45(c )(3)"
+  },
+  {
+    "charge": "FALSE IMPRISONMENT",
+    "ocga": "16-5-41"
+  },
+  {
+    "charge": "FALSE IMPRISONMENT - VICTIM IS LESS THAN 14 YOA AND NOT OFFENDERS CHILD",
+    "ocga": "16-5-41 (c)"
+  },
+  {
+    "charge": "FALSE IMPRISONMENT UNDER COLOR OF LEGAL PROCESS",
+    "ocga": "16-5-42"
+  },
+  {
+    "charge": "MALICIOUS CONFINEMENT OF SANE PERSON IN AN ASYLUM",
+    "ocga": "16-5-43"
+  },
+  {
+    "charge": "HIJACKING AN  AIRCRAFT",
+    "ocga": "16-5-44"
+  },
+  {
+    "charge": "HIJACKING A MOTOR VEHICLE (1ST DEGREE)",
+    "ocga": "16-5-44.1(b)(1)"
+  },
+  {
+    "charge": "HIJACKING A MOTOR VEHICLE (2ND DEGREE)",
+    "ocga": "16-5-44.1(b)(2)"
+  },
+  {
+    "charge": "GROOMING OF A MINOR",
+    "ocga": "16-12-100.5"
+  },
+  {
+    "charge": "INTERNET PROVIDER INTENTIONALLY PERMITS SUBSCRIBER TO USE SERVICE FOR SEXUAL EXPLOITATION OF CHILD",
+    "ocga": "16-12-100.2(1)"
+  },
+  {
+    "charge": "SODOMY",
+    "ocga": "16-6-2(a)(1)"
+  },
+  {
+    "charge": "AGGRAVATED SODOMY - COMMIT SODOMY WITH FORCE AND AGAINST PERSONS WILL OR PERSON IS LESS THAN 10 YOA",
+    "ocga": "16-6-2(a)(2)"
+  },
+  {
+    "charge": "AGGRAVATED SEXUAL BATTERY",
+    "ocga": "16-6-22.2"
+  },
+  {
+    "charge": "SEXUAL BATTERY",
+    "ocga": "16-6-22.1(b)"
+  },
+  {
+    "charge": "BESTIALITY",
+    "ocga": "16-6-6"
+  },
+  {
+    "charge": "CHILD MOLESTATION-VICTIM IS 14 BUT LESS THAN 16, OFFENDER IS 18 OR YOUNGER BUT ONLY 4 YRS OLDER",
+    "ocga": "16-6-4(b)(2)"
+  },
+  {
+    "charge": "AGGRAVATED CHILD MOLESTATION-VIC IS 13 BUT LESS THAN 16, OFF IS 18 OR YOUNGER-ONLY 4 YRS OLDER",
+    "ocga": "16-6-4(d)(2)"
+  },
+  {
+    "charge": "SODOMY-VICTIM IS 13-LESS THAN 16 YOA AND OFFENDER IS 18 YOA/YOUNGER BUT NO MORE THAN 4 YRS OLDER",
+    "ocga": "16-6-2(d)"
+  },
+  {
+    "charge": "PEEPING TOM",
+    "ocga": "16-11-61"
+  },
+  {
+    "charge": "ENTICING A CHILD FOR INDECENT PURPOSES -VIC IS 14 BUT LESS THAN 16, OFF IS 18 OR YOUNGER",
+    "ocga": "16-6-5(c)"
+  },
+  {
+    "charge": "SEXUAL BATTERY - SECOND OR SUBSEQUENT OFFENSE",
+    "ocga": "16-6-22.1(b)"
+  },
+  {
+    "charge": "ADULTERY",
+    "ocga": "16-6-19"
+  },
+  {
+    "charge": "STATUTORY RAPE",
+    "ocga": "16-6-3(b)"
+  },
+  {
+    "charge": "PUBLICATION OF NAME OR IDENTITY OF FEMALE RAPED OR ASSAULTED WITH INTENT TO COMMIT RAPE",
+    "ocga": "16-6-23"
+  },
+  {
+    "charge": "SOLICITATION OF SODOMY",
+    "ocga": "16-6-15(a)"
+  },
+  {
+    "charge": "SOLICITATION OF SODOMY UNDER 18 YOA",
+    "ocga": "16-6-15(b)"
+  },
+  {
+    "charge": "STATUTORY RAPE-VICTIM IS 14 BUT LESS THAN 16 AND OFFENDER IS 18/YOUNGER AND NO MORE THAN 4 Y OLDER",
+    "ocga": "16-6-3(c)"
+  },
+  {
+    "charge": "HARBORING, CONCEALING, OR WITHHOLDING INFORMATION CONCERNING A SEXUAL OFFENDER",
+    "ocga": "16-6-25"
+  },
+  {
+    "charge": "FAILURE TO REGISTER AS SEX OFFENDER/FAILURE TO COMPLY WITH REQUIREMENTS/PROVIDED FALSE INFORMATION",
+    "ocga": "42-1-12(n)"
+  },
+  {
+    "charge": "RAPE",
+    "ocga": "16-6-1"
+  },
+  {
+    "charge": "AGGRAVATED CHILD MOLESTATION",
+    "ocga": "16-6-4(c )"
+  },
+  {
+    "charge": "SEXUAL BATTERY AGAINST CHILD UNDER 16",
+    "ocga": "16-6-22.1(d)"
+  },
+  {
+    "charge": "CHILD MOLESTATION",
+    "ocga": "16-6-4(a)"
+  },
+  {
+    "charge": "TRAFFICKING A PERSON FOR LABOR SERVITUDE",
+    "ocga": "16-5-46(b)"
+  },
+  {
+    "charge": "TRAFFICKING A PERSON FOR SEXUAL SERVITUDE",
+    "ocga": "16-5-46(c)"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT BY A FOSTER PARENT 1ST DEGREE(F)",
+    "ocga": "16-6-5.1(b.1)"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT VICTIM BETWEEN 14-21; OFFENDER UNDER 21; AGE DIFF < 48 MONTHS 2ND DEGREE(M)",
+    "ocga": "16-6-5.1(g)(2)"
+  },
+  {
+    "charge": "INTENTIONALLY PHOTOGRAPHING A MINOR WITHOUT THE CONSENT OF PARENT OR GUARDIAN BY REGISTERED SEX OFFENDER",
+    "ocga": "42-1-18(b)"
+  },
+  {
+    "charge": "DISPLAYS OF NUDITY OR SEXUAL CONDUCT ON OUTDOOR ADVERTISING VISIBLE FROM ROADWAY PROHIBITED",
+    "ocga": "32-6-52(d)(1)"
+  },
+  {
+    "charge": "ENTICING A CHILD FOR INDECENT PURPOSES",
+    "ocga": "16-6-5(b)"
+  },
+  {
+    "charge": "SEXUAL EXTORTION 2ND OR SUBSEQUENT OFFENSE(F)",
+    "ocga": "16-11-92"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT BY EMPLOYEE OR AGENT FIRST DEGREE",
+    "ocga": "16-6-5.1(b)"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT VICTIM BETWEEN 14-21; OFFENDER UNDER 21; AGE DIFF < 48 MONTHS 1ST DEGREE(M)",
+    "ocga": "16-6-5.1(f)(2)(A)"
+  },
+  {
+    "charge": "FORNICATION",
+    "ocga": "16-6-18"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT 2ND DEGREE VICTIM UNDER 16(F)",
+    "ocga": "16-6-5.1(g)(1)"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT BY EMPLOYEE OR AGENT SECOND DEGREE(M)",
+    "ocga": "16-6-5.1(c)"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT SECOND DEGREE FOR 2ND OR SUBSEQUENT CONVICTION(F)",
+    "ocga": "16-6-5.1(g)(3)"
+  },
+  {
+    "charge": "INCEST",
+    "ocga": "16-6-22"
+  },
+  {
+    "charge": "REGISTERED SEX OFFENDER RESTRICTED RESIDENCE VIOLATION WHEN ACT WAS COMMITTED ON/AFTER JULY 1, 2008",
+    "ocga": "42-1-15(b)"
+  },
+  {
+    "charge": "REGISTERED SEX OFFENDER RESTRICTED EMPLOYMENT/VOLUNTEER VIOLATION WHEN ACT WAS COMMITTED ON/AFTER JULY",
+    "ocga": "42-1-15(c)(1)"
+  },
+  {
+    "charge": "REGISTERED SEXUALLY DANGEROUS PREDATOR RESTRICTED EMPLOYMENT/VOLUNTEER VIOLATION WHEN ACT WAS COMMITTED",
+    "ocga": "42-1-15(c)(2)"
+  },
+  {
+    "charge": "REGISTERED SEX OFFENDER NOT ALLOWED TO LOITER AT ANY CHILD CARE FACILITY, SCHOOL OR AREA WHER MINORS CONG",
+    "ocga": "42-1-15(d)"
+  },
+  {
+    "charge": "REGISTERED SEX OFFENDER RESTRICTED RESIDENCE VIOLATION WHEN ACT WAS COMMITTED BETWEEN JULY 1, 2006 AND JU",
+    "ocga": "42-1-16(b)"
+  },
+  {
+    "charge": "REGISTERED SEX OFFENDER RESTRICTED EMPLOYMENT/VOLUNTEER VIOLATION WHEN ACT WAS COMMITTED BETWEEN JULY 1,",
+    "ocga": "42-1-16(c)(1)"
+  },
+  {
+    "charge": "REGISTERED SEXUALLY DANGEROUS PREDATOR RESTRICTED EMPLOYMENT/VOLUNTEER VIOLATION WHEN ACT WAS COMMITTED J",
+    "ocga": "42-1-16(c)(2)"
+  },
+  {
+    "charge": "REGISTERED SEX OFFENDER RESTRICTED RESIDENCE VIOLATION WHEN ACT WAS COMMITTED BETWEEN JUNE 4, 2003 - JUNE",
+    "ocga": "42-1-16(d)"
+  },
+  {
+    "charge": "REGISTERED SEX OFFENDER RESTRICTED RESIDENCE VIOLATION WHEN ACT WAS COMMITTED BETWEEN JUNE 4, 2003 - JUNE",
+    "ocga": "42-1-17(b)"
+  },
+  {
+    "charge": "SEXUAL EXTORTION (M)",
+    "ocga": "16-11-92"
+  },
+  {
+    "charge": "NECROPHILIA",
+    "ocga": "16-6-7"
+  },
+  {
+    "charge": "CAUSE A MINOR TO BE IDENTIFIED IN AN OBSCENE DEPICTION, 2ND OR SUBSEQUENT OFFENSE",
+    "ocga": "16-11-40.1"
+  },
+  {
+    "charge": "CAUSE A MINOR TO BE IDENTIFIED IN AN OBSCENE DEPICTION",
+    "ocga": "16-11-40.1"
+  },
+  {
+    "charge": "ACCESS OR USE OF COMMERCIAL SOCIAL NETWORKING WEBSITE BY HIGH-RISK SEX OFFENDER",
+    "ocga": "16-12-100.4"
+  },
+  {
+    "charge": "IMPROPER SEXUAL CONTACT BY A FOSTER PARENT 2ND DEGREE(M)",
+    "ocga": "16-6-5.1(c.1)"
+  },
+  {
+    "charge": "FEMALE GENITAL MUTILATION",
+    "ocga": "16-5-27(b)"
+  },
+  {
+    "charge": "KNOWINGLY USING/INSTALLING A DEVICE TO OBSERVE, RECORD UNDERNEATH OR THROUGH AN INDIVIDUALS CLOTHING",
+    "ocga": "16-11-91(b)(1)"
+  },
+  {
+    "charge": "DISSEMINATION OF AN IMAGE OR RECORDING TAKEN UNDERNEATH OR THROUGH AN INDIVIDUALS CLOTHING",
+    "ocga": "16-11-91(b)(2)"
+  },
+  {
+    "charge": "PUBLIC INDECENCY-1ST OR 2ND CONVICTION",
+    "ocga": "16-6-8(b)"
+  },
+  {
+    "charge": "PUBLIC INDECENCY - 3RD OR SUBSEQUENT CONVICTION",
+    "ocga": "16-6-8(c)"
+  },
+  {
+    "charge": "OBSCENE INTERNET CONTACT WITH A CHILD",
+    "ocga": "16-12-100.2(e)(1)"
+  },
+  {
+    "charge": "USE COMPUTER SERVICE TO SEDUCE, SOLICIT, LURE OR ENTICE CHILD TO COMMIT ILLEGAL ACT",
+    "ocga": "16-12-100.2(d)(1)"
+  },
+  {
+    "charge": "COMPUTER OR ELECTRONIC PORNOGRAPHY",
+    "ocga": "16-12-100.2(c)(1)"
+  },
+  {
+    "charge": "OBSCENE TELEPHONE CONTACT WITH A CHILD -1ST OFFENSE",
+    "ocga": "16-12-100.3(c)(1)(2)"
+  },
+  {
+    "charge": "OBSCENE TELEPHONE CONTACT WITH A CHILD - 2ND OR SUBSEQUENT CONVICTION",
+    "ocga": "16-12-100.3(c)(3)"
+  },
+  {
+    "charge": "USE COMPUTER SERV TO SOLICIT CHILD AT LEAST 14 YOA TO COMMIT ILLEGAL ACT IF OFFENDER IS 18 OR YOUNGER",
+    "ocga": "16-12-100.2(d)(1)"
+  },
+  {
+    "charge": "OBSCENE INTERNET CONTACT WITH A CHILD  AT LEAST 14 YOA AND OFFENDER IS 18 OR YOUNGER",
+    "ocga": "16-12-100.2(e)(1)"
+  },
+  {
+    "charge": "SEXUALLY EXPLICIT CONDUCT OF MINOR  - FAILURE TO REPORT VISUAL/PRINTED MATERIAL",
+    "ocga": "16-12-100(c)"
+  },
+  {
+    "charge": "VIOLATION COMPUTER PORNOGRAPHY  AND CHILD EXPLOITATION PREV ACT, CHILD  14 OR OLDER, DEF 18 UNDER",
+    "ocga": "16-12-100.2(c)"
+  },
+  {
+    "charge": "ROBBERY",
+    "ocga": "16-8-40"
+  },
+  {
+    "charge": "HOME INVASION - 1ST DEGREE",
+    "ocga": "16-7-5(b)"
+  },
+  {
+    "charge": "HOME INVASION - 2ND DEGREE",
+    "ocga": "16-7-5(c)"
+  },
+  {
+    "charge": "INTENTIONALLY PHOTOGRAPHING A MINOR WITHOUT THE CONSENT OF PARENT OR GUARDIAN BY REGISTERED SEX OFFENDER - SECOND OR SUBSEQUENT OFFENSE",
+    "ocga": "42-1-18(b)"
+  },
+  {
+    "charge": "POSSESSING, OWNING, OR OPERATING AN UNMANNED AIRCRAFT SYSTEM BY REGISTERED SEX OFFENDER",
+    "ocga": "42-1-18(c)"
+  },
+  {
+    "charge": "ARMED ROBBERY",
+    "ocga": "16-8-41"
+  },
+  {
+    "charge": "ASSAULT ON AN UNBORN CHILD",
+    "ocga": "16-5-28"
+  },
+  {
+    "charge": "BATTERY ON AN UNBORN CHILD",
+    "ocga": "16-5-29"
+  },
+  {
+    "charge": "AGGRAVATED BATTERY AGAINST LAW ENFORCEMENT OFFICER WHEN ENGAGED ON OFFICIAL DUTY",
+    "ocga": "16-5-24 (c)"
+  },
+  {
+    "charge": "SIMPLE ASSAULT",
+    "ocga": "16-5-20"
+  },
+  {
+    "charge": "SIMPLE ASSAULT - PUBLIC SCHOOL SYSTEM EMPLOYEE",
+    "ocga": "16-5-20"
+  },
+  {
+    "charge": "SIMPLE BATTERY AGAINST PUBLIC SCHOOL SYSTEM EMPLOYEE",
+    "ocga": "16-5-23(i)"
+  },
+  {
+    "charge": "ASSAULT WITH INTENT TO COMMIT A CRIME",
+    "ocga": "16-5-22"
+  },
+  {
+    "charge": "AGGRAVATED ASSAULT",
+    "ocga": "16-5-21"
+  },
+  {
+    "charge": "SIMPLE BATTERY - FAMILY VIOLENCE",
+    "ocga": "16-5-23"
+  },
+  {
+    "charge": "SIMPLE ASSAULT - FAMILY VIOLENCE",
+    "ocga": "16-5-20(d)"
+  },
+  {
+    "charge": "AGGRAVATED ASSAULT ON AN OFFICER OF COURT WHILE OFFICER IS ON DUTY",
+    "ocga": "16-5-21(k)"
+  },
+  {
+    "charge": "BATTERY-FAMILY VIOLENCE (1ST OFFENSE)",
+    "ocga": "16-5-23.1(f)(2)"
+  },
+  {
+    "charge": "BATTERY-FAMILY VIOLENCE-SUBSEQUENT CONVICTION OR PRIOR FORCIBLE FELONY CONVICTION",
+    "ocga": "16-5-23.1(f)(2)"
+  },
+  {
+    "charge": "AGGRAVATED ASSAULT WITH INTENT TO RAPE A CHILD UNDER 14 YEARS OF AGE",
+    "ocga": "16-5-21(j)"
+  },
+  {
+    "charge": "AGGRAVATED ASSAULT AGAINST LAW ENFORCEMENT OFFICER WHEN ENGAGED ON OFFICIAL DUTY",
+    "ocga": "16-5-21(c)"
+  },
+  {
+    "charge": "SIMPLE BATTERY AGAINST A PERSON WHO IS 65 YEARS OR OLDER OR WHO IS PREGNANT AT TIME OF THE OFFENSE",
+    "ocga": "16-5-23(c)"
+  },
+  {
+    "charge": "SIMPLE BATTERY IN A PUBLIC TRANSIT VEHICLE OR STATION",
+    "ocga": "16-5-23(d)"
+  },
+  {
+    "charge": "SIMPLE BATTERY AGAINST PATIENT IN PERSONAL CARE HOME, HOSPICE OR LONG TERM CARE FACILITY OR ASSISTED LIVI",
+    "ocga": "16-5-23(g)"
+  },
+  {
+    "charge": "AGGRAVATED BATTERY",
+    "ocga": "16-5-24"
+  },
+  {
+    "charge": "SIMPLE BATTERY AGAINST POLICE OFFICER/LE DOG/CORRECTIONS OR DETENTION OFFICER",
+    "ocga": "16-5-23(e)"
+  },
+  {
+    "charge": "BATTERY IN A PUBLIC TRANSIT VEHICLE OR STATION",
+    "ocga": "16-5-23.1(g)"
+  },
+  {
+    "charge": "BATTERY AGAINST A FEMALE WHO IS PREGNANT",
+    "ocga": "16-5-23.1(h)"
+  },
+  {
+    "charge": "BATTERY AGAINST A SPORTS OFFICIAL(M)",
+    "ocga": "16-5-23.1(k)"
+  },
+  {
+    "charge": "UNLAWFUL FOR PERSON EMPLOY/ASSC W/CRIMINAL STREET GANG TO CONDUCT/PARTICIPATE IN CRIMINAL ACTIVITY",
+    "ocga": "16-15-4(a)"
+  },
+  {
+    "charge": "UNLAWFUL TO COMMIT OFFENSE W/INTENT TO OBTAIN/EARN/MAINTAIN MEMSHP/INCREASE STATUS/POSITION IN ST GANG",
+    "ocga": "16-15-4(b)"
+  },
+  {
+    "charge": "UNLAWFUL TO ACQURE/MAINTAIN THRU GANG ACTIVITY/PROCEEDS DERIVED FRM INTEREST/CONTROL OF PROPERTY",
+    "ocga": "16-15-4(c)"
+  },
+  {
+    "charge": "UNLAWFUL FOR PERSON WHO OCCUPIES CRIMIINAL STREET GANG POSITION OF ORGANIZER/SUPERVISORY/MANAGEMENT/LEADE",
+    "ocga": "16-15-4(d)"
+  },
+  {
+    "charge": "UNLAWFUL FOR PERSON TO CAUSE/ENCOURAGE/SOLICIT/RECRUIT/COERCE ANOTHER TO BECOME CRIMINAL STREET GANG MEMB",
+    "ocga": "16-15-4(e)"
+  },
+  {
+    "charge": "UNLAWFUL TO COMMUNICATE ANY THREAT OF INJURY/DAMAGE TO DETER FROM ASSISTING CRIMINAL STREET GANG MEMBER/A",
+    "ocga": "16-15-4"
+  },
+  {
+    "charge": "UNLAWFUL TO COMMUNICATE THREAT OF INJURY/DAMAGE WITH INTENT TO PUNISH/RETALIATE AGAINST PERSON FOR HAVING",
+    "ocga": "16-15-4(g)"
+  },
+  {
+    "charge": "UNLAWFUL TO COMMUNICATE THREAT OF INJURY/DAMAGE WITH INTENT TO PUNISH/RELIATE AGAINST PERSON FOR REFUSING",
+    "ocga": "16-15-4(h)"
+  },
+  {
+    "charge": "UNLAWFUL TO COMMUNICATE THREAT OF INJURY/DAMAGE WITH INTENT TO PUNISH/RETALIATE AGAINST PERSON FOR PROVID",
+    "ocga": "16-15-4(i)"
+  },
+  {
+    "charge": "UNLAWFUL TO COMMUNICATE THREAT OF INJURY/DAMAGE WITHI INTENT TO INTIMIDATE/DETER/PREVENT COMMUNICATION WI",
+    "ocga": "16-15-4(j)"
+  },
+  {
+    "charge": "DRIVE-BY SHOOTING",
+    "ocga": "16-15-4.1"
+  },
+  {
+    "charge": "BATTERY ON SCHOOL TEACHER OR OTHER SCHOOL PERSONNEL",
+    "ocga": "16-5-23.1(i)"
+  },
+  {
+    "charge": "BATTERY AGAINST PATIENT IN PERSONAL CARE HOME, HOSPICE OR LONG TERM CARE FACILITY OR ASSISTED LIVING COMM",
+    "ocga": "16-5-23.1(J)"
+  },
+  {
+    "charge": "BATTERY - 3RD OR SUBSEQUENT OFFENSE ON SAME VICTIM",
+    "ocga": "16-5-23.1(e)"
+  },
+  {
+    "charge": "BATTERY",
+    "ocga": "16-5-23.1"
+  },
+  {
+    "charge": "SIMPLE BATTERY",
+    "ocga": "16-5-23"
+  },
+  {
+    "charge": "STALKING",
+    "ocga": "16-5-90"
+  },
+  {
+    "charge": "STALKING - 2ND OR SUBSEQUENT CONVICTION",
+    "ocga": "16-5-90"
+  },
+  {
+    "charge": "AGGRAVATED STALKING",
+    "ocga": "16-5-91"
+  },
+  {
+    "charge": "DISSEMINATION OF INFORMATION RELATING TO TERRORISTIC ACTS VIA COMPUTER",
+    "ocga": "16-11-37.1"
+  },
+  {
+    "charge": "DISSEMENATION OF INFORMATION RELATING TO TERRORISTIC ACTS VIA COMPUTER",
+    "ocga": "16-11-37.1"
+  },
+  {
+    "charge": "TERRORISTIC THREATS AND ACTS",
+    "ocga": "16-11-37"
+  },
+  {
+    "charge": "TERRORISTIC THREATS AND ACTS",
+    "ocga": "16-11-37"
+  },
+  {
+    "charge": "STALKING - FAMILY VIOLENCE",
+    "ocga": "16-5-90"
+  },
+  {
+    "charge": "CRIMINAL ABORTION",
+    "ocga": "16-12-140"
+  },
+  {
+    "charge": "PARTIAL BIRTH ABORTION",
+    "ocga": "16-12-144"
+  },
+  {
+    "charge": "SALE OF REGULATED METAL PROPERTY TO A SECONDARY METALS RECYCLER (OVER $500.00)",
+    "ocga": "10-1-357(a)"
+  },
+  {
+    "charge": "SECONDARY METALS RECYCLER KNOWINGLY AND INTENTIONALLY ENGAGING IN PRACTICE CONSTITUTING VIOLATION",
+    "ocga": "10-1-357(b)"
+  },
+  {
+    "charge": "UNLAWFUL TO REMOVE AGRICULTURAL PRODUCT FROM WAREHOUSE OR USE/ALTER LICENSE/RECEIPT ISSUED BY COMM",
+    "ocga": "10-4-32(a)"
+  },
+  {
+    "charge": "PENALTY FOR FALSE AFFIDAVIT AS TO LIEN ON COTTON PER O.C.G.A. 10-4-76",
+    "ocga": "10-4-78"
+  },
+  {
+    "charge": "PENALTIES FOR DELIVERING COTTON WITHOUT PRODUCTION OF RECEIPT OR FAILING TO CANCEL RECEIPT",
+    "ocga": "10-4-79"
+  },
+  {
+    "charge": "PENALTIES FOR ISSUING RECEIPT FOR COTTON NOT IN WAREHOUSE",
+    "ocga": "10-4-80"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL NOT PURCHASE COIL WITHOUT VERIFIABLE DOCUMENTATION",
+    "ocga": "10-1-351(a)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL NOT PURCHASE COIL WITHOUT VERIFIABLE DOCUMENTATION",
+    "ocga": "10-1-351(a)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL NOT PURCHASE COPPER WIRE EXPOSED TO HEAT, ETC W/O DOCUMENTATION",
+    "ocga": "10-1-351(b)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL NOT PURCHASE COPPER WIRE EXPOSED TO HEAT, ETC W/O DOCUMENTATION",
+    "ocga": "10-1-351(b)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL PURCHASE BURIAL OBJECT FROM REQUIRED SOURCE",
+    "ocga": "10-1-352"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL PURCHASE BURIAL OBJECT FROM REQUIRED SOURCE",
+    "ocga": "10-1-352"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL MAINTAIN LEGIBLE RECORD OF PURCHASE TRANSACTIONS",
+    "ocga": "10-1-353(a)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL MAINTAIN LEGIBLE RECORD OF PURCHASE TRANSACTIONS",
+    "ocga": "10-1-353(a)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER MAINTAIN/CAUSE TO MAINTAIN REQUIRED INFO NOT < 2 YRS FROM PURCHASE",
+    "ocga": "10-1-353(b)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER MAINTAIN/CAUSE TO MAINTAIN REQUIRED INFO NOT < 2 YRS FROM PURCHASE",
+    "ocga": "10-1-353(b)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL FORWARD VEHICLE TITLE/FORM TO DEPT OF REVENUE",
+    "ocga": "10-1-353(c)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER SHALL FORWARD VEHICLE TITLE/FORM TO DEPT OF REVENUE",
+    "ocga": "10-1-353(c )"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER REQUIRED TO PURCHASE/SALE BETWEEN SPECIFIC HOURS",
+    "ocga": "10-1-359(a)(1)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER REQUIRED TO PURCHASE/SALE BETWEEN SPECIFIC HOURS",
+    "ocga": "10-1-359(a)(1)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER -  UNLAWFUL FOR PERSON TO GIVE FALSE/ALTERED IDENT CARD/TAG OR IDENT NBR",
+    "ocga": "10-1-359(a)(2)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER -  UNLAWFUL FOR PERSON TO GIVE FALSE/ALTERED IDENT CARD/TAG OR IDENT NBR",
+    "ocga": "10-1-359(a)(2)"
+  },
+  {
+    "charge": "SECOND METAL RECYCLER REGISTRATION REQUIRED TO PURCHASE REGULATED METAL PROPERTY",
+    "ocga": "10-1-359.1"
+  },
+  {
+    "charge": "SIGN A SECONDARY METAL RECYCLER STATEMENT KNOWING IT TO BE FALSE",
+    "ocga": "10-1-353(d)"
+  },
+  {
+    "charge": "SIGN A SECONDARY METAL RECYCLER STATEMENT KNOWING IT TO BE FALSE",
+    "ocga": "10-1-353(d)"
+  },
+  {
+    "charge": "UNAUTHORIZED PURCHASE OF CATALYTIC CONVERTER BY SECONDARY METALS RECYCLER",
+    "ocga": "10-1-351(c)"
+  },
+  {
+    "charge": "UNAUTHORIZED PURCHASE OF CATALYTIC CONVERTER BY SECONDARY METALS RECYCLER",
+    "ocga": "10-1-351(c)"
+  },
+  {
+    "charge": "UNAUTHORIZED PURCHASING/SOLICITING/ADVERTISING FOR PURCHASE A USED, DETACHED CATALYTIC CONVERTER",
+    "ocga": "10-1-351(d)(2)"
+  },
+  {
+    "charge": "UNAUTHORIZED PURCHASING/SOLICITING/ADVERTISING FOR PURCHASE A USED, DETACHED CATALYTIC CONVERTER",
+    "ocga": "10-1-351(d)(2)"
+  },
+  {
+    "charge": "UNAUTHORIZED PURCHASING/POSSESSING/TRANSPORTING/SELLING A USED, DETACHED CATALYTIC CONVERTER",
+    "ocga": "10-1-351(d)(3)"
+  },
+  {
+    "charge": "OFFER/SELL SECURTY(IES) UNLESS FEDERALLY COVERED",
+    "ocga": "10-5-20(1)"
+  },
+  {
+    "charge": "UNAUTHORIZED PURCHASING/POSSESSING/TRANSPORTING/SELLING A USED, DETACHED CATALYTIC CONVERTER",
+    "ocga": "10-1-351(d)(3)"
+  },
+  {
+    "charge": "OFFER/SELL SECURTY UNLESS SECURITY/TRANSACTION/OFFER IS EXEMPTED FROM REGISTRATION",
+    "ocga": "10-5-20(2)"
+  },
+  {
+    "charge": "UNAUTHORIZED PAYMENT FOR REGULATED METAL PROPERTY BY SECONDARY METALS RECYCLER",
+    "ocga": "10-1-355"
+  },
+  {
+    "charge": "OFFER/SELL SECURITY(IES) UNLESS SECURITY IS REGISTERED UNDER THIS CHAPTER",
+    "ocga": "10-5-20(3)"
+  },
+  {
+    "charge": "UNAUTHORIZED PAYMENT FOR REGULATED METAL PROPERTY BY SECONDARY METALS RECYCLER",
+    "ocga": "10-1-355"
+  },
+  {
+    "charge": "TRANSACT BUSINESS AS A BROKER-DEALER UNLESS REGISTERED OR EXEMPT FROM REGISTRATION",
+    "ocga": "10-5-30(a)"
+  },
+  {
+    "charge": "BROKER-DEALER TO EMPLOY/ASSOCIATE W/ INDIVIDUAL IF REGISTRATION IS SUSPENDED/REVOKED",
+    "ocga": "10-5-30(c)"
+  },
+  {
+    "charge": "TRANSACT BUSINESS AS AGENT UNLESS INDIVIDUAL IS REGISTERED/EXEMPTED FROM REGISTRATION",
+    "ocga": "10-5-31(a)"
+  },
+  {
+    "charge": "BROKER-DEALER TO EMPLOY/ASSOCIATE W/ UNREGISTERED AGENT OPERATING ON BEHALF OTHER AGENY",
+    "ocga": "10-5-31(d)"
+  },
+  {
+    "charge": "TRANSACT BUSINESS AS INVESTMENT ADVISOR UNLESS REGISTERED OR EXEMPT FROM REGISTRATION",
+    "ocga": "10-5-33(a)"
+  },
+  {
+    "charge": "ACT AS INVESTMENT ADVISOR ON BEHALF OF INDIVIDUAL WHOSE REGISTRATION IS SUSPENDED/REVOKED",
+    "ocga": "10-5-33(e)"
+  },
+  {
+    "charge": "FED COVERED INVESTMENT ADVISOR TO TRANSACT BUSINESS MUST COMPLY WITH SUBSECTION (C) OF THIS CODE SECT",
+    "ocga": "10-5-34(a)"
+  },
+  {
+    "charge": "OFFER/SALE/PURCHASE SECURITY, TO EMPLOY A DEVICE, SCHEME OR ARTIFICE TO DEFRAUD",
+    "ocga": "10-5-50(1)"
+  },
+  {
+    "charge": "OFFER/SALE/PURCHASE SECURITY, TO MAKE UNTRUE STATEMENT/OMIT MATERIAL FACT",
+    "ocga": "10-5-50(2)"
+  },
+  {
+    "charge": "OFFER/SALE PURCHASE SECURITY, ENGAGE IN ACT/BUSINESS THAT OPERATES AS FRAUD/DECEIT UPON PERSON",
+    "ocga": "10-5-50(3)"
+  },
+  {
+    "charge": "ADVISE OTHERS AS TO VALUE OF SECURITIES, TO EMPLOY A DEVICE, SCHEME OR ARTIFICE TO DEFRAUD",
+    "ocga": "10-5-51(a)(1)"
+  },
+  {
+    "charge": "UNLAWFUL USE OF SECONDARY METAL RECYCLERS DATABASE",
+    "ocga": "10-1-359.5"
+  },
+  {
+    "charge": "ADVISE OTHERS AS TO VALUE OF SECURITIES, ENGAGE IN ACT THAT OPERATES AS FRAUD/DECEIPT UPON PERSON",
+    "ocga": "10-5-51(a)(2)"
+  },
+  {
+    "charge": "MAKE FALSE OR MISLEADING STATEMENTS REGARDING SECURITIES",
+    "ocga": "10-5-54"
+  },
+  {
+    "charge": "EMPLOY/USE MINOR TO ENGAGE IN/ASSIST PERSON IN SEXUALLY EXPLICIT CONDUCT FOR VISUAL MEDIUM",
+    "ocga": "16-12-100(b)(1)"
+  },
+  {
+    "charge": "EMPLOY/USE MINOR TO ENGAGE IN/ASSIST PERSON IN SEXUALLY EXPLICIT CONDUCT FOR VISUAL MEDIUM",
+    "ocga": "16-12-100(b)(1)"
+  },
+  {
+    "charge": "PERMIT MINOR TO ENGAGE IN/ASSIST PERSON IN SEXUALLY EXPLICIT CONDUCT FOR VISUAL MEDIUM",
+    "ocga": "16-12-100(b)(2)"
+  },
+  {
+    "charge": "EMPLOY/USE MINOR TO ENGAGE IN/ASSIST PERSON IN SEXUALLY EXPLICIT CONDUCT FOR ANY PERFORMANCE",
+    "ocga": "16-12-100(b)(3)"
+  },
+  {
+    "charge": "PERMIT MINOR TO ENGAGE IN/ASSIST PERSON IN SEXUALLY EXPLICIT CONDUCT FOR ANY PERFORMANCE",
+    "ocga": "16-12-100(b)(4)"
+  },
+  {
+    "charge": "CREATE/ETC OR POSSESS WID/SELL VISUAL MEDIUM DEPICTING MINOR IN SEXUALLY EXPLICIT CONDUCT",
+    "ocga": "16-12-100(b)(5)"
+  },
+  {
+    "charge": "CREATE/ETC OR POSSESS WID/SELL VISUAL MEDIUM DEPICTING MINOR IN SEX EXPLICIT CONDUCT",
+    "ocga": "16-12-100(b)(5)"
+  },
+  {
+    "charge": "PROVIDE INFORMATION WHERE VISUAL MEDIUM DEPICTING MINOR IN SEXUALLY EXPLICIT CONDUCT FOUND",
+    "ocga": "16-12-100(b)(6)"
+  },
+  {
+    "charge": "BRING/CAUSE TO BE BROUGHT INTO STATE ANY MATERIAL DEPICTING MINOR IN SEXUALLY EXPLICIT CONDUCT",
+    "ocga": "16-12-100(b)(7)"
+  },
+  {
+    "charge": "BRING/CAUSE TO BE BROUGHT INTO STATE ANY MATERIAL DEPICTING MINOR IN SEXUALLY EXPLICIT CONDUCT",
+    "ocga": "16-12-100(b)(7)"
+  },
+  {
+    "charge": "POSSESS OR CONTROL ANY MATERIAL DEPICTING MINOR IN SEXUALLY EXPLICIT CONDUCT",
+    "ocga": "16-12-100(b)(8)"
+  },
+  {
+    "charge": "POSSESS OR CONTROL ANY MATERIAL DEPICTING MINOR IN SEXUALLY EXPLICIT CONDUCT",
+    "ocga": "16-12-100(b)(8)"
+  },
+  {
+    "charge": "ARSON OF A LAW ENFORCEMENT VEHICLE",
+    "ocga": "16-7-60.1"
+  },
+  {
+    "charge": "ARSON - 1ST DEGREE",
+    "ocga": "16-7-60(c)"
+  },
+  {
+    "charge": "ARSON - 2ND DEGREE",
+    "ocga": "16-7-61"
+  },
+  {
+    "charge": "ARSON-  3RD DEGREE",
+    "ocga": "16-7-62"
+  },
+  {
+    "charge": "ARSON OF LANDS-1ST DEGREE",
+    "ocga": "16-7-63(a)(1)"
+  },
+  {
+    "charge": "ARSON OF LANDS-2ND DEGREE",
+    "ocga": "16-7-63(a)(1)"
+  },
+  {
+    "charge": "ARSON OF LANDS-3RD DEGREE",
+    "ocga": "16-7-63(a)(1)"
+  },
+  {
+    "charge": "BURNING OF WOODLANDS WITHOUT PRECAUTIONS TO PREVENT ESCAPE OF FIRE",
+    "ocga": "16-7-63(a)(2)"
+  },
+  {
+    "charge": "BURNING OF WOODLANDS BY CAUSING A FIRE BY DISCARDING LIGHTED/SMOLDERING MATERIAL",
+    "ocga": "16-7-63(a)(3)"
+  },
+  {
+    "charge": "DESTROY OR DAMAGE ANY MATERIAL OR DEVICE USED IN DETECTION OR SUPPRESSION OF WILDIRES",
+    "ocga": "16-7-63(a)(4)"
+  },
+  {
+    "charge": "CONTRIBUTIONS TO INFLUENCE OFFICIAL ACTION PROHIBITED",
+    "ocga": "14-5-6"
+  },
+  {
+    "charge": "FAILURE BY CLERK OF COURT/OFFICER/AGENT TO PAY FUNDS GREATER THAN $10,000 TO GSCCCA",
+    "ocga": "15-21A-8"
+  },
+  {
+    "charge": "CHARGE/DEMAND/RECEIPT BY ATTORNEY GENERAL OF COMPENSATION OTHER THAN SALARY IN STATE INTERESTS",
+    "ocga": "45-15-20"
+  },
+  {
+    "charge": "EMPLOYEE OR OFFICER OF STATE COERCES EMPLOYEE TO GIVE ANYTHING OF VALUE FOR POLITICAL PURPOSES",
+    "ocga": "45-11-10"
+  },
+  {
+    "charge": "ASSAULT UNDER COLOR OF OFFICE",
+    "ocga": "45-11-3"
+  },
+  {
+    "charge": "SELLING OFFICE OR DIVIDING THE PROFITS THEREOF",
+    "ocga": "45-11-2"
+  },
+  {
+    "charge": "UNLAWFUL FOR OFFICERS OF COURT, LAW ENFORCEMENT, ETC., TO ENGAGE IN BAIL BOND BUSINESS",
+    "ocga": "45-11-8"
+  },
+  {
+    "charge": "STEALING, ALTERING OF PUBLIC DOCUMENTS",
+    "ocga": "45-11-1"
+  },
+  {
+    "charge": "EXTORTION UNDER COLOR OF OFFICE",
+    "ocga": "45-11-5"
+  },
+  {
+    "charge": "BURGLARY - SMASH AND GRAB",
+    "ocga": "16-7-2"
+  },
+  {
+    "charge": "BURGLARY - 1ST DEGREE",
+    "ocga": "16-7-1(b)"
+  },
+  {
+    "charge": "BURGLARY - 2ND DEGREE",
+    "ocga": "16-7-1(c)"
+  },
+  {
+    "charge": "REFUND FRAUD -  $500 OR LESS",
+    "ocga": "16-8-14.1(a)(1)"
+  },
+  {
+    "charge": "REFUND FRAUD - OVER $500",
+    "ocga": "16-8-14.1(a)(2)"
+  },
+  {
+    "charge": "OWNING, OPERATING OR CONDUCTING A CHOP SHOP",
+    "ocga": "16-8-83"
+  },
+  {
+    "charge": "ATTEMPT/CONSPIRE TO SOLICIT/PROCURE TELEPHONE RECORDS OF RESIDENT/BUSINESS WITHOUT AUTHORIZATION",
+    "ocga": "46-5-232(1)"
+  },
+  {
+    "charge": "SELL/ATTEMPT TO SELL A TELEPHONE RECORD OF RESIDENT/BUSINESS WITHOUT AUTHORIZATION OF THE CUSTOMER",
+    "ocga": "46-5-232(2)"
+  },
+  {
+    "charge": "RECEIVE A TELEPHONE RECORD OF RESIDENT/BUSINESS KNOWING IT WAS OBTAINED WITHOUT AUTHORIZATION",
+    "ocga": "46-5-232(3)"
+  },
+  {
+    "charge": "CARGO THEFT - VALUE MORE THAN $1500",
+    "ocga": "16-8-22(b)"
+  },
+  {
+    "charge": "CARGO THEFT - VALUE LESS THAN $1500",
+    "ocga": "16-8-22(b)"
+  },
+  {
+    "charge": "THEFT BY POSSESSION OF STOLEN MAIL",
+    "ocga": "16-8-24"
+  },
+  {
+    "charge": "PORCH PIRACY",
+    "ocga": "16-8-25"
+  },
+  {
+    "charge": "MODIFY,ALTER, OR ATTEMPT AND POSS/SELL/MOVE FIFTH WHEEL OR ITS ANTI-THEFT DEVICE FOR CARGO THEFT",
+    "ocga": "16-8-23"
+  },
+  {
+    "charge": "FILM PIRACY - 2ND OR SUBSEQUENT CONVICTION",
+    "ocga": "16-8-62"
+  },
+  {
+    "charge": "FILM PIRACY - 1ST CONVICTION",
+    "ocga": "16-8-62"
+  },
+  {
+    "charge": "ORGANIZED RETAIL THEFT EXCEEDING $24,999.99",
+    "ocga": "16-8-14.2"
+  },
+  {
+    "charge": "REMOVAL OR ABANDONMENT OF SHOPPING CARTS",
+    "ocga": "16-8-21"
+  },
+  {
+    "charge": "THEFT OF TRADE SECRETS LESS THAN $100",
+    "ocga": "16-8-13(b)(3)"
+  },
+  {
+    "charge": "THEFT OF TRADE SECRETS GREATER THAN $100",
+    "ocga": "16-8-13(b)(3)"
+  },
+  {
+    "charge": "FINANCIAL TRANSACTION CARD THEFT",
+    "ocga": "16-9-31"
+  },
+  {
+    "charge": "RETAIL PROPERTY FENCING",
+    "ocga": "16-8-5.2"
+  },
+  {
+    "charge": "RETAIL PROPERTY FENCING",
+    "ocga": "16-8-5.2"
+  },
+  {
+    "charge": "THEFT BY BRINGING STOLEN PROPERTY INTO STATE",
+    "ocga": "16-8-9"
+  },
+  {
+    "charge": "THEFT BY BRINGING STOLEN PROPERTY INTO STATE",
+    "ocga": "16-8-9"
+  },
+  {
+    "charge": "THEFT BY CONVERSION",
+    "ocga": "16-8-4"
+  },
+  {
+    "charge": "THEFT BY CONVERSION",
+    "ocga": "16-8-4"
+  },
+  {
+    "charge": "CONVERSION OF PAYMENTS FOR REAL PROPERTY IMPROVEMENTS",
+    "ocga": "16-8-15"
+  },
+  {
+    "charge": "THEFT BY RECEIVING STOLEN PROPERTY",
+    "ocga": "16-8-7"
+  },
+  {
+    "charge": "THEFT BY RECEIVING STOLEN PROPERTY",
+    "ocga": "16-8-7"
+  },
+  {
+    "charge": "LIVESTOCK THEFT LESS THAN OR EQUAL TO $100",
+    "ocga": "16-8-20(c)"
+  },
+  {
+    "charge": "LIVESTOCK THEFT GREATER THAN $100",
+    "ocga": "16-8-20(c)"
+  },
+  {
+    "charge": "ENTERING AUTOMOBILE OR OTHER MOTOR VEHICLE WITH INTENT TO COMMIT THEFT OR FELONY",
+    "ocga": "16-8-18"
+  },
+  {
+    "charge": "THEFT BY SHOPLIFTING",
+    "ocga": "16-8-14"
+  },
+  {
+    "charge": "THEFT BY SHOPLIFTING",
+    "ocga": "16-8-14"
+  },
+  {
+    "charge": "THEFT BY DECEPTION",
+    "ocga": "16-8-3"
+  },
+  {
+    "charge": "THEFT BY DECEPTION",
+    "ocga": "16-8-3"
+  },
+  {
+    "charge": "THEFT OF SERVICES",
+    "ocga": "16-8-5"
+  },
+  {
+    "charge": "THEFT OF SERVICES",
+    "ocga": "16-8-5"
+  },
+  {
+    "charge": "THEFT BY TAKING",
+    "ocga": "16-8-2"
+  },
+  {
+    "charge": "THEFT BY TAKING",
+    "ocga": "16-8-2"
+  },
+  {
+    "charge": "THEFT BY RECEIVING PROPERTY STOLEN IN ANOTHER STATE",
+    "ocga": "16-8-8"
+  },
+  {
+    "charge": "THEFT BY RECEIVING PROPERTY STOLEN IN ANOTHER STATE",
+    "ocga": "16-8-8"
+  },
+  {
+    "charge": "THEFT BY EXTORTION",
+    "ocga": "16-8-16"
+  },
+  {
+    "charge": "THEFT OF LOST/MISLAID PROPERTY",
+    "ocga": "16-8-6"
+  },
+  {
+    "charge": "THEFT OF LOST OR MISLAID PROPERTY",
+    "ocga": "16-8-6"
+  },
+  {
+    "charge": "MAKING, POSSESSING OR TRANSFERRING DEVICE FOR THEFT OF TELECOMMUNICATION SERVICE",
+    "ocga": "46-5-3(c)(1)"
+  },
+  {
+    "charge": "INTENT TO CHEAT OR DEFRAUD A RETAILER BY FRAUDULENT USE OF SALES RECEIPT, ETC.",
+    "ocga": "16-8-17"
+  },
+  {
+    "charge": "WILLFULLY/KNOWLINGLY SELL/PURCHASE/INSTALL/TRANSFER/POSSESS AUTOMATED SALES SUPPRESSION DEVICE",
+    "ocga": "16-9-62"
+  },
+  {
+    "charge": "FORGING CUSTOMER AUTHORIZATION FOR LOCAL OR LONG DISTANCE CARRIER SERVICE",
+    "ocga": "46-5-188"
+  },
+  {
+    "charge": "FORGERY OF A FINANCIAL TRANSACTION CARD",
+    "ocga": "16-9-32"
+  },
+  {
+    "charge": "CRIMINAL POSSESSION OF FINANCIAL TRANSACTION CARD FORGERY DEVICES",
+    "ocga": "16-9-34"
+  },
+  {
+    "charge": "CRIMINAL FACTORING OF FINANCIAL TRANSACTION CARD",
+    "ocga": "16-9-36.1"
+  },
+  {
+    "charge": "FORGERY - 1ST DEGREE",
+    "ocga": "16-9-1(b)"
+  },
+  {
+    "charge": "FORGERY - 2ND DEGREE",
+    "ocga": "16-9-1(c)"
+  },
+  {
+    "charge": "FORGERY - 3RD DEGREE",
+    "ocga": "16-9-1(d)"
+  },
+  {
+    "charge": "FORGERY - 4TH DEGREE",
+    "ocga": "16-9-1(e)"
+  },
+  {
+    "charge": "FORGERY - 4TH DEGREE",
+    "ocga": "16-9-1(e)"
+  },
+  {
+    "charge": "FORGING, COUNTERFEITING TRADEMARKS, SERVICE MARKS, COPYRIGHTED DESIGNS",
+    "ocga": "10-1-454(b)"
+  },
+  {
+    "charge": "FORGING, COUNTERFEITING TRADEMARKS, SERVICE MARKS, COPYRIGHTED DESIGNS",
+    "ocga": "10-1-454(b)"
+  },
+  {
+    "charge": "SELL GOODS WITH FORGED, COUNTERFEIT TRADEMARKS, SERVICE MARKS, COPYRIGHTED DESIGNS",
+    "ocga": "10-1-454(c)"
+  },
+  {
+    "charge": "SELL GOODS WITH FORGED, COUNTERFEIT TRADEMARKS, SERVICE MARKS, COPYRIGHTED DESIGNS",
+    "ocga": "10-1-454(c)"
+  },
+  {
+    "charge": "UNLAWFUL TO POSSESS DISPLAY OR USE ANY FALSE FRAUDULENT ALTERED IDENT DOCUMENT (2ND  OR SUBQ OFFENSE)",
+    "ocga": "16-9-4(b)(1)"
+  },
+  {
+    "charge": "MANUFACTURE, SALE, DISTRIBUTE, ETC. FALSE IDENTIFICATION DOCUMENT - 1ST OFFENSE",
+    "ocga": "16-9-4(b)(2)"
+  },
+  {
+    "charge": "MANUFACTURE, SALE, DISTRIBUTE, ETC. IDENTIFICATION DOCUMENT WITH TRADEMARK - 1ST OFFENSE",
+    "ocga": "16-9-4(b)(3)"
+  },
+  {
+    "charge": "POSSESS, DISPLAY, USE IDENTIFICATION OF ANOTHER WITHOUT CONSENT - 1ST OFFENSE",
+    "ocga": "16-9-4(b)(6)"
+  },
+  {
+    "charge": "MANUFACTURE, SALE, DISTRIBUTE, ETC. FALSE IDENTIFICATION DOCUMENT - 2ND OR SUBSEQUENT",
+    "ocga": "16-9-4(b)(2)"
+  },
+  {
+    "charge": "MANUFACTURE, SALE, DISTRIBUTE, ETC. IDENTIFICATION DOCUMENT WITH TRADEMARK - 2ND OR SUBSEQUENT",
+    "ocga": "16-9-4(b)(3)"
+  },
+  {
+    "charge": "POSSESS, DISPLAY, FALSE IDENTIFICATION WITH GOVERNMENT LOGO OR SEAL FOR CRIMINAL ACT",
+    "ocga": "16-9-4(b)(4)"
+  },
+  {
+    "charge": "ALTER, SALE, DISTRIBUTE, ETC. IDENTIFICATION WITH GOVT LOGO OR SEAL WITHOUT WRITTEN CONSENT",
+    "ocga": "16-9-4(b)(5)"
+  },
+  {
+    "charge": "POSSESS, DISPLAY, USE IDENTIFICATION OF ANOTHER WITHOUT CONSENT - 2ND OR SUBSEQ",
+    "ocga": "16-9-4(b)(6)"
+  },
+  {
+    "charge": "PRINTING, EXECUTING, NEGOTIATING CHECKS, DRAFTS, ETC. KNOWING INFORMATION IS IN ERROR OR FICTITIOUS",
+    "ocga": "16-9-21"
+  },
+  {
+    "charge": "FALSE MAKING, ALTERING, FORGING, COUNTERFEITING OF LOTTERY TICKETS",
+    "ocga": "50-27-27(a)"
+  },
+  {
+    "charge": "UNLAWFUL INFLUENCE OF PRIZES, COERCION, FRAUD, DECEPTION OR TAMPERING WITH EQUIPMENT OR MATERIALS",
+    "ocga": "50-27-27(b)"
+  },
+  {
+    "charge": "MAKING FALSE STATEMENTS OR FALSE ENTRIES IN BOOKS OR RECORDS PERTAINING TO LOTTERY ACTIVITY",
+    "ocga": "50-27-28"
+  },
+  {
+    "charge": "MAKE FALSE STATEMENT ON APPLICATION FOR MASTER LICENSE/PERMIT STICKER BY FRAUD/MAKE FALSE ENTRY",
+    "ocga": "50-27-82(d)"
+  },
+  {
+    "charge": "MONEY LAUNDERING",
+    "ocga": "7-1-915(c)"
+  },
+  {
+    "charge": "WORKERS COMPENSATION - MAKING FALSE/MISLEADING STATEMENTS",
+    "ocga": "34-9-19"
+  },
+  {
+    "charge": "UNLAWFUL TO POSSESS, DISPLAY, OR USE ANY FALSE, FRAUDULENT, ALTERED IDENTIFICATION DOCUMENT",
+    "ocga": "16-9-4(b)(1)"
+  },
+  {
+    "charge": "PREVENTING OR DISRUPTING GENERAL ASSEMBLY SESSIONS OR OTHER MEETINGS OF MEMBERS; ETC. (3RD OFFENSE)",
+    "ocga": "16-11-34.1"
+  },
+  {
+    "charge": "WILLFUL VIOLATION OF RECORDS AND REPORTS OF CURRENCY TRANSACTIONS; OR STRUCTURING",
+    "ocga": "7-1-915(b)"
+  },
+  {
+    "charge": "VIOLATION OF COMMODITIES AND COMMODITY CONTRACTS AND OPTIONS LAWS",
+    "ocga": "10-5A-31(a)"
+  },
+  {
+    "charge": "MEDICAID FRAUD",
+    "ocga": "49-4-146.1(b)"
+  },
+  {
+    "charge": "UNLAWFUL FOR MOTOR VEHICLE LESSEE TO SUBLEASE VEHICLE; OFFER VEHICLE FOR HIRE BY SUB LESSEE",
+    "ocga": "10-1-40"
+  },
+  {
+    "charge": "DEPOSIT ACCOUNT FRAUD (BAD CHECKS) - OUT-OF-STATE BANK",
+    "ocga": "16-9-20(c)"
+  },
+  {
+    "charge": "FINANCIAL TRANSACTION CARD FRAUD",
+    "ocga": "16-9-33"
+  },
+  {
+    "charge": "VIOLATION OF GEORGIA EMPLOYMENT SECURITY LAW",
+    "ocga": "34-8-256(a)(b)(e)"
+  },
+  {
+    "charge": "VIOLATION OF GEORGIA EMPLOYMENT SECURITY LAW",
+    "ocga": "34-8-256(a)(b)(c)(d)"
+  },
+  {
+    "charge": "PUBLICATION OF METHODS USED FOR FINANCIAL TRANSACTION CARD FRAUD OR THEFT OF TELECOMMUNICATION SERV",
+    "ocga": "16-9-39"
+  },
+  {
+    "charge": "PREVENT OR DISRUPT GENL ASSEMBLY SESSION OR OTHER MEETINGS OF MEMBERS (1ST OR 2ND  OFFENSE)",
+    "ocga": "16-11-34.1"
+  },
+  {
+    "charge": "FRAUD IN OBTAINING PUBLIC ASSISTANCE, FOOD STAMPS, OR MEDICAID",
+    "ocga": "49-4-15"
+  },
+  {
+    "charge": "DEFRAUDING HOTELS, BOARDING HOUSES, OR EATING HOUSE",
+    "ocga": "43-21-13"
+  },
+  {
+    "charge": "LOITERING UPON SCHOOL PREMISES OR WITHIN A SCHOOL SAFETY ZONE",
+    "ocga": "20-2-1180(b)(1)"
+  },
+  {
+    "charge": "FAILURE OF UNAUTHORIZED PERSON TO CHECK IN AT DESIGNATED LOCATION UPON ENTERING SCHOOL",
+    "ocga": "20-2-1180(b)2"
+  },
+  {
+    "charge": "PROHIBIT USE OF INTERNET OR EMAIL TO INDUCE ANOTHER TO PROVIDE IDENTIFYING INFORMATION BY FALSELY REPRESE",
+    "ocga": "16-9-109.1(b)"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA RESIDENTIAL MORTGAGE FRAUD ACT",
+    "ocga": "16-8-105"
+  },
+  {
+    "charge": "CONSPIRACY TO DEFRAUD THE STATE OR POLITICAL SUBDIVISION",
+    "ocga": "16-10-21"
+  },
+  {
+    "charge": "CRIMINAL RECEIPT OF GOODS OR SERVICES FRAUDULENTLY OBTAINED",
+    "ocga": "16-9-35"
+  },
+  {
+    "charge": "FAILING TO PAY FOR NATURAL PRODUCTS OR CHATTELS GREATER THAN $500",
+    "ocga": "16-9-58"
+  },
+  {
+    "charge": "DECEPTIVE, FRAUDULENT OR ABUSIVE TELEMARKETING",
+    "ocga": "10-5B-6(a)"
+  },
+  {
+    "charge": "PROHIBITED ACTIVITIES INVOLVING MAGNETIC STRIP OR STRIPE ON PAYMENT CARD PER O.C.G.A. 10-15-4",
+    "ocga": "10-15-4"
+  },
+  {
+    "charge": "VIOLATION OF STATE PROCUREMENT LAWS",
+    "ocga": "50-5-133"
+  },
+  {
+    "charge": "MISREPRESENTING ORIGIN OR OWNERSHIP OF TIMBER LESS THAN OR EQUAL TO $500",
+    "ocga": "16-9-61"
+  },
+  {
+    "charge": "MISREPRESENTING ORIGIN OR OWNERSHIP OF TIMBER GREATER THAN $500",
+    "ocga": "16-9-61"
+  },
+  {
+    "charge": "FALSE AFFIDAVIT THAT INSUREDS MOTOR VEHICLE STOLEN",
+    "ocga": "33-1-15"
+  },
+  {
+    "charge": "FAILING TO PAY FOR NATURAL PRODUCTS OR CHATTELS LESS THAN OR EQUAL TO $500",
+    "ocga": "16-9-58"
+  },
+  {
+    "charge": "USE STATE FUNDS FOR PERSONAL OR BENEFIT OF ANOTHER TO OBTAIN GOODS, SERVICES OR THINGS AGG $500 OR MORE",
+    "ocga": "50-5-80(b)"
+  },
+  {
+    "charge": "KNOWINGLY ASSIST ANOTHER PERSON, IN USE OF STATE FUNDS TO OBTAIN GOODS, SERVICES OR  THINGS AGGR $500>",
+    "ocga": "50-5-80(b)"
+  },
+  {
+    "charge": "MISUSE OF STATE PURCHASING CARD BY EMPLOYEE OF AN AGENCY OF THE STATE IF THE VALUE OF THE IT",
+    "ocga": "50-5-83(c)"
+  },
+  {
+    "charge": "EMPLOYEE SUPERVISOR WHO KNOWINGLY, INTENTIONALLY, WILLFULLY, WANTONLY, OR RECKLESSLY ALLOWS OR CONSPIRES",
+    "ocga": "50-5-83(d)"
+  },
+  {
+    "charge": "KNOWINGLY MAKING A FALSE STATEMENT PERTAINING TO MOTOR VEHICLE INSURANCE REQUIREMENTS",
+    "ocga": "40-6-10(c)"
+  },
+  {
+    "charge": "USE OF TRAVEL ADVANCE FUNDS FOR NONGOVERNMENTAL PURPOSES OR SUBMIT OR APPROVE KNOWINGLY, OR THROUGH WILLF",
+    "ocga": "45-7-32(a)"
+  },
+  {
+    "charge": "USE TRAVEL ADV FUNDS FOR NONGOVT PURPOSE/SUBMIT/APPRV FRAUD REQUEST FOR REIMBURSE AGG LESS < $500",
+    "ocga": "45-7-32(a)"
+  },
+  {
+    "charge": "USE STATE FUNDS FOR PERSONAL OR BENEFIT OF ANOTHER TO OBTAIN GOODS,  SERVICES OR THINGS AGG <$500",
+    "ocga": "50-5-80(b)"
+  },
+  {
+    "charge": "FRAUDULENT ATTEMPTS TO OBTAIN REFUNDS",
+    "ocga": "16-9-56"
+  },
+  {
+    "charge": "FRAUDULENTLY OBTAINING OR ATTEMPTING TO OBTAIN PUBLIC HOUSING",
+    "ocga": "16-9-55"
+  },
+  {
+    "charge": "FRAUDULENT TELEPHONE SOLICITATION",
+    "ocga": "16-9-54"
+  },
+  {
+    "charge": "KNOWINGLY ASSIST ANOTHER PERSON, IN USE OF STATE FUNDS TO OBTAIN GOODS, SERVICES OR  THINGS AGGR <$500",
+    "ocga": "50-5-80(b)"
+  },
+  {
+    "charge": "IMPROPER SOLICITATION OF MONEY BY USE OF INVOICE FOR GOODS, ETC. NOT ORDERED",
+    "ocga": "16-9-52"
+  },
+  {
+    "charge": "DAMAGING, DESTROYING, OR SECRETING PROPERTY TO DEFRAUD ANOTHER",
+    "ocga": "16-9-53"
+  },
+  {
+    "charge": "FALSE REPRESENTATION AS REPRESENTATIVE OF PEACE OFFICER OR FIRE SERVICE ORGANIZATION",
+    "ocga": "16-9-57"
+  },
+  {
+    "charge": "REMOVAL OF COLLARS OR IDENTIFYING ITEMS OR MARKS ON ANIMALS",
+    "ocga": "16-9-71"
+  },
+  {
+    "charge": "UNAUTHORIZED USE OF FINANCIAL TRANSACTION CARD",
+    "ocga": "16-9-37"
+  },
+  {
+    "charge": "IMPERSONATING A PUBLIC OFFICER OR EMPLOYEE",
+    "ocga": "16-10-23"
+  },
+  {
+    "charge": "IDENTITY FRAUD THAT DOES NOT INVOLVE INTENT TO COMMIT THEFT OF APPROPRIATION BY A PERSON LESS THAN 21 YOA",
+    "ocga": "16-9-126(b)"
+  },
+  {
+    "charge": "PERJURY IN WORKER COMPENSATION PROCEEDING",
+    "ocga": "34-9-20"
+  },
+  {
+    "charge": "DESTROY/REMOVE/CONCEAL ENCUMBER/TRANSFER/DEAL WITH PROPERY SUBJ TO SECURITY INTEREST",
+    "ocga": "16-9-51(a)"
+  },
+  {
+    "charge": "DESTROY/REMOVE/CONCEAL ENCUMBER/TRANSFER/DEAL WITH PROPERY SUBJ TO SEC INTERW/DAMAGES >$500",
+    "ocga": "16-9-51(b)"
+  },
+  {
+    "charge": "INSURANCE FRAUD",
+    "ocga": "33-1-9(e)"
+  },
+  {
+    "charge": "FAILURE TO ACCOUNT FOR INSURANCE PREMIUMS IN EXCESS OF $500",
+    "ocga": "33-23-35(c)"
+  },
+  {
+    "charge": "KNOWINGLY MANUFACTURE, SELL, DISTRIBUTE COUNTERFIET OR FALSE PROOF INSURANCE DOCUMENT",
+    "ocga": "16-9-5"
+  },
+  {
+    "charge": "FALSE RECORD ENTRIES BY DIRECTORS, OFFICERS OR AGENT OF FINANCIAL INSTITUTIONS",
+    "ocga": "7-1-842"
+  },
+  {
+    "charge": "DECEPTIVE BUSINESS PRACTICE",
+    "ocga": "16-9-50"
+  },
+  {
+    "charge": "MISUSE STATE PURCH CARD BY EMPLOYEE OF STATE AGENCY IF VALUE OF ITEMS PURCHASED/ RETAINED <$500",
+    "ocga": "50-5-83(c)"
+  },
+  {
+    "charge": "KNOWINGLY POSSESS A COUNTERFEIT OR FALSE PROOF OF INSURANCE DOCUMENT",
+    "ocga": "16-9-5"
+  },
+  {
+    "charge": "CONSPIRACY IN RESTRAINT OF FREE AND OPEN COMPETITION",
+    "ocga": "16-10-22"
+  },
+  {
+    "charge": "FALSELY HOLDING SELF OUT AS REPRESENTATIVE OF COMMISSIONER OR DEPARTMENT",
+    "ocga": "48-1-4"
+  },
+  {
+    "charge": "TRUSTEE FAILURE TO PROVIDE STATE ATTY INFORMATION RELATED TO A LIEN",
+    "ocga": "9-16-8"
+  },
+  {
+    "charge": "FRAUDULENT USE OF EXEMPTION CERTIFICATE TO EVADE TAXES",
+    "ocga": "48-1-7"
+  },
+  {
+    "charge": "BREACH OF FIDUCIARY OBLIGATION PERSON 65 YEARS OR OLDER",
+    "ocga": "16-9-6"
+  },
+  {
+    "charge": "UNLAWFUL TO ISSUE BACKDATED LICENSE,PERMIT, OR OTHER AUTHORIZING DOCUMENT",
+    "ocga": "36-60-26"
+  },
+  {
+    "charge": "DISCLOSURE BY OFFICIALS OF INTERESTS IN PROPERTY TO BE REZONED",
+    "ocga": "36-67A-2"
+  },
+  {
+    "charge": "DISCLOSURE OF CAMPAIGN CONTRIBUTIONS.",
+    "ocga": "36-67A-3"
+  },
+  {
+    "charge": "OPERATION OF CREDIT REPAIR SERVICES ORGANIZATION",
+    "ocga": "16-9-59"
+  },
+  {
+    "charge": "FORECLOSURE FRAUD",
+    "ocga": "16-9-60"
+  },
+  {
+    "charge": "WORKERS COMPENSATION EMPLOYEE, WITH INTENT TO DEFRAUD, RECEIVES AND RETAINS INCOME BENEFITS",
+    "ocga": "34-9-21"
+  },
+  {
+    "charge": "SUBMITTING FALSE EXPENSE VOUCHER BY MEMBER OF THE GENERAL ASSEMBLY",
+    "ocga": "28-1-8(c)"
+  },
+  {
+    "charge": "FRAUDULENT ACTIVITIES WITH RESPECT TO DOCUMENTS CONFERRED BY INSTITUTION OF EDUCATION",
+    "ocga": "20-1-7"
+  },
+  {
+    "charge": "WORKERS COMPENSATION EMPLOYER REFUSAL TO FILE WORKER COMPENSATION COMPLIANCE FORMS",
+    "ocga": "34-9-126"
+  },
+  {
+    "charge": "UNLAWFUL OR DECEPTIVE TELEMARKETING PRACTICES",
+    "ocga": "10-1-393.6"
+  },
+  {
+    "charge": "UNLAWFUL OR DECEPTIVE TELEMARKETING PRACTICES",
+    "ocga": "10-1-393.6"
+  },
+  {
+    "charge": "ATTEMPTING OR CONSPIRING TO COMMIT FINANCIAL IDENTITY FRAUD",
+    "ocga": "16-9-122"
+  },
+  {
+    "charge": "PROHIBITED TELEMARKETING, INTERNET ACTIVITIES OR HOME REPAIR - 1ST OFFENSE",
+    "ocga": "10-1-393.5"
+  },
+  {
+    "charge": "EXECUTION TO BE CANCELED WHEN SATISFIED; PRIVATE RIGHT OF ACTION",
+    "ocga": "9-13-80(f)"
+  },
+  {
+    "charge": "PROHIBITED TELEMARKETING, INTERNET ACTIVITIES OR HOME REPAIR - 2ND OR SUBSEQUENT OFFENSE",
+    "ocga": "10-1-393.5"
+  },
+  {
+    "charge": "IDENTITY THEFT FRAUD WHEN USING/POSSESSING IDENTIFYING INFO CONCERNING A PERSON",
+    "ocga": "16-9-121(a)(1)"
+  },
+  {
+    "charge": "IDENTITY THEFT FRAUD WHEN USING/POSSESSING IDENTIFYING INFO CONCERNING A INDIVIDUAL UNDER 18YOA OVER WHOM",
+    "ocga": "16-9-121(a)(2)"
+  },
+  {
+    "charge": "IDENTITY THEFT FRAUD WHEN USING OR POSSESSES IDENTIFYING INFO CONCERNING A DECEASED INDIVIDUAL",
+    "ocga": "16-9-121(a)(3)"
+  },
+  {
+    "charge": "IDENTITY THEFT FRAUD TO CREATE/USE/POSSESS COUNTERFEIT/FICTIOUS IDENTYING INFO CONCERNING FICTITOUS PERSO",
+    "ocga": "16-9-121(a)(4)"
+  },
+  {
+    "charge": "IDENTITY THEFT FRAUD TO CREATE/USE/POSSESS COUNTERFEIT/FICTIOUS IDENTYING INFO CONCERNING REAL PERSON FOR",
+    "ocga": "16-9-121(a)(5)"
+  },
+  {
+    "charge": "AGGRAVATED IDENTITY FRAUD",
+    "ocga": "16-9-121.1(a)"
+  },
+  {
+    "charge": "DEPOSIT ACCOUNT FRAUD (BAD CHECKS) NO MORE THAN $1499",
+    "ocga": "16-9-20(b)(1)(2)"
+  },
+  {
+    "charge": "DEPOSIT ACCOUNT FRAUD (BAD CHECKS) $1500 OR MORE",
+    "ocga": "16-9-20(b)(3)"
+  },
+  {
+    "charge": "STAGING A COLLISION W/INTENT TO COMMIT INSURANCE FRAUD (F)",
+    "ocga": "33-1-9.1"
+  },
+  {
+    "charge": "AGGRAVATED STAGING A COLLISION W/INTENT TO COMMIT INSURANCE FRAUD (F)",
+    "ocga": "33-1-9.1"
+  },
+  {
+    "charge": "MAKING A FRAUDULENT CLAIM RELATED TO A STAGED COLLISION TO OBTAIN ANY BENEFIT (F)",
+    "ocga": "33-1-9.1"
+  },
+  {
+    "charge": "DEFACING OR DISTURBING NATURAL CONDITION OF CAVE; TAMPERING WITH GATES, ETC TO TRESPASS",
+    "ocga": "12-4-143"
+  },
+  {
+    "charge": "CRIMINAL DAMAGE TO PROPERTY - 1ST DEGREE",
+    "ocga": "16-7-22"
+  },
+  {
+    "charge": "CRIMINAL DAMAGE TO PROPERTY - 2ND DEGREE",
+    "ocga": "16-7-23"
+  },
+  {
+    "charge": "INTERFERENCE WITH GOVERNMENT PROPERTY",
+    "ocga": "16-7-24(b)"
+  },
+  {
+    "charge": "INTERFERENCE WITH GOVERNMENT PROPERTY",
+    "ocga": "16-7-24(a)"
+  },
+  {
+    "charge": "DAMAGING, INJURING OR INTERFERING WITH PROPERTY OF PUBLIC UTILITY COMPANIES",
+    "ocga": "16-7-25"
+  },
+  {
+    "charge": "INJURING, TEARING DOWN OR DESTRUCTION OF MAILBOXES; INJURING, DEFACING OR DESTRUCTION OF MAIL",
+    "ocga": "16-7-27"
+  },
+  {
+    "charge": "DAMAGE OR DESTROY AN ANIMAL FACILITY/PROPERTY/ANIMAL",
+    "ocga": "4-11-32(c)"
+  },
+  {
+    "charge": "ACQUIRE OR EXERCISE UNLAWFUL CONTROL OVER ANIMAL/CROP FACILITY",
+    "ocga": "4-11-32(a)"
+  },
+  {
+    "charge": "DAMAGE OR DESTROY AN ANIMAL/CROP FACILITY GREATER THAN $500",
+    "ocga": "4-11-32(b)"
+  },
+  {
+    "charge": "DISPOSAL OF STATE PROPERTY LESS THAN $200",
+    "ocga": "50-5-146"
+  },
+  {
+    "charge": "DISPOSAL OF STATE PROPERTY GRETAER THAN OR EQUAL TO $200",
+    "ocga": "50-5-146"
+  },
+  {
+    "charge": "VANDALISM TO A PLACE OF WORSHIP",
+    "ocga": "16-7-26"
+  },
+  {
+    "charge": "UNLAWFUL TO KNOWINGLY REMOVE/DESTROY/CIRCUMVENT OPER OF ELECT MONITORING DEVICE - O.C.G.A. 42-1-8",
+    "ocga": "16-7-29(b)(1)"
+  },
+  {
+    "charge": "UNLAWFUL TO KNOWINGLY REMOVE/DESTROY/CIRCUMVENT OPER OF ELECT MONITORING DEVICE -  PRETRIAL/BON",
+    "ocga": "16-7-29(b)(2)"
+  },
+  {
+    "charge": "UNLAWFUL TO KNOWINGLY REMOVE/DESTROY/CIRCUMVENT OPER OF ELECT MONITORING DEVICE -  PROBATION",
+    "ocga": "16-7-29(b)(3)"
+  },
+  {
+    "charge": "UNLAWFUL TO KNOWINGLY REMOVE/DESTROY/CIRCUMVENT OPER OF ELECT MONITORING DEVICE - PAROLE CON",
+    "ocga": "16-7-29(b)(4)"
+  },
+  {
+    "charge": "UNLAWFUL TO KNOWINGLY REMOVE/DESTROY/CIRCUMVENT OPER OF ELEC MONITORING DEVICE - O.C.G.A. 42-1-14",
+    "ocga": "16-7-29(b)(5)"
+  },
+  {
+    "charge": "RETAILER PURCHASES PRODUCT WITH PSEUDOEPHEDRINE FROM OTHER THAN LICENSED MANUFACTURER/WHOLESALER",
+    "ocga": "16-13-30.3(b.1)(6)(C)"
+  },
+  {
+    "charge": "WHOLESALER SELLS, RESALES, ETC. PRODUCTS WITH PSEUDOEPHEDRINE WITHOUT PROPER LICENSE/ RECORD KEEPING",
+    "ocga": "16-13-30.4(g)(3)(B)"
+  },
+  {
+    "charge": "TRANSACTIONS IN DRUG RELATED OBJECTS (DEVICE OR OBJECT USED W/MARIJUANA) (1ST AND 2ND OFFENSES)",
+    "ocga": "16-13-32(d)"
+  },
+  {
+    "charge": "TRANSACTIONS IN DRUG RELATED OBJECTS PROHIBITED  (EQUIPMENT) (1ST AND 2ND OFFENSES)",
+    "ocga": "16-13-32.1(d)"
+  },
+  {
+    "charge": "FURNISH PRODUCT CONTAINING PSEUDOEPHEDRINE WITH INTENT TO MANUFACTURE A CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30.4(g)(3)(A)"
+  },
+  {
+    "charge": "TRANSACTIONS IN DRUG RELATED OBJECTS - 3RD OR SUBSEQUENT OFFENSE",
+    "ocga": "16-13-32(d)"
+  },
+  {
+    "charge": "POSSESSION OF COCAINE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "POSSESSION OF METHAMPHETAMINE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "POSSESSION OF A SCHEDULE II CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "POSSESSION OF A SCHEDULE III CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "MARIJUANA-POSSESS LESS THAN 1 OZ.",
+    "ocga": "16-13-30(j)"
+  },
+  {
+    "charge": "TRANSACTIONS IN DRUG RELATED OBJECTS PROHIBITED - 3RD OFFENSE",
+    "ocga": "16-13-32.1(d)"
+  },
+  {
+    "charge": "POSSESSION OF A SCHEDULE IV CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "PURCHASE, POSSESSION, MANUFACTURE, DISTRIBUTION, OR SALE OF MARIJUANA",
+    "ocga": "16-13-30(j)"
+  },
+  {
+    "charge": "SALE, DISTRIBUTION, OR POSSESSION OF DANGEROUS DRUGS",
+    "ocga": "16-13-72"
+  },
+  {
+    "charge": "POSSESSION OF A SCHEDULE I CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "POSSESSION OF COCAINE WITH INTENT TO DISTRIBUTE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "SALE OF COCAINE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "POSSESSION OF METHAMPHETAMINE WITH INTENT TO DISTRIBUTE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "POSSESSION OF AMPHETAMINE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "SALE OF AMPHETAMINE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "SALE OF METHAMPHETAMINE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "POSSESSION OF A SCHEDULE I OR II CONTROLLED SUBSTANCE WITH INTENT TO DISTRIBUTE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "POSSESSION OF A SCHEDULE III, IV OR V CONTROLLED SUBSTANCE WITH INTENT TO DISTRIBUTE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "POSSESSION OF HYDROCODONE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "POSSESS/MANUFACTURE/DISTRIBUTE ETC. A CONTROLLED SUBSTANCE OR MARIJUANA WITHIN 1,000 FEET OF SCHOOLS",
+    "ocga": "16-13-32.4"
+  },
+  {
+    "charge": "MANUFACTURE/POSSESS ETC CONTROLLED OR COUNTERFEIT SUBSTANCE, OR MARIJUANA, NEAR PARK/HOUSING PROJECT",
+    "ocga": "16-13-32.5"
+  },
+  {
+    "charge": "TRAFFICKING IN COCAINE, ILLEGAL DRUGS, MARIJUANA, OR METHAMPHETAMINE",
+    "ocga": "16-13-31"
+  },
+  {
+    "charge": "ABANDONMENT OF CERTAIN DANGEROUS DRUGS, POISONS, OR CONTROLLED SUBSTANCES",
+    "ocga": "16-13-3"
+  },
+  {
+    "charge": "SALE OF A SCHEDULE I OR II CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "SALE OF A SCHEDULE III, IV OR V CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "SELLING, POSSESSING, DISTRIBUTING OR OTHER OFFENSES ASSOCIATED WITH ECSTACY",
+    "ocga": "16-13-31.1"
+  },
+  {
+    "charge": "MANUFACTURE, POSSESS, DISTRIBUTE CONTROLLED SUBSTANCE IN DRUG-FREE COMMERCIAL ZONE",
+    "ocga": "16-13-32.6"
+  },
+  {
+    "charge": "WRITTEN PRESCRIPTIONS FOR DANGEROUS DRUGS; CONTENT; SIGNATURE",
+    "ocga": "16-13-74"
+  },
+  {
+    "charge": "PRESCRIBING OR ORDERING DANGEROUS DRUGS",
+    "ocga": "16-13-78.1"
+  },
+  {
+    "charge": "POSSESSION, MANUFACTURE, DELIVERY, DISTRIBUTION, OR SALE OF COUNTERFEIT SUBSTANCES",
+    "ocga": "16-13-78.2"
+  },
+  {
+    "charge": "MANUFACTURE OR POSSESS CHEMICALS TO MANUFACTURE METHAMPHETAMINE WHEN CHILD IS PRESENT",
+    "ocga": "16-5-73(b)(1)"
+  },
+  {
+    "charge": "CHILD IS INJURED DURING MANUFACTURE OF METHAMPHETAMINE",
+    "ocga": "16-5-73(b)(2)"
+  },
+  {
+    "charge": "ATTEMPT OR CONSPIRACY TO VIOLATE GEORGIA CONTROLLED SUBSTANCE ACT",
+    "ocga": "16-13-33"
+  },
+  {
+    "charge": "ATTEMPT OR CONSPIRACY TO VIOLATE GEORGIA CONTROLLED SUBSTANCE ACT",
+    "ocga": "16-13-33"
+  },
+  {
+    "charge": "HIRE, SOLICIT PERSON UNDER 17 YOA TO MANUFACTURE, DISTRIBUTE ETC CONTROLLED/COUNTERFEIT SUBST/MARIJ",
+    "ocga": "16-13-30(k)"
+  },
+  {
+    "charge": "UNLAWFUL TO PURCHASE, POSSESS, OR HAVE CONTROL OVER FLUNITRAZEPAM",
+    "ocga": "16-13-30(l)(1)"
+  },
+  {
+    "charge": "USE OF COMMUNICATION FACILITY IN COMMISSION OF A FELONY INVOLVING CONTROLLED SUBSTANCES",
+    "ocga": "16-13-32.3(a)"
+  },
+  {
+    "charge": "UNAUTHORIZED DISTRIBUTION; FAIL TO KEEP RECORDS: PERMIT INSPECTION; MAINTAIN BLDG OR VEHICLE",
+    "ocga": "16-13-42"
+  },
+  {
+    "charge": "LABELING PRESCRIPTION CONTAINERS OF DANGEROUS DRUGS",
+    "ocga": "16-13-73"
+  },
+  {
+    "charge": "OBTAINING, ATTEMPTING TO OBTAIN DANGEROUS DRUGS BY FRAUD, FORGERY, OR CONCEALMENT OF FACT",
+    "ocga": "16-13-78"
+  },
+  {
+    "charge": "INTENTIONAL INHALATION OF MODEL GLUE",
+    "ocga": "16-13-91"
+  },
+  {
+    "charge": "POSSESSION, SALE, OR TRANSFER OF MODEL GLUE WHERE PROHIBITED",
+    "ocga": "16-13-92"
+  },
+  {
+    "charge": "PURCHASE, POSSESS, OR HAVE CONTROL  OF ANY CONTROLLED SUBSTANCE IN SCHEDULE III, IV OR V",
+    "ocga": "16-13-30(g)"
+  },
+  {
+    "charge": "SALE OR TRANSFER OF MODEL GLUE TO MINORS (UNDER 18YOA)",
+    "ocga": "16-13-93"
+  },
+  {
+    "charge": "PURCHASE/POSSESS OR HAVE CONTROL OF ANY CONTROLLED SUBSTANCE IN SCHEDULE II EXCEPT NARCOTICS",
+    "ocga": "16-13-30(e)"
+  },
+  {
+    "charge": "PURCHASE, POSSESS OR HAVE CONTROL OF CONTROLLED SUBSTANCE IN SCHEDULE I OR NARCOTIC IN SCHEDULE II",
+    "ocga": "16-13-30(c)"
+  },
+  {
+    "charge": "MANUFACTURE/DELIVER/DISTRIBUTE OR POSSESS W/INTENT TO DISTRIBUTE CONTROLLED SUBS IN SCHEDULE I OR II",
+    "ocga": "16-13-30(d)"
+  },
+  {
+    "charge": "MAINTENANCE OF RECORDS OF SALES TO MINORS (UNDER 18 YOA)",
+    "ocga": "16-13-94"
+  },
+  {
+    "charge": "MANUFACTURE/DELIVER/DISTRIBUTE/SELL/POSSESS W/INTENT TO DISTRIBUTE CONTROLLED SUBSTANCE IN SCHEDULE III,",
+    "ocga": "16-13-30(h)"
+  },
+  {
+    "charge": "POSSESSION OF A SCHEDULE V CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "MANUFACTURE, DELIVER, SELL, DISTRIBUTE, ETC. OR POSSESS WITH INTENT TO DISTRIBUTE FLUNITRAZEPAM",
+    "ocga": "16-13-30(l)(2)"
+  },
+  {
+    "charge": "FALSE REPRESNTATION OF AGE BY MINOR WITH INTENT TO PURCHASE OR OBTAIN ANY DRUG RELATED OBJECT",
+    "ocga": "16-13-1(c)"
+  },
+  {
+    "charge": "DISTRIBUTE OR POSSESS WITH INTENT TO DISTRIBUTE NITROUS OXIDE",
+    "ocga": "16-13-79(b)"
+  },
+  {
+    "charge": "DISTRIBUTE OR POSSESS WITH INTENT TO DISTRIBUTE NITROUS OXIDE TO PERSON UNDER 18 YOA",
+    "ocga": "16-13-79(c)"
+  },
+  {
+    "charge": "POSSESS W/INTENT TO OR SELL/DELIVER/DISTRIBUTE/DISPLAY, OR PROVIDE A MINOR ANY DRUG RELATED OBJECT",
+    "ocga": "16-13-1(b)"
+  },
+  {
+    "charge": "UNLAWFUL FOR ANY PERSON TO PURCHASE, POSSESS, OR HAVE UNDER HIS CONTROL ANY CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "MANUFACTURE/DELIVER/DISTRIBUTE/ADMINISTER/SELL/POSSESS W/INTENT TO DISTRIBUTE CONTROLLED SUBSTANCE",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "SELL/DISTRIBUTE/DISPLAY/PROVIDE TO MINOR DRUG RELATED OBJECTS(2ND/SUBSEQ OFFENSE) PER 16-13-1(B)",
+    "ocga": "16-13-1(b)"
+  },
+  {
+    "charge": "POSSESSION AND USE OF DRUG RELATED OBJECTS",
+    "ocga": "16-13-32.2"
+  },
+  {
+    "charge": "PROHIBIT PURCHASE AND SALE OF MARIJUANA FLAVORED PRODUCTS TO MINORS",
+    "ocga": "16-13-30.6(c)"
+  },
+  {
+    "charge": "UNLAWFUL PRESCRIPTION",
+    "ocga": "16-13-41"
+  },
+  {
+    "charge": "DRUGS NOT IN ORIGINAL CONTAINER",
+    "ocga": "16-13-75"
+  },
+  {
+    "charge": "USE OF FICTIOUS INFORMATION WHEN OBTAINING DRUGS",
+    "ocga": "16-13-76"
+  },
+  {
+    "charge": "PURCHASE/POSSESS/HAVE UNDER CONTROL SYNTHETIC CANNABINOID, SYNTHETHIC MARIJUANA OR K2",
+    "ocga": "16-13-30(a)"
+  },
+  {
+    "charge": "MANUFACTURE/DELIVER/DISTRIBUTE/ADMINISTER/SELL/POSSESS W/INTENT TO DISTRIBUTE SYNTHETIC CANNABINOID, SYNT",
+    "ocga": "16-13-30(b)"
+  },
+  {
+    "charge": "POSS/PUR/SELL/MANUF/DISPENSE/DIST WITH INTENT TO DIST > 20 OZ BUT < 160 OZ LOW THC OIL",
+    "ocga": "16-12-191(c )"
+  },
+  {
+    "charge": "TRAFFICKING 160 OZ OR MORE LOW THC OIL",
+    "ocga": "16-12-191(d)"
+  },
+  {
+    "charge": "UNLAWFUL PURCHASE/POSSESSION 20 OZ OR LESS OF LOW THC OIL",
+    "ocga": "16-12-191"
+  },
+  {
+    "charge": "SALE OF CONTROLLED SUBSTANCES AND DANGEROUS DRUGS WITHOUT APPROVAL OF FDA",
+    "ocga": "16-13-4"
+  },
+  {
+    "charge": "POSSESSION OF SUBSTANCES WITH INTENT TO USE TO MANUFACTURE SCHEDULE I OR II CONTROLLED SUBSTANCES",
+    "ocga": "16-13-30.5(d)"
+  },
+  {
+    "charge": "UNLAWFUL MANUFACTURE, DISTRIBUTE, POSSESS WITH INTENT TO DISTRIBUTE IMITATION CONTROLLED SUBSTANCES",
+    "ocga": "16-13-30.2"
+  },
+  {
+    "charge": "UNLAWFUL POSSESSION OF EPHEDRINE, PSEUDOEPHEDRINE, PHENYLPROPANOLAMINE",
+    "ocga": "16-13-30.3"
+  },
+  {
+    "charge": "UNLAWFUL MANUFACTURE, DELIVERY, DISTRIBUTION, POSSESSION, OR SALE OF NONCONTROLLED SUBSTANCES",
+    "ocga": "16-13-30.1"
+  },
+  {
+    "charge": "DISTRIBUTE/RESELL INJECTABLE INSULIN FROM OVER-THE-COUNTER SALE VIA PHARMACY, OTHER SOURCE",
+    "ocga": "16-13-79 (e )"
+  },
+  {
+    "charge": "DISPENSER INTENTIONALLY FAILS TO SUBMIT PRESCRIPTION INFORMATION TO GEORGIA DRUGS AND NARCOTICS AGENCY",
+    "ocga": "16-13-64(a)"
+  },
+  {
+    "charge": "INDIVIDUAL AUTHORIZED ACCESS ELECTRONIC DATA BASE PRESCRIPTION INFO NEGLIGENTLY USES ETC",
+    "ocga": "16-13-64(b)"
+  },
+  {
+    "charge": "DISSEMINATE/RECEIVE/USE/ATTEMPT TO USE ELECTRONIC DATA BASE INFORMATION KNOWING DISSEMINATION/RECEIPT/USE",
+    "ocga": "16-13-64(c)(1)(2)(3)"
+  },
+  {
+    "charge": "INDIVIDUAL AUTHORIZED ACCESS ELECTRONIC DATA BASE PRESCRIPTION INFORMATION WHO OBTAINS/DISCLOSES INFORMAT",
+    "ocga": "16-13-64(c)(1)"
+  },
+  {
+    "charge": "KNOWINGLY OBTAINS, ATTEMPTS TO OBTAIN OR DISCLOSES ELECTRONIC DATA BASE PRESCRIPTION INFORMATION UNDER FA",
+    "ocga": "16-13-64(c)(2)"
+  },
+  {
+    "charge": "OBTAINS /DISCLOSES ELECTRONIC DATA BASE PRESCRIPTION INFORMATION WITH INTENT TO SELL/TRANSFER/OR USE INFO",
+    "ocga": "16-13-64(c)(3)"
+  },
+  {
+    "charge": "REGISTRANT DISTRIBUTING CONTROLLED SUBST CLASSIFIED SCHED I/II EXCEPT AS REQUIRED BY CODE 16-13-40",
+    "ocga": "16-13-43(a)(1)"
+  },
+  {
+    "charge": "USE IN MANUFACTURE/DISTRIBUTION OF CONTROLLED SUBSTANCE, A REGISTRATION NUMBER FICTITIOUS/REVOKED/SUSPEND",
+    "ocga": "16-13-43(a)(2)"
+  },
+  {
+    "charge": "ACQUIRE OR OBTAIN POSSESSION OF CONTROLLED SUBSTANCE BY MISREPRESENTATION,FRAUD,FORGERY,DECEPTION,SUBTERF",
+    "ocga": "16-13-43(a)(3)"
+  },
+  {
+    "charge": "FURNISH FALSE OR FRAUDULENT MATERIAL INFO OR OMIT MATERIAL INFO FROM APPLICATION/REPORT/DOCUMENT/RECORD",
+    "ocga": "16-13-43(a)(4)"
+  },
+  {
+    "charge": "MAKE/DISTRIBUTE/POSSESS PUNCH/DIE/PLATE/STONE/THING DESIGNED TO PRINT/IMPRINT/REPRODUCE TRADEMARK/TRADE N",
+    "ocga": "16-13-43(a)(5)"
+  },
+  {
+    "charge": "WITHHOLD INFORMATION FROM PRACTITIONER THAT PERSON OBTAINED CONTROLLED SUBSTANCE OF SIMILAR THERAPUTIC US",
+    "ocga": "16-13-43(a)(6)"
+  },
+  {
+    "charge": "POSSESS OR HAVE UNDER HIS/HER CONTROL A COUNTERFEIT SUBSTANCE",
+    "ocga": "16-13-30(i)(1)"
+  },
+  {
+    "charge": "MANUFACTURE/DELIVER/DISTRIBUTE/ADMINISTER/PURCHASE/SELL OR POSSESS WITH INTENT TO DISTRIBUTE A COUNTERFEI",
+    "ocga": "16-13-30(i)(2)"
+  },
+  {
+    "charge": "INDIVIDUAL AUTHORIZED ACCESS ELECTRONIC DATA BASE PRESCRIPTION INFORMATION NEGLIGENTLY USES ETC (FELO",
+    "ocga": "16-13-64(b)"
+  },
+  {
+    "charge": "SELLING/POSSESS/TRANSFER KRATOM (M)",
+    "ocga": "16-13-121"
+  },
+  {
+    "charge": "PATIENT ENDANGERMENT/TRAF/DIST OF LOW THC OIL/RELATED PRODUCTS BY LICENSEE/EMPLOYEE",
+    "ocga": "16-12-225(a)"
+  },
+  {
+    "charge": "PATIENT ENDANGERMENT/TRAF/DIST OF LOW THC OIL/RELATED PRODUCTS BY PERSON",
+    "ocga": "16-12-225(b)"
+  },
+  {
+    "charge": "DISTRIBUTING OR DISPENSING A CONTROLLED SUBSTANCE IN VIOLATION OF CODE SECTION 16-13-41",
+    "ocga": "16-13-42(a)(1)"
+  },
+  {
+    "charge": "MANUFACTURING, DISTRIBUTING, OR DISPENSING A CONTROLLED SUBSTANCE NOT AUTHORIZED BY REGISTRATION",
+    "ocga": "16-13-42(a)(2)"
+  },
+  {
+    "charge": "FAILING TO KEEP RECORDS REQUIRED FOR CONTROLLED SUBSTANCE DISPENSATION",
+    "ocga": "16-13-42(a)(3)"
+  },
+  {
+    "charge": "REFUSING ENTRY INTO ANY PREMISES FOR AN AUTHORIZED INSPECTION OF CONTROLLED SUBSTANCE DISPENSATION",
+    "ocga": "16-13-42(a)(4)"
+  },
+  {
+    "charge": "MAINTAINING A DWELLING OR STRUCTURE FOR USING, KEEPING, OR SELLING CONTROLLED SUBSTANCES",
+    "ocga": "16-13-42(a)(5)"
+  },
+  {
+    "charge": "POSSESSION OF A PILL PRESS, TABLETING MACHINE, AN ENCAPSULATING MACHINE, OR OTHER CONTROLLED SUBSTANCE COUNTERFEITING MATERIALS",
+    "ocga": "16-13-30.7"
+  },
+  {
+    "charge": "DISTRIBUTING OBSCENE MATERIALS",
+    "ocga": "16-12-80"
+  },
+  {
+    "charge": "ELECTRONICALLY FURNISHING OBSCENE MATERIAL TO MINORS",
+    "ocga": "16-12-100.1(c)"
+  },
+  {
+    "charge": "FURNISH OBSCENE MATERIAL TO A MINOR WHEN MINOR ATLEAST 14 YOA AND DEF  18 YOA OR YOUNGER",
+    "ocga": "16-12-100.1(d)"
+  },
+  {
+    "charge": "DISTRIBUTION OF OBSCENE MATERIALS TO MINORS",
+    "ocga": "16-12-103(a)"
+  },
+  {
+    "charge": "DISTRIBUTION OF MATERIAL DEPICTING NUDITY OR SEXUAL CONDUCT",
+    "ocga": "16-12-81"
+  },
+  {
+    "charge": "UNLAWFUL ADMISSION OF MINORS TO PERFORMANCE THAT DEPICTS SEXUAL NUDITY, SEXUAL CONDUCT, ETC.",
+    "ocga": "16-12-103"
+  },
+  {
+    "charge": "OBSCENE, LEWD, OR INDECENT TELEPHONE COMMUNICATIONS",
+    "ocga": "46-5-22"
+  },
+  {
+    "charge": "DISPLAYING TO THEATER AUDIENCES SCENES FROM RESTRICTED FILMS TO BE SHOWN AT FUTURE TIME",
+    "ocga": "16-12-85"
+  },
+  {
+    "charge": "CRUELTY TO CHILDREN - 1ST DEGREE",
+    "ocga": "16-5-70"
+  },
+  {
+    "charge": "CRUELTY  TO CHILDREN - 2ND DEGREE",
+    "ocga": "16-5-70(c)"
+  },
+  {
+    "charge": "RECKLESS ABANDONMENT OF CHILD UNDER 1 YOA RESULTING IN DEATH",
+    "ocga": "16-5-72"
+  },
+  {
+    "charge": "BIGAMY",
+    "ocga": "16-6-20"
+  },
+  {
+    "charge": "LICENSEE OR DIR OF FACILITY HAVE EMPLOYEE W/CRIMINAL RECORD PROHIBITING CONTACT WITH CHILDREN",
+    "ocga": "20-1A-39(g)"
+  },
+  {
+    "charge": "UNLAWFUL TO TATTOO THE BODY OF ANY PERSON UNDER THE AGE OF 18",
+    "ocga": "16-5-71"
+  },
+  {
+    "charge": "UNLAWFUL BODY PIERCING OF PERSONS UNDER 18 WITH THE EXCEPTION OF THE EAR LOBES",
+    "ocga": "16-5-71.1"
+  },
+  {
+    "charge": "ABANDONMENT OF DEPENDENT CHILD",
+    "ocga": "19-10-1(b)"
+  },
+  {
+    "charge": "ABANDONMENT OF DEPENDENT CHILD - INTERSTATE OR 3RD OR SUBSEQUENT OFFENSE",
+    "ocga": "19-10-1(b)"
+  },
+  {
+    "charge": "ABANDONMENT OF DEPENDENT PREGNANT WIFE",
+    "ocga": "19-10-2(b)"
+  },
+  {
+    "charge": "ABANDONMENT OF DEPENDENT PREGNANT WIFE - INTERSTATE",
+    "ocga": "19-10-2(c)"
+  },
+  {
+    "charge": "CRUELTY TO CHILDREN-3RD DEGREE",
+    "ocga": "16-5-70(d)"
+  },
+  {
+    "charge": "CRUELTY TO CHILDREN IN THE 3RD DEGREE 3RD OR SUBSEQUENT OFFENSE",
+    "ocga": "16-5-70(d)"
+  },
+  {
+    "charge": "UNLAWFUL PUBLISHING, DISSEMINATING OR DISCLOSING LOCATION OF FAMILY VIOLENCE SHELTER",
+    "ocga": "19-13-23(a)"
+  },
+  {
+    "charge": "CONTRIBUTING TO DELINQUENCY OR DEPENDENCY OF A MINOR",
+    "ocga": "16-12-1"
+  },
+  {
+    "charge": "CONTRIBUTING TO DELINQUENCY OR DEPENDENCY OF A MINOR",
+    "ocga": "16-12-1"
+  },
+  {
+    "charge": "FALSIFYING PARENTAL ABILITY TO SUPPORT",
+    "ocga": "19-11-10"
+  },
+  {
+    "charge": "NEGLECT TO A DISABLED ADULT/ELDER PERSON/RESIDENT OF LONG-TERM CARE FACILITY",
+    "ocga": "16-5-101"
+  },
+  {
+    "charge": "EXPLOIT/INFLICT PAIN TO/DEPRIVE ESSENTIAL SERVICES TO  DISABLED PERSON, ELDER PERSON OR RESIDENT",
+    "ocga": "16-5-102(a)"
+  },
+  {
+    "charge": "WILFULLY FAIL TO REPORT ABUSE OF DISABLED ADULT/ELDER PERSON PER PURSUANT TO 30-5-4",
+    "ocga": "30-5-8"
+  },
+  {
+    "charge": "TRAFFICKING A DISABLED ADULT, ELDER PERSON, OR RESIDENT",
+    "ocga": "16-5-102.1"
+  },
+  {
+    "charge": "AID, ASSIST OR ENCOURAGE A CHILD TO ESCAPE CUSTODY OR CONTROL",
+    "ocga": "49-4A-11(a)"
+  },
+  {
+    "charge": "HARBOR OR SHELTER ESCAPED CHILD OR YOUTH",
+    "ocga": "49-4A-11(b)"
+  },
+  {
+    "charge": "HINDER APPREHENSION OF ESCAPED CHILD OR YOUTH",
+    "ocga": "49-4A-11(c)"
+  },
+  {
+    "charge": "VIOLATE FAMILY VIOLENCE ORDER",
+    "ocga": "16-5-95"
+  },
+  {
+    "charge": "VIOLATION OF PARENTAL NOTIFICATION ACT OR ENCOURAGE ANYONE TO VIOLATE",
+    "ocga": "15-11-688"
+  },
+  {
+    "charge": "DISCRIMINATE OR RETALIATE AGAINST CHILD, ETC MAKING COMPLAINT TO ADVOCATE OR INTERFERE W/DUTIES",
+    "ocga": "15-11-745(b)"
+  },
+  {
+    "charge": "THREATEN, INTIMIDATE A DISABLED ADULT, ELDER PERSON, OR RESIDENT  PURSUANT  5-30 OR 4-8-31",
+    "ocga": "16-5-102(b)"
+  },
+  {
+    "charge": "MARRYING A BIGAMIST",
+    "ocga": "16-6-21"
+  },
+  {
+    "charge": "ALLOW UNAUTHORIZED  ACCESS TO OR OBTAIN/ATTEMPT TO OBTAIN CONFIDENTIAL CHILD ABUSE RECORDS",
+    "ocga": "15-11-40(b)"
+  },
+  {
+    "charge": "INTERMARRIAGE",
+    "ocga": "19-3-3"
+  },
+  {
+    "charge": "FAILURE TO REPORT SUSPECTED CHILD ABUSE",
+    "ocga": "19-7-5"
+  },
+  {
+    "charge": "FURNISHING TOBACCO PRODUCTS TO MINORS",
+    "ocga": "16-12-171(a)"
+  },
+  {
+    "charge": "OPERATE A RAFFLE WITHOUT A VALID LICENSE",
+    "ocga": "16-12-22.1"
+  },
+  {
+    "charge": "OPERATE A BINGO GAME WITHOUT A VALID LICENSE",
+    "ocga": "16-12-62"
+  },
+  {
+    "charge": "RESTRICTIONS AS TO BINGO OWNERS OF PREMISES UTILIZED",
+    "ocga": "16-12-57"
+  },
+  {
+    "charge": "BINGO AGE RESTRICTIONS (PERSONS UNDER AGE 18 NOT ALLOWED )",
+    "ocga": "16-12-58"
+  },
+  {
+    "charge": "ANNUAL BINGO REPORT TO BE FILED WITH DIRECTOR",
+    "ocga": "16-12-59"
+  },
+  {
+    "charge": "VIOLATIONS OF BINGO RULES AND REGULATIONS",
+    "ocga": "16-12-60"
+  },
+  {
+    "charge": "PROHIBIT DOG FIGHTING AND RELATED CONDUCT",
+    "ocga": "16-12-37(b)"
+  },
+  {
+    "charge": "SPECTATOR AT ANY PLACE FOR THE FIGHTING OF DOGS",
+    "ocga": "16-12-37(c)"
+  },
+  {
+    "charge": "SPECTATOR AT ANY PLACE FOR THE FIGHTING OF DOGS - 2ND OFFENSE",
+    "ocga": "16-12-37(c)"
+  },
+  {
+    "charge": "UNLAWFUL ADVERTISEMENTS FOR LOTTERIES",
+    "ocga": "16-12-27"
+  },
+  {
+    "charge": "ADVERTISING COMMERCIAL GAMBLING",
+    "ocga": "16-12-26"
+  },
+  {
+    "charge": "COMMERCIAL GAMBLING",
+    "ocga": "16-12-22"
+  },
+  {
+    "charge": "COMMUNICATING GAMBLING INFORMATION",
+    "ocga": "16-12-28"
+  },
+  {
+    "charge": "SOLICITATION OF ANOTHER TO GAMBLE WITH INTENT TO DEFRAUD OR DECEIVE",
+    "ocga": "16-12-25"
+  },
+  {
+    "charge": "KEEPING A GAMBLING PLACE",
+    "ocga": "16-12-23"
+  },
+  {
+    "charge": "EVIDENCE OF WINNINGS VIOLATION (1ST OFFENSE)",
+    "ocga": "16-12-35(h)"
+  },
+  {
+    "charge": "EVIDENCE OF WINNINGS VIOLATION (2ND OR SUBSEQUENT OFFENSE)",
+    "ocga": "16-12-35(h)"
+  },
+  {
+    "charge": "EVIDENCE OF WINNINGS MAY NOT INCLUDE FIREARMS/ALCOHOL OR TOBACCO (1ST OFFENSE)",
+    "ocga": "16-12-35(i)"
+  },
+  {
+    "charge": "EVIDENCE OF WINNINGS MAY NOT INCLUDE FIREARMS/ALCOHOL OR TOBACCO (2ND OR SUBSEQUENT OFFENSE)",
+    "ocga": "16-12-35(i)"
+  },
+  {
+    "charge": "PLACE/PROVIDE AMUSEMENT MACHINE-OFFER FOR PLAY AT LOCATION NOT LICENSED OR IN PRIVATE RESIDENCE",
+    "ocga": "16-12-35(k)"
+  },
+  {
+    "charge": "POSSESSION OF GAMBLING DEVICE OR EQUIPMENT",
+    "ocga": "16-12-24"
+  },
+  {
+    "charge": "UNAUTHORIZED MAKING OR POSSESSION OF VOTING MACHINE KEY",
+    "ocga": "21-2-581"
+  },
+  {
+    "charge": "GAMBLING",
+    "ocga": "16-12-21"
+  },
+  {
+    "charge": "UNLAWFUL TO PARTICIPATE IN A PYRAMID PROMOTIONAL SCHEME",
+    "ocga": "16-12-38(b)(3)"
+  },
+  {
+    "charge": "UNLAWFUL TO ESTABLISH, PROMOTE, OR OPERATE A PYRAMID PROMOTIONAL SCHEME",
+    "ocga": "16-12-38(b)(3)"
+  },
+  {
+    "charge": "PROSTITUTION",
+    "ocga": "16-6-9"
+  },
+  {
+    "charge": "KEEPING A PLACE OF PROSTITUTION",
+    "ocga": "16-6-10"
+  },
+  {
+    "charge": "KEEPING A PLACE OF PROSTITUTION FOR PERSON UNDER 18 YOA",
+    "ocga": "16-6-10"
+  },
+  {
+    "charge": "MASTURBATION FOR HIRE",
+    "ocga": "16-6-16"
+  },
+  {
+    "charge": "PANDERING",
+    "ocga": "16-6-12"
+  },
+  {
+    "charge": "PANDERING PERSON UNDER 18 YOA",
+    "ocga": "16-6-12"
+  },
+  {
+    "charge": "PANDERING - 2ND OR SUBSEQUENT OFFENSE (F)",
+    "ocga": "16-6-12"
+  },
+  {
+    "charge": "PIMPING",
+    "ocga": "16-6-11"
+  },
+  {
+    "charge": "PIMPING PERSON UNDER 18 YOA",
+    "ocga": "16-6-11"
+  },
+  {
+    "charge": "PIMPING - 2ND OR SUBSEQUENT OFFENSE (F)",
+    "ocga": "16-6-11"
+  },
+  {
+    "charge": "GIVING MASSAGES IN PLACE USED FOR LEWDNESS, PROSTITUTION, ASSIGNATION, OR MASTURBATION FOR HIRE",
+    "ocga": "16-6-17"
+  },
+  {
+    "charge": "ABATING OPERATION OF BATHHOUSES",
+    "ocga": "31-12-11"
+  },
+  {
+    "charge": "UNLAWFUL MANUFACTURE/USE/POSS/SELL OF POWDERED ALCOHOL",
+    "ocga": "3-3-34"
+  },
+  {
+    "charge": "INTOXICATING MINOR TO THE POINT OF CAUSING DANGER TO THEMSELVES OR OTHERS",
+    "ocga": "3-3-23.1(d)"
+  },
+  {
+    "charge": "FURNISHING, PURCHASING, AND POSSESSION OF ALCOHOLIC BEVERAGES BY PERSONS BELOW LEGAL AGE",
+    "ocga": "3-3-23"
+  },
+  {
+    "charge": "MANUFACTURE/TRANSPORT/RECEIVE/POSSESS/SALE/DISTRIBUTE ALCOHOLIC BEVERAGES; FILE REPORT/BOND; PAY FEE",
+    "ocga": "3-3-27(c)(2)"
+  },
+  {
+    "charge": "UNLAWFUL TO DISTILL, MANUFACTURE, OR MAKE ANY DISTILLED SPIRITS, EXCEPT AS PERMITTED BY LAW",
+    "ocga": "3-3-27(c)(1)"
+  },
+  {
+    "charge": "ALCOHOL SALE NEAR CHURCH,  SCHOOL BUILDING OR OTHER SITES",
+    "ocga": "3-3-21"
+  },
+  {
+    "charge": "ALCOHOL POSSESSION ON PUBLIC SCHOOL GROUNDS",
+    "ocga": "3-3-21.1"
+  },
+  {
+    "charge": "POSSESSION/TRANSPORT LAWFULLY PURCHASED ALCOHOLIC BEVERAGES WHICH TAXES HAVE NOT BEEN PAID",
+    "ocga": "3-3-8"
+  },
+  {
+    "charge": "PURCH,OFFER FOR SALE OR USE,SELL,OR USE ANY VAPORIZED ALCOHOL BEV PRODUCED BY ALCOHOL VAPOR DEVICE",
+    "ocga": "3-3-33(b)(1)"
+  },
+  {
+    "charge": "OWN OR POSSESS ALCOHOL VAPOR DEVICE, INCLUDING BUT NOT LIMITED, TO AWOL MACHINE",
+    "ocga": "3-3-33(b)(2)"
+  },
+  {
+    "charge": "KEEP OR ALLOW KEPT ON LICENSED PREMISES ANY VAPORIZED FORM OF ALCOH BEV PROD BY ALCOH VAPOR DEVICE",
+    "ocga": "3-3-33(c)"
+  },
+  {
+    "charge": "SHIPPING ALCOHOLIC BEVERAGES INTO STATE BY UNLICENSED NONRESIDENT (2ND OFFENSE WITHIN 2 YEARS)",
+    "ocga": "3-3-32"
+  },
+  {
+    "charge": "SALE OF ALCOHOLIC BEVERAGES ON SUNDAYS, ELECTION DAYS, AND CHRISTMAS DAY",
+    "ocga": "3-3-20"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA MASSAGE THERAPY PRACTICE ACT",
+    "ocga": "43-24A-15"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA MASSAGE THERAPY PRACTICE ACT",
+    "ocga": "43-24A-15"
+  },
+  {
+    "charge": "FAILURE OF BUSINESS OWNER TO POST NATIONAL HUMAN TRAFFICKING HOTLINE NUMBER WITHIN 30 DAYS AFTER NOTICE",
+    "ocga": "16-5-47"
+  },
+  {
+    "charge": "OWN OR OPERATE AN UNLICENSED ADULT RESIDENTIAL MENTAL HEALTH PROGRAM - FIRST OFFENSE",
+    "ocga": "37-3-215"
+  },
+  {
+    "charge": "OWN OR OPERATE AN UNLICENSED ADULT RESIDENTIAL MENTAL HEALTH PROGRAM",
+    "ocga": "37-3-215"
+  },
+  {
+    "charge": "OPERATE PAIN MANAGEMENT CLINIC IN GEORGIA WITHOUT A LICENSE",
+    "ocga": "43-34-288"
+  },
+  {
+    "charge": "OWN OPERATE PERSONAL CARE HOME IN VIOLATION OF 31-7-12(b)",
+    "ocga": "31-7-12.1(g)"
+  },
+  {
+    "charge": "OWN OPERATE PERSONAL CARE HOME IN VIOLATION OF 31-7-12(b)",
+    "ocga": "31-7-12.1(g)"
+  },
+  {
+    "charge": "Unlawful To Solicit/Release/Sell Information Relating To Parties Of A  Vehicle Collision For Personal Gain",
+    "ocga": "33-24-53"
+  },
+  {
+    "charge": "Unlawful To Solicit/Release/Sell Information Relating To Parties Of A Vehicle Collision For Personal Gain",
+    "ocga": "33-24-53"
+  },
+  {
+    "charge": "BIAS MOTIVATED INTIMIDATION OF A PERSON WHO IS OR PERCIEVED AS A FIRST RESPONDER(F)",
+    "ocga": "35-8-7.4(b)"
+  },
+  {
+    "charge": "INTIMIDATE LAW ENFORCEMENT OFFICER/IMMEDIATE FAMILY IN RETALIATION/RESPONSE TO DISCHARGE OF DUTIES (FELON",
+    "ocga": "16-10-97(c)"
+  },
+  {
+    "charge": "RESIST, OBSTRUCT, OPPOSE LAW ENFORCEMENT OFFICERS ON DUTY WITH ANIMAL OR HUMAN BODILY FLUIDS",
+    "ocga": "16-10-24(c)"
+  },
+  {
+    "charge": "WILLFUL OBSTRUCTION OF LAW ENFORCEMENT OFFICERS BY USE OF THREATS OR VIOLENCE",
+    "ocga": "16-10-24(b)"
+  },
+  {
+    "charge": "WILLFUL OBSTRUCTION OF LAW ENFORCEMENT OFFICERS",
+    "ocga": "16-10-24(a)"
+  },
+  {
+    "charge": "RESIST/OBSTRUCT/OPPOSE PARK RANGER IN DISCHARGE OF DUTIES BY OFFERING/DOING VIOLENCE TO RANGER",
+    "ocga": "16-10-24.4(c)"
+  },
+  {
+    "charge": "WILFULLY HINDER PARK RANGER IN THE LAWFUL DISCHARGE OF DUTIES",
+    "ocga": "16-10-24.4(b)"
+  },
+  {
+    "charge": "TRANSMITTING FALSE REPORT OF FIRE",
+    "ocga": "16-10-27"
+  },
+  {
+    "charge": "OBSTRUCT DISABLED/ELDERLY PERSON INVESTIGATION PURSUANT TO OCGA 5-30 OR 4-8-31",
+    "ocga": "16-5-102(c)"
+  },
+  {
+    "charge": "LASER DEVICE USE AGAINST LAW ENFORCEMENT OFFICER",
+    "ocga": "16-10-34(b)"
+  },
+  {
+    "charge": "REFUSAL TO OBEY OFFICIAL REQUEST AT FIRE OR OTHER EMERGENCY",
+    "ocga": "16-10-30"
+  },
+  {
+    "charge": "OBSTRUCTING OR HINDERING PERSONS MAKING EMERGENCY TELEPHONE CALL",
+    "ocga": "16-10-24.3"
+  },
+  {
+    "charge": "ATTEMPT TO KILL OR OBSTRUCT WITNESS FROM GIVING TESTIMONY OR EVIDENCE IN OFFICIAL PROCEEDINGS",
+    "ocga": "16-10-32(a)"
+  },
+  {
+    "charge": "THREATEN OR CAUSE PHYSICAL OR ECONOMIC HARM TO HINDER OR DELAY TESTIMONY OR PROSECUTION",
+    "ocga": "16-10-32(b)"
+  },
+  {
+    "charge": "REMOVAL OR ATTEMPTED REMOVAL OF WEAPON FROM PUBLIC OFFICIAL",
+    "ocga": "16-10-33"
+  },
+  {
+    "charge": "MAKING AN UNLAWFUL REQUEST FOR EMERGENCY SERVICES ASSISTANCE (M)",
+    "ocga": "16-10-28"
+  },
+  {
+    "charge": "MAKING AN UNLAWFUL REQUEST FOR EMERGENCY SERVICES ASSISTANCE (F)",
+    "ocga": "16-10-28"
+  },
+  {
+    "charge": "MAKING AN UNLAWFUL REQUEST FOR EMERGENCY SERVICES ASSISTANCE SECOND OR SUBSEQUENT CONVICTION (F)",
+    "ocga": "16-10-28"
+  },
+  {
+    "charge": "TRANSMITTING A FALSE PUBLIC ALARM (1ST OFFENSE)",
+    "ocga": "16-10-28"
+  },
+  {
+    "charge": "WILLFUL INTERFERENCE WITH EMERGENCY MEDICAL PROFESSIONAL",
+    "ocga": "16-10-24.2(b)"
+  },
+  {
+    "charge": "WILLFUL INTERFERENCE WITH EMERGENCY MEDICAL PROFESSIONAL BY USE OF THREATS OR VIOLENCE",
+    "ocga": "16-10-24.2(c)"
+  },
+  {
+    "charge": "REQUEST FOR AMBULANCE SERVICE WHEN NOT REASONABLY NEEDED",
+    "ocga": "16-10-29"
+  },
+  {
+    "charge": "FALSE REPORT OF A CRIME",
+    "ocga": "16-10-26"
+  },
+  {
+    "charge": "FALSE REPORT OF THEFT OR CONVERSION OF A MOTOR VEHICLE",
+    "ocga": "40-3-92"
+  },
+  {
+    "charge": "FLEEING OR ATTEMPTING TO ELUDE A POLICE OFFICER",
+    "ocga": "40-6-395(a)"
+  },
+  {
+    "charge": "FLEEING OR ATTEMPTING TO ELUDE A POLICE OFFICER DURING THE COMMISION OF CERTAIN CRIMES",
+    "ocga": "40-6-395(c)"
+  },
+  {
+    "charge": "FLEEING OR ATTEMPTING TO ELUDE A POLICE OFFICER",
+    "ocga": "40-6-395(a)"
+  },
+  {
+    "charge": "GIVING FALSE NAME, ADDRESS, OR BIRTHDATE TO LAW ENFORCEMENT OFFICER",
+    "ocga": "16-10-25"
+  },
+  {
+    "charge": "WILLFUL OBSTRUCTION OR HINDRANCE OF FIREFIGHTER",
+    "ocga": "16-10-24.1(b)"
+  },
+  {
+    "charge": "WILLFUL OBSTRUCTION OR HINDRANCE OF FIREFIGHTER BY  USE OF  THREATS OR VIOLENCE",
+    "ocga": "16-10-24.1(c)"
+  },
+  {
+    "charge": "UNLAWFUL CONDUCT DURING 911 CALL BY USING OBSCENE/VULGAR/OBSCENE LANGUAGE TO INTIMIDATE/HARRASS 911 OFFIC",
+    "ocga": "16-11-39.2(b)(1)"
+  },
+  {
+    "charge": "UNLAWFUL CONDUCT DURING 911 CALL/CONTACTS 911 FOR PURPOSE OF ANNOY/HARRASS/MOLEST/911 OFFICER OR INTERFER",
+    "ocga": "16-11-39.2(b)(2)"
+  },
+  {
+    "charge": "CALLS OR OTHERWISE CONTACTS 911 AND FAILS TO HANG UP/DISENGAGE CONNECTION FOR PURPOSE OF INTERFERING WITH",
+    "ocga": "16-11-39.2(b)(3)"
+  },
+  {
+    "charge": "CALLS OR OTHERWISE CONTACTS 911 WITH THE INTENTION TO HARASS A COMMUNICATIONS OFFICER",
+    "ocga": "16-11-39.2(b)(4)"
+  },
+  {
+    "charge": "UNLAWFUL CONDUCT DURING 911 CALLS OR OTHERWISE CONTACTS 911 AND MAKES A FALSE REPORT",
+    "ocga": "16-11-39.2(b)(5)"
+  },
+  {
+    "charge": "FUGITIVE FROM JUSTICE FOR FINGERPRINTABLE CHARGE",
+    "ocga": "17-13-33"
+  },
+  {
+    "charge": "ESCAPE",
+    "ocga": "16-10-52(b)(4)"
+  },
+  {
+    "charge": "ESCAPE",
+    "ocga": "16-10-52(b)"
+  },
+  {
+    "charge": "CRIMINAL JUSTICE EMPLOYEE AIDING PERSON IN THEIR CUSTODY TO ESCAPE",
+    "ocga": "16-10-53(b)"
+  },
+  {
+    "charge": "AIDING OR PERMITTING ANOTHER TO ESCAPE LAWFUL CUSTODY OR CONFINEMENT",
+    "ocga": "16-10-53(a)"
+  },
+  {
+    "charge": "FUGITIVE FROM JUSTICE FOR FINGERPRINTABLE CHARGE",
+    "ocga": "17-13-33"
+  },
+  {
+    "charge": "HINDERING APPREHENSION OR PUNISHMENT OF CRIMINAL",
+    "ocga": "16-10-50"
+  },
+  {
+    "charge": "BAIL JUMPING",
+    "ocga": "16-10-51(b)"
+  },
+  {
+    "charge": "BAIL JUMPING",
+    "ocga": "16-10-51(a)"
+  },
+  {
+    "charge": "BAIL JUMPING - LEAVING THE STATE",
+    "ocga": "16-10-51(c)(1)"
+  },
+  {
+    "charge": "FAILURE TO APPEAR FOR FINGERPRINTABLE CHARGE",
+    "ocga": "17-6-12"
+  },
+  {
+    "charge": "PROBATION VIOLATION (WHEN PROBATION TERMS ARE ALTERED) FOR FINGERPRINTABLE CHARGE",
+    "ocga": "42-8-38"
+  },
+  {
+    "charge": "PERJURY",
+    "ocga": "16-10-70"
+  },
+  {
+    "charge": "IMPERSONATING ANOTHER IN THE ACKNOWLEDGMENT OF RECOGNIZANCE, BAIL, OR JUDGMENT",
+    "ocga": "16-10-73"
+  },
+  {
+    "charge": "PROBATION VIOLATION (WHEN PROBATION TERMS ARE ALTERED) FOR FINGERPRINTABLE CHARGE",
+    "ocga": "42-8-38"
+  },
+  {
+    "charge": "IMPERSONATING ANOTHER IN THE COURSE OF AN ACTION, PROCEEDING, OR PROSECUTION",
+    "ocga": "16-10-96"
+  },
+  {
+    "charge": "FALSE STATEMENTS OR WRITINGS; CONCEAL FACTS OR FRAUDULENT DOCUMENTS IN MATTERS OF GOVERNMENT",
+    "ocga": "16-10-20"
+  },
+  {
+    "charge": "PAROLE VIOLATION",
+    "ocga": "42-9-44"
+  },
+  {
+    "charge": "FAILURE TO APPEAR FOR FINGERPRINTABLE CHARGE",
+    "ocga": "17-6-12"
+  },
+  {
+    "charge": "COMPOUNDING A CRIME",
+    "ocga": "16-10-90(b)"
+  },
+  {
+    "charge": "COMPOUNDING A CRIME",
+    "ocga": "16-10-90(b)"
+  },
+  {
+    "charge": "CONTEMPT OF SUPERIOR COURT FOR FINGERPRINTABLE CHARGE",
+    "ocga": "15-6-8(5)"
+  },
+  {
+    "charge": "CONTEMPT OF STATE COURT FOR FINGERPRINTABLE CHARGE",
+    "ocga": "15-7-4"
+  },
+  {
+    "charge": "ACCEPTANCE OF BENEFIT, REWARD, ETC., BY WITNESS FOR CHANGING TESTIMONY OR BEING ABSENT FROM TRIAL",
+    "ocga": "16-10-92"
+  },
+  {
+    "charge": "INTIMIDATE OR IMPEDE GRAND JUROR/TRIAL JUROR/COURT OFFICER/ANY OFFICER SERVIING AT COURT PROCEEDING WHILE",
+    "ocga": "16-10-97(a)(1)"
+  },
+  {
+    "charge": "INJURE GRAND JUROR/TRIAL JUROR OR HIS/HER PROPERTY ON ACCOUNT OF INDICTMENT OR VERDICT OR BEING/HAVING BE",
+    "ocga": "16-10-97(a)(2)"
+  },
+  {
+    "charge": "INJURE COURT OFFICER OR ANY OFFICER WHO MAY BE SERVING AT COURT PROCEEDING OR HIS/HER PROPERTY ON ACCOUNT",
+    "ocga": "16-10-97(a)(3)"
+  },
+  {
+    "charge": "SUBORNATION OF PERJURY OR FALSE SWEARING",
+    "ocga": "16-10-72"
+  },
+  {
+    "charge": "EMBRACERY",
+    "ocga": "16-10-91"
+  },
+  {
+    "charge": "DELIVERING A PERSON WITHOUT EXTRADITION HEARING",
+    "ocga": "17-13-30"
+  },
+  {
+    "charge": "KNOWINGLY FILE A FALSE DOCUMENT AGAINST A PERSON",
+    "ocga": "16-10-20.1(b)"
+  },
+  {
+    "charge": "KNOWINGLY ALTER, CONCEAL, COVER UP, CREATE AND FILE A FALSE DOCUMENT",
+    "ocga": "16-10-20.1(b)2"
+  },
+  {
+    "charge": "FALSE SWEARING",
+    "ocga": "16-10-71"
+  },
+  {
+    "charge": "INFLUENCING WITNESS",
+    "ocga": "16-10-93"
+  },
+  {
+    "charge": "BAIL RECOVER AGENT IMPERSONATING  A POLICE OFFICER",
+    "ocga": "17-6-58(c)"
+  },
+  {
+    "charge": "FAILURE TO REGISTER AS BAIL RECOVERY AGENT - 1ST OFFENSE",
+    "ocga": "17-6-58(a)"
+  },
+  {
+    "charge": "FAILURE TO REGISTER AS BAIL RECOVERY AGENT - 2ND OR SUBSEQUENT OFFENSE",
+    "ocga": "17-6-58(a)"
+  },
+  {
+    "charge": "USE OF UNQUALIFIED BAIL RECOVERY AGENT - 1ST OFFENSE",
+    "ocga": "17-6-58(b)"
+  },
+  {
+    "charge": "USE OF UNQUALIFIED BAIL RECOVERY AGENT - 2ND OR SUBSEQUENT OFFENSE",
+    "ocga": "17-6-58(b)"
+  },
+  {
+    "charge": "TAMPERING WITH EVIDENCE",
+    "ocga": "16-10-94"
+  },
+  {
+    "charge": "TAMPERING WITH EVIDENCE",
+    "ocga": "16-10-94"
+  },
+  {
+    "charge": "BRIBERY",
+    "ocga": "16-10-2"
+  },
+  {
+    "charge": "SOLICITING OR ACCEPTING A BRIBE TO INFLUENCE ATHLETIC CONTEST, OR SPORTING EVENTS",
+    "ocga": "16-12-34"
+  },
+  {
+    "charge": "FALSE ACKNOWLEDGMENTS, STATEMENTS OF APPEARANCE OR OATH, ETC. BY OFFICER AUTHORIZED TO DO SAME",
+    "ocga": "16-10-7"
+  },
+  {
+    "charge": "IMPROPERLY INFLUENCING LEGISLATIVE ACTION",
+    "ocga": "16-10-4"
+  },
+  {
+    "charge": "INFLUENCING OF OFFICER OR EMPLOYEE OF STATE OR POLITICAL SUBDIVISION BY ANOTHER OFFICER OR EMPLOYEE",
+    "ocga": "16-10-5"
+  },
+  {
+    "charge": "SALE OF REAL OR PERSONAL PROPERTY TO POLITICAL SUBDIVISION BY LOCAL OFFICER OR EMPLOYEE",
+    "ocga": "16-10-6"
+  },
+  {
+    "charge": "ACCEPTANCE OF OFFICE OR EMPLOYMENT IN MORE THAN ONE BRANCH OF GOVERNMENT",
+    "ocga": "16-10-9"
+  },
+  {
+    "charge": "FALSE OFFICIAL CERTIFICATES OR WRITINGS BY OFFICERS/EMPLOYEES OF STATE AND POLITICAL SUBDIVISIONS",
+    "ocga": "16-10-8"
+  },
+  {
+    "charge": "BRIBERY OF CONTESTANTS",
+    "ocga": "16-12-33"
+  },
+  {
+    "charge": "USING PRIVATE FUNDS FOR LAW ENFORCEMENT; OFF-DUTY EMPLOYMENT OF LAW ENFORCEMENT OFFICERS",
+    "ocga": "16-10-3"
+  },
+  {
+    "charge": "MALPRACTICE, MISFEASANCE OR MALFEASANCE IN OFFICE BY PUBLIC OFFICER",
+    "ocga": "45-11-4(b)"
+  },
+  {
+    "charge": "VIOLATION OF OATH BY PUBLIC OFFICER",
+    "ocga": "16-10-1"
+  },
+  {
+    "charge": "UNLAWFUL WEARING OF BULLETPROOF VEST DURING COMMISSION OF CRIME",
+    "ocga": "16-11-160 (a)(2)"
+  },
+  {
+    "charge": "VEHICLES WITH FALSE OR SECRET COMPARTMENTS",
+    "ocga": "16-11-112 (d)"
+  },
+  {
+    "charge": "FIREARM OR WEAPON ON PREMISES OF NUCLEAR POWER FACILITY",
+    "ocga": "16-11-127.2"
+  },
+  {
+    "charge": "FIREARM OR WEAPON ON PREMISES OF NUCLEAR POWER FACILITY",
+    "ocga": "16-11-127.2"
+  },
+  {
+    "charge": "UNLAWFUL CARRYING OF A WEAPON",
+    "ocga": "16-11-126(g)(1)"
+  },
+  {
+    "charge": "UNLAWFUL CARRYING OF A WEAPON",
+    "ocga": "16-11-126(g)(1)"
+  },
+  {
+    "charge": "ALTERS/COUNTERFEITS, OR POSSESSES ALTERED/COUNTERFEIT, WEAPONS CARRY LICENSE WITH INTENT TO MISREPRESENT",
+    "ocga": "16-11-129(g)"
+  },
+  {
+    "charge": "ENTER RESTRICTED AREA OF AIRPORT POSSESSING A WEAPON OR LONG GUN  W/INTENT TO COMMIT FELONY",
+    "ocga": "16-11-130.2"
+  },
+  {
+    "charge": "PROHIBITED TRAINING ON MAKING AND USE OF ILLEGAL FIREARMS/EXPLOSIVES/DEVICES IN CIVIL DISORDER/RIOT",
+    "ocga": "16-11-151"
+  },
+  {
+    "charge": "ENTER RESTRICTED AREA OF AIRPORT POSSESSING A WEAPON OR LONG GUN",
+    "ocga": "16-11-130.2"
+  },
+  {
+    "charge": "VIOLATE CONFIDENTIALITY AND SECURITY OF FIREARMS CHECK DATA/RECORDS",
+    "ocga": "16-11-172(c)"
+  },
+  {
+    "charge": "BUS OR RAIL VEHICLE HIJACKING",
+    "ocga": "16-12-123(a)"
+  },
+  {
+    "charge": "BOARDING AN AIRCRAFT, BUS, OR RAIL VEHICLE WITH WEAPON",
+    "ocga": "16-12-123(b)"
+  },
+  {
+    "charge": "UNAUTHORIZED DISCHARGE OF FIREARMS WITHIN 50 YEARDS OF PUBLIC HWY",
+    "ocga": "16-11-103"
+  },
+  {
+    "charge": "DISCHARGE OF FIREARMS ON PROPERTY OF ANOTHER",
+    "ocga": "16-11-104"
+  },
+  {
+    "charge": "FURNISHING  KNUCKLES OR A KNIFE TO PERSON UNDER THE AGE OF 18 YEARS",
+    "ocga": "16-11-101"
+  },
+  {
+    "charge": "FURNISH PISTOL OR REVOLVER TO PERSONS UNDER 18YOA",
+    "ocga": "16-11-101.1"
+  },
+  {
+    "charge": "POINTING OR AIMING GUN OR PISTOL AT ANOTHER",
+    "ocga": "16-11-102"
+  },
+  {
+    "charge": "USE OF FIREARM BY CONVICTED FELON DURING COMMISSION OF A CRIME",
+    "ocga": "16-11-133"
+  },
+  {
+    "charge": "POSSESSION OF SAWED-OFF SHOTGUN, SAWED-OFF RIFLE, MACHINE GUN, DANGEROUS WEAPON, OR SILENCER",
+    "ocga": "16-11-123"
+  },
+  {
+    "charge": "POSSESSION OF FIREARM OR KNIFE DURING COMMISSION OF OR ATTEMPT TO COMMIT CERTAIN FELONIES",
+    "ocga": "16-11-106"
+  },
+  {
+    "charge": "DISCHARGING FIREARM WHILE UNDER INFLUENCE OF ALCOHOL OR DRUGS",
+    "ocga": "16-11-134"
+  },
+  {
+    "charge": "USE OF MACHINE GUN, SAWED-OFF RIFLE, SAWED-OFF SHOTGUN, OR SILENCER DURING COMMISSION OF CRIME",
+    "ocga": "16-11-160(a)(1)"
+  },
+  {
+    "charge": "RECEIPT, POSSESSION OR TRANSPORT OF FIREARM  BY CONVICTED FELON OR FELONY FIRST OFFENDER, ETC",
+    "ocga": "16-11-131(b)"
+  },
+  {
+    "charge": "POSSESSION OF PISTOL OR REVOLVER BY PERSON UNDER 18 YOA - 1ST OFFENSE",
+    "ocga": "16-11-132(b)"
+  },
+  {
+    "charge": "POSSESSION OF PISTOL OR REVOLVER BY PERSON UNDER 18 YOA - 2ND OR SUBSEQUENT OFFENSE",
+    "ocga": "16-11-132(b)"
+  },
+  {
+    "charge": "ATTEMPT TO PURCHASE OR TRANSFER A FIREARM WHEN PROHIBITED BY O.G.G.A. 16-11-131",
+    "ocga": "16-11-131(b.1)"
+  },
+  {
+    "charge": "CARRYING A WEAPON OR LONG GUN IN UNAUTHORIZED LOCATIONS",
+    "ocga": "16-11-127(b)"
+  },
+  {
+    "charge": "CARRYING WEAPON OR LONG GUN IN  JAIL OR PRISON",
+    "ocga": "16-11-127(b)(3)"
+  },
+  {
+    "charge": "KNOWINGLY PROVIDING A FIREARM TO A FELONY FIRST OFFENDER PROBATIONER OR CONVICTED FELON",
+    "ocga": "16-11-113(b)(1)"
+  },
+  {
+    "charge": "SOLICIT,PERSUADE, ETC. DEALER TO TRANSFER FIREARM TO PERSON OTHER THAN BUYER,CONV FEL,OR FEL PROBATIONER",
+    "ocga": "16-11-113(a)"
+  },
+  {
+    "charge": "CARRYING WEAPON IN SCHOOL SAFETY ZONES, AT SCHOOL FUNCTIONS, OR ON A BUS",
+    "ocga": "16-11-127.1(b)(1)"
+  },
+  {
+    "charge": "CARRYING WEAPON IN SCHOOL SAFETY ZONES, AT SCHOOL FUNCTIONS, OR ON A BUS",
+    "ocga": "16-11-127.1(b)(1)"
+  },
+  {
+    "charge": "LASER USE AGAINST AN AIRCRAFT",
+    "ocga": "16-11-45"
+  },
+  {
+    "charge": "INCITING TO RIOTING",
+    "ocga": "16-11-31"
+  },
+  {
+    "charge": "RIOT",
+    "ocga": "16-11-30"
+  },
+  {
+    "charge": "UNLAWFUL ASSEMBLY",
+    "ocga": "16-11-33"
+  },
+  {
+    "charge": "HARASSING PHONE CALLS",
+    "ocga": "16-11-39.1"
+  },
+  {
+    "charge": "DISORDERLY CONDUCT",
+    "ocga": "16-11-39"
+  },
+  {
+    "charge": "WATER VESSEL HULL IDENTIFICATION NUMBERS REQUIRED",
+    "ocga": "52-7-7.1"
+  },
+  {
+    "charge": "COUNTERFEIT WATER VESSEL HULL IDENTIFICATION NUMBERS",
+    "ocga": "57-7-7.5"
+  },
+  {
+    "charge": "AGENCY HEAD IN VIOLATION OF CHAPTER 36, TITLE 50, REQUIRING VERIFICATION OF LAWFUL PRESENCE IN US OR ACT",
+    "ocga": "50-36-1(q)(2)"
+  },
+  {
+    "charge": "KNOWLINGLY ACCEPT ID DOCUMENT THAT ARE NOT SECURE AND VERIFIABLE DOCUMENTS AS PROVIDED BY SUBSECTION (B)(",
+    "ocga": "50-36-2(c)"
+  },
+  {
+    "charge": "AFFRAY (FIGHTING)",
+    "ocga": "16-11-32"
+  },
+  {
+    "charge": "INTERFERING WITH A PUBLIC SAFETY ANIMAL OR SEARCH AND RESCUE ANIMAL",
+    "ocga": "16-11-107(b)"
+  },
+  {
+    "charge": "HARMING A PUBLIC SAFETY ANIMAL OR SEARCH AND RESCUE ANIMAL",
+    "ocga": "16-11-107(c)"
+  },
+  {
+    "charge": "AGGRAVATED HARMING OF A PUBLIC SAFETY ANIMAL OR SEARCH AND RESCUE ANIMAL",
+    "ocga": "16-11-107(d)"
+  },
+  {
+    "charge": "FAILURE TO LEAVE CAMPUS OR FACILITY OF UNIT OF UNIVERSITY SYSTEM WHEN DIRECTED",
+    "ocga": "16-11-35"
+  },
+  {
+    "charge": "ABUSE OR MISUSE OF NATIONAL, STATE OR CONFEDERATE FLAG",
+    "ocga": "50-3-11"
+  },
+  {
+    "charge": "REFUSAL TO RELINQUISH TELEPHONE PARTY LINE IN EMERGENCY; FALSE STATEMENT TO OBTAIN LINE",
+    "ocga": "16-11-42"
+  },
+  {
+    "charge": "FAILURE TO STOP AND COMPLY WITH 52-7-14 AFTER WATER VESSEL ACCIDENT, COLLISION, OR CASUALTY",
+    "ocga": "52-7-14(a)"
+  },
+  {
+    "charge": "OPERATING VESSEL UNDER INFLUENCE OF ALCOHOL (UNDER THE AGE OF 21)",
+    "ocga": "52-7-12(k)(1)"
+  },
+  {
+    "charge": "ENDANGERING A CHILD WHILE OPERATING A VESSEL UNDER THE INFLUENCE",
+    "ocga": "52-7-12(l)"
+  },
+  {
+    "charge": "ENDANGERING A CHILD WHILE OPERATING A VESSEL UNDER THE INFLUENCE",
+    "ocga": "52-7-12(l)"
+  },
+  {
+    "charge": "OPERATION OF WATERCRAFT UNDER THE INFLUENCE OF ALCOHOL, DRUGS OR TOXIC VAPOR",
+    "ocga": "52-7-12(a)"
+  },
+  {
+    "charge": "OPERATION OF WATERCRAFT UNDER THE INFLUENCE OF ALCOHOL, DRUGS OR TOXIC VAPOR",
+    "ocga": "52-7-12(a)"
+  },
+  {
+    "charge": "OPERATING VESSEL UNDER INFLUENCE OF ALCOHOL UNDER THE AGE OF 21",
+    "ocga": "52-7-12(k)(1)"
+  },
+  {
+    "charge": "VESSEL OWNER AUTHORIZE PERSON TO OPERATE VESSEL UNDER INFLUENCE OF ALCOHOL, DRUGS,TOXIC VAPORS",
+    "ocga": "52-7-12(i)"
+  },
+  {
+    "charge": "VESSEL OWNER AUTHORIZE PERSON TO OPERATE VESSEL UNDER INFLUENCE OF ALCOHOL, DRUGS,TOXIC VAPORS",
+    "ocga": "52-7-12(i)"
+  },
+  {
+    "charge": "OPERATING A VESSEL OR WATERCRAFT WHEN PRIVILEGE IS SUSPENDED",
+    "ocga": "52-7-12.6(c)"
+  },
+  {
+    "charge": "FLYING AN AIRCRAFT UNDER THE INFLUENCE OF ALCOHOL OR DRUGS",
+    "ocga": "6-2-5.1"
+  },
+  {
+    "charge": "PREVENTING OR DISRUPTING LAWFUL MEETINGS, GATHERINGS, OR PROCESSIONS",
+    "ocga": "16-11-34"
+  },
+  {
+    "charge": "RECKLESS CONDUCT - PERSON LIVING WITH HIV",
+    "ocga": "16-5-60(c)"
+  },
+  {
+    "charge": "RECKLESS CONDUCT",
+    "ocga": "16-5-60(b)"
+  },
+  {
+    "charge": "OBSTRUCTING HIGHWAYS, STREETS, SIDEWALKS, OR OTHER PUBLIC PASSAGES",
+    "ocga": "16-11-43"
+  },
+  {
+    "charge": "FIREWORKS SALE, USE, POSSESSION, MANUFACTURE OR TRANSPORTATION PROHIBITED",
+    "ocga": "25-10-2"
+  },
+  {
+    "charge": "UNLAWFUL FIREWORKS DISPLAY FOR PUBLIC EXHIBITION WITHOUT LICENSE",
+    "ocga": "25-10-8(a)"
+  },
+  {
+    "charge": "IGNITE CONSUMER FIREWORKS OR FIREWORKS WHILE UNDER THE INFLUENCE OF ALCOHOL OR DRUGS",
+    "ocga": "25-10-2.1"
+  },
+  {
+    "charge": "DISORDERLY OR DISRUPTIVE CONDUCT AT ANY FUNERAL OR MEMORIAL SERVICE",
+    "ocga": "16-11-34.2(c)"
+  },
+  {
+    "charge": "DEFACE PUBLIC MONUMENT, PLAQUE, MARKER OR MEMORIAL",
+    "ocga": "50-3-1(b)(1)"
+  },
+  {
+    "charge": "VIOLATION OF GA. CEMETERY AND FUNERAL SERVICES ACT OF 2000",
+    "ocga": "10-14-20(a)"
+  },
+  {
+    "charge": "VIOLATION OF GA. CEMETERY AND FUNERAL SERVICES ACT OF 2000",
+    "ocga": "10-14-20(b)"
+  },
+  {
+    "charge": "WEARING MASK, HOOD, OR DEVICE WHICH CONCEALS IDENTITY OF WEARER",
+    "ocga": "16-11-38"
+  },
+  {
+    "charge": "HAZING STUDENTS",
+    "ocga": "16-5-61"
+  },
+  {
+    "charge": "PROMOTES OR ORGANIZES AN EXHIBITION OF ILLEGAL DRAG RACING OR LAYING DRAGS",
+    "ocga": "16-11-43.1(a)"
+  },
+  {
+    "charge": "HIT AND RUN; DUTY OF DRIVER TO STOP AT OR RETURN TO SCENE OF ACCIDENT",
+    "ocga": "40-6-270"
+  },
+  {
+    "charge": "ENDANGERING A CHILD BY DRIVING UNDER THE INFLUENCE OF ALCOHOL OR DRUGS",
+    "ocga": "40-6-391(l)"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE OF ALCOHOL",
+    "ocga": "40-6-391(a)(1)"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE OF DRUGS",
+    "ocga": "40-6-391(a)(2)"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE OF GLUE/AEROSOL/TOXIC VAPOR",
+    "ocga": "40-6-391(a)(3)"
+  },
+  {
+    "charge": "UNLAWFUL SPECIFICATION OF DUI ALCOHOL OR DRUG RISK REDUCTION PROGRAM BY PROBATION SUPERVISOR",
+    "ocga": "42-8-26(c)(3)"
+  },
+  {
+    "charge": "DUI - DRIVING SCHOOL BUS UNDER INFLUENCE OF ALCOHOL OR DRUGS",
+    "ocga": "40-6-391.3"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE OF MULTIPLE SUBSTANCES",
+    "ocga": "40-6-391(a)(4)"
+  },
+  {
+    "charge": "RESTRICTIONS ON USE OF BLUE LIGHTS ON VEHICLES",
+    "ocga": "40-8-90(a)(2)"
+  },
+  {
+    "charge": "DRIVING WHILE LICENSE SUSPENDED OR REVOKED",
+    "ocga": "40-5-121"
+  },
+  {
+    "charge": "INSTALLATION OR REINSTALLATION OF OBJECT IN LIEU OF OR OTHER THAN AIR BAG",
+    "ocga": "16-9-111"
+  },
+  {
+    "charge": "FRAUDULENT DRIVERS LICENSE OR IDENTIFICATION CARD; FALSE STATEMENTS IN APPLICATIONS",
+    "ocga": "40-5-125(a)"
+  },
+  {
+    "charge": "FRAUDULENT DRIVERS LICENSE OR IDENTIFICATION CARD; FALSE STATEMENTS IN APPLICATIONS",
+    "ocga": "40-5-125(b)"
+  },
+  {
+    "charge": "UNLAWFUL TO LEND IDENTIFICATION CARD FOR PERSONS WITH DISABILITIES OR PERMIT USE BY ANOTHER",
+    "ocga": "40-5-179(1)"
+  },
+  {
+    "charge": "UNLAWFUL TO DISPLAY OR REPRESENT AS OWN IDENTIFICATION CARD WITH DISABILITIES NOT ISSUED TO THEM",
+    "ocga": "40-5-179(2)"
+  },
+  {
+    "charge": "PROHIBITED USE OF TRAFFIC CONTROL DEVICE PREEMPTION EMITTER",
+    "ocga": "40-6-17(b)"
+  },
+  {
+    "charge": "OPERATION OF PERSONAL ASSISTIVE MOBILITY DEVICE WHILE INTOXICATED",
+    "ocga": "40-6-326"
+  },
+  {
+    "charge": "ALTERING FORGING COUNTERFEITING  MOTOR VEHICLE  CERTIFICATE OF TITLE",
+    "ocga": "40-3-90"
+  },
+  {
+    "charge": "HIT AND RUN RESULTING IN SERIOUS INJURY OR DEATH",
+    "ocga": "40-6-270(b)"
+  },
+  {
+    "charge": "UNLAWFUL SPECIFICATION OF DUI ALCOHOL OR DRUG RISK REDUCTION PROGRAM BY PRIVATE PROBATION AGENCY",
+    "ocga": "42-8-109"
+  },
+  {
+    "charge": "VIOLATION OF IGNITION INTERLOCK DEVICE ACT",
+    "ocga": "42-8-118"
+  },
+  {
+    "charge": "SCAN ANOTHER PERSON DRIVER LICENSE/IDENT CARD WITHOUT PRIOR KNOWLEDGE/CONSENT OF PERSON",
+    "ocga": "40-5-120(5)"
+  },
+  {
+    "charge": "SERIOUS INJURY BY INTERFERENCE WITH AN OFFICIAL TRAFFIC-CONTROL DEVICE OR RAILROAD SIGN OR SIGNAL",
+    "ocga": "40-6-396(b)"
+  },
+  {
+    "charge": "ENDANGERING A CHILD WHILE DRIVING UNDER THE INFLUENCE OF ALCOHOL",
+    "ocga": "40-6-391(l)"
+  },
+  {
+    "charge": "VIOLATION OF AN IGNITION INTERLOCK DEVICE LIMITED DRIVING PERMIT",
+    "ocga": "40-5-64.1"
+  },
+  {
+    "charge": "IMPERSONATING AN OFFICER",
+    "ocga": "40-6-395(e)"
+  },
+  {
+    "charge": "HABITUAL VIOLATOR",
+    "ocga": "40-5-58(c)"
+  },
+  {
+    "charge": "HABITUAL VIOLATOR - SURRENDER LICENSE PLATE",
+    "ocga": "40-2-136(b)"
+  },
+  {
+    "charge": "SERIOUS INJURY BY VEHICLE",
+    "ocga": "40-6-394(b)"
+  },
+  {
+    "charge": "COMMITS THE CRIME SERIOUS INJURY BY VEHICLE AND LEAVES THE SCENE OF THE ACCIDENT",
+    "ocga": "40-6-394(c)"
+  },
+  {
+    "charge": "DRIVING WITHOUT A VALID LICENSE",
+    "ocga": "40-5-20"
+  },
+  {
+    "charge": "DRIVING WITHOUT A VALID LICENSE - FOURTH OR SUBSEQUENT OFFENSE WITHIN FIVE YEARS",
+    "ocga": "40-5-20"
+  },
+  {
+    "charge": "DRIVING WHILE LICENSE SUSPENDED OR REVOKED - FOURTH OR SUBSEQUENT OFFENSE WITHIN FIVE YEARS",
+    "ocga": "40-5-121"
+  },
+  {
+    "charge": "VIOLATING CONDITIONS ON PROBATIONARY DRIVERS LICENSE",
+    "ocga": "40-5-58(d)(6)(A)(i)"
+  },
+  {
+    "charge": "TRUCK ALTERATION OF SUSPENSION SYSTEMS",
+    "ocga": "40-8-6.1"
+  },
+  {
+    "charge": "RECKLESS STUNT DRIVING, 4TH CONVICTION",
+    "ocga": "40-6-390.1"
+  },
+  {
+    "charge": "RECKLESS STUNT DRIVING",
+    "ocga": "40-6-390.1"
+  },
+  {
+    "charge": "OPERATING A MOTOR VEHICLE WITH A SUSPENDED LICENSE WITH A RECKLESS STUNT DRIVING CONVICTION",
+    "ocga": "40-5-57.2"
+  },
+  {
+    "charge": "ACQUIRING LICENSE PLATE FOR PURPOSE OF CONCEALING IDENTIFICATION OF  MOTOR VEHICLE",
+    "ocga": "40-2-5"
+  },
+  {
+    "charge": "KNOWINGLY DRIVING MOTOR VEHICLE ON SUSPENDED, CANCELED, OR REVOKED REGISTRATION",
+    "ocga": "40-6-15"
+  },
+  {
+    "charge": "VIOLATION OF CONDITIONS ON LIMITED DRIVING PERMIT",
+    "ocga": "40-5-64"
+  },
+  {
+    "charge": "DRIVING COMMERCIAL MOTOR VEHICLE WITH MORE THAN ONE LICENSE PROHIBITED",
+    "ocga": "40-5-143"
+  },
+  {
+    "charge": "VIOLATING LAW OR ORDINANCE FOR CERTAIN OFFENSES BY PROBATIONARY LICENSEE",
+    "ocga": "40-5-58(d)(6)(A)(ii)(iii)"
+  },
+  {
+    "charge": "EMPLOYER ALLOWS DRIVER TO DRIVE COMMERCIAL VEHICLE WITH SUSPENDED/REVOKED; MULTIPLE LICENSES, ETC.",
+    "ocga": "40-5-145(b)"
+  },
+  {
+    "charge": "VIOLATE OR FAIL TO COMPLY WITH ARTICLE 2, CHAPTER 1 OF TITLE 40, TRANSPORTATION OF HAZARDOUS MATERIALS (M",
+    "ocga": "40-1-23"
+  },
+  {
+    "charge": "OPERATING A VEHICLE WITH FLASHING OR REVOLVING AMBER LIGHTS ON A HIGHWAY DURING COMMISSION OF FELONY",
+    "ocga": "40-8-35"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE OF ALCOHOL - CONCENTRATION IS 0.08G OR MORE WITHIN 3 HRS OR MORE",
+    "ocga": "40-6-391(a)(5)"
+  },
+  {
+    "charge": "DUI - ALCOHOL/CONTROLLED SUBSTANCE PRESENT IN BLOOD OR URINE SUBJ TO O.C.G.A.42-6-391(B)",
+    "ocga": "40-6-391(a)(6)"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE OF ALCOHOL WHILE DRIVING COMMERCIAL MOTOR VEHICLE",
+    "ocga": "40-6-391(i)"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE OF ALCOHOL UNDER THE AGE OF 21",
+    "ocga": "40-6-391(k)"
+  },
+  {
+    "charge": "HABITUAL VIOL W/REVOKED LICENSE CONVICTED OF OPERATING MV AFTER 5Y/BEFORE DRIVER LIC ISSUED",
+    "ocga": "40-5-58(c)(1)"
+  },
+  {
+    "charge": "DUI - DRIVING UNDER THE INFLUENCE - FOURTH OR SUBSEQUENT CONVICTION WITHIN TEN YEAR PERIOD",
+    "ocga": "40-6-391(c)"
+  },
+  {
+    "charge": "FAIL TO YIELD RIGHT OF WAY TO MOTORCYCLE/BICYCLE/PED/FARM VEHICLE RESULT IN  SERIOUS INJURY",
+    "ocga": "40-6-77"
+  },
+  {
+    "charge": "PERMIT ANOTHER TO HAVE/USE CERTIFICATE OF TITLE WITH FRAUDULENT INTENT; FAIL TO DELIVER TITLE IN 10 DAYS",
+    "ocga": "40-3-91"
+  },
+  {
+    "charge": "ACTS RELATING TO MOTOR VEHICLE ODOMETER READINGS",
+    "ocga": "40-8-5"
+  },
+  {
+    "charge": "SALE, SHIP, OR MANUFACTURE OF CERTAIN MOTOR VEHICLE PART WITHOUT VIN; FAIL TO KEEP RECORDS",
+    "ocga": "40-4-7"
+  },
+  {
+    "charge": "BUY, SELL, ETC. MOTOR VEHICLE, OR PART WHICH SERIAL NUMBERS HAVE BEEN ALTERED TO CONCEAL IDENTITY",
+    "ocga": "40-4-22"
+  },
+  {
+    "charge": "UNLAWFUL MANUFACTURE OF LICENSE TAGS",
+    "ocga": "40-2-4"
+  },
+  {
+    "charge": "FALSIFY STATEMENT RELATED TO CANELLATION OF CERTIFICATION OF TITLE FOR SCRAPPED VEHICLE",
+    "ocga": "40-3-36(a)(2)"
+  },
+  {
+    "charge": "VIOLATIONS RELATING TO FREE LICENSE TAGS FOR VETERANS",
+    "ocga": "40-2-72"
+  },
+  {
+    "charge": "PERSONAL USE OF LAW ENFORCEMENT VEHICLE PROHIBITED UNLESS LIGHTS AND MARKINGS ARE REMOVED",
+    "ocga": "40-8-91"
+  },
+  {
+    "charge": "USE OF BLUE LIGHT IN COMMISSION OF FELONY",
+    "ocga": "40-8-90(c)"
+  },
+  {
+    "charge": "AFFIXING MATERIALS THAT REDUCE OR INCREASE LIGHT TRANSMISSION/REFLECTANCE OF WINDOWS/WINDSHIELDS",
+    "ocga": "40-8-73.1"
+  },
+  {
+    "charge": "PARKING, STANDING OR DRIVING VEHICLE IN PRIVATE PARKING AREA AFTER REQUEST NO TO DO SO",
+    "ocga": "40-6-252"
+  },
+  {
+    "charge": "REMOVAL OR FALSIFICATION OF MOTOR VEHICLE OR ENGINE IDENTIFICATION NUMBER",
+    "ocga": "40-4-21(a)"
+  },
+  {
+    "charge": "REMOVAL OR FALSIFICATION OF MOTOR VEHICLE OR ENGINE IDENTIFICATION NUMBER WITH INTENT TO DEFRAUD-FEL",
+    "ocga": "40-4-21(b)"
+  },
+  {
+    "charge": "UNLAWFUL SALE OF MOTOR VEHICLES WHICH DO NOT COMPLY WITH FEDERAL EMISSION AND SAFETY STANDARDS",
+    "ocga": "16-9-110"
+  },
+  {
+    "charge": "EMPLOYER FAIL TO REPORT FRAUDULENT INFO REGARDING EMPLOYEES EMPLOYMENT OR EXPERIENCE",
+    "ocga": "40-5-159(b)"
+  },
+  {
+    "charge": "AGGRESSIVE DRIVING",
+    "ocga": "40-6-397"
+  },
+  {
+    "charge": "DRIVING AWAY WITHOUT PAYING FOR GASOLINE",
+    "ocga": "40-6-255"
+  },
+  {
+    "charge": "SALE, AUCTION, TRANSFER OF INFECTED OR DISEASED POULTRY",
+    "ocga": "4-4-81"
+  },
+  {
+    "charge": "OPERATING A POULTRY MARKET WITHOUT LICENSE",
+    "ocga": "4-4-82"
+  },
+  {
+    "charge": "PROHIBIT ACTIVITIES FOR FELON/PERSON CONVICTED OF CRIME OF MORAL TURPITUDE INVOLVING MARTIAL ARTS",
+    "ocga": "43-4B-53(d)"
+  },
+  {
+    "charge": "CONTROL OF VICIOUS DOG (O.C.G.A. 4-8-42)",
+    "ocga": "4-8-43"
+  },
+  {
+    "charge": "UNLAWFUL TO OBSTRUCT, RESIST, IMPEDE OR INTERFERE WITH PERSON ENFORCING LITTERING LAWS",
+    "ocga": "16-7-43(g)"
+  },
+  {
+    "charge": "FRAUDULENT, MISREPRESESNTING, OR MISLEADING ACTIVITIES REGARDING CHARITABLE SOLITATIONS PER 43-17-12(D)",
+    "ocga": "43-17-23(b)"
+  },
+  {
+    "charge": "PROHIBIT ACTIVITIES FOR FELON/PERSON CONVICTED OF CRIME OF MORAL TURPITUDE INVOLVING MARTIAL ARTS OR WRES",
+    "ocga": "43-4B-53(d)"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA COMPREHENSIVE SOLID WASTE MANAGEMENT ACT",
+    "ocga": "12-8-30.8"
+  },
+  {
+    "charge": "VIOLATION OF THE HAZARDOUS WASTE MANAGEMENT ACT",
+    "ocga": "12-8-82"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA AIR QUALITY ACT",
+    "ocga": "12-9-24"
+  },
+  {
+    "charge": "ENGAGE IN PRACTICE OF PERFUSION WITHOUT A LICENSE (O.C.G.A. 43-34-177)",
+    "ocga": "43-34-178(b)"
+  },
+  {
+    "charge": "DUMPING WASTE EXCEEDING 500 LBS OR 100 CUBIC FEET IN VOLUME 2ND OR SUBSEQUENT OFFENSE",
+    "ocga": "16-7-53(b)"
+  },
+  {
+    "charge": "PRACTICING CHIROPRACTIC WITHOUT LICENSE",
+    "ocga": "43-9-19"
+  },
+  {
+    "charge": "DUMPING BIOMEDICAL  OR HAZARDOUS WASTE OR SUBSTANCE OR DUMPING FOR COMMERCIAL PURPOSE",
+    "ocga": "16-7-53(c)"
+  },
+  {
+    "charge": "DUMPING WASTE UNDER 500 LBS OR 100 CUBIC FT IN VOLUME (NOT BIOMEDICAL/HAZARDOUS/COMMERCIAL)",
+    "ocga": "16-7-53(a)"
+  },
+  {
+    "charge": "PRACTICING DENTISTRY UNDER ANOTHERS LICENSE",
+    "ocga": "43-11-51"
+  },
+  {
+    "charge": "PRACTICING DENTISTRY WITHOUT LICENSE",
+    "ocga": "43-11-50"
+  },
+  {
+    "charge": "PRACTICING OPTOMETRY WITHOUT A LICENSE",
+    "ocga": "43-30-14"
+  },
+  {
+    "charge": "UNLAWFUL PROMOTION OF UNARMED COMBAT (3RD AND SUBSEQUENT OFFENSE)",
+    "ocga": "43-4B-21(d)"
+  },
+  {
+    "charge": "ABANDONED; UNATTENDED; DISCARDED CONTAINERS AND MOTOR VEHICLES WITH LOCKS, DOORS OR WINDOWS",
+    "ocga": "16-11-100"
+  },
+  {
+    "charge": "UNLAWFUL ENGAGING IN UNARMED COMBAT (1ST AND 2ND OFFENSE)",
+    "ocga": "43-4B-21(c)"
+  },
+  {
+    "charge": "ACT AS ATHLETIC TRAINER WITHOUT A LICENSE",
+    "ocga": "43-5-7"
+  },
+  {
+    "charge": "ENGAGE IN THE PRACTICE OF VETERINARY MEDICINE WITHOUT A LICENSE",
+    "ocga": "43-50-45(a)"
+  },
+  {
+    "charge": "UNLAWFUL PROMOTION OF UNARMED COMBAT (1ST AND 2ND OFFENSE)",
+    "ocga": "43-4B-21(d)"
+  },
+  {
+    "charge": "ATTEMPT OR ADMINISTER/PERFORM ARTIFICIAL INSEMINATION WITHOUT LICENSE TO PRACTICE MEDICINE",
+    "ocga": "43-34-37"
+  },
+  {
+    "charge": "PRACTICE MEDICINE WITHOUT LICENSE",
+    "ocga": "43-34-42"
+  },
+  {
+    "charge": "UNAUTHORIZED PRACTICE OF OSTEOPATHIC MEDICINE",
+    "ocga": "43-34-40"
+  },
+  {
+    "charge": "UNLAWFULLY SELL OR DISPENSE CONTACT LENSES OR SPECTACLES-3RD OR SUBSEQUENT OFFENSE",
+    "ocga": "31-12-12"
+  },
+  {
+    "charge": "VIOLATION OF GEORGIA  DRUG AND COSMETIC ACT",
+    "ocga": "26-3-24"
+  },
+  {
+    "charge": "VIOLATE VITAL RECORDS REGISTRATION",
+    "ocga": "31-10-31"
+  },
+  {
+    "charge": "VIOLATE VITAL RECORDS REGISTRATION",
+    "ocga": "31-10-31"
+  },
+  {
+    "charge": "VIOLATION OF O.C.G.A. 43-4A-14 RELATING TO ATHLETIC AGENT NOTICE OF CONTRACT TO ATHLETIC DIRECTOR",
+    "ocga": "43-4A-14"
+  },
+  {
+    "charge": "UNLAWFUL SOLICITATION/TRANSACTION WITH STUDENT ATHLETE",
+    "ocga": "20-2-317"
+  },
+  {
+    "charge": "UNLAWFULLY SELL OR DISPENSE CONTACT LENSES OR SPECTACLES-1ST OR 2ND OFFENSE",
+    "ocga": "31-12-12"
+  },
+  {
+    "charge": "PAY/SOLICIT/RECEIVE RENUMERATION FOR REFERRING PATIENT/PATRONAGE TO SUBSTANCE ABUSE PROVIDER",
+    "ocga": "26-5-80(b)"
+  },
+  {
+    "charge": "SELL OR DISPENSE DRUGS IN VENDING MACHINE",
+    "ocga": "26-4-89"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA PODIATRY PRACTICE ACT",
+    "ocga": "43-35-18"
+  },
+  {
+    "charge": "DISTRIBUTE, DELIVER OR RECEIVE DRUGS OR DEVICES FROM UNLICENSED PERSON OR FIRM",
+    "ocga": "26-4-113(b)"
+  },
+  {
+    "charge": "FAILURE TO RECORD THE SALE OF POISON AS REQUIRED",
+    "ocga": "26-4-161"
+  },
+  {
+    "charge": "PAY/SOLICIT/RECEIVE RENUMERATION FOR REFERRING PATIENT/PATRONAGE TO SUBSTANCE ABUSE PROVIDER",
+    "ocga": "26-5-80(b)"
+  },
+  {
+    "charge": "UNLAWFUL PRACTICE PHARMACY WITHOUT A LICENSE",
+    "ocga": "26-4-40"
+  },
+  {
+    "charge": "UNLAWFUL SALE OF POISON",
+    "ocga": "26-4-160"
+  },
+  {
+    "charge": "DRUG RESEARCHER - FAIL TO APPLY FOR PERMIT; OTHER UNLAWFUL ACTS",
+    "ocga": "26-4-49"
+  },
+  {
+    "charge": "DRUG DISTRIBUTOR THAT FAILS TO REGISTER OR SUBMIT REPORTS",
+    "ocga": "26-4-115"
+  },
+  {
+    "charge": "DISTRIBUTE/ATTEMPT TO DISTRIBUTE ADULTERATED FOOD OR ARTICLE",
+    "ocga": "26-2-88(a)"
+  },
+  {
+    "charge": "DISTRIBUTE/ATTEMPT TO DISTRIBUTE/SELL FOR HUMAN CONSUMPTION DISEASED OR CANCEROUS ANIMAL",
+    "ocga": "26-2-88(b)"
+  },
+  {
+    "charge": "HEALTH SPA SHALL NOT ENTER INTO AN AGREEMENT WITH CONSUMER UNLESS IT IS FULLY OPERATIONAL/AVAILABLE",
+    "ocga": "10-1-393.2(l)"
+  },
+  {
+    "charge": "KNOWINGLY ADDING POISONOUS OR DELETERIOUS SUBSTANCES TO COMMERCE FINISHED FOODS OR FINISH FOOD INGREDIENTS",
+    "ocga": "26-2-27.1"
+  },
+  {
+    "charge": "BUYING OR SELLING OR OFFERING TO BUY OR SELL THE HUMAN BODY OR PARTS",
+    "ocga": "16-12-160"
+  },
+  {
+    "charge": "WILLFUL DESTRUCTION, ALTERATION, OR FALSIFICATION OF MEDICAL RECORDS.",
+    "ocga": "16-10-94.1"
+  },
+  {
+    "charge": "REMOVAL OR DISPOSAL OF BY INTRODUCING INTO COMMERCE EMBARGOED ADULTERATED OR MISBRANDED FOOD",
+    "ocga": "26-2-24"
+  },
+  {
+    "charge": "MANUFACTURE/SALE/DELIVERY/RECEIPT OF ADULTERATED OR MISBRAND FOOD; OTHER PROHIBITED ACTS PER OCGA 26-2-22",
+    "ocga": "26-2-24"
+  },
+  {
+    "charge": "KNOWINGLY INTRODUCE FOREIGN ANIMAL DISEASE",
+    "ocga": "4-4-6(a)"
+  },
+  {
+    "charge": "FAILURE TO REPORT CERTAIN ANIMAL DISEASES, SYNDROMES OR CONDITIONS",
+    "ocga": "4-4-6(b)"
+  },
+  {
+    "charge": "OWNER TO HAVE OR POSSESS A CLASSIFIED DOG WITH REQUIRED CERTIFICATE OF REGISTRATION",
+    "ocga": "4-8-27(a)"
+  },
+  {
+    "charge": "OWNER OF CLASSIFIED DOG SHALL NOTIFY CONTROL OFFICER IF DOG ON LOOSE/ATTACKS/DIED/EUTHANIZED",
+    "ocga": "4-8-28(a)"
+  },
+  {
+    "charge": "VICIOUS DOG NOT TRANSFERRED/SOLD/DONATED UNLESS RELINQUISHED TO GOV FACILITY/VET TO EUTHANIZE",
+    "ocga": "4-8-28(b)"
+  },
+  {
+    "charge": "OWNER OF CLASSIFIED DOG WHO MOVES SHALL REGISTER DOG WITHIN REQUIRED NUMBER OF DAYS",
+    "ocga": "4-8-28(c)"
+  },
+  {
+    "charge": "DOG OWNER WITH PREVIOUS CONVICTION FOR VIOLATION WHOSE CLASSIFIED DOG CAUSES SERIOUS INJURY TO HUMAN",
+    "ocga": "4-8-29(d)"
+  },
+  {
+    "charge": "VIOLATION OF O.C.G.A. 45-17-8 RELATED TO PERFORMING NOTARIAL SERVICES",
+    "ocga": "45-17-8"
+  },
+  {
+    "charge": "PERFORMING NOTARIAL SERVICES WITHOUT COMPLYING WITH ARTICLE - 3RD OR SUBQ CONVICTION",
+    "ocga": "45-17-8"
+  },
+  {
+    "charge": "OWNER OF DANGEROUS DOG TO PERMIT DOG TO BE OFF PROPERTY",
+    "ocga": "4-8-29(a)"
+  },
+  {
+    "charge": "OWNER OF VICIOUS DOG TO PERMIT DOG TO BE OUTSIDE ENCLOSURE",
+    "ocga": "4-8-29(b)"
+  },
+  {
+    "charge": "TRAFFIC IN DEAD HUMAN BODIES",
+    "ocga": "31-21-41"
+  },
+  {
+    "charge": "REMOVAL OF DEAD BODY FROM GRAVE FOR PURPOSES OF SALE OR DISSECTION",
+    "ocga": "31-21-43"
+  },
+  {
+    "charge": "REMOVE DEAD BODY FROM GRAVE/DISTURB CONTENT OF GRAVE; RECEIVE, DISPOSE, OR POSSESS DEAD BODY OR PART",
+    "ocga": "31-21-44"
+  },
+  {
+    "charge": "CRIMINAL TRESPASS",
+    "ocga": "16-7-21"
+  },
+  {
+    "charge": "CRIMINAL TRESPASS INVOLVING A WILD ANIMAL IN THE FIRST DEGREE",
+    "ocga": "16-7-21.2(b)(1)"
+  },
+  {
+    "charge": "UNLAWFUL DISCLOSURE OF INFORMATION BY CONSUMER REPORTING AGENCY",
+    "ocga": "10-1-393(b)(29)"
+  },
+  {
+    "charge": "DISCLOSURE OF INFORMATION OBTAINED IN PREPARING INCOME TAX RETURNS",
+    "ocga": "16-11-81"
+  },
+  {
+    "charge": "EXCISE TAX INN KEEPER FAILURE TO PAY (OVER $10,000)",
+    "ocga": "48-13-58.1(b)(2)"
+  },
+  {
+    "charge": "POSSESSION SALE AND DISTRIBUTION OF EAVESDROPPING DEVICES",
+    "ocga": "16-11-63"
+  },
+  {
+    "charge": "CAUSE ELECTRONIC TRANSMISSION OR POSTING OF SEXUALLY EXPLICIT PHOTO OR VIDEO",
+    "ocga": "16-11-90(b)(2)(B)"
+  },
+  {
+    "charge": "ELECTRONICALLY TRANSMIT OR POST NUDE/SEXUALLY EXPLICIT PHOTO OR VIDEO",
+    "ocga": "16-11-90(b)(1)(B)"
+  },
+  {
+    "charge": "ELECTRONICALLY TRANSMIT OR POST NUDE/SEXUALLY EXPLICIT PHOTO OR VIDEO-2ND, SUBSEQUENT OFFENSE",
+    "ocga": "16-11-90(b)(1)(B)"
+  },
+  {
+    "charge": "CAUSE ELECTRONIC TRANSMISSION OR POSTING 0F SEXUALLY EXPLICIT PHOTO OR VIDEO, 2ND, SUBQ OFFENSE",
+    "ocga": "16-11-90(b)(2)(B)"
+  },
+  {
+    "charge": "TRANSMIT OR POST NUDE OR SEXUALLY EXPLICIT PHOTO OR VIDEO TO A WEBSITE/LIVE WEBCAM/MESSAGE BOARD",
+    "ocga": "16-11-90(b)(1)(A)"
+  },
+  {
+    "charge": "CAUSE TRANSMITTAL/POST OF NUDE/SEXUALLY EXPLICIT PHOTO/VIDEO TO A WEBSITE/LIVE WEBCAM/MESSAGE BOARD",
+    "ocga": "16-11-90(b)(2)(A)"
+  },
+  {
+    "charge": "ABANDONMENT OF DEAD BODY",
+    "ocga": "31-21-44.2"
+  },
+  {
+    "charge": "DEAD BODY ABUSE",
+    "ocga": "31-21-44.1"
+  },
+  {
+    "charge": "UNLAWFUL EXHIBITION OR DISPLAY OF DEAD AMERICAN INDIAN BODIES OR PARTS",
+    "ocga": "31-21-45"
+  },
+  {
+    "charge": "UNLAWFUL EAVESDROPPING OR SURVEILLANCE",
+    "ocga": "16-11-62"
+  },
+  {
+    "charge": "OBTAIN FOR, PROCURE FOR, OR GIVE AN INMATE TOBACCO OR TOBACCO PRODUCT WITHOUT CONSENT OF JAILER",
+    "ocga": "42-4-13(d.1)"
+  },
+  {
+    "charge": "UNLAWFUL TO DELIVER TO INMATE ANY ALCOHOLIC BEVERAGE WITHOUT CONSENT OF JAILER",
+    "ocga": "42-4-13(d)(1)(B)"
+  },
+  {
+    "charge": "UNLAWFUL TO OBTAIN FOR OR GIVE TO INMATE ANY ITEM WITHOUT CONSENT OF JAILER",
+    "ocga": "42-4-13(e)"
+  },
+  {
+    "charge": "REFUSAL BY OFFICER TO RECEIVE INMATES",
+    "ocga": "42-5-39"
+  },
+  {
+    "charge": "ESCAPE BY PERSON IN CUSTODY UNDER AGREEMENT",
+    "ocga": "42-6-25"
+  },
+  {
+    "charge": "ASSAILING, OPPOSING, OR RESISTING OFFICER OF THE LAW IN A PENAL INSTITUTION",
+    "ocga": "16-10-54"
+  },
+  {
+    "charge": "INTRODUCE ACROSS GUARD LINE/COME INSIDE JUVENILE DETENTION CENTER WITH GUN/PISTOL/KNIFE/WEAPON/BULLET AMM",
+    "ocga": "49-4A-16(b)(1)"
+  },
+  {
+    "charge": "INTRODUCE ACROSS/COME INSIDE JUVENILE DETENTION CENTER WITH LIQUOR/AMPHETAMINES/MARIJUANA/HALLC (FE",
+    "ocga": "49-4A-16(b)(2)"
+  },
+  {
+    "charge": "TAKE/CAUSE TO BE INTRODUCED INTO JUVENILE DETENTION CENTER ANY ITEM WITHOUT KNOWLEDGE/CONSENT OF COM",
+    "ocga": "49-4A-17(a)"
+  },
+  {
+    "charge": "TRADE/TRAFFIC WITH/BUY FROM/SELL ANY ARTICLE TO YOUTH ASSIGNED TO JUV DET CTR WITHOUT KNOWLEDGE/CONS",
+    "ocga": "49-4A-17(b)"
+  },
+  {
+    "charge": "UNLAWFUL FOR ANY PERSON TO OBTAIN FOR/PROCURE FOR/GIVE TO YOUTH ANY ARTICLE OR ITEM WITHOUT AUTHORIZATION",
+    "ocga": "49-4A-18(b)"
+  },
+  {
+    "charge": "UNLAWFUL FOR YOUTH TO POSSESS ANY PROHIBITED ARTICLE OR ITEM WITHOUT AUTHORIZATION OF JUVENILE DETENTION",
+    "ocga": "49-4A-18(c)"
+  },
+  {
+    "charge": "OBTAIN/PROCURE/GIVE INMATE TOBACCO/TOBACCO PRODUCT WITHOUT AUTHORIZATION (F)",
+    "ocga": "42-5-18(b)(1)"
+  },
+  {
+    "charge": "OBTAIN/PROCURE/GIVE INMATE A STORED VALUE CARD, CARD ACCOUNT NUMBER, OR PIN (F)",
+    "ocga": "42-5-18(e)(2)"
+  },
+  {
+    "charge": "UNAUTHORIZED POSSESSION OF PROHIBITED ITEM BY INMATE (F)",
+    "ocga": "42-5-18(c)"
+  },
+  {
+    "charge": "OBTAIN/PROCURE/GIVE INMATE PROHIBITED ITEM WITHOUT AUTHORIZATION (F)",
+    "ocga": "42-5-18(b)"
+  },
+  {
+    "charge": "UNAUTHORIZED POSSESSION OF TELECOMMUNICATIONS DEVICE BY INMATE - ORIGINAL CHARGE WAS A MISDEMEANOR",
+    "ocga": "42-5-18(c)"
+  },
+  {
+    "charge": "POSSESSION OF STORED VALUE CARD, CARD ACCOUNT NUMBER, OR PIN BY INMATE (F)",
+    "ocga": "42-5-18(e)(1)"
+  },
+  {
+    "charge": "INTENTIONALLY USE UNMANNED AIRCRAFT TO PHOTO/RECORD A PLACE OF INCARCERATION TO COMMIT A CRIME (F)",
+    "ocga": "42-5-18(f)(2)"
+  },
+  {
+    "charge": "INTENTIONALLY USE UNMANNED AIRCRAFT SYSTEM TO OBTAIN/PROCURE/GIVE/POSSESS PROHIBITED ITEMS (F)",
+    "ocga": "42-5-18(f)(1)"
+  },
+  {
+    "charge": "PERSUADING, ENTICING, INSTIGATING, AIDING, ETC. PERSON IN PENAL INSTITUTION TO COMMIT MUTINY",
+    "ocga": "16-10-55"
+  },
+  {
+    "charge": "DIVULGE CONFIDENTIAL STATE SECRETS RELATED TO A PENAL INSTITUTION/INMATE",
+    "ocga": "42-5-36(f)"
+  },
+  {
+    "charge": "PENAL EMPLOYEE SHALL NOT GIVE ADVICE TO INMATES ON EMPLOYEMENT OF ATTORNEY OR RECEIVE FEES",
+    "ocga": "42-1-11.2"
+  },
+  {
+    "charge": "USING COMMUNITY SERVICE OFFENDER FOR PRIVATE GAIN",
+    "ocga": "42-3-50"
+  },
+  {
+    "charge": "LOITERING NEAR INMATES AFTER BEING ORDERED TO DESIST",
+    "ocga": "42-5-17"
+  },
+  {
+    "charge": "CROSSING STATE/COUNTY GUARD LINES WITH WEAPONS, INTOXICANTS, DRUGS WITHOUT CONSENT",
+    "ocga": "42-5-15"
+  },
+  {
+    "charge": "UNAUTHORIZED POSSESSION OF WEAPON BY INMATE",
+    "ocga": "42-5-63"
+  },
+  {
+    "charge": "UNLAWFUL LOITERING WHERE INMATES ARE ASSIGNED AFTER ORDER TO DESIST",
+    "ocga": "42-4-13(g)"
+  },
+  {
+    "charge": "UNLAWFUL TO COME INSIDE GUARD LINES TO DELIVER TO INMATE A CONTROLLED SUBSTANCE, ETC.",
+    "ocga": "42-4-13(d)(1)(A)"
+  },
+  {
+    "charge": "ENTER GUARD LINE OR JAIL UNDER THE INFLUENCE OF CONTROLLED SUBST OR DANGEROUS DRUG WITHOUT CONSENT",
+    "ocga": "42-4-13(1)"
+  },
+  {
+    "charge": "ATTEMPT, ETC. TO COMMIT OFFENSE PERTAINING TO POSS OF DRUGS, WEAPONS,  ALCOHOL BY INMATES",
+    "ocga": "42-4-13(h)"
+  },
+  {
+    "charge": "ATTEMPT, ETC. TO COMMIT OFFENSE PERTAINING TO POSS OF DRUGS, WEAPONS,  ALCOHOL BY INMATES",
+    "ocga": "42-4-13(h)"
+  },
+  {
+    "charge": "TRADING WITH INMATES WITHOUT CONSENT OF WARDEN OR SUPERINTENDENT",
+    "ocga": "42-5-16"
+  },
+  {
+    "charge": "EMPLOYEES IN CONTROL OF INMATES PROHIBITED FROM RECEIVING PROFIT FROM INMATE LABOR",
+    "ocga": "42-5-37"
+  },
+  {
+    "charge": "CRUELTY TO INMATES",
+    "ocga": "42-4-5"
+  },
+  {
+    "charge": "RIOT IN PENAL INSTITUTION",
+    "ocga": "16-10-56"
+  },
+  {
+    "charge": "UNLAWFUL FOR JAIL INMATE TO POSSESS ANY CONTROLLED SUBSTANCE, DRUGS, GUN, OR DANGEROUS WEAPON",
+    "ocga": "42-4-13(b)(1)"
+  },
+  {
+    "charge": "VIOLATION OF THE TAX AMNESTY PROGRAM ACT",
+    "ocga": "48-16-12(b)"
+  },
+  {
+    "charge": "MAKING FALSE OR FRAUDULENT EXCISE TAX RETURN BY INNKEEPER",
+    "ocga": "48-13-60"
+  },
+  {
+    "charge": "PROHIBIT  LOANS LESS THAN $3,000 EXCEPTIONS (4TH CONVICTION)",
+    "ocga": "16-17-2(d)"
+  },
+  {
+    "charge": "PROHIBIT  LOANS LESS THAN $3,000",
+    "ocga": "16-17-2(d)"
+  },
+  {
+    "charge": "VIOLATION OF GEORGIA FAIR LENDING ACT",
+    "ocga": "7-6A-8"
+  },
+  {
+    "charge": "FRAUD, FORGERY, AND THEFT IN CONNECTION WITH REGISTRATION OF TITLE TO LAND",
+    "ocga": "44-2-43"
+  },
+  {
+    "charge": "FRAUDULENT ACTS BY OFFICE OF CLERK PERSONNEL",
+    "ocga": "44-2-44"
+  },
+  {
+    "charge": "FRAUD OR FALSE ENTRIES BY SHERIFFS AND DEPUTIES",
+    "ocga": "44-2-45"
+  },
+  {
+    "charge": "FRAUDULENT ACTS AND MALPRACTICE OF EXAMINERS",
+    "ocga": "44-2-46"
+  },
+  {
+    "charge": "ILLEGAL OPERATION OF AN IMMIGRATION ASSISTANCE SERVICE",
+    "ocga": "43-20A-4(j)"
+  },
+  {
+    "charge": "UNLAWFUL FILING OF FALSE DOCUMENTS; OMISSIONS; TAX EVASION",
+    "ocga": "48-1-6"
+  },
+  {
+    "charge": "FAILURE BY DEALER TO COLLECT SALES TAX",
+    "ocga": "48-8-7(b)"
+  },
+  {
+    "charge": "FRAUDULENT SALES TAX RETURN BY DEALER",
+    "ocga": "48-8-8(b)"
+  },
+  {
+    "charge": "DEALER REFUSAL TO FURNISH A SALES TAX RETURN TO REVENUE COMMISSIONER",
+    "ocga": "48-8-9(b)"
+  },
+  {
+    "charge": "FAILURE BY DEALER TO KEEP RECORDS OR TO OPEN RECORDS FOR INSPECTION BY REVENUE COMMISSIONER",
+    "ocga": "48-8-10(b)"
+  },
+  {
+    "charge": "REMOVE/DEFACE STICKER ATTACHED TO COIN OPERATED MACHINE W/OUT AUTHORIZATION OF OWNER/CORPORATION",
+    "ocga": "50-27-78"
+  },
+  {
+    "charge": "VIOLATION OF GEORGIA LAND SALES ACT (O.C.G.A 44-3-5 (a)(d))",
+    "ocga": "44-3-7(b)"
+  },
+  {
+    "charge": "UNLAWFUL ACTIVITIES AS TO REVENUE STAMPS; POSSESSION OR TRANSPORTATION OF CONTRABAND",
+    "ocga": "48-2-84"
+  },
+  {
+    "charge": "UNLAWFUL TAX PRACTICES",
+    "ocga": "48-7-127"
+  },
+  {
+    "charge": "EVASION OF INCOME TAX, PENALTY, INTEREST, OR OTHER AMOUNT IN EXCESS OF $3,000.00",
+    "ocga": "48-7-5"
+  },
+  {
+    "charge": "TRANSPORTING CIGARS, CIGARETTES, LOOSE OR SMOKELESS TOBACCO WITH INTENT TO EVADE TAX",
+    "ocga": "48-11-23"
+  },
+  {
+    "charge": "SELL OR POSSESSION OF COUNTERFEIT CIGARETTES - TWO OR MORE CARTONS",
+    "ocga": "48-11-30"
+  },
+  {
+    "charge": "SALE OF UNTAXED CIGARETTES, SMOKELESS TOBACCO OR CIGARS TO EVADE TAX",
+    "ocga": "48-11-25(b)(1)"
+  },
+  {
+    "charge": "TIME SHARE PROJECTS AND PROGRAMS - LOSS OVER $5000",
+    "ocga": "44-3-195(a)"
+  },
+  {
+    "charge": "FILE FRAUDULENT AFFIDAVIT REGARDING MORTGAGE, LIEN, ETC",
+    "ocga": "44-14-3(c.1)(2)(C )"
+  },
+  {
+    "charge": "SELLING OR DISPOSING OF MOTOR VEHICLE SECURING BILL OF SALE WITH INTENT TO DEFRAUD",
+    "ocga": "44-14-7"
+  },
+  {
+    "charge": "KNOWINGLY, WILLFULLY FAIL/NEGLECT/REFUSE TO COLLECT SALES AND USE TAXES (2ND OR SUBSEQUENT CONVICTION)",
+    "ocga": "48-8-7(b)"
+  },
+  {
+    "charge": "FILING FALSE OR FRAUDULENT RETURN BY DEALER UNDER ARTICLE (2ND CONVICTION)",
+    "ocga": "48-8-8(b)"
+  },
+  {
+    "charge": "FAILURE BY DEALER TO FURNISH RETURN UNDER ARTICLE (2ND, SUBSEQUENT CONVICTION)",
+    "ocga": "48-8-9(b)"
+  },
+  {
+    "charge": "FAILURE BY DEALER TO KEEP OR TO ALLOW INSPECTION OF RECORDS UNDER ARTICLE (2ND, SUBSEQUENT CONVICTION)",
+    "ocga": "48-8-10(b)"
+  },
+  {
+    "charge": "POSSESSION/USE/MANUFACTURE COUNTERFEITED STAMPS OR TAMPERING WITH METERING MACHINE",
+    "ocga": "48-11-28"
+  },
+  {
+    "charge": "OTHER THAN OWNER REMOVE A VALID PERMIT STICKER FROM COIN OPERATED AMUSEMENT MACHINE OR LOCATION",
+    "ocga": "50-27-82(b)"
+  },
+  {
+    "charge": "OWN OR OPERATE COIN OPERATED AMUSEMENT MACHINE W/O CURRENT MASTER LICENSE OR W/O PERMIT DISPLAYED",
+    "ocga": "50-27-82(c)"
+  },
+  {
+    "charge": "VIOLATE GA REVISED UNIFORM ANATOMICAL GIFT ACT",
+    "ocga": "44-5-140"
+  },
+  {
+    "charge": "WILLFULLY RENDERS OR FURNISHES A FALSE/FRADULENT REPORT PURSUANT TO ARTICLE 6 OR MARKETING ORDER",
+    "ocga": "2-8-218(a)"
+  },
+  {
+    "charge": "HUNTING UNDER THE INFLUENCE OF ALCOHOL OR DRUGS",
+    "ocga": "27-3-7"
+  },
+  {
+    "charge": "SELL ONIONS AS VIDALIA ONIONS UNLESS SUCH ARE VIDALIA ONION VARIETY  GROWN IN VIDALIA ONION AREA",
+    "ocga": "2-14-134(a)"
+  },
+  {
+    "charge": "PACKAGE, LABEL, ONIONS FOR SALE AS VIDALIA ONIONS OR USE TERM VIDALIA UNLESS GROWN IN VIDALIA AREA",
+    "ocga": "2-14-134(b)"
+  },
+  {
+    "charge": "RELEASE TRAPPED OR TRANSPORTED FERAL HOG INTO AREA NOT FENCED TO PREVENT THE ESCAPE OF SUCH FERAL HOG",
+    "ocga": "27-2-31(a)(4)(B)"
+  },
+  {
+    "charge": "DAMAGE OR DESTROY A CROP FACILITY/PROPERTY/CROP",
+    "ocga": "4-11-32(c.1)"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA WATER QUALITY CONTROL ACT",
+    "ocga": "12-5-53(a)"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA WATER QUALITY CONTROL ACT",
+    "ocga": "12-5-53(a)(b)(c)(d)"
+  },
+  {
+    "charge": "DUMPING SANITARY SEWER, KITCHEN, OR TOILET WASTES IN STORM OR SANITARY SEWERS",
+    "ocga": "12-8-2(b)"
+  },
+  {
+    "charge": "CRUELTY TO ANIMALS",
+    "ocga": "16-12-4(b)"
+  },
+  {
+    "charge": "AGGRAVATED CRUELTY TO ANIMALS",
+    "ocga": "16-12-4(d)"
+  },
+  {
+    "charge": "UNLAWFUL OWNERSHIP/CUSTODY OF WILDLIFE",
+    "ocga": "27-1-3(i)(j)"
+  },
+  {
+    "charge": "UNLAWFUL POSSESSION OF FISHING GEAR ON TRAWLERS",
+    "ocga": "27-1-38"
+  },
+  {
+    "charge": "IMPORT LIVE DEER/IMPORT OR POSSESS A DEER CARCASS FROM  ANY STATE WITH DOCUMENTED DEER DISEASES",
+    "ocga": "27-5-2.1"
+  },
+  {
+    "charge": "VIOLATION OF BEAR HUNTING LAWS AND ASSOCIATED OFFENSES",
+    "ocga": "27-3-26"
+  },
+  {
+    "charge": "UNLAWFUL POSSESSION OF UNTAGGED DEER",
+    "ocga": "27-3-45"
+  },
+  {
+    "charge": "TAKE BIG GAME ANIMAL, OTHER THAN DEER, WITHIN 200 YARDS OF PLACE WHERE BAIT HAS BEEN PLACED TO CONSITUTE",
+    "ocga": "27-3-9(b)(4)"
+  },
+  {
+    "charge": "UNLAWFUL CONTRACT OF SALE FOR FUTURE DELIVERY OF COTTON, GRAIN, STOCKS OR OTHER COMMODITIES",
+    "ocga": "13-9-3"
+  },
+  {
+    "charge": "MAINTENANCE OR OPERATION OF BUCKET SHOP",
+    "ocga": "13-9-6"
+  },
+  {
+    "charge": "HUNTING WITH UNLAWFUL WEAPON",
+    "ocga": "27-3-4"
+  },
+  {
+    "charge": "HUNTING WITHOUT LICENSE BY PERSON CONVICTED UNDER OCGA 16-11-108",
+    "ocga": "16-11-109(a)(1)"
+  },
+  {
+    "charge": "POSSESION OF UNAUTHORIZED HUNTING LICENSE",
+    "ocga": "16-11-109(a)(2)"
+  },
+  {
+    "charge": "HUNTING UPON OR DISCHARGING WEAPONS ACROSS A PUBLIC ROAD",
+    "ocga": "27-3-10"
+  },
+  {
+    "charge": "UNLAWFUL HUNTING OF ALLIGATORS;  UNLAWFUL POSSESSION OF ALLIGATOR PRODUCTS",
+    "ocga": "27-3-19"
+  },
+  {
+    "charge": "INTERFERENCE WITH ARREST BY RANGER",
+    "ocga": "27-1-25"
+  },
+  {
+    "charge": "INTERFERENCE WITH PERFORMANCE OF RANGER DUTIES",
+    "ocga": "27-1-25"
+  },
+  {
+    "charge": "FAILURE OR REFUSAL TO BRING MOTOR VECHILE OR BOAT TO A STOP WHEN ORDERED TO DO SO",
+    "ocga": "27-1-25.1"
+  },
+  {
+    "charge": "DAMAGING DEPARTMENT OF NATURAL RESOURCES",
+    "ocga": "27-1-27"
+  },
+  {
+    "charge": "TAKING OF NONGAME SPECIES",
+    "ocga": "27-1-28"
+  },
+  {
+    "charge": "SALE  OF GAME",
+    "ocga": "27-1-29"
+  },
+  {
+    "charge": "PURCHASE OF GAME",
+    "ocga": "27-1-29"
+  },
+  {
+    "charge": "DISTURBING WILDLIFE HABITATS",
+    "ocga": "27-1-30"
+  },
+  {
+    "charge": "UNLAWFUL POSSESSION OF WILDLIFE",
+    "ocga": "27-1-31(a)"
+  },
+  {
+    "charge": "CONCEALMENT OF ILLEGALLY TAKEN WILDLIFE",
+    "ocga": "27-1-31(b)"
+  },
+  {
+    "charge": "HIRING ANOTHER TO TAKE WILDLIFE ILLEGALLY",
+    "ocga": "27-1-32"
+  },
+  {
+    "charge": "VIOLATION OF HUNTER EDUCATION REQUIREMENTS",
+    "ocga": "27-2-5"
+  },
+  {
+    "charge": "UNLAWFUL ACTS BY TAXIDERMIST",
+    "ocga": "27-2-9"
+  },
+  {
+    "charge": "HUNTING FROM A MOTOR VEHICLE",
+    "ocga": "27-3-13"
+  },
+  {
+    "charge": "KILLING OR CRIPPLING OF GAME BIRD OR ANIMAL",
+    "ocga": "27-3-14"
+  },
+  {
+    "charge": "HUNTING OUT OF SEASON",
+    "ocga": "27-3-15"
+  },
+  {
+    "charge": "POSSESSION OF MORE THAN BAG LIMIT",
+    "ocga": "27-3-15(e)"
+  },
+  {
+    "charge": "UNLAWFUL TAKING OF GAME BY FALCONRY",
+    "ocga": "27-3-15"
+  },
+  {
+    "charge": "HUNTING DOG VIOLATION",
+    "ocga": "27-3-16"
+  },
+  {
+    "charge": "HUNTING DEER WITH DOGS",
+    "ocga": "27-3-17"
+  },
+  {
+    "charge": "MISUSE OF FIREARMS OR ARCHERY TACKLE WHILE HUNTING NOT RESULTING IN SERIOUS HARM TO ANOTHER",
+    "ocga": "16-11-108(a)"
+  },
+  {
+    "charge": "HUNTING FOXES WITH DOGS",
+    "ocga": "27-3-18"
+  },
+  {
+    "charge": "TAKING RABBITS AND HARES OUT OF SEASON",
+    "ocga": "27-3-20"
+  },
+  {
+    "charge": "HUNTING, POSSESSING OR TRANSPORTING BIRDS",
+    "ocga": "27-3-22"
+  },
+  {
+    "charge": "IMPROPER HUNTING OF FERAL HOGS",
+    "ocga": "27-3-24"
+  },
+  {
+    "charge": "MISUSE OF FIREARM OR ARCHERY TACKLE WHILE HUNTING RESULTING IN SERIOUS BODILY HARM TO ANOTHER",
+    "ocga": "16-11-108(a)"
+  },
+  {
+    "charge": "IMPROPER OUTER GARMENTS WHILE HUNTING BEARS",
+    "ocga": "27-3-25"
+  },
+  {
+    "charge": "FAILURE TO WEAR FLUORESCENT ORANGE CLOTHING",
+    "ocga": "27-3-40"
+  },
+  {
+    "charge": "KILLING ANTLERLESS DEER",
+    "ocga": "27-3-44"
+  },
+  {
+    "charge": "FAILURE TO AFFIX DEER TAG",
+    "ocga": "27-3-46"
+  },
+  {
+    "charge": "KILLING DEER AT NIGHT",
+    "ocga": "27-3-48"
+  },
+  {
+    "charge": "KILLING OF DOG RUNNING DEER",
+    "ocga": "27-3-49(b)"
+  },
+  {
+    "charge": "DISPOSAL OF CARCASS OF FUR-BEARING ANIMALS OR ALLIGATORS",
+    "ocga": "27-3-73"
+  },
+  {
+    "charge": "FORGED OR FALSE DOCUMENTS, RECORDS OR PERMITS UNLAWFUL RELATED TO COMMERICIAL SHELLFISHING",
+    "ocga": "27-4-200"
+  },
+  {
+    "charge": "SUSPENSION OF HUNTING PRIVILEGES FOR NEGLIGENT HUNTING",
+    "ocga": "27-2-25.1(e)"
+  },
+  {
+    "charge": "FORGING, ALTERING, OR COUNTERFEITING TEACHERS LOCAL CERTIFICATE OR LICENSE",
+    "ocga": "20-2-811"
+  },
+  {
+    "charge": "PRESENTATION OF IDENTIFICATION TO POLL WORKERS; FORM OF PROPER IDENTIFICATION; SWEARING ETC.",
+    "ocga": "21-2-417(c)"
+  },
+  {
+    "charge": "CONSPIRACY TO COMMIT ELECTION FRAUD (INVOLVING VIOLATION OF CHAPTER, WHICH IS A FELONY)",
+    "ocga": "21-2-603"
+  },
+  {
+    "charge": "INTENTIONAL OBSERVANCE OF ELECTOR WHILE CASTING BALLOT EXCEPT TO GIVE AUTHORIZED ASSISTANCE",
+    "ocga": "21-2-568.1"
+  },
+  {
+    "charge": "PHOTOGRAPHIC AND OTHER ELECTRONIC MONITORING OF BALLOTS PROHIBITED",
+    "ocga": "21-2-568.2"
+  },
+  {
+    "charge": "INFLUENCING VOTER WHILE ASSISTING",
+    "ocga": "21-2-568(b)"
+  },
+  {
+    "charge": "FALSE REGISTRATION AS ELECTOR (VOTER)",
+    "ocga": "21-2-561"
+  },
+  {
+    "charge": "FRAUDULENT, UNLAWFUL ALTERATION OR DESTRUCTION OF ELECTION REGISTRATION ENTRIES",
+    "ocga": "21-2-562(a)"
+  },
+  {
+    "charge": "IMPROPER SIGNING OR ALTERATION OF NOMINATION PETITIONS OR AFFIDAVITS",
+    "ocga": "21-2-563"
+  },
+  {
+    "charge": "WILLFUL DESTRUCTION, FRAUDULENT FILING, OR SUPPRESSION OF NOMINATION MATERIALS",
+    "ocga": "21-2-564"
+  },
+  {
+    "charge": "ENTER BOOTH WHILE ANOTHER VOTES;INTERFERE W/ELECTOR;INDUCE ELECTOR TO REVEAL/REVEAL ELECTOR'S VOTE",
+    "ocga": "21-2-568(a)"
+  },
+  {
+    "charge": "INTERFERENCE WITH PRIMARIES AND ELECTIONS BY INTERFERING WITH POLL OFFICER, ELECTOR, BALLOT BOX, ETC.",
+    "ocga": "21-2-566"
+  },
+  {
+    "charge": "INTIMIDATION OF ELECTORS",
+    "ocga": "21-2-567"
+  },
+  {
+    "charge": "INTERFERING WITH POLL OFFICERS IN PERFORMANCE OF DUTIES",
+    "ocga": "21-2-569"
+  },
+  {
+    "charge": "GIVE OR RECEIVE MONEY OR GIFTS TO REGISTER AS A VOTER, VOTING, FOR A PARTICULAR CANDIDATE, ETC.",
+    "ocga": "21-2-570"
+  },
+  {
+    "charge": "VOTING BY UNQUALIFIED ELECTOR OR GIVING FALSE INFORMATION",
+    "ocga": "21-2-571"
+  },
+  {
+    "charge": "REPEAT VOTING IN SAME PRIMARY OR ELECTION",
+    "ocga": "21-2-572"
+  },
+  {
+    "charge": "UNLAWFUL POSSESSION OF BALLOTS",
+    "ocga": "21-2-574"
+  },
+  {
+    "charge": "COUNTERFEIT BALLOTS, BALLOT CARDS, OR BALLOT LABELS",
+    "ocga": "21-2-575"
+  },
+  {
+    "charge": "ABSENTEE VOTING BY UNQUALIFIED ELECTOR",
+    "ocga": "21-2-573"
+  },
+  {
+    "charge": "VIOLATION OF PROCEDURE FOR VOTING BY ABSENTEE BALLOT",
+    "ocga": "21-2-385(b)"
+  },
+  {
+    "charge": "TAMPER WITH, DAMAGE, IMPROPER PREPARATION OF, OR PREVENTION OF PROPER OPERATION OF VOTING MACHINES",
+    "ocga": "21-2-580"
+  },
+  {
+    "charge": "TAMPER WITH, DAMAGE, OR PREVENT OPERATION OF DIRECT RECORDING ELECTRONIC OR TABULATING DEVICE",
+    "ocga": "21-2-582"
+  },
+  {
+    "charge": "ALTER, DESTROY RETURN SHEET, TALLY PAPER, AFFIDAVIT, ETC. BY VOTING SUPERINTENDENT OR EMPLOYEE",
+    "ocga": "21-2-585(b)"
+  },
+  {
+    "charge": "ALTER, DESTROY RETURN SHEET, TALLY PAPER, AFFIDAVIT, ETC. BY SECRETARY OF STATE OR EMPLOYEE",
+    "ocga": "21-2-586(b)"
+  },
+  {
+    "charge": "POLL OFFICER MAKING FALSE OR ALTERED RETURNS, BALLOTS, ETC., OR TAMPERING WITH VOTING EQUIPMENT",
+    "ocga": "21-2-587"
+  },
+  {
+    "charge": "ALTERING, MODIFYING OR CHANGING VOTING EQUIPMENT WITHOUT APPROVAL OF SECRETARY OF STATE",
+    "ocga": "21-2-582.1(b)"
+  },
+  {
+    "charge": "POLL OFF PERMIT UNREGISTERED/UNQUALIFIED TO VOTE; NOT PERMIT REGISTERED/QUALIFIED PERSON;UNLAW ASSIST",
+    "ocga": "21-2-590"
+  },
+  {
+    "charge": "UNLAWFUL OR UNAUTHORIZED DELIVERY OR PRINTING OF OFFICIAL BALLOTS OR BALLOT CARDS BY PRINTER",
+    "ocga": "21-2-594"
+  },
+  {
+    "charge": "UPBRAIDING, INSULTING, OR ABUSING PUBLIC SCHOOL TEACHERS, ADMINISTRATORS, OR SCHOOL BUS DRIVERS",
+    "ocga": "20-2-1182"
+  },
+  {
+    "charge": "VIOLATION OF DPS NOMENCLATURE ACT OF 1995",
+    "ocga": "35-2-88"
+  },
+  {
+    "charge": "VIOLATION OF GBI NOMENCLATURE ACT OF 1995",
+    "ocga": "35-3-108"
+  },
+  {
+    "charge": "VIOLATION OF SHERIFF NOMENCLATURE ACT OF 1997",
+    "ocga": "15-16-59"
+  },
+  {
+    "charge": "UNLAWFUL USE OF 976 TELEPHONE NUMBER",
+    "ocga": "46-5-24"
+  },
+  {
+    "charge": "VIOLATION OF MUNICIPAL AND COUNTY POLICE DEPT NOMENCLATURE ACT OF 1996",
+    "ocga": "35-10-10"
+  },
+  {
+    "charge": "VIOLATION OF MUNICIPAL, COUNTY, AND VOLUNTEER FIRE DEPT NOMENCLATURE ACT OF 1996",
+    "ocga": "25-13-10"
+  },
+  {
+    "charge": "FORM OF PRICE QUOTATION WHERE WEIGHT IS USED TO DETERMINE FEET, CORDS, UNITS OF PULPWOOD/TIMBER",
+    "ocga": "2-14-80.1"
+  },
+  {
+    "charge": "VIOLATION OF REGULATIONS PERTAINING TO ANIMAL SHELTERS, KENNELS, STABLES, AND PET DEALERS",
+    "ocga": "4-11-10"
+  },
+  {
+    "charge": "SPECIAL SALES; PERMITS PERTAINING TO LIVESTOCK",
+    "ocga": "4-6-52"
+  },
+  {
+    "charge": "MAINTAINING A DISORDERLY HOUSE",
+    "ocga": "16-11-44"
+  },
+  {
+    "charge": "CRIMINAL USE OF  AN ARTICLE WITH ALTERED ID MARK (OTHER THAN MOTOR VEHICLE)",
+    "ocga": "16-9-70"
+  },
+  {
+    "charge": "REPRODUCTION OF RECORDED MATERIAL; TRANSFER, SALE, DISTRIBUTION, CIRCULATION",
+    "ocga": "16-8-60"
+  },
+  {
+    "charge": "UNLAWFUL ADVERTISEMENT OR INDUCEMENT FOR ADOPTION OF CHILDREN",
+    "ocga": "19-8-24"
+  },
+  {
+    "charge": "AVOID OR ATTEMPT TO AVOID LAWFUL TELECOMMUNICATION CHARGES  (2ND OR SUBQ OFF OR OVER $10,000)",
+    "ocga": "46-5-2(b)"
+  },
+  {
+    "charge": "AVOID OR ATTEMPT TO AVOID LAWFUL TELECOMMUNICATION CHARGES - 1ST OFFENSE",
+    "ocga": "46-5-2(b)(1)"
+  },
+  {
+    "charge": "HARASSMENT OF ASSISTANCE DOG BY HUMANS OR OTHER DOGS",
+    "ocga": "16-11-107.1"
+  },
+  {
+    "charge": "UNLAWFUL TO REMOVE BAGGAGE, CARGO, ETC FROM A BUS, RAIL, AIRCRAFT OR TERMINAL",
+    "ocga": "16-12-124"
+  },
+  {
+    "charge": "PROHIBITED ACTS ON A FARMERS MARKET",
+    "ocga": "2-10-62"
+  },
+  {
+    "charge": "VIOLATION OF THE GEORGIA RICO (RACKETEER INFLUENCED AND CORRUPT ORGANIZATIONS) ACT",
+    "ocga": "16-14-4"
+  },
+  {
+    "charge": "VIOLATIONS OF LOAN BROKERAGE LAWS",
+    "ocga": "7-7-6"
+  },
+  {
+    "charge": "TRANSACTING MORTGAGE BUSINESS WITHOUT A LICENSE IN VIOLATION OF OCGA 7-1-1002",
+    "ocga": "7-1-1019(1)"
+  },
+  {
+    "charge": "INITIATION OF DECEPTIVE COMMERCIAL E-MAIL",
+    "ocga": "16-9-102(a)"
+  },
+  {
+    "charge": "SPYWARE, BROWSERS, HIJACKS, AND OTHER SOFTWARE PROHIBITED",
+    "ocga": "16-9-152(a)"
+  },
+  {
+    "charge": "COMPUTER THEFT",
+    "ocga": "16-9-93(a)"
+  },
+  {
+    "charge": "COMPUTER TRESPASS",
+    "ocga": "16-9-93(b)"
+  },
+  {
+    "charge": "COMPUTER INVASION OF PRIVACY",
+    "ocga": "16-9-93(c)"
+  },
+  {
+    "charge": "COMPUTER FORGERY",
+    "ocga": "16-9-93(d)"
+  },
+  {
+    "charge": "COMPUTER PASSWORD DISCLOSURE",
+    "ocga": "16-9-93(e)"
+  },
+  {
+    "charge": "MISLEADING TRANSMITTAL OF NAME, REGISTERED TRADEMARK, OFFICIAL SEAL, ETC. OVER COMPUTER/TELEPHONE",
+    "ocga": "16-9-93.1"
+  },
+  {
+    "charge": "UNAUTHORIZED REQUEST OR DISCLOSURES OF CRIMINAL HISTORY RECORD INFORMATION",
+    "ocga": "35-3-38(a)"
+  },
+  {
+    "charge": "UNLAWFUL DISCLOSURE OF TECHNIQUE OR METHOD TO ENSURE SECURITY CRIMINAL HISTORY RECORD INFORMATION",
+    "ocga": "35-3-38(c)"
+  },
+  {
+    "charge": "DESTROYING, DEFACING, HARMING, ETC. ARCHEOLOGICAL, ABORIGINAL, PREHISTORIC OR HISTORIC SITES",
+    "ocga": "12-3-621(a)"
+  },
+  {
+    "charge": "FAIL TO NOTIFY STATE ARCHEOLOGIST OF  DISTURBANCE  TO ARCHEOLOGICAL, ABORIGINAL, PREHISTORIC SITES, ETC.",
+    "ocga": "12-3-621(b)"
+  },
+  {
+    "charge": "INITIATION OF DECEPTIVE COMMERCIAL SPAM SLAM E-MAIL",
+    "ocga": "16-9-102(a)(b)"
+  },
+  {
+    "charge": "COMPILE AND DISSEMINATE INFO FROM A TELEPHONE SUBSCRIBER DATABASE",
+    "ocga": "46-5-27(2)"
+  },
+  {
+    "charge": "REMOVE, ALTER, CHANGE OFFICIAL PERMANENT MARK/BRAND/TATTOO/TAG ON ANY COW WITH A HEALTH CERTIFICATE",
+    "ocga": "4-4-95.1"
+  },
+  {
+    "charge": "E-MAIL VIRUS DISTRIBUTION, DENIAL OF SERVICE ATTACKS, AND OTHER CONDUCT PROHIBITED",
+    "ocga": "16-9-153"
+  },
+  {
+    "charge": "SALE, AUCTION, TRANSFER OR MOVEMENT OF INFECTED LIVESTOCK (1ST OR 2ND  OFFENSE)",
+    "ocga": "4-6-2"
+  },
+  {
+    "charge": "SALE, AUCTION, TRANSFER OR MOVEMENT OF INFECTED LIVESTOCK (3RD OR SUBSEQUENT OFFENSE)",
+    "ocga": "4-6-2"
+  },
+  {
+    "charge": "MAINTENANCE OF LIVESTOCK RECORDS (1ST OR 2ND OFFENSE)",
+    "ocga": "4-6-5"
+  },
+  {
+    "charge": "MAINTENANCE OF LIVESTOCK RECORDS (3RD OR SUBSEQUENT OFFENSE)",
+    "ocga": "4-6-5"
+  },
+  {
+    "charge": "QUARANTINE OF PREMISES; PROMULGATION OF RULES/ REGULATIONS PRESCRIBE STANDARDS (1ST OR 2ND OFFENSE)",
+    "ocga": "4-6-6"
+  },
+  {
+    "charge": "QUARANTINE OF PREMISES; PROMULGATION OF RULES/ REGULATIONS PRESCRIBE STANDARDS (3RD OR SUB OFFENSE)",
+    "ocga": "4-6-6"
+  },
+  {
+    "charge": "DOG COLLAR REMOVAL WITHOUT PERMISSION FROM OWNER W/INTENT OF PREVENT/ HINDER LOCATING DOG",
+    "ocga": "4-8-6.1"
+  },
+  {
+    "charge": "OBSTRUCTION OF AN ANIMAL CONTROL OFFICER",
+    "ocga": "4-1-6"
+  },
+  {
+    "charge": "UNLAWFUL TRANSPORTATION OF CATTLE - 3RD OR SBUSEQUENT OFFENSE",
+    "ocga": "4-4-95.1"
+  },
+  {
+    "charge": "OBTAINS OR ATTEMPTS TO OBTAIN  DNA SAMPLE SUBMITTED FOR ANALYSIS EXCEPT FOR LAW ENFORCEMENT PURPOSES",
+    "ocga": "35-3-164(b)"
+  },
+  {
+    "charge": "DISSEMINATES, RECEIVES OR OTHERWISE USES OR ATEMPTS TO USE DNA DATA BANK INFORMATION FOR UNAUTHORIZED PUR",
+    "ocga": "35-3-164(a)"
+  }
+]

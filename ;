@@ -1,0 +1,78 @@
+import Button from "./Button.jsx";
+import {useState, useEffect} from "react";
+import {useUser} from "../pages/context/UserContext.tsx"
+import {useSafeSettings} from "../pages/hooks/useSafeSettings.ts"
+import type{ScanData, FormData} from "../helpers/fillIdDataPdf.ts"
+import {motion} from "motion/react";
+
+export type BookingProps = {
+  formState: FormData;
+  setFormState: React.Dispatch<React.SetStateAction<FormData>>;
+}
+
+export default function BookingForm({formState, setFormState}: BookingProps){
+  const {primaryAccent, secondaryAccent} = useSafeSettings();
+  const inputStyle = "border-2 border-zinc-500 text-zinc-200 w-full  text-md 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
+  const inputStyleXl = "border-2 border-zinc-500 text-zinc-200 w-full text-md 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
+  const inputStyleLg =  "border-2 border-zinc-500 text-zinc-200 w-full text-md 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
+
+
+
+  function handleInput(e: React.ChangeEvent<HTMLInputElement> ) {
+    const {name, value} = e.target;
+    setFormState((prev) => ({...prev, [name]: value}));
+  }
+
+  function handleSubmit() {
+    return
+  }
+  return(
+    <motion.div id="panel" style={{borderColor: primaryAccent}} className="w-full h-full p-4 flex items-center justify-center border rounded-lg">
+      <motion.form className="flex w-full h-full flex-col flex-wrap gap-6">
+        <div className="flex-4 flex items-center justify-center text-lg text-zinc-200 font-semibold">Pre-Bookin</div>
+          <motion.div className="grid grid-cols-4 h-1/8 gap-2">
+             <motion.input value={formState.arrestingAgency} placeholder="Arresting Agency" name="arrestingAgency" onChange={handleInput} className={inputStyle} />
+             <motion.input value={formState.incidentNumber} placeholder="Incident Number" name="incidentNumber" onChange={handleInput} className={inputStyle} />
+             <motion.input value={formState.loa} placeholder="Location of Arrest" name="loa" onChange={handleInput} className={inputStyleXl} />
+             <motion.input type="date" value={formState.arrestDate} placeholder="Arrest Date" name="arrestDate" onChange={handleInput} className={inputStyle} />
+             <motion.input type="time" value={formState.arrestTime} placeholder="Arrest Time" name="arrestTime" onChange={handleInput} className={inputStyle} />
+          </motion.div>
+          <motion.div className="flex flex-wrap flex-1 gap-2">
+          <div className="flex w-full flex-wrap gap-2">
+              <motion.input value={formState.lastName} placeholder="Inmate Last Name" name="lastName" onChange={handleInput} className={inputStyleLg} />
+              <motion.input value={formState.firstName} placeholder="Inmate First Name" name="firstName" onChange={handleInput} className={inputStyleLg} />
+              <motion.input value={formState.middleName} placeholder="Inmate Middle Name" name="middleName" onChange={handleInput} className={inputStyleLg} />
+            </div>
+            <div className="flex  flex-wrap gap-2">
+              <motion.input value={formState.race} placeholder="Race" name="race" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.sex} placeholder="Sex" name="sex" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.height} placeholder="Height" name="height" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.weight} placeholder="Weight" name="weight" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.hairColor} placeholder="Hair Color" name="hairColor" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.eyeColor} placeholder="Eye Color" name="eyeColor" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.dob} placeholder="DOB" name="dob" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.social} placeholder="SSN" name="social" onChange={handleInput} className={inputStyleLg} />
+              <motion.input value={formState.oln} placeholder="OLN" name="oln" onChange={handleInput} className={inputStyleLg} />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <motion.input value={formState.street} placeholder="Street" name="street" onChange={handleInput} className={inputStyleXl} />
+              <motion.input value={formState.city} placeholder="City" name="city" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.state} placeholder="State" name="state" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.zip} placeholder="Zipcode" name="zip" onChange={handleInput} className={inputStyle} />
+              <motion.input value={formState.phoneNumber} placeholder="Phone Number" name="phoneNumber" onChange={handleInput} className={inputStyle} />
+            </div>
+          </motion.div>
+          <motion.div className="flex flex-wrap flex-1 gap-2">
+            <motion.input value={formState.arrestingOfficer} placeholder="Arresting Officer" name="arrestingOfficer" onChange={handleInput} className={inputStyleXl} />
+            <motion.input value={formState.arrestingOfficerBadge} placeholder="badge" name="arrestingOfficerBadge" onChange={handleInput} className={inputStyle} />
+            <motion.input value={formState.arrestingOfficerAgency} placeholder="Agency" name="arrestingOfficerAgency" onChange={handleInput} className={inputStyle} />
+            <motion.input value={formState.transportingOfficer} placeholder="Transporting Officer (If different from arresting)" name="transportingOfficer" onChange={handleInput} className={inputStyleXl} />
+            <motion.input value={formState.transportingOfficerBadge} placeholder="Badge" name="transportingOfficerBadge" onChange={handleInput} className={inputStyle} />
+            <motion.input value={formState.transportingOfficerAgency} placeholder="Agency" name="transportingOfficerAgency" onChange={handleInput} className={inputStyle} />
+          </motion.div>
+        <Button text="Submit" type="submit" action={handleSubmit} />
+
+      </motion.form>
+    </motion.div>);
+
+}

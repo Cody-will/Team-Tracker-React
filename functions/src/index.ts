@@ -4,14 +4,107 @@ import {
   HttpsError,
   CallableRequest,
 } from "firebase-functions/v2/https";
-
+import {defineSecret} from "firebase-functions/params";
+import nodemailer from "nodemailer";
 admin.initializeApp();
+import {fillBookingPdfBytes, fillIdDataPdfBytes, ServerUser} from "./pdf/fillIdDataPdf";
 
 type AuthInput = {
   email: string;
   password: string;
   ifExists?: "return" | "error";
 };
+
+const SMTP_USER = defineSecret("SMTP_USER");
+const SMTP_PASS = defineSecret("SMTP_PASS");
+
+function isEmail(s: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+}
+export const sendBookingPacket = onCall(
+  {
+    region: "us-central1",
+    // Callable functions are NOT meant to be hit via fetch() from browsers.
+    // This cors option is fine, but the real fix is calling via httpsCallable.
+    cors: [
+      "https://teamtrackerpickens.web.app",
+      "https://teamtrackerpickens.firebaseapp.com",
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+    ],
+    secrets: [SMTP_USER, SMTP_PASS],
+  },
+  async (req) => {
+    // ✅ Prevent becoming an open mail relay
+    if (!req.auth) {
+      throw new HttpsError("unauthenticated", "Sign in required.");
+    }
+
+    const { emails, formData, u } = (req.data ?? {}) as {
+      emails?: string[];
+      formData?: any;
+      u?: ServerUser;
+    };
+
+    if (!Array.isArray(emails) || emails.length === 0) {
+      throw new HttpsError("invalid-argument", "Missing emails[]");
+    }
+
+    const cleaned = [...new Set(emails.map(e => String(e).trim().toLowerCase()))];
+    if (cleaned.some((e) => !isEmail(e))) {
+      throw new HttpsError("invalid-argument", "One or more emails are invalid.");
+    }
+    if (cleaned.length > 10) {
+      throw new HttpsError("invalid-argument", "Too many recipients.");
+    }
+
+    if (!formData) {
+      throw new HttpsError("invalid-argument", "Missing formData");
+    }
+    if (!u) {
+      throw new HttpsError("invalid-argument", "Missing user data (u)");
+    }
+
+    // Generate PDFs (Uint8Array or Buffer both fine)
+    const bookingPdf = await fillBookingPdfBytes(formData, u);
+    const idDataPdf = await fillIdDataPdfBytes(formData, u);
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false, // STARTTLS
+      auth: {
+        user: SMTP_USER.value(),
+        pass: SMTP_PASS.value(),
+      },
+    });
+
+    // Optional but useful: fail early if SMTP creds are wrong
+    await transporter.verify();
+
+    await transporter.sendMail({
+      from: `Booking Forms <${SMTP_USER.value()}>`,
+      to: cleaned.join(","),
+      subject: `Pre-Booking Forms ${formData.lastName}, ${formData.firstName}`,
+      text: "Attached are the completed forms.",
+      attachments: [
+        {
+          filename: "PreBook.pdf",
+          content: Buffer.isBuffer(bookingPdf) ? bookingPdf : Buffer.from(bookingPdf),
+          contentType: "application/pdf",
+        },
+        {
+          filename: "IDData.pdf",
+          content: Buffer.isBuffer(idDataPdf) ? idDataPdf : Buffer.from(idDataPdf),
+          contentType: "application/pdf",
+        },
+      ],
+    });
+
+    return { ok: true, sentTo: cleaned.length };
+  }
+);
+
 
 // This function checks if the user is authenticated and if they are an admin user
 function isAdmin(req: any) {

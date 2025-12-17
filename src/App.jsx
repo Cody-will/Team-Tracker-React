@@ -27,7 +27,7 @@ import { VersionProvider } from "./pages/context/VersionContext.tsx";
 import { useBreakpoint } from "./pages/hooks/useBreakpoint.ts";
 import CardConfigure from "./pages/CardConfigure.tsx";
 import { CardProvider } from "./pages/context/CardContext.tsx";
-
+import Booking from "./pages/Booking.tsx"
 const LoginRoute = () => {
   const { currentUser, authReady, forceSplash } = useAuth();
 
@@ -103,6 +103,8 @@ function useSeamlessWallpaper(initial, fadeMs = 300) {
 }
 
 function App() {
+
+  
   return (
     <AuthProvider>
       <ConfigureProvider>
@@ -126,6 +128,7 @@ function App() {
                     <Route path="/configure" element={<Configure />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/cardsettings" element={<CardConfigure />} />
+                    <Route path="/booking" element={<Booking />} />
                   </Route>
 
                   <Route

@@ -3,6 +3,7 @@ import {
   BsArrowRepeat,
   BsPeople,
   BsAirplane,
+  BsUpcScan,
   BsShuffle,
   BsGear,
   BsDoorClosed,
@@ -92,6 +93,7 @@ export default function Sidebar() {
       icon: <Columns3Cog size={iconSize} />,
       label: "Info Card Configuration",
     },
+    { to: "/booking", icon: <BsUpcScan size={iconSize} />, label: "Booking"},
     {
       to: "/login",
       action: logOut,
@@ -224,6 +226,7 @@ function roleCheck(title, role, excludes, division, view, user) {
   }
   if (title === "Info Card Configuration" && user.lastName !== "Willard")
     return false;
+  if (title === "Booking" && user.lastName !== "Willard") return false;
   if (role === "Admin") return true;
   return !excludes.includes(title);
 }
