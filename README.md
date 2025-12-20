@@ -3,9 +3,7 @@
 <!-- HEADER STYLE: CLASSIC -->
 <div align="center">
 
-<img src="https://github.com/Cody-will/Team-Tracker-React/blob/main/public/team-tracker-react.png?raw=true" width="30%" style="position: relative; top: 0; right: 0;" alt="Project Logo"/>
-![Project Logo](/public/team-tracker-react.png)
-![Project Logo](https://github.com/Cody-will/Team-Tracker-React/blob/main/public/team-tracker-react.png?raw=true)
+<img src="[https://github.com/Cody-will/Team-Tracker-React/blob/main/public/team-tracker-react.png?raw=true](https://github.com/Cody-will/Team-Tracker-React/blob/main/public/app_logo.png?raw=true)" width="30%" style="position: relative; top: 0; right: 0;" alt="Project Logo"/>
 
 
 
