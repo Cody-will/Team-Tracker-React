@@ -1,11 +1,13 @@
 import { useBreakpoint } from "../pages/hooks/useBreakpoint.ts";
 import Button from "./Button.jsx";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import {useUser} from "../pages/context/UserContext.tsx"
 import {useSafeSettings} from "../pages/hooks/useSafeSettings.ts"
-import type{ScanData, FormData} from "../helpers/fillIdDataPdf.ts"
+import type{ScanData, FormData} from "../../functions/src/pdf/fillIdDataPdf.ts"
 import {motion, LayoutGroup, AnimatePresence} from "motion/react";
 import chargeCodes from "../data/ocga.json";
+import type{PopUpProps} from "./PopUp.tsx";
+import PopUp from "./PopUp.tsx";
 export type ChargeCode = {charge: string, ocga: string};
 import { getFunctions, httpsCallable } from "firebase/functions";
 const functions = getFunctions(undefined, "us-central1");
@@ -13,13 +15,25 @@ const sendBookingPacket = httpsCallable(functions, "sendBookingPacket");
 export type ServerUser = {firstName: string, lastName: string, badge: string};
 export type BookingProps = { formState: FormData; setFormState: React.Dispatch<React.SetStateAction<FormData>>; setBuild: React.Dispatch<React.SetStateAction<boolean>>; createNotif: (res: boolean) => void; }
 
+
+
+type ConfirmState = {
+  title: string;
+  message?: string;
+  confirmText?: string;
+  cancelText?: string;
+  onConfirm: () => void;
+};
+
+
+
+
 export default function BookingForm({formState, setFormState, setBuild, createNotif}: BookingProps){ 
   const [chargeQuery, setChargeQuery] = useState<string[]>(Array(6).fill(""));
   const [chargeOptions, setChargeOptions] = useState<ChargeCode[][]>(Array(6).fill([]));
   const [chargeOpen, setChargeOpen] = useState<boolean[]>(Array(6).fill(false));
   const [submitting, setSubmitting] = useState(false);
-  const [timeFocus, setTimeFocus] = useState(false);
-  const [dateFocus, setDateFocus] = useState(false);
+  const [confirm, setConfirm] = useState<ConfirmState | null>(null);
   const {primaryAccent, secondaryAccent} = useSafeSettings();
   const {user} = useUser();
   const inputStyle = "border-2 border-zinc-500 text-zinc-200 w-full  text-md 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
@@ -33,69 +47,135 @@ export default function BookingForm({formState, setFormState, setBuild, createNo
   const norm = (s: string) => (s ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
   const normOcga = (s: string) => (s ?? "").toLowerCase().replace(/\s+/g, "");
 
-  function searchChargeCodes(allCharges: ChargeCode[], query: string, limit = 12) { 
-    const raw = query.trim(); 
+ 
+  function searchChargeCodes(
+    allCharges: ChargeCode[],
+    query: string,
+    limit = 12
+  ) {
+    const raw = query.trim();
 
-    if (!raw) return []; 
+    if (!raw) return [];
 
-    const qName = norm(raw); 
+    const qName = norm(raw);
     const qOcga = normOcga(raw);
 
-    return allCharges.map((c) => { 
-      const name = norm(c.charge);
+    return allCharges
+      .map((c) => {
+        const name = norm(c.charge);
 
-      const ocga = normOcga(c.ocga);
+        const ocga = normOcga(c.ocga);
 
-      let score = 0; 
-      if (ocga === qOcga) score += 1000; 
-        else if (ocga.startsWith(qOcga)) score += 700; 
-          else if (ocga.includes(qOcga)) score += 400; 
-      if (name.startsWith(qName)) score += 250; 
-        else if (name.includes(qName)) score += 150; 
-      return { c, score }; }).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).slice(0, limit).map((x) => x.c); }
+        let score = 0;
+        if (ocga === qOcga) score += 1000;
+        else if (ocga.startsWith(qOcga)) score += 700;
+        else if (ocga.includes(qOcga)) score += 400;
+        if (name.startsWith(qName)) score += 250;
+        else if (name.includes(qName)) score += 150;
+        return { c, score };
+      })
+      .filter((x) => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map((x) => x.c);
+  }
 
-  function handleChargeText(index: number, value: string) { 
-    setChargeQuery((prev) => { const next = [...prev]; next[index] = value; return next; }); 
-    const opts = searchChargeCodes(allCharges, value, 15); 
-    setChargeOptions((prev) => { const next = [...prev]; 
-      next[index] = opts; return next; }); 
-    setChargeOpen((prev) => { const next = [...prev]; 
-      next[index] = value.trim().length > 0 && opts.length > 0; return next; }); 
-    setFormState((prev) => { const nextCharges = [...prev.charge]; 
-      nextCharges[index] = { ...nextCharges[index], charge: value }; 
-      return { ...prev, charge: nextCharges }; }); }
+  function handleChargeText(index: number, value: string) {
+    setChargeQuery((prev) => {
+      const next = [...prev];
+      next[index] = value;
+      return next;
+    });
+    const opts = searchChargeCodes(allCharges, value, 15);
+    setChargeOptions((prev) => {
+      const next = [...prev];
+      next[index] = opts;
+      return next;
+    });
+    setChargeOpen((prev) => {
+      const next = [...prev];
+      next[index] = value.trim().length > 0 && opts.length > 0;
+      return next;
+    });
+    setFormState((prev) => {
+      const nextCharges = [...prev.charge];
+      nextCharges[index] = { ...nextCharges[index], charge: value };
+      return { ...prev, charge: nextCharges };
+    });
+  }
 
-  function handleChargeField(index: number, field: "chargeType" | "chargeNum", value: string) { setFormState((prev) => { const nextCharges = [...prev.charge]; nextCharges[index] = { ...nextCharges[index], [field]: value }; return { ...prev, charge: nextCharges }; }); }
+  function handleChargeField(
+    index: number,
+    field: "chargeType" | "chargeNum",
+    value: string
+  ) {
+    setFormState((prev) => {
+      const nextCharges = [...prev.charge];
+      nextCharges[index] = { ...nextCharges[index], [field]: value };
+      return { ...prev, charge: nextCharges };
+    });
+  }
 
-  function selectCharge(index: number, selected: ChargeCode) { const combined = `${selected.charge} ${selected.ocga}`; setFormState((prev) => { const nextCharges = [...prev.charge]; nextCharges[index] = { ...nextCharges[index], charge: combined }; return { ...prev, charge: nextCharges }; }); setChargeQuery((prev) => { const next = [...prev]; next[index] = combined; return next; }); setChargeOpen((prev) => { const next = [...prev]; next[index] = false; return next; }); }
-  
+  function selectCharge(index: number, selected: ChargeCode) {
+    const combined = `${selected.charge} ${selected.ocga}`;
+    setFormState((prev) => {
+      const nextCharges = [...prev.charge];
+      nextCharges[index] = { ...nextCharges[index], charge: combined };
+      return { ...prev, charge: nextCharges };
+    });
+    setChargeQuery((prev) => {
+      const next = [...prev];
+      next[index] = combined;
+      return next;
+    });
+    setChargeOpen((prev) => {
+      const next = [...prev];
+      next[index] = false;
+      return next;
+    });
+  }
+    
   function handleCheckbox(e: React.ChangeEvent<HTMLInputElement>){
     const {name, checked} = e.target;
     setFormState((prev) => ({...prev, [name]: checked}));
   }
 
-  
-  
-  async function handleSubmit(e?: React.FormEvent) {
+
+
+  function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault?.();
+    if (submitting) return;
+
+    setConfirm({
+      title: "Ready to send?",
+      message: "Make sure everything is correct before sending.",
+      confirmText: "Send",
+      cancelText: "Cancel",
+      onConfirm: () => doSubmit(),
+    });
+  }
+
+  async function doSubmit() {
+    // close modal immediately so it feels responsive
+    setConfirm(null);
 
     if (!user) {
       console.error("No user in context");
       return;
     }
+
     setSubmitting(true);
 
-    // IMPORTANT: match the ServerUser type expected by the function
     const u = {
       firstName: user.firstName ?? "",
       lastName: user.lastName ?? "",
-      badge: user.badge ?? "", // force string so TS + email/pdf are stable
+      badge: user.badge ?? "",
     };
 
     try {
       const resp = await sendBookingPacket({
         emails: ["intake@pickensgasheriff.com", user.email],
-        formData: formState, // make sure name is formData, not formState
+        formData: formState,
         u,
       });
 
@@ -106,14 +186,78 @@ export default function BookingForm({formState, setFormState, setBuild, createNo
       createNotif(true);
     } catch (err) {
       console.error("sendBookingPacket failed:", err);
-      setSubmitting(false)
       createNotif(false);
+      // allow retry
+      setSubmitting(false);
     }
   }
+  
+ 
+  
 
+  
+   
 
   return(
-    <motion.div id="panel" style={{borderColor: primaryAccent}} className="w-full h-full overflow-auto p-2 lg:p-4 flex items-center justify-center border rounded-lg">
+    <motion.div id="panel" style={{borderColor: primaryAccent}} className="relative w-full h-full overflow-auto p-2 lg:p-4 flex items-center justify-center border rounded-lg">
+      
+        <AnimatePresence>
+          {confirm && (
+            <motion.div
+              className="absolute inset-0 z-50 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {/* backdrop */}
+              <motion.button
+                type="button"
+                className="absolute inset-0 w-full min-h-screen bg-black/60"
+                aria-label="Close dialog"
+                onClick={() => setConfirm(null)}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+
+              {/* dialog */}
+              <motion.div
+                style={{ borderColor: primaryAccent }}
+                className="relative w-[92%] max-w-lg rounded-xl border bg-zinc-950 p-4 shadow-2xl"
+                initial={{ scale: 0.96, y: 10, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.98, y: 8, opacity: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+              >
+                <div className="text-zinc-100 text-lg font-semibold">
+                  {confirm.title}
+                </div>
+
+                {confirm.message && (
+                  <div className="mt-2 text-sm text-zinc-300">
+                    {confirm.message}
+                  </div>
+                )}
+
+                <div className="mt-4 flex items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    text={confirm.cancelText ?? "Cancel"}
+                    color={`${secondaryAccent}90`}
+                    action={() => setConfirm(null)}
+                  />
+                  <Button
+                    type="button"
+                    text={submitting ? "Sending..." : (confirm.confirmText ?? "Send")}
+                    disabled={submitting}
+                    color={primaryAccent}
+                    action={confirm.onConfirm}
+                  />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       <LayoutGroup>
       <motion.form className="lg:w-2/3 w-full min-h-dvh lg:h-full  grid grid-cols-1 gap-4" onSubmit={handleSubmit}>
         <div className=" flex items-center justify-center text-2xl text-zinc-200 lg:pt-8 font-semibold">Pre-Bookin</div>
@@ -121,8 +265,14 @@ export default function BookingForm({formState, setFormState, setBuild, createNo
           <motion.input value={formState.arrestingAgency} placeholder="Arresting Agency" name="arrestingAgency" onChange={handleInput} className={inputStyle} />
           <motion.input value={formState.incidentNumber} placeholder="Incident Number" name="incidentNumber" onChange={handleInput} className={inputStyle} />
           <div className="flex items-center col-span-2 justify-center gap-2">
-            <motion.input type={dateFocus || formState.arrestDate ? "date" : "text"} onBlur={() => {if (!formState.arrestDate) {setDateFocus(false)}}}  onFocus={() => setDateFocus(prev => !prev)} value={formState.arrestDate} placeholder="Arrest Date" name="arrestDate" onChange={handleInput} className={inputStyle} />
-            <motion.input type={timeFocus || formState.arrestTime ? "time" : "text"} onBlur={() => {if (!formState.arrestTime) {setTimeFocus(false)}}} onFocus={() => setTimeFocus(prev => !prev)} step={60} value={formState.arrestTime} placeholder="Arrest Time" name="arrestTime" onChange={handleInput} className={inputStyle} />
+            <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-1">
+              <div className="font-semibold">Date:</div>
+              <motion.input type="date" value={formState.arrestDate} placeholder="Arrest Date" name="arrestDate" onChange={handleInput} className={inputStyle} />
+            </div>
+            <div className="flex flex-col lg:flex-row items-center jusitfy-center w-full gap-1">
+              <div className="font-semibold">Time:</div>
+              <motion.input type="time" step={60} value={formState.arrestTime} placeholder="Arrest Time" name="arrestTime" onChange={handleInput} className={inputStyle} />
+            </div>
           </div>
           <motion.input value={formState.loa} placeholder="Location of Arrest" name="loa" onChange={handleInput} className={inputStyle2xl} />
         </motion.div>
@@ -309,4 +459,8 @@ function CheckboxCard({ primaryAccent, label, danger, name, checked, onChange })
     </label>
   );
 }
+
+
+
+
 

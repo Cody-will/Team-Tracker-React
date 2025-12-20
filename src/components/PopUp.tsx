@@ -27,6 +27,7 @@ export interface PopUpProps {
   timer?: number;
   toggle?: ToggleProps;
   tempData?: TempParent;
+  returnFunction?: boolean;
 }
 
 export default function PopUp(props: PopUpProps) {
@@ -42,6 +43,7 @@ export default function PopUp(props: PopUpProps) {
     timer = 5,
     toggle,
     tempData,
+    returnFunction
   } = props;
   const { primaryAccent, secondaryAccent } = useSafeSettings();
   const position = getLocation(location);
