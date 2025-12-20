@@ -1,12 +1,22 @@
 {
   "name": "Team Tracker",
-  "short_name": "Tracker",
+  "short_name": "Team Tracker",
   "icons": [
     {
-      "src": "/apple-touch-icon.png",
-      "sizes": "180x180",
+      "src": "/app_icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/app_icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/app_icon.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ],
   "display": "standalone",
