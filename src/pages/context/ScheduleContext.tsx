@@ -560,7 +560,7 @@ export function ScheduleProvider({ children }: any) {
           allDay: e.allDay,
           claimed: false,
           Division: division,
-          backgroundColor: e.color,
+          backgroundColor: getColor(e.eventType),
           textColor: "#09090b",
         };
         void addUnclaimedCoverage(entry);
@@ -592,8 +592,24 @@ export function ScheduleProvider({ children }: any) {
   );
 
   async function deleteEvent(id: string) {
+    const ev = events.find(e => e.id == id);
+    if (!ev) return;
+
+    // delete coverage children first (if needed)
+    if (ev.coverage) {
+      const children = coverageRaw
+        .filter((c) => typeof c?.id === "string")
+        .filter((c) => c.id === id || c.id?.startsWith(`${id}-`)); 
+
+      await Promise.all(children.map((c) => deleteCoverage(c.id as string)));
+    }
     const evRef = ref(db, `events/${id}`);
     await set(evRef, null);
+  }
+
+  async function deleteCoverage(id: string) {
+    const covRef = ref(db, `coverage/${id}`);
+    await set(covRef, null);
   }
 
   const addClaimedCoverage = useCallback(async (event: DayEvent) => {

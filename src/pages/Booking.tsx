@@ -4,11 +4,14 @@ import {useState, useEffect} from "react";
 import {useUser} from "./context/UserContext.tsx";
 import { useSafeSettings } from "./hooks/useSafeSettings.ts";
 import type{FormData, ScanData} from "../helpers/fillIdDataPdf.ts"
+import PopUp from "../components/PopUp.tsx";
+import type{PopUpProps} from "../components/PopUp.tsx";
 
 export default function Booking() {
   const [formData, setFormData] = useState<FormData>({});
   const [scanData, setScanData] = useState<ScanData>({});
   const [built, setBuilt] = useState(false);
+  const [notif, setNotif] = useState<PopUpProps | null>(null)
   const {user} = useUser();
 
   function buildForm(data: ScanData) {
@@ -64,7 +67,37 @@ export default function Booking() {
     setBuilt(true);
     
   }
-  return (<div className="w-full min-h-dvh lg:h-full p-2 lg:p-4">{!built ? <LicenseScanner handleSubmit={buildForm} /> : <BookingForm formState={formData} setFormState={setFormData} setBuild={setBuilt} />}</div>)
+
+  function closePopup() {
+    setNotif(null);
+  }
+
+  function createPopup(success: boolean){
+    const message: PopUpProps = success ?  {
+      title: "Success",
+      message: "Forms completed and send",
+      location: "top-center",
+      onClose: closePopup,
+      timer: 3,
+    } : {
+        title: "Oops!",
+        message: "Something went wrong, try again.",
+        location: "top-center",
+        onClose: closePopup,
+        timer: 3,
+      }
+
+    setNotif(message);
+
+  }
+  
+ 
+  
+  return (
+    <div className="relative w-full min-h-dvh lg:h-full p-2 lg:p-4">
+    {notif && <PopUp title={notif.title} message={notif.message} location={notif.location} onClose={notif.onClose} timer={notif.timer} />}
+    {!built ? <LicenseScanner handleSubmit={buildForm} /> : <BookingForm formState={formData} setFormState={setFormData} createNotif={createPopup} setBuild={setBuilt} />}
+    </div>)
 }
 
 

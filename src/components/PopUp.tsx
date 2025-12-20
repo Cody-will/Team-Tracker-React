@@ -84,7 +84,7 @@ export default function PopUp(props: PopUpProps) {
       initial={{ y: location === "top-center" ? -200 : 200 }}
       animate={{ y: 0 }}
       exit={{ y: location === "top-center" ? -200 : 200 }}
-      transition={{ duration: 0.2 }}
+      transition={{type: "spring", duration: 0.3 }}
       className={`fixed ${position} transform -translate-x-1/2 bg-zinc-900/90 rounded-lg text-zinc-200 border-zinc-700 flex flex-col items-center justify-center gap-4 z-50 px-6 py-2`}
     >
       <div className="text-2xl font-semibold">{title}</div>

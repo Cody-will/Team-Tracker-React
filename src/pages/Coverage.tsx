@@ -33,7 +33,6 @@ export default function Coverage() {
       (e) => user?.Shifts != users[e.originUID].Shifts && !e.claimed
     );
   }
-
   // This function handles switching the view from list view to the upcoming calendar view
   function handleViewChange() {
     setView((prev) => !prev);

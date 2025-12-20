@@ -174,12 +174,7 @@ export default function Sidebar() {
                               size={photoSize()}
                               borderColor={primaryAccent}
                             />
-                           <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
-                              {user.Ranks}
-                            </div>
-                            <div className="text-zinc-200 2xl:text-md text-sm font-medium 2xl:font-medium">
-                              {user.lastName}
-                            </div>
+                           
                           </div>
                         </motion.div>
                       )}
@@ -226,7 +221,6 @@ function roleCheck(title, role, excludes, division, view, user) {
   }
   if (title === "Info Card Configuration" && user.lastName !== "Willard")
     return false;
-  if (title === "Booking" && user.lastName !== "Willard") return false;
   if (role === "Admin") return true;
   return !excludes.includes(title);
 }

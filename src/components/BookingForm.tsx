@@ -11,13 +11,15 @@ import { getFunctions, httpsCallable } from "firebase/functions";
 const functions = getFunctions(undefined, "us-central1");
 const sendBookingPacket = httpsCallable(functions, "sendBookingPacket");
 export type ServerUser = {firstName: string, lastName: string, badge: string};
-export type BookingProps = { formState: FormData; setFormState: React.Dispatch<React.SetStateAction<FormData>>; setBuild: React.Dispatch<React.SetStateAction<boolean>>; }
+export type BookingProps = { formState: FormData; setFormState: React.Dispatch<React.SetStateAction<FormData>>; setBuild: React.Dispatch<React.SetStateAction<boolean>>; createNotif: (res: boolean) => void; }
 
-export default function BookingForm({formState, setFormState, setBuild}: BookingProps){ 
+export default function BookingForm({formState, setFormState, setBuild, createNotif}: BookingProps){ 
   const [chargeQuery, setChargeQuery] = useState<string[]>(Array(6).fill(""));
   const [chargeOptions, setChargeOptions] = useState<ChargeCode[][]>(Array(6).fill([]));
   const [chargeOpen, setChargeOpen] = useState<boolean[]>(Array(6).fill(false));
   const [submitting, setSubmitting] = useState(false);
+  const [timeFocus, setTimeFocus] = useState(false);
+  const [dateFocus, setDateFocus] = useState(false);
   const {primaryAccent, secondaryAccent} = useSafeSettings();
   const {user} = useUser();
   const inputStyle = "border-2 border-zinc-500 text-zinc-200 w-full  text-md 2xl:text-base bg-zinc-900 rounded-md 2xl:rounded-lg py-1 px-1.5 2xl:py-2 2xl:px-3 focus:border-[var(--accent)] focus:outline-none focus:ring-1 2xl:focus:ring-2 [--tw-ring-color:var(--accent)] focus:shadow-[0_0_10px_1px_var(--accent)] 2xl:focus:shadow-[0_0_15px_2px_var(--accent)]";
@@ -92,7 +94,7 @@ export default function BookingForm({formState, setFormState, setBuild}: Booking
 
     try {
       const resp = await sendBookingPacket({
-        emails: ["cwillard@pickensgasheriff.com"],
+        emails: ["intake@pickensgasheriff.com", user.email],
         formData: formState, // make sure name is formData, not formState
         u,
       });
@@ -101,9 +103,11 @@ export default function BookingForm({formState, setFormState, setBuild}: Booking
 
       setFormState({} as FormData);
       setBuild(false);
+      createNotif(true);
     } catch (err) {
       console.error("sendBookingPacket failed:", err);
       setSubmitting(false)
+      createNotif(false);
     }
   }
 
@@ -117,8 +121,8 @@ export default function BookingForm({formState, setFormState, setBuild}: Booking
           <motion.input value={formState.arrestingAgency} placeholder="Arresting Agency" name="arrestingAgency" onChange={handleInput} className={inputStyle} />
           <motion.input value={formState.incidentNumber} placeholder="Incident Number" name="incidentNumber" onChange={handleInput} className={inputStyle} />
           <div className="flex items-center col-span-2 justify-center gap-2">
-            <motion.input type="date" value={formState.arrestDate} placeholder="Arrest Date" name="arrestDate" onChange={handleInput} className={inputStyle} />
-            <motion.input type="time" step={60} value={formState.arrestTime} placeholder="Arrest Time" name="arrestTime" onChange={handleInput} className={inputStyle} />
+            <motion.input type={dateFocus || formState.arrestDate ? "date" : "text"} onBlur={() => {if (!formState.arrestDate) {setDateFocus(false)}}}  onFocus={() => setDateFocus(prev => !prev)} value={formState.arrestDate} placeholder="Arrest Date" name="arrestDate" onChange={handleInput} className={inputStyle} />
+            <motion.input type={timeFocus || formState.arrestTime ? "time" : "text"} onBlur={() => {if (!formState.arrestTime) {setTimeFocus(false)}}} onFocus={() => setTimeFocus(prev => !prev)} step={60} value={formState.arrestTime} placeholder="Arrest Time" name="arrestTime" onChange={handleInput} className={inputStyle} />
           </div>
           <motion.input value={formState.loa} placeholder="Location of Arrest" name="loa" onChange={handleInput} className={inputStyle2xl} />
         </motion.div>
@@ -227,7 +231,7 @@ export default function BookingForm({formState, setFormState, setBuild}: Booking
               
         </motion.div>}
         </AnimatePresence>
-        <motion.div layout className="grid grid-cols-2 gap-4">
+        <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           <motion.input value={formState.arrestingOfficer} placeholder="Arresting Officer" name="arrestingOfficer" onChange={handleInput} className={lgUp ? inputStyle : inputStyleLg} />
           <motion.input value={formState.arrestingOfficerBadge} placeholder="Badge" name="arrestingOfficerBadge" onChange={handleInput} className={inputStyle} />
           <motion.input value={formState.arrestingOfficerAgency} placeholder="Agency" name="arrestingOfficerAgency" onChange={handleInput} className={inputStyle} />
