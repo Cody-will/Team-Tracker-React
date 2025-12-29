@@ -219,7 +219,7 @@ function roleCheck(title, role, excludes, division, view, user) {
   if (title === "Scheduling" && user.Divisions !== view && user.lastName !== "Willard") {
     return false;
   }
-  if (title === "Info Card Configuration" && user.lastName !== "Willard")
+  if (title === "Info Card Configuration" && role != "Admin")
     return false;
   if (role === "Admin") return true;
   return !excludes.includes(title);

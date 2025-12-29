@@ -264,7 +264,7 @@ export default function BookingForm({formState, setFormState, setBuild, createNo
         <motion.div className="grid grid-cols-2 lg:grid-cols-4 h-full gap-2">
           <motion.input value={formState.arrestingAgency} placeholder="Arresting Agency" name="arrestingAgency" onChange={handleInput} className={inputStyle} />
           <motion.input value={formState.incidentNumber} placeholder="Incident Number" name="incidentNumber" onChange={handleInput} className={inputStyle} />
-          <div className="flex items-center col-span-2 justify-center gap-2">
+          <div className="flex items-center col-span-2 w-full justify-center gap-2">
             <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-1">
               <div className="font-semibold">Date:</div>
               <motion.input type="date" value={formState.arrestDate} placeholder="Arrest Date" name="arrestDate" onChange={handleInput} className={inputStyle} />

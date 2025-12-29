@@ -169,7 +169,7 @@ function SortableStackCard({
   } as React.CSSProperties;
 
   // negative margin stacks them (your -mt-45)
-  const stackOffsetClass = index === 0 ? "" : "-mt-35";
+  const stackOffsetClass = index === 0 ? "" : "-mt-55";
 
   return (
     <div
