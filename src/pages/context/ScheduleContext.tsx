@@ -186,92 +186,102 @@ export function ScheduleProvider({ children }: any) {
     UPD: ScheduleEvent[];
   }>({ ADC: [], UPD: [] });
 
-  // ---- COVERAGE LISTENER (raw) ----
-  useEffect(() => {
-    const cRef = ref(db, "coverage");
-    const unsubscribe = onValue(
-      cRef,
-      (snapshot) => {
+
+// ---- COVERAGE LISTENER (raw) ----
+useEffect(() => {
+  if (!user) {
+    setCoverageRaw([]);
+    return;
+  }
+
+  const cRef = ref(db, "coverage");
+  const unsubscribe = onValue(
+    cRef,
+    (snapshot) => {
+      startTransition(() => {
+        const raw = snapshot.exists()
+          ? (Object.values(snapshot.val()) as DayEvent[])
+          : [];
+        setCoverageRaw(raw);
+      });
+    },
+    (error) => console.log(error)
+  );
+
+  return () => unsubscribe();
+}, [user?.uid]);
+
+// ---- EVENTS LISTENER (raw) ----
+useEffect(() => {
+  if (!user) {
+    startTransition(() => {
+      setEvents([]);
+      setVacation([]);
+      setTraining([]);
+      setRange([]);
+      setSwap([]);
+      setJailSchool([]);
+    });
+    return;
+  }
+
+  const confRef = ref(db, "events");
+  const unsubscribe = onValue(
+    confRef,
+    (snapshot) => {
+      if (!snapshot.exists()) {
         startTransition(() => {
-          const raw = snapshot.exists()
-            ? (Object.values(snapshot.val()) as DayEvent[])
-            : [];
-          setCoverageRaw(raw);
+          setEvents([]);
+          setVacation([]);
+          setTraining([]);
+          setRange([]);
+          setSwap([]);
+          setJailSchool([]);
         });
-      },
-      (error) => console.log(error)
-    );
-    return unsubscribe;
-  }, []);
+        return;
+      }
 
-  // ---- EVENTS LISTENER (raw) ----
-  useEffect(() => {
-    const confRef = ref(db, "events");
-    const unsubscribe = onValue(
-      confRef,
-      (snapshot) => {
-        if (!snapshot.exists()) {
-          startTransition(() => {
-            setEvents([]);
-            setVacation([]);
-            setTraining([]);
-            setRange([]);
-            setSwap([]);
-            setJailSchool([]);
-          });
-          return;
+      const typedData = snapshot.val() as Record<string, ScheduleEvent>;
+      const values = Object.values(typedData);
+
+      const nextEvents: ScheduleEvent[] = [];
+      const nextVacation: ScheduleEvent[] = [];
+      const nextTraining: ScheduleEvent[] = [];
+      const nextRange: ScheduleEvent[] = [];
+      const nextSwap: ScheduleEvent[] = [];
+      const nextJailSchool: ScheduleEvent[] = [];
+
+      for (const e of values) {
+        const normalized: ScheduleEvent = {
+          ...e,
+          start: toDayOnly(toLocalMidnight(e.start)),
+          end: toDayOnly(toLocalMidnight(e.end)),
+        };
+        nextEvents.push(normalized);
+
+        switch (e.eventType) {
+          case "Vacation": nextVacation.push(normalized); break;
+          case "Training": nextTraining.push(normalized); break;
+          case "Range": nextRange.push(normalized); break;
+          case "Shift-Swap": nextSwap.push(normalized); break;
+          case "Jail-School": nextJailSchool.push(normalized); break;
         }
+      }
 
-        const typedData = snapshot.val() as Record<string, ScheduleEvent>;
-        const values = Object.values(typedData);
+      startTransition(() => {
+        setEvents(nextEvents);
+        setVacation(nextVacation);
+        setTraining(nextTraining);
+        setRange(nextRange);
+        setSwap(nextSwap);
+        setJailSchool(nextJailSchool);
+      });
+    },
+    (error) => console.log(error)
+  );
 
-        const nextEvents: ScheduleEvent[] = [];
-        const nextVacation: ScheduleEvent[] = [];
-        const nextTraining: ScheduleEvent[] = [];
-        const nextRange: ScheduleEvent[] = [];
-        const nextSwap: ScheduleEvent[] = [];
-        const nextJailSchool: ScheduleEvent[] = [];
-
-        for (const e of values) {
-          const normalized: ScheduleEvent = {
-            ...e,
-            start: toDayOnly(toLocalMidnight(e.start)),
-            end: toDayOnly(toLocalMidnight(e.end)),
-          };
-          nextEvents.push(normalized);
-
-          switch (e.eventType) {
-            case "Vacation":
-              nextVacation.push(normalized);
-              break;
-            case "Training":
-              nextTraining.push(normalized);
-              break;
-            case "Range":
-              nextRange.push(normalized);
-              break;
-            case "Shift-Swap":
-              nextSwap.push(normalized);
-              break;
-            case "Jail-School":
-              nextJailSchool.push(normalized);
-              break;
-          }
-        }
-
-        startTransition(() => {
-          setEvents(nextEvents);
-          setVacation(nextVacation);
-          setTraining(nextTraining);
-          setRange(nextRange);
-          setSwap(nextSwap);
-          setJailSchool(nextJailSchool);
-        });
-      },
-      (error) => console.log(error)
-    );
-    return unsubscribe;
-  }, []);
+  return () => unsubscribe();
+}, [user?.uid]);
 
   const currentYear = new Date().getFullYear();
   const nextYear = currentYear + 1;

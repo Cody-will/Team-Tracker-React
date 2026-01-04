@@ -2,7 +2,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { ref, push, set, onValue, update } from "firebase/database";
-
 import { db } from "../../firebase";
 import type { InfoCardProps } from "../../components/InfoCard";
 import { useUser } from "./UserContext";
@@ -11,7 +10,6 @@ export interface AllInfo {
   ADC: Record<string, InfoCardProps>;
   UPD: Record<string, InfoCardProps>;
 }
-
 export type Info = InfoCardProps[];
 
 export interface Value {
@@ -27,129 +25,105 @@ const CardContext = React.createContext<Value | undefined>(undefined);
 
 export function useCard() {
   const context = React.useContext(CardContext);
-  if (!context) {
-    throw new Error("CardContext must be used inside <CardProvider>");
-  }
+  if (!context) throw new Error("CardContext must be used inside <CardProvider>");
   return context;
 }
 
 export function CardProvider({ children }: { children: React.ReactNode }) {
+  const DEBUG = true;
+  const log = (...a: any[]) => DEBUG && console.log("[CardProvider]", ...a);
+  const warn = (...a: any[]) => DEBUG && console.warn("[CardProvider]", ...a);
+  const errLog = (...a: any[]) => DEBUG && console.error("[CardProvider]", ...a);
+
   const { user, view } = useUser();
   const [info, setInfo] = useState<Info>([]);
 
-  // all cards, by division
-  const [allInfo, setAllInfo] = useState<AllInfo>({
-    ADC: {},
-    UPD: {},
-  });
+  // Keep structure for API compatibility, but we won't subscribe to root anymore
+  const [allInfo, setAllInfo] = useState<AllInfo>({ ADC: {}, UPD: {} });
 
-  // ---- Firebase subscription: keep allInfo in sync ----
+  // ✅ Subscribe ONLY to the active division path (cards/ADC or cards/UPD)
   useEffect(() => {
-    const cardRef = ref(db, "cards");
+    // not logged in / not ready
+    if (!user || !view) {
+      log("no user/view -> reset cards state", { hasUser: !!user, view });
+      setInfo([]);
+      setAllInfo({ ADC: {}, UPD: {} });
+      return;
+    }
 
-    const unsubscribe = onValue(
-      cardRef,
-      (snapshot) => {
-        const val = snapshot.val() as Partial<AllInfo> | null;
+    const division = view; // "ADC" | "UPD"
+    const divisionRef = ref(db, `cards/${division}`);
 
-        // Normalize so we ALWAYS have ADC + UPD keys
-        setAllInfo({
-          ADC: val?.ADC ?? {},
-          UPD: val?.UPD ?? {},
-        });
+    log("attach onValue", `cards/${division}`);
+
+    const unsub = onValue(
+      divisionRef,
+      (snap) => {
+        const val = (snap.val() || {}) as Record<string, InfoCardProps>;
+
+        // update allInfo for that division (keep other division intact)
+        setAllInfo((prev) => ({
+          ...prev,
+          [division]: val,
+        }));
+
+        const sorted = Object.values(val).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        setInfo(sorted);
+
+        log("cards snapshot", { division, count: sorted.length });
       },
-      (err) => {
-        console.error("Firebase fetch error:", err);
+      (e) => {
+        errLog("cards onValue error", { division, e });
+        setInfo([]);
+        setAllInfo((prev) => ({ ...prev, [division]: {} as any }));
       }
     );
 
     return () => {
-      unsubscribe();
+      log("detach onValue", `cards/${division}`);
+      unsub();
     };
-  }, []);
+  }, [user?.uid, view]);
 
-  // ---- Derive `info` for the current view (division) ----
-  useEffect(() => {
-    if (!user || !view) {
-      setInfo([]);
-      return;
-    }
-
-    const divisionCards = allInfo[view];
-    if (!divisionCards) {
-      setInfo([]);
-      return;
-    }
-
-    const sorted = Object.values(divisionCards).sort(
-      (a, b) => a.order - b.order
-    );
-
-    setInfo(sorted);
-  }, [allInfo, user, view]);
-
-  // ---- Add a new card ----
   async function addCard(cardProps: InfoCardProps): Promise<string> {
-    // Use the division from the card itself, not from context,
-    // so you can create cards for any division explicitly.
     const division = cardProps.division; // "ADC" | "UPD"
-
     const listRef = ref(db, `cards/${division}`);
     const newRef = push(listRef);
     const uid = newRef.key;
+    if (!uid) throw new Error("Failed to generate card id");
 
-    if (!uid) {
-      throw new Error("Failed to generate card id");
-    }
-
-    await set(newRef, {
-      ...cardProps,
-      uid,
-    });
-
+    await set(newRef, { ...cardProps, uid });
     return uid;
   }
 
-  // ---- Reorder cards on drag end ----
- async function reorderCard(cards: Info) {
-  if (!user) return;
+  async function reorderCard(cards: Info) {
+    if (!user) return;
 
-  const division = user.Divisions?.toUpperCase();
-  if (!division) return;
+    // IMPORTANT: use view for reorder, not user.Divisions (because Sheriff can toggle view)
+    const division = (view ?? user.Divisions)?.toUpperCase() as "ADC" | "UPD" | undefined;
+    if (!division) return;
 
-  // Reference to the division card list
-  const cardListRef = ref(db, `cards/${division}`);
+    const cardListRef = ref(db, `cards/${division}`);
+    const updatesObj: Record<string, any> = {};
 
-  // Build the update object
-  const updates: Record<string, any> = {};
+    cards.forEach((card, index) => {
+      if (!card.uid) return;
+      updatesObj[`${card.uid}/order`] = (index + 1) * 10;
+    });
 
-  cards.forEach((card, index) => {
-    if (!card.uid) return;
-    const newOrder = (index + 1) * 10;
+    await update(cardListRef, updatesObj);
+  }
 
-    updates[`${card.uid}/order`] = newOrder;
-  });
-
-  // Commit all updates in a single atomic update()
-  await update(cardListRef, updates);
-
-  
-}
-
-  // ---- Delete Card ---- 
   async function deleteCard(uid: string) {
     if (!user) return;
-    const division = user.Divisions.toUpperCase();
+    const division = (view ?? user.Divisions)?.toUpperCase() as "ADC" | "UPD" | undefined;
+    if (!division) return;
 
     const cardRef = ref(db, `cards/${division}/${uid}`);
     await set(cardRef, null);
   }
 
-  // ---- Add a signup to a card ----
-  async function addSignup(
-    cardUid: string,
-    division: "ADC" | "UPD"
-  ): Promise<void> {
+  async function addSignup(cardUid: string, division: "ADC" | "UPD"): Promise<void> {
     if (!user) return;
 
     const signupData = {
@@ -159,34 +133,16 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
       badge: user.badge,
     };
 
-    // Cards are stored at cards/{division}/{cardUid}
-    const signupsRef = ref(
-      db,
-      `cards/${division}/${cardUid}/signUpProps`
-    );
+    const signupsRef = ref(db, `cards/${division}/${cardUid}/signUpProps`);
     const newRef = push(signupsRef);
     const signupId = newRef.key;
-
-    if (!signupId) {
-      throw new Error("Failed to generate signup id");
-    }
+    if (!signupId) throw new Error("Failed to generate signup id");
 
     await set(newRef, signupData);
   }
 
-  const value: Value = {
-    addCard,
-    info,
-    allInfo,
-    addSignup,
-    deleteCard,
-    reorderCard,
-  };
+  const value: Value = { addCard, info, allInfo, addSignup, deleteCard, reorderCard };
 
-  return (
-    <CardContext.Provider value={value}>
-      {children}
-    </CardContext.Provider>
-  );
+  return <CardContext.Provider value={value}>{children}</CardContext.Provider>;
 }
 

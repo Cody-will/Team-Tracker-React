@@ -17,17 +17,15 @@ export default function Carousel({ team }) {
   const [direction, setDirection] = useState(0);
   const { events, coverage } = useSchedule();
   const { lgUp, twoXlUp } = useBreakpoint();
-  const {info: cards} = useCard();
-  
-  useEffect(() => {
-    console.log("Carousel is mounting");
-  }, [])
+
+  const { info } = useCard();
+  const cards = Array.isArray(info) ? info : [];
 
   const itemsPerPage = 3;
-  
-  const totalPages = Math.ceil(cards.length / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(cards.length / itemsPerPage)); // avoid 0
 
   const paginate = (newDirection) => {
+    if (totalPages <= 1) return;
     const newPage = wrap(0, totalPages, page + newDirection);
     setDirection(newDirection);
     setPage(newPage);
@@ -55,6 +53,13 @@ export default function Carousel({ team }) {
       position: "absolute",
     }),
   };
+
+  
+  console.log("[Carousel] cards", { hasInfo: !!info, len: Array.isArray(info) ? info.length : null });
+  
+  if (!cards.length) {
+    return <div className="text-zinc-400">Loading cards…</div>;
+  }
 
   return (
     <div className="relative flex lg:gap-2 justify-center items-center w-full h-full  overflow-hidden">

@@ -63,7 +63,7 @@ export default function SplashOverlay() {
       {showOverlay && (
         <motion.div
           key="app-splash"
-          className="fixed inset-0 z-9999 overflow-hidden pointer-events-auto"
+          className="fixed inset-0 z-[9999] overflow-hidden pointer-events-auto"
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 1 }} // curtains handle the visual; keep root solid

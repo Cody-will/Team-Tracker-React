@@ -48,7 +48,7 @@ export default function Home() {
           overflow-visible
           flex items-center justify-center
         "
-      > <h2 className="text-zinc-200 text-2xl">Hello world</h2>
+      > 
         {team && <TeamDisplay key="team-display-comp" team={team} />}
       </div>
 

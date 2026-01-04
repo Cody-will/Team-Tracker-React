@@ -312,82 +312,89 @@ export function UserProvider({ children }: any) {
   }
 
   // ===== 1) Main users listener: fills allUsers + per-division caches =====
-  useEffect(() => {
-    if (!currentUser) {
-      log("AUTH: logged out -> resetting provider state");
 
-      setData({});
-      setAllUsers({});
-      setUsersByDivision({ ADC: {}, UPD: {} });
-      setUser(undefined);
-      setUserSettings(null);
-      setError(undefined);
+useEffect(() => {
+  const uid = currentUser?.uid;
 
-      setLoading(false);
-      setUsersReady(false);
-      setUserReady(false);
-      setSettingsReady(false);
-      setView(null);
-      return;
-    }
-
-    log("AUTH: logged in", { uid: currentUser.uid });
-
-    setLoading(true);
-    setUsersReady(false);
+  if (!uid) {
+    log("AUTH: no uid -> resetting provider state");
+    setData({});
+    setAllUsers({});
+    setUsersByDivision({ ADC: {}, UPD: {} });
+    setUser(undefined);
+    setUserSettings(null);
     setError(undefined);
 
-    const usersRef = ref(db, "users");
+    setLoading(false);
+    setUsersReady(false);
+    setUserReady(false);
+    setSettingsReady(false);
+    setView(null);
+    return;
+  }
 
-    log("DB: attaching onValue listener to /users");
+  log("AUTH: uid present -> attach /users listener", { uid });
 
-    const unsub = onValue(
-      usersRef,
-      (snap) => {
-        const raw = (snap.val() || {}) as Record<string, User>;
-        const checked = fixExpiredSick(raw);
+  setLoading(true);
+  setUsersReady(false);
+  setError(undefined);
 
-        log("DB: /users snapshot received", {
-          totalUsers: Object.keys(raw).length,
-          checkedUsers: Object.keys(checked).length,
-          includesCurrent: !!checked[currentUser.uid],
-        });
+  const usersRef = ref(db, "users");
+  let didFirstSnapshot = false;
 
-        // single source of truth
-        setAllUsers(checked);
+  const unsub = onValue(
+    usersRef,
+    (snap) => {
+      didFirstSnapshot = true;
 
-        const adcEntries = Object.entries(checked).filter(([, u]) => isADC(u));
-        const updEntries = Object.entries(checked).filter(([, u]) => u?.Divisions === "UPD");
+      const raw = (snap.val() || {}) as Record<string, User>;
+      const checked = fixExpiredSick(raw);
 
-        const adcMap = Object.fromEntries(adcEntries) as UserRecord;
-        const updMap = Object.fromEntries(updEntries) as UserRecord;
+      log("DB: /users snapshot", {
+        totalUsers: Object.keys(raw).length,
+        includesCurrent: !!checked[uid],
+      });
 
-        setUsersByDivision({ ADC: adcMap, UPD: updMap });
+      setAllUsers(checked);
 
-        log("CACHE: rebuilt division caches", {
-          adcCount: Object.keys(adcMap).length,
-          updCount: Object.keys(updMap).length,
-        });
+      const adcEntries = Object.entries(checked).filter(([, u]) => isADC(u));
+      const updEntries = Object.entries(checked).filter(([, u]) => u?.Divisions === "UPD");
 
-        setLoading(false);
-      },
-      (e) => {
-        errLog("DB: /users onValue error", e);
+      const adcMap = Object.fromEntries(adcEntries) as UserRecord;
+      const updMap = Object.fromEntries(updEntries) as UserRecord;
 
-        setError(e?.message ?? "Failed to load users");
-        setAllUsers({});
-        setUsersByDivision({ ADC: {}, UPD: {} });
-        setData({});
-        setUsersReady(false);
-        setLoading(false);
-      }
-    );
+      setUsersByDivision({ ADC: adcMap, UPD: updMap });
 
-    return () => {
-      log("DB: detaching onValue listener from /users");
-      unsub();
-    };
-  }, [currentUser]);
+      setLoading(false);
+    },
+    (e) => {
+      didFirstSnapshot = true;
+      errLog("DB: /users onValue error", e);
+
+      setError(e?.message ?? "Failed to load users");
+      setAllUsers({});
+      setUsersByDivision({ ADC: {}, UPD: {} });
+      setData({});
+      setUsersReady(false);
+      setLoading(false);
+    }
+  );
+
+  // Optional: if something goes wrong and we never get the first callback,
+  // don’t block the entire app forever.
+  const t = window.setTimeout(() => {
+    if (!didFirstSnapshot) {
+      warn("DB: /users first snapshot timeout -> releasing loading gate");
+      setLoading(false);
+    }
+  }, 6000);
+
+  return () => {
+    window.clearTimeout(t);
+    log("DB: detach /users listener", { uid });
+    unsub();
+  };
+}, [currentUser?.uid]); // ✅ key off uid only
 
   // ===== 2) Derived: user object (DB user tied to auth) =====
   useEffect(() => {

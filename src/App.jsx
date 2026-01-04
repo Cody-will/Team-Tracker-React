@@ -1,43 +1,45 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense, lazy } from "react";
 import "./App.css";
+
 import Sidebar from "./components/Sidebar";
-import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.jsx";
-import { motion } from "motion/react";
-import TeamManagement from "./pages/TeamManagement.tsx";
-import ShiftSwap from "./pages/ShiftSwap.tsx";
-import Vacation from "./pages/Vacation.tsx";
-import Settings from "./pages/Settings.tsx";
-import AddUser from "./pages/AddUser.tsx";
-import Coverage from "./pages/Coverage";
-import Configure from "./pages/Configure";
+import SplashOverlay from "./components/SplashOverlay.tsx";
+
 import { Outlet, Routes, Route, Navigate } from "react-router-dom";
-import { db } from "./firebase.js";
-import { onValue, ref } from "firebase/database";
+
 import { AuthProvider } from "./pages/context/AuthContext.jsx";
 import { ConfigureProvider } from "./pages/context/configureContext.jsx";
 import { useAuth } from "./pages/context/AuthContext.jsx";
 import { UserProvider } from "./pages/context/UserContext.tsx";
-import { useUser } from "./pages/context/UserContext.tsx";
 import { useSafeSettings } from "./pages/hooks/useSafeSettings.ts";
-import Schedule from "./pages/Schedule.tsx";
 import { ScheduleProvider } from "./pages/context/ScheduleContext.tsx";
-import SplashOverlay from "./components/SplashOverlay.tsx";
 import { VersionProvider } from "./pages/context/VersionContext.tsx";
 import { useBreakpoint } from "./pages/hooks/useBreakpoint.ts";
-import CardConfigure from "./pages/CardConfigure.tsx";
 import { CardProvider } from "./pages/context/CardContext.tsx";
-import Booking from "./pages/Booking.tsx"
+
+import { motion } from "motion/react";
+
+const Home = lazy(() => import("./pages/Home.tsx"));
+const TeamManagement = lazy(() => import("./pages/TeamManagement.tsx"));
+const ShiftSwap = lazy(() => import("./pages/ShiftSwap.tsx"));
+const Vacation = lazy(() => import("./pages/Vacation.tsx"));
+const Settings = lazy(() => import("./pages/Settings.tsx"));
+const AddUser = lazy(() => import("./pages/AddUser.tsx"));
+const Coverage = lazy(() => import("./pages/Coverage"));
+const Configure = lazy(() => import("./pages/Configure"));
+const Schedule = lazy(() => import("./pages/Schedule.tsx"));
+const CardConfigure = lazy(() => import("./pages/CardConfigure.tsx"));
+const Booking = lazy(() => import("./pages/Booking.tsx"));
+
+function RouteFallback() {
+  return <div className="p-6 text-zinc-200">Loading…</div>;
+}
+
 const LoginRoute = () => {
   const { currentUser, authReady, forceSplash } = useAuth();
 
-  if (!authReady) {
-    // Still waiting on Firebase
-    return null;
-  }
+  if (!authReady) return null;
 
-  // Only auto-redirect if user is logged in AND
-  // we are NOT in the middle of a login transition using the curtain.
   if (currentUser && !forceSplash) {
     return <Navigate to="/home" replace />;
   }
@@ -102,45 +104,44 @@ function useSeamlessWallpaper(initial, fadeMs = 300) {
   return { current, next, showNext, startSwap, fadeMs };
 }
 
-function App() {
-
-  
+export default function App() {
   return (
     <AuthProvider>
-      <ConfigureProvider>
-        <UserProvider>
+      <UserProvider>
+        <ConfigureProvider>
           <ScheduleProvider>
             <CardProvider>
               <VersionProvider>
                 <SplashOverlay />
-                <Routes>
-                  <Route path="/login" element={<LoginRoute />} />
 
-                  <Route element={<ProtectedLayout />}>
-                    <Route index element={<Navigate to="/home" replace />} />
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/team-management" element={<TeamManagement />} />
-                    <Route path="/schedule" element={<Schedule />} />
-                    <Route path="/vacation" element={<Vacation />} />
-                    <Route path="/add-user" element={<AddUser />} />
-                    <Route path="/shift-swap" element={<ShiftSwap />} />
-                    <Route path="/coverage" element={<Coverage />} />
-                    <Route path="/configure" element={<Configure />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/cardsettings" element={<CardConfigure />} />
-                    <Route path="/booking" element={<Booking />} />
-                  </Route>
+                {/* ✅ Wrap routes in Suspense so lazy pages can load */}
+                <Suspense fallback={<RouteFallback />}>
+                  <Routes>
+                    <Route path="/login" element={<LoginRoute />} />
 
-                  <Route
-                    path="*"
-                    element={<div className="p-6">Not Found</div>}
-                  />
-                </Routes>
+                    <Route element={<ProtectedLayout />}>
+                      <Route index element={<Navigate to="/home" replace />} />
+                      <Route path="/home" element={<Home />} />
+                      <Route path="/team-management" element={<TeamManagement />} />
+                      <Route path="/schedule" element={<Schedule />} />
+                      <Route path="/vacation" element={<Vacation />} />
+                      <Route path="/add-user" element={<AddUser />} />
+                      <Route path="/shift-swap" element={<ShiftSwap />} />
+                      <Route path="/coverage" element={<Coverage />} />
+                      <Route path="/configure" element={<Configure />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/cardsettings" element={<CardConfigure />} />
+                      <Route path="/booking" element={<Booking />} />
+                    </Route>
+
+                    <Route path="*" element={<div className="p-6">Not Found</div>} />
+                  </Routes>
+                </Suspense>
               </VersionProvider>
             </CardProvider>
           </ScheduleProvider>
-        </UserProvider>
-      </ConfigureProvider>
+        </ConfigureProvider>
+      </UserProvider>
     </AuthProvider>
   );
 }
@@ -148,7 +149,6 @@ function App() {
 const ProtectedLayout = () => {
   const { currentUser, authReady } = useAuth();
   const { bgImage } = useSafeSettings();
-  const { loading: usersLoading } = useUser(); // 🔹 user/settings loading from context
   const { isTallDesktop } = useBreakpoint();
 
   const { current, next, showNext, startSwap, fadeMs } = useSeamlessWallpaper(
@@ -160,27 +160,12 @@ const ProtectedLayout = () => {
     startSwap(bgImage ?? null);
   }, [bgImage]);
 
-  // 1️⃣ Wait until Firebase tells us if there's a user at all
-  if (!authReady) {
-    return null;
-  }
-
-  // 2️⃣ If there is NO user after auth is ready, redirect to login
-  if (!currentUser) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // 3️⃣ User is logged in, but user data/settings still loading -> don't render layout yet.
-  //    SplashOverlay is up during this, so the user won't see a flash of default settings.
-  if (usersLoading) {
-   return null;
-  }
+  if (!authReady) return null;
+  if (!currentUser) return <Navigate to="/login" replace />;
 
   return (
     <motion.div
-      style={{
-        backgroundColor: "#27272a",
-      }}
+      style={{ backgroundColor: "#27272a" }}
       className="lg:h-screen min-h-screen w-screen overflow-x-hidden lg:overflow-hidden flex relative"
     >
       {current && (
@@ -217,4 +202,3 @@ const ProtectedLayout = () => {
   );
 };
 
-export default App;
