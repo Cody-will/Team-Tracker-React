@@ -54,7 +54,6 @@ export default function Carousel({ team }) {
     }),
   };
 
-  
   console.log("[Carousel] cards", { hasInfo: !!info, len: Array.isArray(info) ? info.length : null });
   
   if (!cards.length) {
@@ -77,7 +76,7 @@ export default function Carousel({ team }) {
           <div className="relative w-full h-full flex justify-center items-center">
             <AnimatePresence custom={direction} mode="wait" initial={false}>
               <motion.div
-                key={page}
+                key={`carousel-${page}`}
                 custom={direction}
                 variants={variants}
                 initial="enter"
@@ -87,7 +86,7 @@ export default function Carousel({ team }) {
                 className="flex gap-2 w-full h-full justify-center items-center"
               >
                 {paginatedCards.map((card) => (
-                  <InfoCard key={card.key} {...card}/>
+                  <InfoCard key={card.uid} {...card}/>
                 ))}
               </motion.div>
             </AnimatePresence>
@@ -105,7 +104,7 @@ export default function Carousel({ team }) {
       ) : (
         <motion.div className="w-full h-full flex flex-col gap-4">
           {cards.map((card) => (
-            <InfoCard key={card.key} {...card} />
+            <InfoCard key={card.uid} {...card} />
           ))}
         </motion.div>
       )}

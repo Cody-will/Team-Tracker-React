@@ -172,21 +172,25 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
     setTimeout(() => setDrag(false), 0);
   }
 
-  const commandStaff =
-    configData &&
-    Object.values(team)
-      .filter((user) => user.Shifts === "Command Staff" || user.Ranks == "Sheriff")
-      .sort(
-        (a, b) => getOrder(a.Ranks, configData) - getOrder(b.Ranks, configData)
-      )
-      .map((user) => (
-        <FrontCard
-          key={user.uid}
-          person={user}
-          didDrag={didDrag}
-          currShift={user.Shifts}
-        />
-      ));
+  
+  const commandStaff = configData
+    ? Object.values(team)
+        .filter(
+          (user) =>
+            user.Shifts === "Command Staff" || user.Ranks === "Sheriff"
+        )
+        .sort(
+          (a, b) => getOrder(a.Ranks, configData) - getOrder(b.Ranks, configData)
+        )
+        .map((user) => (
+          <FrontCard
+            key={user.uid}
+            person={user}
+            didDrag={didDrag}
+            currShift={user.Shifts}
+          />
+        ))
+    : [];
 
   function getOrder(rank: string, data: ConfigureData): number {
     const ranks = data.Ranks.items;
@@ -222,18 +226,9 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
       >
         <motion.div
           id="CommandStaff"
-          className="w-full lg:h-1/5 2xl:h-1/6 flex lg:flex-row flex-col 2xl:gap-2 gap-2"
-        >
-          {team && lgUp ? (
-            [commandStaff]
-          ) : (
-            <>
-              <div className="w-full">{commandStaff[0]}</div>
-              <div className="w-full gap-2 flex">
-                {commandStaff.slice(1, 3)}
-              </div>
-            </>
-          )}
+          className="w-full lg:h-1/5 2xl:h-1/6 flex lg:flex-row flex-wrap lg:no-wrap 2xl:gap-2 gap-2"
+        >   
+         {commandStaff.length > 0 && commandStaff} 
         </motion.div>
 
         <motion.div

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useSafeSettings } from "./hooks/useSafeSettings";
 import { BsArrowLeft } from "react-icons/bs";
 import { useState, lazy, Suspense } from "react";
+import {useBreakpoint} from "../pages/hooks/useBreakpoint.ts"
 
 const loadOrganizeCard = () => import("../components/OrganizeCard.tsx");
 const loadCreateInfoCard = () => import("../components/CreateInfoCard.tsx");
@@ -12,6 +13,7 @@ const CreateInfoCard = lazy(loadCreateInfoCard);
 
 export default function CardConfigure() {
   const { primaryAccent } = useSafeSettings();
+  const {lgUp} = useBreakpoint();
   const [page, setPage] = useState(0);
   const isStart = page === 0;
 
@@ -26,7 +28,7 @@ export default function CardConfigure() {
         className=" border-zinc-800 flex-col  bg-zinc-950/50 w-full flex-1 overflow-scroll lg:overflow-hidden lg:overscroll-none flex p-1 lg:p-2 rounded-lg"
       >
         <motion.div className="flex items-center gap-4">
-          <motion.div style={{ opacity: isStart ? 0 : 1 }} className="flex w-full items-center gap-4 ">
+          <motion.div style={{ opacity: isStart ? 0 : 1 }} className="flex w-full items-center gap-2 ">
             <motion.div
               onMouseEnter={preloadCreate}
               onFocus={preloadCreate}
@@ -34,16 +36,16 @@ export default function CardConfigure() {
               whileHover={{ scale: 1.1 }}
               className="hover:cursor-pointer"
             >
-              <BsArrowLeft size={48} />
+              <BsArrowLeft size={lgUp ? 48 : 24} />
             </motion.div>
-            <motion.div className="text-zinc-200 text-lg font-semibold">Create Cards</motion.div>
+            <motion.div className="text-zinc-200 text-xs lg:text-lg font-semibold">Create Cards</motion.div>
           </motion.div>
 
           <AnimatePresence mode="wait">
             {isStart ? (
               <motion.div
                 key="create-title"
-                className="text-xl font-semibold w-full flex justify-center items-center text-zinc-200"
+                className="text-nowrap text-lg lg:text-xl font-semibold w-full flex justify-center items-center text-zinc-200"
                 initial={{ x: "-100%", filter: "blur(15px)" }}
                 animate={{ x: 0, filter: "none" }}
                 exit={{ x: "-100%", filter: "blur(15px)" }}
@@ -53,7 +55,7 @@ export default function CardConfigure() {
             ) : (
               <motion.div
                 key="organize-title"
-                className=" text-xl font-semibold w-full flex justify-center items-center text-zinc-200"
+                className="text-nowrap text-md lg:text-xl font-semibold w-full flex justify-center items-center text-zinc-200"
                 initial={{ x: "100%", filter: "blue(15px)" }}
                 animate={{ x: 0, filter: "none" }}
                 exit={{ x: "100%", filter: "blur(15px)" }}
@@ -63,8 +65,8 @@ export default function CardConfigure() {
             )}
           </AnimatePresence>
 
-          <motion.div style={{ opacity: !isStart ? 0 : 1 }} className="flex w-full justify-end items-center gap-4 ">
-            <motion.div className="text-zinc-200 text-lg font-semibold">{"Organize Card"}</motion.div>
+          <motion.div style={{ opacity: !isStart ? 0 : 1 }} className="flex w-full justify-end items-center gap-2 lg:gap-4 ">
+            <motion.div className="text-zinc-200 lg:text-lg text-nowrap text-xs font-semibold">{"Organize Card"}</motion.div>
             <motion.div
               onMouseEnter={preloadOrganize}
               onFocus={preloadOrganize}
@@ -73,7 +75,7 @@ export default function CardConfigure() {
               whileHover={{ scale: 1.1 }}
               className="hover:cursor-pointer"
             >
-              <BsArrowLeft size={48} />
+              <BsArrowLeft size={lgUp ? 48 : 24} />
             </motion.div>
           </motion.div>
         </motion.div>

@@ -184,6 +184,7 @@ export default function TeamManagement() {
           id="panel"
           style={{borderColor: `${primaryAccent}E6`}}
           className="relative flex flex-col w-full h-11/12  rounded-md border  drop-shadow-xl/50"
+
         >
           {selectedTab && (
             <TeamPanel
@@ -274,16 +275,16 @@ function TeamPanel({
       <div className="flex p-2 flex-col items-center justify-evenly w-full h-full">
         {exclude.includes(title) && (
           <>
-            <div className="flex p-2 gap-4 border-b-2 border-zinc-900 items-center justify-evenly w-full h-2/5">
+            <div className="flex p-2 gap-4 border-b-2 border-zinc-900 flex-wrap w-full h-2/5">
               {supervisorCards}
             </div>
-            <div className="flex p-2 lg:flex-row flex-col gap-4 flex-1 flex-wrap w-full">
+            <div className="flex p-2 lg:flex-row flex-row gap-2 flex-1 flex-wrap w-full">
               {employeeCards}
             </div>{" "}
           </>
         )}
         {!exclude.includes(title) && (
-          <motion.div className="flex flex-1 lg:flex-row flex-col p-2 gap-4 flex-wrap w-full">
+          <motion.div className="flex flex-1 lg:flex-row  p-2 gap-2 flex-wrap w-full">
             {allCards}
           </motion.div>
         )}
@@ -323,7 +324,7 @@ function PanelCard({
   const includes = ["Alpha", "Bravo", "Charlie", "Delta", "Command-Staff"];
 
   return (
-    <div className="flex-1 basis-1/3">
+    <div className="flex-1 basis-1/3 xl:basis-1/4">
       <motion.div
         layoutId={`user-${user.uid}`}
         onClick={
