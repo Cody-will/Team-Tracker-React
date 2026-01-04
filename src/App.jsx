@@ -173,7 +173,7 @@ const ProtectedLayout = () => {
   // 3️⃣ User is logged in, but user data/settings still loading -> don't render layout yet.
   //    SplashOverlay is up during this, so the user won't see a flash of default settings.
   if (usersLoading) {
-    return null;
+   return null;
   }
 
   return (

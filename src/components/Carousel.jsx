@@ -18,7 +18,10 @@ export default function Carousel({ team }) {
   const { events, coverage } = useSchedule();
   const { lgUp, twoXlUp } = useBreakpoint();
   const {info: cards} = useCard();
-
+  
+  useEffect(() => {
+    console.log("Carousel is mounting");
+  }, [])
 
   const itemsPerPage = 3;
   

@@ -193,6 +193,11 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
     const order = Object.values(ranks).filter((ranks) => ranks.title === rank);
     return order[0].order;
   }
+  
+
+  useEffect(() => {
+    console.log("Team Display is mounting");
+  }, []) 
 
   return (
     <motion.div className="relative lg:h-full w-full min-h-screen lg:min-h-0 2xl:min-h-0 flex-1 gap-2 lg:gap-2 flex flex-col">

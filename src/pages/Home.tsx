@@ -5,20 +5,23 @@ import { useUser } from "./context/UserContext.tsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import SplashOverlay from "../components/SplashOverlay.tsx";
 import { useSafeSettings } from "./hooks/useSafeSettings.ts";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import type{ UserRecord } from "./context/UserContext.tsx";
 
 export default function Home() {
   const { currentUser, forceSplash } = useAuth();
   const { data, loading } = useUser();
   const { primaryAccent } = useSafeSettings();
-
+  const [team, setTeam] = useState<UserRecord>({});
   
-  const hasTeam = data && Object.keys(data).length > 0;
-  const isReady = !!currentUser && !loading && hasTeam;
+  useEffect(() => {
+    if (data) setTeam(data);
+  }, [data, loading]);
 
-  if (!isReady || forceSplash) {
-    return <SplashOverlay />;
-  }
+
+  useEffect(() => {
+    console.log("Home is mounting");
+  }, [])
 
   return (
     <motion.div
@@ -45,8 +48,8 @@ export default function Home() {
           overflow-visible
           flex items-center justify-center
         "
-      >
-        {data && <TeamDisplay key="team-display-comp" team={data} />}
+      > <h2 className="text-zinc-200 text-2xl">Hello world</h2>
+        {team && <TeamDisplay key="team-display-comp" team={team} />}
       </div>
 
       {/* BOTTOM PANEL - fixed height on lg+, auto on mobile */}
@@ -64,7 +67,7 @@ export default function Home() {
         "
       >
         {/* Carousel can still manage its own overflow */}
-        <Carousel key="carousel-comp" team={data} />
+        <Carousel key="carousel-comp" team={team} />
       </div>
     </motion.div>
   );
