@@ -277,13 +277,13 @@ function TeamPanel({
             <div className="flex p-2 gap-4 border-b-2 border-zinc-900 items-center justify-evenly w-full h-2/5">
               {supervisorCards}
             </div>
-            <div className="flex p-2 lg:flex-row flex-col gap-4 items-center justify-evenly w-full h-full">
+            <div className="flex p-2 lg:flex-row flex-col gap-4 flex-1 flex-wrap w-full">
               {employeeCards}
             </div>{" "}
           </>
         )}
         {!exclude.includes(title) && (
-          <motion.div className="flex lg:flex-row flex-col p-2 gap-4 items-center justify-evenly w-full h-full">
+          <motion.div className="flex flex-1 lg:flex-row flex-col p-2 gap-4 flex-wrap w-full">
             {allCards}
           </motion.div>
         )}
@@ -323,7 +323,7 @@ function PanelCard({
   const includes = ["Alpha", "Bravo", "Charlie", "Delta", "Command-Staff"];
 
   return (
-    <div className="w-full h-full">
+    <div className="flex-1 basis-1/3">
       <motion.div
         layoutId={`user-${user.uid}`}
         onClick={

@@ -1,3 +1,4 @@
+
 import { useContext, useState, useEffect, SetStateAction } from "react";
 import * as React from "react";
 import { db, storage } from "../../firebase.js";
@@ -9,16 +10,14 @@ import {
   update,
   remove,
   onValue,
-  runTransaction,
 } from "firebase/database";
 import {
   ref as storageRef,
   uploadBytesResumable,
   getDownloadURL,
-  getMetadata,
   deleteObject,
 } from "firebase/storage";
-import type { FullMetadata, UploadTaskSnapshot } from "firebase/storage";
+import type { UploadTaskSnapshot } from "firebase/storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { useAuth } from "./AuthContext.jsx";
 import type { Location } from "../Settings.js";
@@ -26,12 +25,10 @@ import {
   primaryAccentHex,
   secondaryAccentHex,
   backgroundImage,
-  backgroundOptions,
 } from "../../colors.jsx";
 import type { FormValues } from "../../components/EditForm.tsx";
 
 type CustomValue = string | number | boolean | null;
-
 type Photo = { src: string; path: string };
 
 export interface User {
@@ -73,66 +70,6 @@ export interface User {
 
 export type UserRecord = Record<string, User>;
 
-export interface Value {
-  data: UserRecord;
-  loading: boolean;
-  error?: string;
-  user?: User;
-  userSettings: UserSettings | null;
-  defaultSettings: DefaultSettings;
-  userReady: boolean;
-  usersReady: boolean;
-  settingsReady: boolean;
-  view: View;
-  setView: React.Dispatch<SetStateAction<View>>;
-  addUser: (userData: User) => Promise<AddUserReturn>;
-  deleteUser: (uid: string) => Promise<void>;
-  deactivateUser: (uid: string) => Promise<void>;
-  updateUser: (uid: string, formData: FormValues) => Promise<UpdateUserResult>;
-  updateUserSettings: (
-    uid: string,
-    location: Location,
-    value: string
-  ) => Promise<void>;
-  uploadPhoto: ({
-    uid,
-    file,
-    name,
-    type,
-    handleProgress,
-  }: UploadArguments) => Promise<UploadResult>;
-  updateUserBackground: ({
-    uid,
-    type,
-    name,
-    src,
-    path,
-  }: UpdateBackground) => Promise<string>;
-
-  usersWithoutShift: (shift: string) => UserWithShift[] | void;
-  setProfilePhoto: (args: {
-    uid: string;
-    file: File;
-    onProgress?: (snapshot: UploadTaskSnapshot) => void;
-  }) => Promise<{ src: string; path: string }>;
-
-  removeProfilePhoto: (uid: string) => Promise<void>;
-  updateAfterDrag: (
-    uid: string,
-    field: string,
-    data: string | boolean | null | number
-  ) => Promise<AddUserReturn>;
-}
-
-type UserBackground = {
-  name: string;
-  src: string;
-  path: string;
-  uploadedAt: number;
-};
-
-export type AddUserReturn = { success: boolean; message: string };
-
 export interface UserSettings {
   primaryAccent: string;
   secondaryAccent: string;
@@ -144,6 +81,13 @@ export interface UserSettings {
   backgrounds?: UserBackground | Record<string, UserBackground>;
 }
 
+type UserBackground = {
+  name: string;
+  src: string;
+  path: string;
+  uploadedAt: number;
+};
+
 export interface DefaultSettings {
   primaryAccent: string;
   secondaryAccent: string;
@@ -153,6 +97,8 @@ export interface DefaultSettings {
   trainingAccent: string;
   bgImage: string;
 }
+
+export type AddUserReturn = { success: boolean; message: string };
 
 export type UpdateUserResult =
   | { success: true }
@@ -188,17 +134,70 @@ export type View = "ADC" | "UPD" | null;
 
 type UserWithShift = User & { shift: string };
 
+export interface Value {
+  data: UserRecord;
+  loading: boolean;
+  error?: string;
+  user?: User;
+  userSettings: UserSettings | null;
+  defaultSettings: DefaultSettings;
+  userReady: boolean;
+  usersReady: boolean;
+  settingsReady: boolean;
+  view: View;
+  setView: React.Dispatch<SetStateAction<View>>;
+  addUser: (userData: User) => Promise<AddUserReturn>;
+  deleteUser: (uid: string) => Promise<void>;
+  deactivateUser: (uid: string) => Promise<void>;
+  updateUser: (uid: string, formData: FormValues) => Promise<UpdateUserResult>;
+  updateUserSettings: (
+    uid: string,
+    location: Location,
+    value: string
+  ) => Promise<void>;
+  uploadPhoto: ({
+    uid,
+    file,
+    name,
+    type,
+    handleProgress,
+  }: UploadArguments) => Promise<UploadResult>;
+  updateUserBackground: ({
+    uid,
+    type,
+    name,
+    src,
+    path,
+  }: UpdateBackground) => Promise<string>;
+  usersWithoutShift: (shift: string) => UserWithShift[] | void;
+  setProfilePhoto: (args: {
+    uid: string;
+    file: File;
+    onProgress?: (snapshot: UploadTaskSnapshot) => void;
+  }) => Promise<{ src: string; path: string }>;
+  removeProfilePhoto: (uid: string) => Promise<void>;
+  updateAfterDrag: (
+    uid: string,
+    field: string,
+    data: string | boolean | null | number
+  ) => Promise<AddUserReturn>;
+}
+
 const userContext = React.createContext<Value | undefined>(undefined);
 
 export function useUser(): Value {
   const context = useContext(userContext);
-  if (!context) {
-    throw new Error("useUser must be inside <UserProvider>");
-  }
+  if (!context) throw new Error("useUser must be inside <UserProvider>");
   return context;
 }
 
 export function UserProvider({ children }: any) {
+  // ===== DEBUG TOGGLES =====
+  const DEBUG = true; // set false when done
+  const log = (...args: any[]) => DEBUG && console.log("[UserProvider]", ...args);
+  const warn = (...args: any[]) => DEBUG && console.warn("[UserProvider]", ...args);
+  const errLog = (...args: any[]) => DEBUG && console.error("[UserProvider]", ...args);
+
   const [data, setData] = useState<UserRecord>({});
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | undefined>();
@@ -229,7 +228,27 @@ export function UserProvider({ children }: any) {
     UPD: UserRecord;
   }>({ ADC: {}, UPD: {} });
 
-  const [view, setView] = useState<"ADC" | "UPD" | null>(null);
+  const [view, setView] = useState<View>(null);
+
+  // ---- DIAGNOSTIC snapshot of state each render (optional, can be noisy)
+  useEffect(() => {
+    if (!DEBUG) return;
+    log("render snapshot", {
+      auth: !!currentUser,
+      uid: currentUser?.uid,
+      loading,
+      usersReady,
+      userReady,
+      settingsReady,
+      view,
+      allUsersCount: Object.keys(allUsers).length,
+      adcCount: Object.keys(usersByDivision.ADC).length,
+      updCount: Object.keys(usersByDivision.UPD).length,
+      dataCount: Object.keys(data).length,
+      hasUser: !!user,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [DEBUG, currentUser, loading, usersReady, userReady, settingsReady, view, allUsers, usersByDivision, data, user]);
 
   const value: Value = {
     data,
@@ -261,17 +280,48 @@ export function UserProvider({ children }: any) {
     if (!userSettings) return;
     const color = userSettings.primaryAccent || "#0ea5e9";
     document.documentElement.style.setProperty("--accent", color);
+    log("accent applied", color);
   }, [userSettings]);
 
-  // Main users listener: fills allUsers + per-division caches
+  // Utility: division rule
+  const isADC = (u: User) => {
+    if (u?.Divisions === "ADC") return true;
+    if (u?.Ranks === "Sheriff") return true;
+    return false;
+  };
+
+  // Fix expired sick (unchanged, but with logs)
+  function fixExpiredSick(raw: Record<string, User>, now = Date.now()): Record<string, User> {
+    const result: Record<string, User> = {};
+
+    for (const [uid, u] of Object.entries(raw)) {
+      let fixed: User = { ...u };
+
+      if (fixed.sick && fixed.sickExpires && fixed.sickExpires <= now) {
+        fixed = { ...fixed, sick: false, sickExpires: null };
+        // fire-and-forget; don't await inside loop
+        updateAfterDrag(uid, "sick", false);
+        updateAfterDrag(uid, "sickExpires", null);
+        warn("sick expired auto-fix", { uid, wasExpires: u.sickExpires });
+      }
+
+      result[uid] = fixed;
+    }
+
+    return result;
+  }
+
+  // ===== 1) Main users listener: fills allUsers + per-division caches =====
   useEffect(() => {
     if (!currentUser) {
-      // reset everything if logged out
+      log("AUTH: logged out -> resetting provider state");
+
       setData({});
       setAllUsers({});
       setUsersByDivision({ ADC: {}, UPD: {} });
       setUser(undefined);
       setUserSettings(null);
+      setError(undefined);
 
       setLoading(false);
       setUsersReady(false);
@@ -281,10 +331,15 @@ export function UserProvider({ children }: any) {
       return;
     }
 
+    log("AUTH: logged in", { uid: currentUser.uid });
+
     setLoading(true);
     setUsersReady(false);
+    setError(undefined);
 
     const usersRef = ref(db, "users");
+
+    log("DB: attaching onValue listener to /users");
 
     const unsub = onValue(
       usersRef,
@@ -292,27 +347,34 @@ export function UserProvider({ children }: any) {
         const raw = (snap.val() || {}) as Record<string, User>;
         const checked = fixExpiredSick(raw);
 
+        log("DB: /users snapshot received", {
+          totalUsers: Object.keys(raw).length,
+          checkedUsers: Object.keys(checked).length,
+          includesCurrent: !!checked[currentUser.uid],
+        });
+
         // single source of truth
         setAllUsers(checked);
 
-        // pre-split by division ONCE per snapshot
-        const adcEntries = Object.entries(checked).filter(
-          ([, u]) => u.Divisions === "ADC"
-        );
-        const updEntries = Object.entries(checked).filter(
-          ([, u]) => u.Divisions === "UPD"
-        );
+        const adcEntries = Object.entries(checked).filter(([, u]) => isADC(u));
+        const updEntries = Object.entries(checked).filter(([, u]) => u?.Divisions === "UPD");
 
-        setUsersByDivision({
-          ADC: Object.fromEntries(adcEntries) as UserRecord,
-          UPD: Object.fromEntries(updEntries) as UserRecord,
+        const adcMap = Object.fromEntries(adcEntries) as UserRecord;
+        const updMap = Object.fromEntries(updEntries) as UserRecord;
+
+        setUsersByDivision({ ADC: adcMap, UPD: updMap });
+
+        log("CACHE: rebuilt division caches", {
+          adcCount: Object.keys(adcMap).length,
+          updCount: Object.keys(updMap).length,
         });
 
         setLoading(false);
       },
-      (err) => {
-        console.error("users onValue error:", err);
-        setError(err.message ?? "Failed to load users");
+      (e) => {
+        errLog("DB: /users onValue error", e);
+
+        setError(e?.message ?? "Failed to load users");
         setAllUsers({});
         setUsersByDivision({ ADC: {}, UPD: {} });
         setData({});
@@ -321,50 +383,18 @@ export function UserProvider({ children }: any) {
       }
     );
 
-    return () => unsub();
+    return () => {
+      log("DB: detaching onValue listener from /users");
+      unsub();
+    };
   }, [currentUser]);
 
-  // Derived: data (visible users) based on currentUser + view
-  useEffect(() => {
-    if (!currentUser) {
-      setData({});
-      setUsersReady(false);
-      return;
-    }
-
-    const uid = currentUser.uid;
-    const current = allUsers[uid];
-
-    // current user not yet loaded
-    if (!current) {
-      setData({});
-      setUsersReady(false);
-      return;
-    }
-
-    // no division -> they only ever see themselves
-    if (!current.Divisions) {
-      setData({ [uid]: current });
-      setUsersReady(true);
-      return;
-    }
-
-    // which division are we *viewing*?
-    // view overrides, otherwise user's own division
-    const division = (view ?? current.Divisions) as "ADC" | "UPD";
-    if (!view) setView(division);
-
-    const fromCache = usersByDivision[division] ?? {};
-
-    setData(fromCache);
-    setUsersReady(true);
-  }, [allUsers, usersByDivision, view, currentUser]);
-
-  // Derived: user object (DB user tied to auth)
+  // ===== 2) Derived: user object (DB user tied to auth) =====
   useEffect(() => {
     if (!currentUser) {
       setUser(undefined);
       setUserReady(false);
+      log("DERIVE user: no auth -> cleared");
       return;
     }
 
@@ -373,22 +403,92 @@ export function UserProvider({ children }: any) {
 
     setUser(cUser ?? undefined);
     setUserReady(!!cUser);
+
+    if (!cUser) {
+      warn("DERIVE user: currentUser not found in allUsers yet", {
+        uid,
+        allUsersCount: Object.keys(allUsers).length,
+      });
+    } else {
+      log("DERIVE user: loaded", { uid, division: cUser.Divisions, rank: cUser.Ranks });
+    }
   }, [allUsers, currentUser]);
 
-  // Derived: userSettings from user or defaults
+  // ===== 3) Initialize view ONCE when user becomes known (prevents race) =====
+  useEffect(() => {
+    if (!user?.Divisions) return;
+
+    setView((prev) => {
+      const next = prev ?? (user.Divisions as "ADC" | "UPD");
+      if (prev == null) log("VIEW: initialized", { view: next, fromDivision: user.Divisions });
+      return next;
+    });
+  }, [user]);
+
+  // ===== 4) Derived: visible data based on view + caches =====
+  useEffect(() => {
+    if (!currentUser) {
+      setData({});
+      setUsersReady(false);
+      log("DERIVE data: no auth -> cleared");
+      return;
+    }
+
+    const uid = currentUser.uid;
+    const current = allUsers[uid];
+
+    if (!current) {
+      setData({});
+      setUsersReady(false);
+      warn("DERIVE data: waiting for current user record in allUsers", { uid });
+      return;
+    }
+
+    // no division -> only themselves
+    if (!current.Divisions) {
+      setData({ [uid]: current });
+      setUsersReady(true);
+      log("DERIVE data: no division -> self only", { uid });
+      return;
+    }
+
+    const division = (view ?? current.Divisions) as "ADC" | "UPD";
+    const fromCache = usersByDivision[division];
+
+    // IMPORTANT: don't claim ready if cache empty on first login
+    const cacheSize = fromCache ? Object.keys(fromCache).length : 0;
+
+    if (!fromCache || cacheSize === 0) {
+      setUsersReady(false);
+      warn("DERIVE data: division cache not ready yet", {
+        division,
+        view,
+        userDivision: current.Divisions,
+        adcCount: Object.keys(usersByDivision.ADC).length,
+        updCount: Object.keys(usersByDivision.UPD).length,
+      });
+      return;
+    }
+
+    setData(fromCache);
+    setUsersReady(true);
+
+    log("DERIVE data: populated", { division, count: cacheSize });
+  }, [allUsers, usersByDivision, view, currentUser]);
+
+  // ===== 5) Derived: userSettings from user or defaults =====
   useEffect(() => {
     if (!user) {
       setUserSettings(null);
       setSettingsReady(false);
+      warn("SETTINGS: waiting for user");
       return;
     }
 
     if (!user.settings) {
-      setUserSettings({
-        ...defaultSettings,
-        backgrounds: undefined,
-      });
+      setUserSettings({ ...defaultSettings, backgrounds: undefined });
       setSettingsReady(true);
+      log("SETTINGS: user.settings missing -> using defaults");
       return;
     }
 
@@ -405,37 +505,31 @@ export function UserProvider({ children }: any) {
 
     setUserSettings(settings);
     setSettingsReady(true);
+    log("SETTINGS: loaded from DB");
   }, [user]);
 
-  function fixExpiredSick(
-    raw: Record<string, User>,
-    now = Date.now()
-  ): Record<string, User> {
-    const result: Record<string, User> = {};
+  // ======================
+  // Your existing functions below (unchanged except minor logging safety)
+  // ======================
 
-    for (const [uid, user] of Object.entries(raw)) {
-      let fixed: User = { ...user };
-
-      if (fixed.sick && fixed.sickExpires && fixed.sickExpires <= now) {
-        fixed = {
-          ...fixed,
-          sick: false,
-          sickExpires: null,
-        };
-        // fire-and-forget; don't await inside loop
-        updateAfterDrag(uid, "sick", false);
-        updateAfterDrag(uid, "sickExpires", null);
-      }
-
-      result[uid] = fixed;
-    }
-
-    return result;
+  function usersWithoutShift(shift: string): UserWithShift[] | void {
+    if (!data) return;
+    const usersArr = Object.values(data) as UserWithShift[];
+    return usersArr.filter((u) => u?.shift != shift);
   }
 
-  // Returns users email and password to be used when creating the auth account
-  function getEmailAndPassword(user: User) {
-    return { email: user.email.trim(), password: user.password.trim() };
+  async function updateAfterDrag(
+    uid: string,
+    field: string,
+    dataVal: string | boolean | null | number
+  ) {
+    try {
+      await update(ref(db, `users/${uid}`), { [field]: dataVal });
+      return { success: true, message: "Sucess" };
+    } catch (e: any) {
+      errLog("updateAfterDrag failed", { uid, field, e });
+      return { success: false, message: e.message };
+    }
   }
 
   async function uploadPhoto({
@@ -451,6 +545,7 @@ export function UserProvider({ children }: any) {
       contentType: file.type,
       customMetadata: { displayName: name },
     });
+
     await new Promise<void>((resolve, reject) => {
       const unsubscribe = upload.on(
         "state_changed",
@@ -465,28 +560,9 @@ export function UserProvider({ children }: any) {
         }
       );
     });
+
     const src = await getDownloadURL(objectRef);
-
     return { src, path: storagePath };
-  }
-
-  function usersWithoutShift(shift: string): UserWithShift[] | void {
-    if (!data) return;
-    const usersArr = Object.values(data) as UserWithShift[];
-    return usersArr.filter((user) => user?.shift != shift);
-  }
-
-  async function updateAfterDrag(
-    uid: string,
-    field: string,
-    dataVal: string | boolean | null | number
-  ) {
-    try {
-      await update(ref(db, `users/${uid}`), { [field]: dataVal });
-      return { success: true, message: "Sucess" };
-    } catch (error: any) {
-      return { success: false, message: error.message };
-    }
   }
 
   async function updateUserBackground({
@@ -496,15 +572,17 @@ export function UserProvider({ children }: any) {
     src,
     path,
   }: UpdateBackground): Promise<string> {
-    const dbRef = `users/${uid}/settings/${type}`;
-    await push(ref(db, dbRef), { name, src, path, uploadedAt: Date.now() });
+    const dbRefPath = `users/${uid}/settings/${type}`;
+    await push(ref(db, dbRefPath), { name, src, path, uploadedAt: Date.now() });
     return src;
   }
 
-  async function createUserAccount(
-    email: string,
-    password: string
-  ): Promise<string> {
+  // Returns users email and password to be used when creating the auth account
+  function getEmailAndPassword(u: User) {
+    return { email: u.email.trim(), password: u.password.trim() };
+  }
+
+  async function createUserAccount(email: string, password: string): Promise<string> {
     const createAuthUser = httpsCallable(getFunctions(), "createAuthUser");
     const response = await createAuthUser({ email, password });
     return (response.data as { uid: string; created: boolean }).uid;
@@ -545,7 +623,7 @@ export function UserProvider({ children }: any) {
       });
       return { success: true, message: "Successful" };
     } catch (e) {
-      console.error("addUser failed:", e);
+      errLog("addUser failed", e);
       return { success: false, message: "Failed" };
     }
   }
@@ -555,7 +633,7 @@ export function UserProvider({ children }: any) {
       await deleteUserAccount(uid);
       await remove(ref(db, `users/${uid}`));
     } catch (e) {
-      console.error("deleteUser failed: ", e);
+      errLog("deleteUser failed", e);
       throw e;
     }
   }
@@ -566,27 +644,26 @@ export function UserProvider({ children }: any) {
       await disableUser(uid, disabled);
       await update(ref(db, `users/${uid}`), { active: false });
     } catch (e) {
-      console.error("deactivateUser failed: ", e);
+      errLog("deactivateUser failed", e);
       throw e;
     }
   }
 
-  async function updateUser(
-    uid: string,
-    formData: FormValues
-  ): Promise<UpdateUserResult> {
-    const setRole = httpsCallable(getFunctions(), "setUserRole");
+  async function updateUser(uid: string, formData: FormValues): Promise<UpdateUserResult> {
+    const setRoleFn = httpsCallable(getFunctions(), "setUserRole");
 
     try {
-      if (data[uid].Role !== formData.Role) {
-        await setRole({ uid, role: formData.Role });
+      // NOTE: safer guard: data[uid] might not be in current division view
+      const existing = allUsers[uid];
+      if (existing && existing.Role !== formData.Role) {
+        await setRoleFn({ uid, role: formData.Role });
       }
 
       await update(ref(db, `users/${uid}`), formData);
 
       return { success: true };
     } catch (err: any) {
-      console.error("updateUser failed:", err);
+      errLog("updateUser failed", err);
 
       let source: "role" | "profile" = "profile";
       let code: string | undefined = err?.code;
@@ -594,37 +671,22 @@ export function UserProvider({ children }: any) {
 
       if (typeof err?.code === "string" && err.code.startsWith("functions/")) {
         source = "role";
-
-        if (err.details?.originalMessage) {
-          message = err.details.originalMessage;
-        } else if (err.message) {
-          message = err.message;
-        }
+        if (err.details?.originalMessage) message = err.details.originalMessage;
+        else if (err.message) message = err.message;
       } else {
-        if (err?.message) {
-          message = err.message;
-        }
+        if (err?.message) message = err.message;
       }
 
-      return {
-        success: false,
-        source,
-        code,
-        message,
-      };
+      return { success: false, source, code, message };
     }
   }
 
-  async function updateUserSettings(
-    uid: string,
-    location: Location,
-    value: string
-  ) {
+  async function updateUserSettings(uid: string, location: Location, value: string) {
     const updates = { [`users/${uid}/settings/${location}`]: value };
     try {
       await update(ref(db), updates);
     } catch (e) {
-      console.error("updateUserSettings failed: ", e);
+      errLog("updateUserSettings failed", e);
       throw e;
     }
   }
@@ -646,22 +708,20 @@ export function UserProvider({ children }: any) {
       const pathSnap = await get(ref(db, `users/${uid}/photo/path`));
       oldPath = pathSnap.exists() ? (pathSnap.val() as string) : undefined;
     } catch (e) {
-      console.warn("Could not read old photo path:", e);
+      warn("Could not read old photo path", e);
     }
 
     const storagePath = `users/${uid}/avatars/${Date.now()}_${file.name}`;
     const objectRef = storageRef(storage, storagePath);
-    const upload = uploadBytesResumable(objectRef, file, {
-      contentType: file.type,
-    });
+    const upload = uploadBytesResumable(objectRef, file, { contentType: file.type });
 
     await new Promise<void>((resolve, reject) => {
       const unsub = upload.on(
         "state_changed",
         (snap) => onProgress?.(snap),
-        (err) => {
+        (e) => {
           unsub();
-          reject(err);
+          reject(e);
         },
         () => {
           unsub();
@@ -677,7 +737,7 @@ export function UserProvider({ children }: any) {
       try {
         await deleteObject(storageRef(storage, oldPath));
       } catch (e) {
-        console.warn("Delete old profile photo skipped:", e);
+        warn("Delete old profile photo skipped", e);
       }
     }
 
@@ -689,15 +749,13 @@ export function UserProvider({ children }: any) {
 
     try {
       const pathSnap = await get(ref(db, `users/${uid}/photo/path`));
-      const oldPath = pathSnap.exists()
-        ? (pathSnap.val() as string)
-        : undefined;
+      const oldPath = pathSnap.exists() ? (pathSnap.val() as string) : undefined;
 
       if (oldPath) {
         try {
           await deleteObject(storageRef(storage, oldPath));
         } catch (e) {
-          console.warn("Delete profile photo skipped:", e);
+          warn("Delete profile photo skipped", e);
         }
       }
     } finally {
@@ -707,3 +765,4 @@ export function UserProvider({ children }: any) {
 
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 }
+

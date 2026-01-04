@@ -105,6 +105,7 @@ export default function ProfilePhoto({
   // If size is provided, we use it as an explicit width.
   // Height will follow from aspect-square.
   const explicitWidth = size ? anchorSize : undefined;
+  const isSheriff =  user.Ranks == "Sheriff";
 
   return (
     <motion.div
@@ -146,12 +147,24 @@ export default function ProfilePhoto({
               className="absolute inset-0 w-full h-full rounded-full pointer-events-none"
             >
               {badges}
-              {isUpd && (
+              {(isUpd && !isSheriff ) && (
                 <ProfileBadge
                   key={`${"upd"}-${user.badge}`}
                   title={user.car.toString()}
                   color={secondaryAccent}
                   position={"top"}
+                  absolute
+                  anchorSize={anchorSize}
+                  styles={badgeStyle}
+                  fontSize={badgeFontSize}
+                />
+              )}
+              {isSheriff && (
+                <ProfileBadge
+                  key="Sheriff"
+                  title="Sheriff"
+                  color={secondaryAccent}
+                  position={"bottom"}
                   absolute
                   anchorSize={anchorSize}
                   styles={badgeStyle}

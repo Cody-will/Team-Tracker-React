@@ -175,7 +175,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
   const commandStaff =
     configData &&
     Object.values(team)
-      .filter((user) => user.Shifts === "Command Staff")
+      .filter((user) => user.Shifts === "Command Staff" || user.Ranks == "Sheriff")
       .sort(
         (a, b) => getOrder(a.Ranks, configData) - getOrder(b.Ranks, configData)
       )

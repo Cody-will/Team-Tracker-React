@@ -5,12 +5,14 @@ import { useUser } from "./context/UserContext.tsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import SplashOverlay from "../components/SplashOverlay.tsx";
 import { useSafeSettings } from "./hooks/useSafeSettings.ts";
+import {useEffect} from "react";
 
 export default function Home() {
   const { currentUser, forceSplash } = useAuth();
   const { data, loading } = useUser();
   const { primaryAccent } = useSafeSettings();
 
+  
   const hasTeam = data && Object.keys(data).length > 0;
   const isReady = !!currentUser && !loading && hasTeam;
 
