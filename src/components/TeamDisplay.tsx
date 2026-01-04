@@ -226,7 +226,7 @@ export default function TeamDisplay({ team }: TeamDisplayProps) {
       >
         <motion.div
           id="CommandStaff"
-          className="w-full lg:h-1/5 2xl:h-1/6 flex lg:flex-row flex-wrap lg:no-wrap 2xl:gap-2 gap-2"
+          className="w-full lg:h-1/5 2xl:h-1/6 flex lg:flex-row flex-wrap lg:flex-nowrap 2xl:gap-2 gap-2"
         >   
          {commandStaff.length > 0 && commandStaff} 
         </motion.div>
