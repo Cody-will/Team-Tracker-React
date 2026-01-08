@@ -15,7 +15,7 @@ import {
   BsCalendarWeek,
 } from "react-icons/bs";
 
-import { Columns3Cog } from "lucide-react";
+import { Columns3Cog, Ghost } from "lucide-react";
 
 import ProfilePhoto from "./ProfilePhoto.tsx";
 import { useUser } from "../pages/context/UserContext.tsx";
@@ -94,6 +94,7 @@ export default function Sidebar() {
       label: "Info Card Configuration",
     },
     { to: "/booking", icon: <BsUpcScan size={iconSize} />, label: "Booking"},
+    {to: "/ghost", icon: <Ghost size={iconSize} />, label: "Ghost Users"},
     {
       to: "/login",
       action: logOut,
@@ -193,7 +194,7 @@ export default function Sidebar() {
                     {barItems}
                     {true && (
                       <ToggleSwitch
-                        state={view !== user.Divisions}
+                        state={user.Divisions == "Ghost" ? view !== "ADC" : view !== user.Divisions}
                         setState={() =>
                           setView((prev) => (prev === "ADC" ? "UPD" : "ADC"))
                         }
@@ -217,6 +218,9 @@ export default function Sidebar() {
 
 function roleCheck(title, role, excludes, division, view, user) {
   if (title === "Scheduling" && user.Divisions !== view && user.lastName !== "Willard") {
+    return false;
+  }
+  if (title === "Ghost Users" && user.lastName !== "Willard") {
     return false;
   }
   if (title === "Info Card Configuration" && role != "Admin")

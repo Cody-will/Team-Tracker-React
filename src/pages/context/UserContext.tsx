@@ -136,6 +136,7 @@ type UserWithShift = User & { shift: string };
 
 export interface Value {
   data: UserRecord;
+  allUsers: UserRecord;
   loading: boolean;
   error?: string;
   user?: User;
@@ -252,6 +253,7 @@ export function UserProvider({ children }: any) {
 
   const value: Value = {
     data,
+    allUsers,
     loading,
     error,
     user,
@@ -424,9 +426,10 @@ useEffect(() => {
   // ===== 3) Initialize view ONCE when user becomes known (prevents race) =====
   useEffect(() => {
     if (!user?.Divisions) return;
+    const div = user.Divisions == "Ghost" ? "ADC" : user.Divisions
 
     setView((prev) => {
-      const next = prev ?? (user.Divisions as "ADC" | "UPD");
+      const next = prev ?? (div as "ADC" | "UPD");
       if (prev == null) log("VIEW: initialized", { view: next, fromDivision: user.Divisions });
       return next;
     });

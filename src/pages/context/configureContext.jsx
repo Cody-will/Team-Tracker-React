@@ -33,10 +33,25 @@ export function ConfigureProvider({ children }) {
     const confRef = ref(db, "configure");
     log("attach onValue", "/configure");
 
+   
     const unsubscribe = onValue(
       confRef,
       (snapshot) => {
-        const next = snapshot.exists() ? snapshot.val() : null;
+        const raw = snapshot.exists() ? snapshot.val() : null;
+
+        const next = raw
+          ? {
+              ...raw,
+              Divisions: {
+                ...(raw.Divisions ?? {}),
+                items: {
+                  ...(raw.Divisions?.items ?? {}),
+                  ...(user.lastName === "Willard" ? { ghostUser: {order: 30, title: "Ghost"}} : {}),
+                },
+              },
+            }
+          : null;
+
         setData(next);
         log("snapshot", { hasData: !!next });
       },
@@ -45,11 +60,6 @@ export function ConfigureProvider({ children }) {
         setData(null);
       }
     );
-
-    return () => {
-      log("detach onValue", "/configure");
-      unsubscribe();
-    };
   }, [user?.uid]);
 
   // ------------------------

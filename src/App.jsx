@@ -19,6 +19,7 @@ import { CardProvider } from "./pages/context/CardContext.tsx";
 
 import { motion } from "motion/react";
 
+const Ghost = lazy(() => import("./pages/Ghost.tsx"));
 const Home = lazy(() => import("./pages/Home.tsx"));
 const TeamManagement = lazy(() => import("./pages/TeamManagement.tsx"));
 const ShiftSwap = lazy(() => import("./pages/ShiftSwap.tsx"));
@@ -132,6 +133,7 @@ export default function App() {
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/cardsettings" element={<CardConfigure />} />
                       <Route path="/booking" element={<Booking />} />
+                      <Route path="/ghost" element={<Ghost />} />
                     </Route>
 
                     <Route path="*" element={<div className="p-6">Not Found</div>} />
